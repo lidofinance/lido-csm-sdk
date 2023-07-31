@@ -1,0 +1,172 @@
+{
+  "name": "@lidofinance/lido-ethereum-sdk",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "sideEffects": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./common": {
+      "import": "./dist/esm/common/index.js",
+      "default": "./dist/cjs/common/index.js",
+      "types": "./dist/types/common/index.d.ts"
+    },
+    "./core": {
+      "import": "./dist/esm/core/index.js",
+      "default": "./dist/cjs/core/index.js",
+      "types": "./dist/types/core/index.d.ts"
+    },
+    "./stake": {
+      "import": "./dist/esm/stake/index.js",
+      "default": "./dist/cjs/stake/index.js",
+      "types": "./dist/types/stake/index.d.ts"
+    },
+    "./wrap": {
+      "import": "./dist/esm/wrap/index.js",
+      "default": "./dist/cjs/wrap/index.js",
+      "types": "./dist/types/wrap/index.d.ts"
+    },
+    "./withdraw": {
+      "import": "./dist/esm/withdraw/index.js",
+      "default": "./dist/cjs/withdraw/index.js",
+      "types": "./dist/types/withdraw/index.d.ts"
+    },
+    "./erc20": {
+      "import": "./dist/esm/erc20/index.js",
+      "default": "./dist/cjs/erc20/index.js",
+      "types": "./dist/types/erc20/index.d.ts"
+    },
+    "./unsteth": {
+      "import": "./dist/esm/unsteth/index.js",
+      "default": "./dist/cjs/unsteth/index.js",
+      "types": "./dist/types/unsteth/index.d.ts"
+    },
+    "./statistics": {
+      "import": "./dist/esm/statistics/index.js",
+      "default": "./dist/cjs/statistics/index.js",
+      "types": "./dist/types/statistics/index.d.ts"
+    },
+    "./events": {
+      "import": "./dist/esm/events/index.js",
+      "default": "./dist/cjs/events/index.js",
+      "types": "./dist/types/events/index.d.ts"
+    },
+    "./rewards": {
+      "import": "./dist/esm/rewards/index.js",
+      "default": "./dist/cjs/rewards/index.js",
+      "types": "./dist/types/rewards/index.d.ts"
+    },
+    "./shares": {
+      "import": "./dist/esm/shares/index.js",
+      "default": "./dist/cjs/shares/index.js",
+      "types": "./dist/types/shares/index.d.ts"
+    },
+    "./l2": {
+      "import": "./dist/esm/l2/index.js",
+      "default": "./dist/cjs/l2/index.js",
+      "types": "./dist/types/l2/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "common": [
+        "./dist/types/common/index.d.ts"
+      ],
+      "core": [
+        "./dist/types/core/index.d.ts"
+      ],
+      "stake": [
+        "./dist/types/stake/index.d.ts"
+      ],
+      "wrap": [
+        "./dist/types/wrap/index.d.ts"
+      ],
+      "withdraw": [
+        "./dist/types/withdraw/index.d.ts"
+      ],
+      "erc20": [
+        "./dist/types/erc20/index.d.ts"
+      ],
+      "statistics": [
+        "./dist/types/statistics/index.d.ts"
+      ],
+      "events": [
+        "./dist/types/events/index.d.ts"
+      ],
+      "rewards": [
+        "./dist/types/rewards/index.d.ts"
+      ],
+      "shares": [
+        "./dist/types/shares/index.d.ts"
+      ],
+      "l2": [
+        "./dist/types/l2/index.d.ts"
+      ]
+    }
+  },
+  "keywords": [
+    "lido",
+    "lido-sdk",
+    "lido-ethereum-sdk",
+    "sdk",
+    "ethereum",
+    "stake",
+    "withdrawals",
+    "wrap"
+  ],
+  "homepage": "https://github.com/lidofinance/lido-ethereum-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lidofinance/lido-ethereum-sdk.git",
+    "directory": "packages/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/lidofinance/lido-ethereum-sdk/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn build:types",
+    "types": "tsc --noEmit",
+    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --moduleResolution node10 --outDir ./dist/cjs --removeComments --verbatimModuleSyntax false && echo > ./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
+    "build:esm": "tsc --project tsconfig.build.json --module nodenext --outDir ./dist/esm && echo > ./dist/esm/package.json '{\"type\":\"module\",\"sideEffects\":false}'",
+    "build:types": "tsc --project tsconfig.build.json --module nodenext --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "test": "jest",
+    "prepublishOnly": "node scripts/updateVersion.cjs",
+    "lint": "eslint . --ext .ts --max-warnings 0",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0"
+  },
+  "peerDependencies": {
+    "viem": "^2.26.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/fs-extra": "^11.0.1",
+    "dotenv": "^16.3.1",
+    "fs-extra": "^11.1.1",
+    "ganache": "^7.9.2",
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.1",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.8.3"
+  }
+}
