@@ -1,0 +1,257 @@
+import {
+  ERROR_CODE,
+  SDKError,
+  TransactionResult,
+} from '@lidofinance/lido-ethereum-sdk';
+import {
+  decodeEventLog,
+  getAbiItem,
+  GetContractReturnType,
+  isAddress,
+  toEventHash,
+  TransactionReceipt,
+  WalletClient,
+  zeroAddress,
+} from 'viem';
+import { CSModuleAbi, PermissionlessGateAbi } from '../abi/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { EMPTY_PERMIT, TOKENS, WithToken } from '../common/index.js';
+import { parseDepositData } from '../common/utils/index.js';
+import { PermitSignature } from '../core-sdk/types.js';
+import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
+import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
+import {
+  AddNodeOperatorInnerProps,
+  AddNodeOperatorProps,
+  AddNodeOperatorResult,
+} from './types.js';
+
+const NODE_OPERATOR_ADDED_EVENT = getAbiItem({
+  abi: CSModuleAbi,
+  name: 'NodeOperatorAdded',
+});
+const NODE_OPERATOR_ADDED_SIGNATURE = toEventHash(NODE_OPERATOR_ADDED_EVENT);
+
+export class PermissionlessGateSDK extends CsmSDKModule<{
+  spending: SpendingSDK;
+}> {
+  private get contract(): GetContractReturnType<
+    typeof PermissionlessGateAbi,
+    WalletClient
+  > {
+    return this.core.getContractPermissionlessGate();
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorETH(
+    props: AddNodeOperatorProps,
+  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+    const {
+      amount: value,
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties,
+      referrer,
+      permit,
+      ...rest
+    } = await this.parseProps(props);
+
+    const args = [
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties,
+      referrer,
+    ] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.contract.estimateGas.addNodeOperatorETH(args, {
+          value,
+          ...options,
+        }),
+      sendTransaction: (options) =>
+        this.contract.write.addNodeOperatorETH(args, {
+          value,
+          ...options,
+        }),
+      decodeResult: (receipt) => this.receiptParseEvents(receipt),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorStETH(
+    props: AddNodeOperatorProps,
+  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+    const {
+      amount,
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties,
+      referrer,
+      permit: _permit,
+      ...rest
+    } = await this.parseProps(props);
+
+    // FIXME: pass callback
+    const permit = await this.getPermit(
+      { token: TOKENS.steth, amount },
+      _permit,
+    );
+
+    const args = [
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties,
+      permit,
+      referrer,
+    ] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.contract.estimateGas.addNodeOperatorStETH(args, options),
+      sendTransaction: (options) =>
+        this.contract.write.addNodeOperatorStETH(args, options),
+      decodeResult: (receipt) => this.receiptParseEvents(receipt),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorWstETH(
+    props: AddNodeOperatorProps,
+  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+    const {
+      amount,
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties,
+      referrer,
+      permit: _permit,
+      ...rest
+    } = await this.parseProps(props);
+
+    // FIXME: pass callback
+    const permit = await this.getPermit(
+      { token: TOKENS.wsteth, amount },
+      _permit,
+    );
+
+    const args = [
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties,
+      permit,
+      referrer,
+    ] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.contract.estimateGas.addNodeOperatorWstETH(args, options),
+      sendTransaction: (options) =>
+        this.contract.write.addNodeOperatorWstETH(args, options),
+      decodeResult: (receipt) => this.receiptParseEvents(receipt),
+    });
+  }
+
+  public async addNodeOperator(
+    props: WithToken<AddNodeOperatorProps>,
+  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+    const { token } = props;
+    switch (token) {
+      case TOKENS.eth:
+        return this.addNodeOperatorETH(props);
+      case TOKENS.steth:
+        return this.addNodeOperatorStETH(props);
+      case TOKENS.wsteth:
+        return this.addNodeOperatorWstETH(props);
+      default:
+        throw new SDKError({
+          message: 'unsupported token',
+          code: ERROR_CODE.INVALID_ARGUMENT,
+        });
+    }
+  }
+
+  @Logger('Utils:')
+  private async parseProps(
+    props: AddNodeOperatorProps,
+  ): Promise<AddNodeOperatorInnerProps> {
+    const { keysCount, publicKeys, signatures } = parseDepositData(
+      props.depositData,
+    );
+    return {
+      ...props,
+      keysCount,
+      publicKeys,
+      signatures,
+      managementProperties: {
+        rewardAddress:
+          props.rewardsAddress && isAddress(props.rewardsAddress)
+            ? props.rewardsAddress
+            : zeroAddress,
+        managerAddress:
+          props.managerAddress && isAddress(props.managerAddress)
+            ? props.managerAddress
+            : zeroAddress,
+        extendedManagerPermissions: props.extendedManagerPermissions ?? false,
+      },
+      referrer:
+        props.referrer && isAddress(props.referrer)
+          ? props.referrer
+          : zeroAddress,
+    };
+  }
+
+  // TODO: cast to PermitSignatureShort?
+  @Logger('Utils:')
+  private async getPermit(
+    props: SignPermitOrApproveProps,
+    preparedPermit?: PermitSignature,
+  ) {
+    if (preparedPermit) return preparedPermit;
+    const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
+    return result?.permit ?? EMPTY_PERMIT;
+  }
+
+  @Logger('Utils:')
+  private async receiptParseEvents(
+    receipt: TransactionReceipt,
+  ): Promise<AddNodeOperatorResult> {
+    for (const log of receipt.logs) {
+      // skips non-relevant events
+      if (log.topics[0] !== NODE_OPERATOR_ADDED_SIGNATURE) continue;
+      const parsedLog = decodeEventLog({
+        abi: [NODE_OPERATOR_ADDED_EVENT],
+        strict: true,
+        ...log,
+      });
+      return {
+        nodeOperatorId: parsedLog.args.nodeOperatorId,
+        managerAddress: parsedLog.args.managerAddress,
+        rewardsAddress: parsedLog.args.rewardAddress,
+      };
+    }
+    throw new SDKError({
+      message: 'could not find NodeOperatorAdded event in transaction',
+      code: ERROR_CODE.TRANSACTION_ERROR,
+    });
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getCurveId(): Promise<bigint> {
+    return this.contract.read.CURVE_ID();
+  }
+}

@@ -18,7 +18,8 @@
     "@ethersproject/units": "^5.6.1",
     "@lido-sdk/constants": "^3.3.0",
     "@lido-sdk/helpers": "^1.6.0",
-    "@lidofinance/lido-ethereum-sdk": "workspace:*",
+    "@lidofinance/lido-csm-sdk": "workspace:*",
+    "@lidofinance/lido-ethereum-sdk": "^4.4.0",
     "@lidofinance/lido-ui": "^3.10.1",
     "@lidofinance/next-cache-files-middleware": "^0.35.0",
     "@tanstack/react-query": "^5.51.1",
@@ -43,7 +44,7 @@
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/styled-components": "^5.1.23",
-    "typescript": "^5.4.5",
+    "typescript": "^5.8.3",
     "url-loader": "^4.1.1"
   },
   "lint-staged": {
