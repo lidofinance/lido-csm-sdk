@@ -11,4 +11,5 @@ export type ShareLimitInfo = {
   activeLeft: bigint;
   capacity: bigint;
   queue: bigint;
+  shareLimit: bigint;
 };

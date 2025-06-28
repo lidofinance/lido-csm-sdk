@@ -97,6 +97,19 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
+    "name": "FEE_DISTRIBUTOR",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "LIDO_LOCATOR",
     "inputs": [],
     "outputs": [
@@ -904,6 +917,25 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
+    "name": "getNodeOperatorOwner",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getNodeOperatorSummary",
     "inputs": [
       {
@@ -1297,24 +1329,6 @@ export const CSModuleAbi = [
         "name": "",
         "type": "bool",
         "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "legacyQueue",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "head",
-        "type": "uint128",
-        "internalType": "uint128"
-      },
-      {
-        "name": "tail",
-        "type": "uint128",
-        "internalType": "uint128"
       }
     ],
     "stateMutability": "view"
@@ -1736,11 +1750,6 @@ export const CSModuleAbi = [
         "name": "exitedValidatorsKeysCount",
         "type": "uint256",
         "internalType": "uint256"
-      },
-      {
-        "name": "stuckValidatorsKeysCount",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -1818,25 +1827,6 @@ export const CSModuleAbi = [
       },
       {
         "name": "count",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "DelayedValidatorExitPenalized",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "penaltyValue",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -2627,12 +2617,22 @@ export const CSModuleAbi = [
   },
   {
     "type": "error",
+    "name": "NoQueuedKeysToMigrate",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "NodeOperatorDoesNotExist",
     "inputs": []
   },
   {
     "type": "error",
     "name": "NotAllowedToRecover",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotEligibleForPriorityQueue",
     "inputs": []
   },
   {
@@ -2658,6 +2658,11 @@ export const CSModuleAbi = [
   {
     "type": "error",
     "name": "PriorityQueueAlreadyUsed",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "PriorityQueueMaxDepositsUsed",
     "inputs": []
   },
   {

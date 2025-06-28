@@ -1,3 +1,5 @@
+import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
+
 export class BusRegistry<
   TModules extends object = object,
   TNames extends keyof TModules = keyof TModules,
@@ -12,6 +14,15 @@ export class BusRegistry<
   }
 
   public get<T extends TNames>(name: T): TModules[T] | undefined {
+    return this.sdks[name];
+  }
+
+  public getOrThrow<T extends TNames>(name: T): TModules[T] {
+    invariant(
+      this.sdks[name],
+      `Module ${name.toString()} not registered`,
+      ERROR_CODE.UNKNOWN_ERROR,
+    );
     return this.sdks[name];
   }
 }

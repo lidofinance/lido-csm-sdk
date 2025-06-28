@@ -1,17 +1,14 @@
 import {
-  CHAINS,
   ERROR_CODE,
   invariant,
   LidoSDKCore,
   NOOP,
-  TransactionCallbackStage,
   TransactionOptions,
   TransactionResult,
   withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
 import {
   Abi,
-  AbiEvent,
   Address,
   Chain,
   getContract,
@@ -21,12 +18,12 @@ import {
 import {
   CSAccountingAbi,
   CSEjectorAbi,
+  CSExitPenaltiesAbi,
   CSFeeDistributorAbi,
   CSFeeOracleAbi,
   CSModuleAbi,
   CSParametersRegistryAbi,
   CSStrikesAbi,
-  CSVerifierAbi,
   HashConsensusAbi,
   PermissionlessGateAbi,
   StakingRouterAbi,
@@ -34,40 +31,50 @@ import {
   VettedGateAbi,
 } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import { Cache, Logger } from '../common/decorators/index.js';
 import {
   CSM_CONTRACT_ADDRESSES,
   CSM_CONTRACT_NAMES,
-  DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN,
+  CSM_SUPPORTED_CHAINS,
+  Erc20Tokens,
 } from '../common/index.js';
-import { requestWithBlockStep } from '../common/utils/request-with-block-step.js';
 import {
+  CSM_ADDRESSES,
   CsmCoreProps,
-  EventRangeProps,
-  LoadEventsProps,
   PerformTransactionOptions,
+  TransactionCallbackStage,
 } from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
+  readonly overridedAddresses?: CSM_ADDRESSES;
 
   constructor(props: CsmCoreProps) {
     super();
     this.core = props.core;
+    this.overridedAddresses = props.overridedAddresses;
   }
 
-  public get chainId(): CHAINS {
-    return this.core.chain.id as CHAINS;
+  public get chainId(): CSM_SUPPORTED_CHAINS {
+    return this.core.chain.id as CSM_SUPPORTED_CHAINS;
   }
 
   public get chain(): Chain {
     return this.core.chain;
   }
 
+  public get logMode() {
+    return this.core.logMode;
+  }
+
   @Logger('Utils:')
   @Cache(30 * 60 * 1000)
-  public getContractAddress(contract: CSM_CONTRACT_NAMES): Address {
-    const address = CSM_CONTRACT_ADDRESSES[this.chainId]?.[contract];
+  public getContractAddress(
+    contract: CSM_CONTRACT_NAMES | Erc20Tokens,
+  ): Address {
+    const address =
+      this.overridedAddresses?.[contract] ??
+      CSM_CONTRACT_ADDRESSES[this.chainId]?.[contract];
     invariant(
       address,
       `CSM contracts are not supported for ${this.core.chain.name}(${this.core.chain.id})`,
@@ -107,6 +114,7 @@ export class CoreSDK extends CsmSDKCacheable {
   > {
     return this.getContract(CSM_CONTRACT_NAMES.csEjector, CSEjectorAbi);
   }
+
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
   public getContractCSFeeDistributor(): GetContractReturnType<
@@ -118,6 +126,7 @@ export class CoreSDK extends CsmSDKCacheable {
       CSFeeDistributorAbi,
     );
   }
+
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
   public getContractCSFeeOracle(): GetContractReturnType<
@@ -159,11 +168,14 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSVerifier(): GetContractReturnType<
-    typeof CSVerifierAbi,
+  public getContractCSExitPenalties(): GetContractReturnType<
+    typeof CSExitPenaltiesAbi,
     WalletClient
   > {
-    return this.getContract(CSM_CONTRACT_NAMES.csVerifier, CSVerifierAbi);
+    return this.getContract(
+      CSM_CONTRACT_NAMES.csExitPenalties,
+      CSExitPenaltiesAbi,
+    );
   }
 
   @Logger('Contracts:')
@@ -320,7 +332,12 @@ export class CoreSDK extends CsmSDKCacheable {
 
     await callback({
       stage: TransactionCallbackStage.DONE,
-      payload: { result, confirmations, receipt, hash },
+      payload: {
+        result: result as Awaited<TDecodedResult>,
+        confirmations,
+        receipt,
+        hash,
+      },
     });
 
     return {
@@ -329,55 +346,5 @@ export class CoreSDK extends CsmSDKCacheable {
       result,
       confirmations,
     };
-  }
-
-  @Logger('Utils:')
-  @ErrorHandler()
-  @Cache(6 * 1000)
-  public async parseEventsProps(props: EventRangeProps) {
-    const step = props.step ?? 10_000;
-
-    const toBlock = await this.core.toBlockNumber({
-      block: props.toBlock ?? 'latest',
-    });
-    const fromBlock = props.fromBlock
-      ? await this.core.toBlockNumber({
-          block: props.fromBlock ?? 'latest',
-        })
-      : DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN[this.chainId] ??
-        toBlock - BigInt(step);
-
-    return {
-      fromBlock,
-      toBlock,
-      step,
-    };
-  }
-
-  // @Logger('Events:')
-  // @ErrorHandler()
-  public async loadEvents<TEvent extends AbiEvent>(
-    props: LoadEventsProps<TEvent>,
-  ) {
-    const { fromBlock, toBlock, step } = await this.parseEventsProps({
-      toBlock: props.toBlock,
-      fromBlock: props.fromBlock,
-      step: props.step,
-    });
-
-    return requestWithBlockStep(
-      step,
-      fromBlock,
-      toBlock,
-      (fromBlock, toBlock) =>
-        this.core.rpcProvider.getLogs({
-          address: props.address,
-          event: props.event,
-          args: props.args,
-          fromBlock,
-          toBlock,
-          strict: true,
-        }),
-    );
   }
 }

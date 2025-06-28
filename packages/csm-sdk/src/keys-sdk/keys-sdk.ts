@@ -3,16 +3,28 @@ import {
   SDKError,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { GetContractReturnType, WalletClient } from 'viem';
+import { GetContractReturnType, WalletClient, zeroAddress } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { EMPTY_PERMIT, TOKENS, WithToken } from '../common/index.js';
+import {
+  EMPTY_PERMIT,
+  PermitSignatureShort,
+  TOKENS,
+  WithToken,
+} from '../common/index.js';
 import { parseDepositData } from '../common/utils/parse-deposit-data.js';
-import { PermitSignature } from '../core-sdk/types.js';
+import { stripPermit } from '../common/utils/strip-permit.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
-import { AddKeysInnerProps, AddKeysProps, RemoveKeysProps } from './types.js';
+import {
+  AddKeysInnerProps,
+  AddKeysProps,
+  EjectKeysByArrayProps,
+  EjectKeysProps,
+  MigrateKeysProps,
+  RemoveKeysProps,
+} from './types.js';
 
 export class KeysSDK extends CsmSDKModule<{
   spending: SpendingSDK;
@@ -22,6 +34,10 @@ export class KeysSDK extends CsmSDKModule<{
     WalletClient
   > {
     return this.core.getContractCSModule();
+  }
+
+  private get ejectorContract() {
+    return this.core.getContractCSEjector();
   }
 
   @Logger('Call:')
@@ -73,11 +89,11 @@ export class KeysSDK extends CsmSDKModule<{
       ...rest
     } = await this.parseProps(props);
 
-    // FIXME: pass callback
-    const permit = await this.getPermit(
-      { token: TOKENS.steth, amount },
+    const { hash, permit } = await this.getPermit(
+      { token: TOKENS.steth, amount, ...rest } as any,
       _permit,
     );
+    if (hash) return { hash };
 
     const args = [
       rest.account.address,
@@ -110,11 +126,11 @@ export class KeysSDK extends CsmSDKModule<{
       ...rest
     } = await this.parseProps(props);
 
-    // FIXME: pass callback
-    const permit = await this.getPermit(
-      { token: TOKENS.wsteth, amount },
+    const { hash, permit } = await this.getPermit(
+      { token: TOKENS.wsteth, amount, ...rest } as any,
       _permit,
     );
+    if (hash) return { hash };
 
     const args = [
       rest.account.address,
@@ -173,15 +189,17 @@ export class KeysSDK extends CsmSDKModule<{
     };
   }
 
-  // TODO: cast to PermitSignatureShort?
   @Logger('Utils:')
   private async getPermit(
     props: SignPermitOrApproveProps,
-    preparedPermit?: PermitSignature,
+    preparedPermit?: PermitSignatureShort,
   ) {
-    if (preparedPermit) return preparedPermit;
+    if (preparedPermit) return { permit: stripPermit(preparedPermit) };
     const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
-    return result?.permit ?? EMPTY_PERMIT;
+    return {
+      hash: result?.hash,
+      permit: stripPermit(result?.permit ?? EMPTY_PERMIT),
+    };
   }
 
   @Logger('Call:')
@@ -199,6 +217,92 @@ export class KeysSDK extends CsmSDKModule<{
         }),
       sendTransaction: (options) =>
         this.contract.write.removeKeys(args, {
+          ...options,
+        }),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async ejectKeys(props: EjectKeysProps): Promise<TransactionResult> {
+    const {
+      nodeOperatorId,
+      startIndex,
+      keysCount,
+      amount: value,
+      refundRecipient = zeroAddress,
+      ...rest
+    } = props;
+
+    const args = [
+      nodeOperatorId,
+      startIndex,
+      keysCount,
+      refundRecipient,
+    ] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.ejectorContract.estimateGas.voluntaryEject(args, {
+          value,
+          ...options,
+        }),
+      sendTransaction: (options) =>
+        this.ejectorContract.write.voluntaryEject(args, {
+          value,
+          ...options,
+        }),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async ejectKeysByArray(
+    props: EjectKeysByArrayProps,
+  ): Promise<TransactionResult> {
+    const {
+      nodeOperatorId,
+      keyIndices,
+      amount: value,
+      refundRecipient = zeroAddress,
+      ...rest
+    } = props;
+
+    const args = [nodeOperatorId, keyIndices, refundRecipient] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.ejectorContract.estimateGas.voluntaryEjectByArray(args, {
+          value,
+          ...options,
+        }),
+      sendTransaction: (options) =>
+        this.ejectorContract.write.voluntaryEjectByArray(args, {
+          value,
+          ...options,
+        }),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async migrateToPriorityQueue(
+    props: MigrateKeysProps,
+  ): Promise<TransactionResult> {
+    const { nodeOperatorId, ...rest } = props;
+
+    const args = [nodeOperatorId] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.contract.estimateGas.migrateToPriorityQueue(args, {
+          ...options,
+        }),
+      sendTransaction: (options) =>
+        this.contract.write.migrateToPriorityQueue(args, {
           ...options,
         }),
     });

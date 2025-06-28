@@ -1,11 +1,10 @@
-import { EtherValue } from '@lidofinance/lido-ethereum-sdk';
 import { Erc20Tokens } from '../common/tyles.js';
 import { CommonTransactionProps } from '../core-sdk/types.js';
 
 type AccountProps = Pick<CommonTransactionProps, 'account'>;
 
 export type AmountAndTokenProps = {
-  amount: EtherValue;
+  amount: bigint;
   token: Erc20Tokens;
 };
 
@@ -18,6 +17,7 @@ export type ApproveProps = AmountAndTokenProps & CommonTransactionProps;
 export type isMultisigProps = AccountProps;
 
 export type SignPermitProps = AmountAndTokenProps &
+  CommonTransactionProps &
   AccountProps & {
     dealine?: bigint;
   };

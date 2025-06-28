@@ -4,25 +4,24 @@ import {
   PerformTransactionGasLimit,
   PerformTransactionSendTransaction,
   SDKError,
-  TransactionCallbackStage,
 } from '@lidofinance/lido-ethereum-sdk';
 import type {
-  AbiEvent,
   Address,
-  BlockNumber,
-  BlockTag,
   Hash,
-  MaybeAbiEventName,
-  MaybeExtractEventArgsFromAbi,
   TransactionReceipt,
   WaitForTransactionReceiptParameters,
 } from 'viem';
-import { getLogs } from 'viem/actions';
+import { CSM_CONTRACT_NAMES, Erc20Tokens } from '../common/index.js';
 
 // Constructor Props
 
+export type CSM_ADDRESSES = {
+  [key2 in CSM_CONTRACT_NAMES | Erc20Tokens]?: Address;
+};
+
 export type CsmCoreProps = {
   core: LidoSDKCore;
+  overridedAddresses?: CSM_ADDRESSES;
 };
 
 // Transaction Props
@@ -44,6 +43,7 @@ type PerformTransactionOptionsDecodePartial<TDecodedResult> =
 
 export type PerformTransactionOptions<TDecodedResult = undefined> =
   CommonTransactionProps<TDecodedResult> & {
+    withPermit?: undefined;
     getGasLimit: PerformTransactionGasLimit;
     sendTransaction: PerformTransactionSendTransaction;
     waitForTransactionReceiptParameters?: WaitForTransactionReceiptParameters;
@@ -51,8 +51,32 @@ export type PerformTransactionOptions<TDecodedResult = undefined> =
 
 // Callback
 
-export type TransactionCallbackProps<TDecodedResult> =
-  | { stage: TransactionCallbackStage.PERMIT; payload?: undefined }
+export enum TransactionCallbackStage {
+  'PERMIT_SIGN' = 'permit_sign',
+  'APPROVE_SIGN' = 'approve_sign',
+  'APPROVE_RECEIPT' = 'approve_receipt',
+  'GAS_LIMIT' = 'gas_limit',
+  'SIGN' = 'sign',
+  'RECEIPT' = 'receipt',
+  'CONFIRMATION' = 'confirmation',
+  'DONE' = 'done',
+  'MULTISIG_DONE' = 'multisig_done',
+  'ERROR' = 'error',
+}
+
+export type TransactionCallbackProps<TDecodedResult = undefined> =
+  | {
+      stage: TransactionCallbackStage.PERMIT_SIGN;
+      payload: { token: Erc20Tokens; amount: bigint };
+    }
+  | {
+      stage: TransactionCallbackStage.APPROVE_SIGN;
+      payload: { token: Erc20Tokens; amount: bigint };
+    }
+  | {
+      stage: TransactionCallbackStage.APPROVE_RECEIPT;
+      payload: { token: Erc20Tokens; amount: bigint; hash: Hash };
+    }
   | { stage: TransactionCallbackStage.GAS_LIMIT; payload?: undefined }
   | { stage: TransactionCallbackStage.SIGN; payload: { gas?: bigint } }
   | { stage: TransactionCallbackStage.RECEIPT; payload: { hash: Hash } }
@@ -63,7 +87,7 @@ export type TransactionCallbackProps<TDecodedResult> =
   | {
       stage: TransactionCallbackStage.DONE;
       payload: {
-        result?: TDecodedResult;
+        result: TDecodedResult;
         confirmations: bigint;
         receipt: TransactionReceipt;
         hash: Hash;
@@ -84,7 +108,7 @@ export type TransactionCallbackResult<TProps> =
   | TransactionCallbackReturn<TProps>
   | Promise<TransactionCallbackReturn<TProps>>;
 
-export type TransactionCallback<TDecodedResult> = (
+export type TransactionCallback<TDecodedResult = undefined> = (
   props: TransactionCallbackProps<TDecodedResult>,
 ) => TransactionCallbackResult<TransactionCallbackProps<TDecodedResult>>;
 
@@ -96,40 +120,3 @@ export type PermitCallbackProps =
   | { stage: TransactionCallbackStage.ERROR; payload: SDKError };
 
 export type PermitCallback = (props: PermitCallbackProps) => void;
-
-// TODO: use type from core ?
-export type PermitSignature = {
-  v: number;
-  r: `0x${string}`;
-  s: `0x${string}`;
-  value: bigint;
-  deadline: bigint;
-  chainId: bigint;
-  nonce: bigint;
-  owner: Address;
-  spender: Address;
-};
-
-// Events Props
-
-export type NonPendingBlockTag = Exclude<BlockTag, 'pending'>;
-export type EventRangeProps = {
-  step?: number;
-  fromBlock?: BlockNumber | NonPendingBlockTag;
-  toBlock?: BlockNumber | NonPendingBlockTag;
-};
-
-export type LoadEventsProps<
-  abiEvent extends AbiEvent | undefined = undefined,
-  abiEvents extends
-    | readonly AbiEvent[]
-    | readonly unknown[]
-    | undefined = abiEvent extends AbiEvent ? [abiEvent] : undefined,
-  _eventName extends string | undefined = MaybeAbiEventName<abiEvent>,
-> = {
-  address: Address;
-  event: abiEvent;
-  args?: MaybeExtractEventArgsFromAbi<abiEvents, _eventName> | undefined;
-} & EventRangeProps;
-
-export type LoadEventsProps2 = Parameters<typeof getLogs>[1] & EventRangeProps;

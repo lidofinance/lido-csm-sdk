@@ -455,19 +455,6 @@ export const CSFeeOracleAbi = [
   },
   {
     "type": "function",
-    "name": "pauseUntil",
-    "inputs": [
-      {
-        "name": "pauseUntilInclusive",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "recoverERC1155",
     "inputs": [
       {

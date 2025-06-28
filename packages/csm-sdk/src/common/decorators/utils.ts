@@ -1,18 +1,19 @@
 /* eslint-disable no-console */
-import { LidoSDKCore, LOG_MODE } from '@lidofinance/lido-ethereum-sdk';
+import { LOG_MODE } from '@lidofinance/lido-ethereum-sdk';
 import { ConsoleCss } from './constants.js';
 import { HeadMessage } from './types.js';
+
+type CoreLog = {
+  logMode: LOG_MODE;
+};
 
 const getLogMode = function <This>(this: This): LOG_MODE {
   let logMode: LOG_MODE = 'info';
 
   if (isCore(this)) {
     logMode = this.logMode;
-  }
-  if (hasBus(this)) {
-    logMode = (this.bus.core as LidoSDKCore)?.logMode;
   } else if (hasCore(this)) {
-    logMode = (this.core as LidoSDKCore)?.logMode;
+    logMode = this.core.logMode;
   }
 
   return logMode;
@@ -44,18 +45,10 @@ export const callConsoleMessage = function <This>(
   }
 };
 
-export const isCore = function (value: unknown): value is LidoSDKCore {
-  return !!value && typeof value === 'object' && 'rpcProvider' in value;
+export const isCore = function (value: unknown): value is CoreLog {
+  return !!value && typeof value === 'object' && 'logMode' in value;
 };
 
-export const hasBus = function (
-  value: unknown,
-): value is { bus: { core?: LidoSDKCore } } {
-  return !!value && typeof value === 'object' && 'bus' in value;
-};
-
-export const hasCore = function (
-  value: unknown,
-): value is { core?: LidoSDKCore } {
+export const hasCore = function (value: unknown): value is { core: CoreLog } {
   return !!value && typeof value === 'object' && 'core' in value;
 };

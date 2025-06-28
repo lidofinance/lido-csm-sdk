@@ -1,9 +1,9 @@
-import { Address, GetAbiItemReturnType, Log } from 'viem';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { ROLES } from '../common/index.js';
 import { NodeOperator } from '../common/tyles.js';
-import { empty, mergeRoles } from './merge.js';
-import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
+import { isNotEmptyRoles, mergeRoles } from './merge.js';
 
 type NodeOperatorLogs =
   | Log<
@@ -11,7 +11,7 @@ type NodeOperatorLogs =
       number,
       false,
       GetAbiItemReturnType<typeof CSModuleAbi, 'NodeOperatorAdded'>,
-      true
+      false
     >
   | Log<
       bigint,
@@ -21,7 +21,7 @@ type NodeOperatorLogs =
         typeof CSModuleAbi,
         'NodeOperatorManagerAddressChanged'
       >,
-      true
+      false
     >
   | Log<
       bigint,
@@ -31,32 +31,34 @@ type NodeOperatorLogs =
         typeof CSModuleAbi,
         'NodeOperatorRewardAddressChanged'
       >,
-      true
+      false
     >;
 
-export const reconstructNodeOperators = (
+export const reconstructOperators = (
   logs: NodeOperatorLogs[],
   address: Address,
 ): NodeOperator[] =>
   logs
-    .sort(sortEventsByBlockNumber)
     .reduce((operators, log) => {
+      if (log.args.nodeOperatorId === undefined) {
+        return operators;
+      }
       switch (log.eventName) {
         case 'NodeOperatorAdded':
           return mergeRoles(operators, log.args.nodeOperatorId, {
-            [ROLES.MANAGER]: log.args.managerAddress === address,
-            [ROLES.REWARDS]: log.args.rewardAddress === address,
+            [ROLES.MANAGER]: isAddressEqual(log.args.managerAddress!, address),
+            [ROLES.REWARDS]: isAddressEqual(log.args.rewardAddress!, address),
           });
         case 'NodeOperatorManagerAddressChanged':
           return mergeRoles(operators, log.args.nodeOperatorId, {
-            [ROLES.MANAGER]: log.args.newAddress === address,
+            [ROLES.MANAGER]: isAddressEqual(log.args.newAddress!, address),
           });
         case 'NodeOperatorRewardAddressChanged':
           return mergeRoles(operators, log.args.nodeOperatorId, {
-            [ROLES.REWARDS]: log.args.newAddress === address,
+            [ROLES.REWARDS]: isAddressEqual(log.args.newAddress!, address),
           });
         default:
           return operators;
       }
     }, [] as NodeOperator[])
-    .filter(empty);
+    .filter(isNotEmptyRoles);
