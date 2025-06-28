@@ -90,6 +90,19 @@ export const VettedGateAbi = [
   },
   {
     "type": "function",
+    "name": "RECOVERER_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "RESUME_ROLE",
     "inputs": [],
     "outputs": [
@@ -464,6 +477,30 @@ export const VettedGateAbi = [
   },
   {
     "type": "function",
+    "name": "getReferralsCount",
+    "inputs": [
+      {
+        "name": "referrer",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "season",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getResumeSinceTimestamp",
     "inputs": [],
     "outputs": [
@@ -705,22 +742,64 @@ export const VettedGateAbi = [
   },
   {
     "type": "function",
-    "name": "referralCounts",
+    "name": "recoverERC1155",
     "inputs": [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
       {
-        "name": "",
+        "name": "tokenId",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverERC20",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverERC721",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverEther",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -837,7 +916,13 @@ export const VettedGateAbi = [
         "internalType": "uint256"
       }
     ],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "season",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -988,6 +1073,31 @@ export const VettedGateAbi = [
   },
   {
     "type": "event",
+    "name": "ReferralRecorded",
+    "inputs": [
+      {
+        "name": "referrer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "season",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "referralNodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "ReferrerConsumed",
     "inputs": [
       {
@@ -995,6 +1105,12 @@ export const VettedGateAbi = [
         "type": "address",
         "indexed": true,
         "internalType": "address"
+      },
+      {
+        "name": "season",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
       }
     ],
     "anonymous": false
@@ -1153,6 +1269,11 @@ export const VettedGateAbi = [
   {
     "type": "error",
     "name": "InvalidTreeRoot",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NodeOperatorDoesNotExist",
     "inputs": []
   },
   {

@@ -16,6 +16,11 @@ export const CSStrikesAbi = [
         "name": "exitPenalties",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "parametersRegistry",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "nonpayable"
@@ -235,7 +240,7 @@ export const CSStrikesAbi = [
       {
         "name": "keyStrikes",
         "type": "tuple",
-        "internalType": "struct ICSStrikes.ModuleKeyStrikes",
+        "internalType": "struct ICSStrikes.KeyStrikes",
         "components": [
           {
             "name": "nodeOperatorId",
@@ -294,7 +299,7 @@ export const CSStrikesAbi = [
       {
         "name": "keyStrikesList",
         "type": "tuple[]",
-        "internalType": "struct ICSStrikes.ModuleKeyStrikes[]",
+        "internalType": "struct ICSStrikes.KeyStrikes[]",
         "components": [
           {
             "name": "nodeOperatorId",
@@ -451,7 +456,7 @@ export const CSStrikesAbi = [
       {
         "name": "keyStrikesList",
         "type": "tuple[]",
-        "internalType": "struct ICSStrikes.ModuleKeyStrikes[]",
+        "internalType": "struct ICSStrikes.KeyStrikes[]",
         "components": [
           {
             "name": "nodeOperatorId",
@@ -644,6 +649,11 @@ export const CSStrikesAbi = [
   },
   {
     "type": "error",
+    "name": "EmptyKeyStrikesList",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidInitialization",
     "inputs": []
   },
@@ -674,22 +684,17 @@ export const CSStrikesAbi = [
   },
   {
     "type": "error",
-    "name": "NotOracle",
+    "name": "SenderIsNotOracle",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ValueNotEvenlyDivisible",
     "inputs": []
   },
   {
     "type": "error",
     "name": "ZeroAdminAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroBadPerformancePenaltyAmount",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroEjectionFeeAmount",
     "inputs": []
   },
   {
@@ -709,7 +714,17 @@ export const CSStrikesAbi = [
   },
   {
     "type": "error",
+    "name": "ZeroMsgValue",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "ZeroOracleAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroParametersRegistryAddress",
     "inputs": []
   }
 ] as const;

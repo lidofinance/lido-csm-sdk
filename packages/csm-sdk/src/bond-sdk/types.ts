@@ -1,23 +1,30 @@
-import { Hex } from 'viem';
-import { NodeOperatorId } from '../common/index.js';
-import { CommonTransactionProps, PermitSignature } from '../core-sdk/types.js';
+import {
+  NodeOperatorId,
+  PermitSignatureShort,
+  RewardProof,
+} from '../common/index.js';
+import { CommonTransactionProps } from '../core-sdk/types.js';
 
-export type AddBondProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
-  amount: bigint;
-  permit?: PermitSignature;
+export type AddBondResult = {
+  current: bigint;
+  required: bigint;
 };
 
-export type CoverLockedBondProps = CommonTransactionProps & {
+export type AddBondProps = CommonTransactionProps<AddBondResult> & {
+  nodeOperatorId: NodeOperatorId;
+  amount: bigint;
+  permit?: PermitSignatureShort;
+};
+
+export type CoverLockedBondProps = CommonTransactionProps<bigint> & {
   nodeOperatorId: NodeOperatorId;
   amount: bigint;
 };
 
-export type ClaimBondProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
-  amount: bigint;
-  cumulativeFeeShares: bigint;
-  rewardsProof: Hex[];
-};
+export type ClaimBondProps = CommonTransactionProps &
+  Partial<RewardProof> & {
+    nodeOperatorId: NodeOperatorId;
+    amount: bigint;
+  };
 
 export type PullRewardsProps = Omit<ClaimBondProps, 'amount'>;

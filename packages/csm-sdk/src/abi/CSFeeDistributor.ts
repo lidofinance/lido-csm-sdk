@@ -95,7 +95,7 @@ export const CSFeeDistributorAbi = [
         "internalType": "uint256"
       },
       {
-        "name": "shares",
+        "name": "cumulativeFeeShares",
         "type": "uint256",
         "internalType": "uint256"
       },
@@ -119,14 +119,14 @@ export const CSFeeDistributorAbi = [
     "name": "distributedShares",
     "inputs": [
       {
-        "name": "",
+        "name": "nodeOperatorId",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
     "outputs": [
       {
-        "name": "",
+        "name": "distributed",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -169,7 +169,7 @@ export const CSFeeDistributorAbi = [
         "internalType": "uint256"
       },
       {
-        "name": "shares",
+        "name": "cumulativeFeeShares",
         "type": "uint256",
         "internalType": "uint256"
       },
@@ -1014,11 +1014,6 @@ export const CSFeeDistributorAbi = [
   },
   {
     "type": "error",
-    "name": "NotAccounting",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "NotAllowedToRecover",
     "inputs": []
   },
@@ -1034,7 +1029,12 @@ export const CSFeeDistributorAbi = [
   },
   {
     "type": "error",
-    "name": "NotOracle",
+    "name": "SenderIsNotAccounting",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "SenderIsNotOracle",
     "inputs": []
   },
   {

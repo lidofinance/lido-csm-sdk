@@ -38,6 +38,7 @@ export class StakingRouterSDK extends CsmSDKModule {
       `CSM module (${moduleId}) is not connected to StakingRouter`,
       ERROR_CODE.NOT_SUPPORTED,
     );
+    const shareLimit = BigInt(moduleDigest.state.stakeShareLimit);
 
     const active =
       moduleDigest.summary.totalDepositedValidators -
@@ -51,17 +52,17 @@ export class StakingRouterSDK extends CsmSDKModule {
       0n,
     );
 
-    const capacity =
-      (totalActive * BigInt(moduleDigest.state.stakeShareLimit)) /
-      PERCENT_BASIS;
+    const capacity = (totalActive * shareLimit) / PERCENT_BASIS;
 
     const activeLeft = capacity - active;
+
 
     return {
       active,
       activeLeft,
       capacity,
       queue,
+      shareLimit,
     };
   }
 

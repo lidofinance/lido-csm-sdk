@@ -321,7 +321,13 @@ export const CSExitPenaltiesAbi = [
         "internalType": "bytes"
       },
       {
-        "name": "withdrawalRequestFee",
+        "name": "withdrawalRequestPaidFee",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "withdrawalRequestRecordedFee",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -382,17 +388,7 @@ export const CSExitPenaltiesAbi = [
   },
   {
     "type": "error",
-    "name": "ValidatorExitDelayAlreadyReported",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "ValidatorExitDelayNotApplicable",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroAccountingAddress",
     "inputs": []
   },
   {

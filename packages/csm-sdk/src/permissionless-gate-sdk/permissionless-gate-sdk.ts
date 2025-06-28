@@ -16,9 +16,13 @@ import {
 import { CSModuleAbi, PermissionlessGateAbi } from '../abi/index.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { EMPTY_PERMIT, TOKENS, WithToken } from '../common/index.js';
-import { parseDepositData } from '../common/utils/index.js';
-import { PermitSignature } from '../core-sdk/types.js';
+import {
+  EMPTY_PERMIT,
+  PermitSignatureShort,
+  TOKENS,
+  WithToken,
+} from '../common/index.js';
+import { parseDepositData, stripPermit } from '../common/utils/index.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
 import {
@@ -99,11 +103,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ...rest
     } = await this.parseProps(props);
 
-    // FIXME: pass callback
-    const permit = await this.getPermit(
-      { token: TOKENS.steth, amount },
+    const { hash, permit } = await this.getPermit(
+      { token: TOKENS.steth, amount, ...rest } as any,
       _permit,
     );
+    if (hash) return { hash };
 
     const args = [
       keysCount,
@@ -140,11 +144,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ...rest
     } = await this.parseProps(props);
 
-    // FIXME: pass callback
-    const permit = await this.getPermit(
-      { token: TOKENS.wsteth, amount },
+    const { hash, permit } = await this.getPermit(
+      { token: TOKENS.wsteth, amount, ...rest } as any,
       _permit,
     );
+    if (hash) return { hash };
 
     const args = [
       keysCount,
@@ -214,15 +218,18 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     };
   }
 
-  // TODO: cast to PermitSignatureShort?
+  // FIXME: duplicate
   @Logger('Utils:')
   private async getPermit(
     props: SignPermitOrApproveProps,
-    preparedPermit?: PermitSignature,
+    preparedPermit?: PermitSignatureShort,
   ) {
-    if (preparedPermit) return preparedPermit;
+    if (preparedPermit) return { permit: stripPermit(preparedPermit) };
     const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
-    return result?.permit ?? EMPTY_PERMIT;
+    return {
+      hash: result?.hash,
+      permit: stripPermit(result?.permit ?? EMPTY_PERMIT),
+    };
   }
 
   @Logger('Utils:')

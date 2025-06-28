@@ -1,7 +1,6 @@
 import {
   CheckAllowanceResult,
-  ERROR_CODE,
-  invariant,
+  NOOP,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
 import {
@@ -12,7 +11,6 @@ import {
   WalletClient,
 } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import {
@@ -20,9 +18,12 @@ import {
   EMPTY_PERMIT,
   Erc20Tokens,
   STETH_ROUNDING_THRESHOLD,
-  TOKEN_ADDRESS,
   TOKENS,
 } from '../common/index.js';
+import {
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '../core-sdk/types.js';
 import {
   AllowanceProps,
   AmountAndTokenProps,
@@ -32,30 +33,17 @@ import {
   SignPermitOrApproveProps,
   SignPermitProps,
 } from './types.js';
-import { parseValue } from '../common/utils/parse-value.js';
 
 export class SpendingSDK extends CsmSDKModule {
   protected get spender(): Address {
     return this.core.getContractAddress(CSM_CONTRACT_NAMES.csAccounting);
   }
 
-  @Logger('Utils:')
-  @Cache(30 * 60 * 1000)
-  public getTokenAddress(contract: Erc20Tokens): Address {
-    const address = TOKEN_ADDRESS[this.core.chainId]?.[contract];
-    invariant(
-      address,
-      `Token contracts are not supported for ${this.core.chain.name}(${this.core.chain.id})`,
-      ERROR_CODE.NOT_SUPPORTED,
-    );
-    return address;
-  }
-
   public getTokenContract(
     token: Erc20Tokens,
   ): GetContractReturnType<typeof erc20Abi, WalletClient> {
     return getContract({
-      address: this.getTokenAddress(token),
+      address: this.core.getContractAddress(token),
       abi: erc20Abi,
       client: {
         public: this.core.core.rpcProvider,
@@ -67,7 +55,12 @@ export class SpendingSDK extends CsmSDKModule {
   @Logger('Permit:')
   @ErrorHandler()
   public async signPermit(props: SignPermitProps) {
-    const { amount } = this.parseProps(props);
+    const { token, amount, callback = NOOP } = this.parseProps(props);
+
+    await callback({
+      stage: TransactionCallbackStage.PERMIT_SIGN,
+      payload: { token, amount },
+    });
 
     // TODO: set default deadline if not provided
     // TODO: convert to short version of permit signature?
@@ -136,12 +129,40 @@ export class SpendingSDK extends CsmSDKModule {
     const isMultisig = await this.core.core.isContract(account.address);
 
     if (isMultisig) {
-      const { hash } = await this.approve(props);
+      const { hash } = await this.approve({
+        ...props,
+        callback: this.wrapApproveCallback(props),
+      });
       return { permit: EMPTY_PERMIT, hash };
     } else {
       const permit = await this.signPermit(props);
       return { permit };
     }
+  }
+
+  private wrapApproveCallback({
+    callback,
+    ...props
+  }: ApproveProps): TransactionCallback | undefined {
+    if (!callback) return undefined;
+    const { token, amount } = this.parseProps(props);
+    return (args) => {
+      switch (args.stage) {
+        case TransactionCallbackStage.SIGN:
+          return callback({
+            stage: TransactionCallbackStage.APPROVE_SIGN,
+            payload: { token, amount },
+          });
+        case TransactionCallbackStage.RECEIPT:
+          return callback({
+            stage: TransactionCallbackStage.APPROVE_RECEIPT,
+            payload: { token, amount, hash: args.payload.hash },
+          });
+        case TransactionCallbackStage.MULTISIG_DONE:
+          return callback(args);
+        default:
+      }
+    };
   }
 
   /**
@@ -151,9 +172,8 @@ export class SpendingSDK extends CsmSDKModule {
   private parseProps<T extends AmountAndTokenProps>(
     props: T,
   ): T & { amount: bigint } {
-    const { token, amount: _amount } = props;
-    let amount = parseValue(_amount);
-    if (token === TOKENS.steth && amount > 0) {
+    let { amount } = props;
+    if (props.token === TOKENS.steth && amount > 0) {
       amount += STETH_ROUNDING_THRESHOLD;
     }
     return { ...props, amount };

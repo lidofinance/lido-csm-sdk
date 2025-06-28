@@ -13,14 +13,14 @@ export const CSEjectorAbi = [
         "internalType": "address"
       },
       {
-        "name": "twg",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
         "name": "stakingModuleId",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "admin",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "nonpayable"
@@ -79,6 +79,19 @@ export const CSEjectorAbi = [
   },
   {
     "type": "function",
+    "name": "RECOVERER_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "RESUME_ROLE",
     "inputs": [],
     "outputs": [
@@ -125,19 +138,6 @@ export const CSEjectorAbi = [
         "name": "",
         "type": "uint8",
         "internalType": "uint8"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "TWG",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ITriggerableWithdrawalsGateway"
       }
     ],
     "stateMutability": "view"
@@ -297,19 +297,6 @@ export const CSEjectorAbi = [
   },
   {
     "type": "function",
-    "name": "initialize",
-    "inputs": [
-      {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "isPaused",
     "inputs": [],
     "outputs": [
@@ -331,6 +318,67 @@ export const CSEjectorAbi = [
         "internalType": "uint256"
       }
     ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverERC1155",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverERC20",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverERC721",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "recoverEther",
+    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -398,6 +446,19 @@ export const CSEjectorAbi = [
   },
   {
     "type": "function",
+    "name": "triggerableWithdrawalsGateway",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract ITriggerableWithdrawalsGateway"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "voluntaryEject",
     "inputs": [
       {
@@ -446,19 +507,6 @@ export const CSEjectorAbi = [
     ],
     "outputs": [],
     "stateMutability": "payable"
-  },
-  {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
-      {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
-    ],
-    "anonymous": false
   },
   {
     "type": "event",
@@ -582,17 +630,7 @@ export const CSEjectorAbi = [
   },
   {
     "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "NodeOperatorDoesNotExist",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotInitializing",
     "inputs": []
   },
   {
@@ -643,11 +681,6 @@ export const CSEjectorAbi = [
   {
     "type": "error",
     "name": "ZeroStrikesAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroTWGAddress",
     "inputs": []
   }
 ] as const;

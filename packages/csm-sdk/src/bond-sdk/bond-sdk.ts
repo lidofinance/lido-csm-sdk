@@ -3,20 +3,42 @@ import {
   SDKError,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { GetContractReturnType, WalletClient } from 'viem';
+import {
+  decodeEventLog,
+  getAbiItem,
+  GetContractReturnType,
+  toEventHash,
+  TransactionReceipt,
+  WalletClient,
+} from 'viem';
 import { CSAccountingAbi } from '../abi/CSAccounting.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { EMPTY_PERMIT, TOKENS, WithToken } from '../common/index.js';
-import { PermitSignature } from '../core-sdk/types.js';
+import {
+  EMPTY_PERMIT,
+  NodeOperatorId,
+  PermitSignatureShort,
+  RewardProof,
+  TOKENS,
+  WithToken,
+} from '../common/index.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
 import {
   AddBondProps,
+  AddBondResult,
   ClaimBondProps,
   CoverLockedBondProps,
   PullRewardsProps,
 } from './types.js';
+import { stripPermit } from '../common/utils/strip-permit.js';
+
+const BOND_LOCK_CHANGED_EVENT = getAbiItem({
+  abi: CSAccountingAbi,
+  name: 'BondLockChanged',
+});
+
+const BOND_LOCK_CHANGED_SIGNATURE = toEventHash(BOND_LOCK_CHANGED_EVENT);
 
 export class BondSDK extends CsmSDKModule<{
   spending: SpendingSDK;
@@ -28,9 +50,18 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.getContractCSAccounting();
   }
 
+  @Logger('Views:')
+  @ErrorHandler()
+  private async getBondSummary(id: NodeOperatorId): Promise<AddBondResult> {
+    const [current, required] = await this.contract.read.getBondSummary([id]);
+    return { current, required };
+  }
+
   @Logger('Call:')
   @ErrorHandler()
-  public async addBondETH(props: AddBondProps): Promise<TransactionResult> {
+  public async addBondETH(
+    props: AddBondProps,
+  ): Promise<TransactionResult<AddBondResult>> {
     const { nodeOperatorId, amount: value, permit, ...rest } = props;
 
     const args = [nodeOperatorId] as const;
@@ -47,19 +78,22 @@ export class BondSDK extends CsmSDKModule<{
           value,
           ...options,
         }),
+      decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addBondStETH(props: AddBondProps): Promise<TransactionResult> {
+  public async addBondStETH(
+    props: AddBondProps,
+  ): Promise<TransactionResult<AddBondResult>> {
     const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
 
-    // FIXME: pass callback
-    const permit = await this.getPermit(
-      { token: TOKENS.steth, amount },
+    const { hash, permit } = await this.getPermit(
+      { token: TOKENS.steth, amount, ...rest } as any,
       _permit,
     );
+    if (hash) return { hash };
 
     const args = [nodeOperatorId, amount, permit] as const;
 
@@ -69,19 +103,22 @@ export class BondSDK extends CsmSDKModule<{
         this.contract.estimateGas.depositStETH(args, options),
       sendTransaction: (options) =>
         this.contract.write.depositStETH(args, options),
+      decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addBondWstETH(props: AddBondProps): Promise<TransactionResult> {
+  public async addBondWstETH(
+    props: AddBondProps,
+  ): Promise<TransactionResult<AddBondResult>> {
     const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
 
-    // FIXME: pass callback
-    const permit = await this.getPermit(
-      { token: TOKENS.wsteth, amount },
+    const { hash, permit } = await this.getPermit(
+      { token: TOKENS.wsteth, amount, ...rest } as any,
       _permit,
     );
+    if (hash) return { hash };
 
     const args = [nodeOperatorId, amount, permit] as const;
 
@@ -91,12 +128,13 @@ export class BondSDK extends CsmSDKModule<{
         this.contract.estimateGas.depositWstETH(args, options),
       sendTransaction: (options) =>
         this.contract.write.depositWstETH(args, options),
+      decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
   public async addBond(
     props: WithToken<AddBondProps>,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<AddBondResult>> {
     const { token } = props;
     switch (token) {
       case TOKENS.eth:
@@ -113,22 +151,24 @@ export class BondSDK extends CsmSDKModule<{
     }
   }
 
-  // TODO: cast to PermitSignatureShort?
   @Logger('Utils:')
   private async getPermit(
     props: SignPermitOrApproveProps,
-    preparedPermit?: PermitSignature,
+    preparedPermit?: PermitSignatureShort,
   ) {
-    if (preparedPermit) return preparedPermit;
+    if (preparedPermit) return { permit: stripPermit(preparedPermit) };
     const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
-    return result?.permit ?? EMPTY_PERMIT;
+    return {
+      hash: result?.hash,
+      permit: stripPermit(result?.permit ?? EMPTY_PERMIT),
+    };
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async coverLockedBonc(
+  public async coverLockedBond(
     props: CoverLockedBondProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<bigint>> {
     const { nodeOperatorId, amount: value, ...rest } = props;
 
     const args = [nodeOperatorId] as const;
@@ -145,7 +185,32 @@ export class BondSDK extends CsmSDKModule<{
           value,
           ...options,
         }),
+      decodeResult: (receipt) => this.coverReceiptParseEvents(receipt),
     });
+  }
+
+  @Logger('Utils:')
+  private async coverReceiptParseEvents(
+    receipt: TransactionReceipt,
+  ): Promise<bigint> {
+    for (const log of receipt.logs) {
+      // skips non-relevant events
+      if (log.topics[0] !== BOND_LOCK_CHANGED_SIGNATURE) continue;
+      const parsedLog = decodeEventLog({
+        abi: [BOND_LOCK_CHANGED_EVENT],
+        strict: true,
+        ...log,
+      });
+      return parsedLog.args.newAmount;
+    }
+    throw new SDKError({
+      message: 'could not find BondLockChanged event in transaction',
+      code: ERROR_CODE.TRANSACTION_ERROR,
+    });
+  }
+
+  public parseClaimProps<T>(props: T & Partial<RewardProof>): T & RewardProof {
+    return { ...props, proof: props.proof ?? [], shares: props.shares ?? 0n };
   }
 
   @Logger('Call:')
@@ -153,10 +218,10 @@ export class BondSDK extends CsmSDKModule<{
   public async pullRewards(
     props: PullRewardsProps,
   ): Promise<TransactionResult> {
-    const { nodeOperatorId, cumulativeFeeShares, rewardsProof, ...rest } =
-      props;
+    const { nodeOperatorId, shares, proof, ...rest } =
+      this.parseClaimProps(props);
 
-    const args = [nodeOperatorId, cumulativeFeeShares, rewardsProof] as const;
+    const args = [nodeOperatorId, shares, proof] as const;
 
     return this.core.performTransaction({
       ...rest,
@@ -176,20 +241,10 @@ export class BondSDK extends CsmSDKModule<{
   public async claimBondUnstETH(
     props: ClaimBondProps,
   ): Promise<TransactionResult> {
-    const {
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-      ...rest
-    } = props;
+    const { nodeOperatorId, amount, shares, proof, ...rest } =
+      this.parseClaimProps(props);
 
-    const args = [
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    ] as const;
+    const args = [nodeOperatorId, amount, shares, proof] as const;
 
     return this.core.performTransaction({
       ...rest,
@@ -209,20 +264,10 @@ export class BondSDK extends CsmSDKModule<{
   public async claimBondStETH(
     props: ClaimBondProps,
   ): Promise<TransactionResult> {
-    const {
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-      ...rest
-    } = props;
+    const { nodeOperatorId, amount, shares, proof, ...rest } =
+      this.parseClaimProps(props);
 
-    const args = [
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    ] as const;
+    const args = [nodeOperatorId, amount, shares, proof] as const;
 
     return this.core.performTransaction({
       ...rest,
@@ -242,20 +287,10 @@ export class BondSDK extends CsmSDKModule<{
   public async claimBondWstETH(
     props: ClaimBondProps,
   ): Promise<TransactionResult> {
-    const {
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-      ...rest
-    } = props;
+    const { nodeOperatorId, amount, shares, proof, ...rest } =
+      this.parseClaimProps(props);
 
-    const args = [
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    ] as const;
+    const args = [nodeOperatorId, amount, shares, proof] as const;
 
     return this.core.performTransaction({
       ...rest,

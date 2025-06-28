@@ -413,25 +413,18 @@ export const CSParametersRegistryAbi = [
     "outputs": [
       {
         "name": "data",
-        "type": "tuple",
-        "internalType": "struct ICSParametersRegistry.KeyNumberValue",
+        "type": "tuple[]",
+        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
-            "name": "intervals",
-            "type": "tuple[]",
-            "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
-            "components": [
-              {
-                "name": "minKeyNumber",
-                "type": "uint256",
-                "internalType": "uint256"
-              },
-              {
-                "name": "value",
-                "type": "uint256",
-                "internalType": "uint256"
-              }
-            ]
+            "name": "minKeyNumber",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "value",
+            "type": "uint256",
+            "internalType": "uint256"
           }
         ]
       }
@@ -475,25 +468,18 @@ export const CSParametersRegistryAbi = [
     "outputs": [
       {
         "name": "data",
-        "type": "tuple",
-        "internalType": "struct ICSParametersRegistry.KeyNumberValue",
+        "type": "tuple[]",
+        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
-            "name": "intervals",
-            "type": "tuple[]",
-            "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
-            "components": [
-              {
-                "name": "minKeyNumber",
-                "type": "uint256",
-                "internalType": "uint256"
-              },
-              {
-                "name": "value",
-                "type": "uint256",
-                "internalType": "uint256"
-              }
-            ]
+            "name": "minKeyNumber",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "value",
+            "type": "uint256",
+            "internalType": "uint256"
           }
         ]
       }
@@ -1135,13 +1121,13 @@ export const CSParametersRegistryAbi = [
       },
       {
         "name": "priority",
-        "type": "uint32",
-        "internalType": "uint32"
+        "type": "uint256",
+        "internalType": "uint256"
       },
       {
         "name": "maxDeposits",
-        "type": "uint32",
-        "internalType": "uint32"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -2098,7 +2084,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "error",
-    "name": "InvalidExitDelayPenalty",
+    "name": "InvalidAllowedExitDelay",
     "inputs": []
   },
   {
@@ -2165,6 +2151,11 @@ export const CSParametersRegistryAbi = [
   {
     "type": "error",
     "name": "ZeroMaxDeposits",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroQueueLowestPriority",
     "inputs": []
   }
 ] as const;

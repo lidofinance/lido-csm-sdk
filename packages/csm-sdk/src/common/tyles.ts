@@ -1,5 +1,5 @@
 import { PermitSignature } from '@lidofinance/lido-ethereum-sdk';
-import { Address } from 'viem';
+import { Address, Hex } from 'viem';
 import { ROLES } from './constants/roles.js';
 import { TOKENS } from './constants/tokens.js';
 
@@ -36,10 +36,36 @@ export type NodeOperator = {
   roles: ROLES[];
 };
 
+export type NodeOperatorInvite = {
+  id: NodeOperatorId;
+  role: ROLES;
+};
+
 export type BondBalance = {
   required: bigint;
   current: bigint;
   locked: bigint;
   delta: bigint;
   isInsufficient: boolean;
+};
+
+export type Proof = Hex[];
+
+export type RewardProof = {
+  shares: bigint;
+  proof: Proof;
+};
+
+export type Rewards = RewardProof & {
+  available: bigint; // steth amount
+};
+
+export type StandardMerkleTreeData<T extends any[]> = {
+  format: 'standard-v1';
+  tree: string[];
+  values: {
+    value: T;
+    treeIndex: number;
+  }[];
+  leafEncoding: string[];
 };

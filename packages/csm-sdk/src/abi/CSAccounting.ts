@@ -1,2480 +1,2347 @@
 export const CSAccountingAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "lidoLocator",
-        "type": "address",
-        "internalType": "address"
+        name: 'lidoLocator',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "module",
-        "type": "address",
-        "internalType": "address"
+        name: 'module',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "_feeDistributor",
-        "type": "address",
-        "internalType": "address"
+        name: '_feeDistributor',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "maxCurveLength",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'minBondLockPeriod',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "minBondLockPeriod",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'maxBondLockPeriod',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "maxBondLockPeriod",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DEFAULT_ADMIN_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "DEFAULT_BOND_CURVE_ID",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DEFAULT_BOND_CURVE_ID',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "FEE_DISTRIBUTOR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'FEE_DISTRIBUTOR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSFeeDistributor"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract ICSFeeDistributor',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "LIDO",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'LIDO',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ILido"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract ILido',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "LIDO_LOCATOR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'LIDO_LOCATOR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ILidoLocator"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract ILidoLocator',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MANAGE_BOND_CURVES_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MANAGE_BOND_CURVES_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MAX_BOND_LOCK_PERIOD",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MAX_BOND_LOCK_PERIOD',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MAX_CURVE_LENGTH",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MAX_CURVE_LENGTH',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MIN_BOND_LOCK_PERIOD",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MIN_BOND_LOCK_PERIOD',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MIN_CURVE_LENGTH",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MIN_CURVE_LENGTH',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MODULE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MODULE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSModule"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract ICSModule',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PAUSE_INFINITELY",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PAUSE_INFINITELY',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PAUSE_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PAUSE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "RECOVERER_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'RECOVERER_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "RESUME_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'RESUME_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "SET_BOND_CURVE_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'SET_BOND_CURVE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "WITHDRAWAL_QUEUE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'WITHDRAWAL_QUEUE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IWithdrawalQueue"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IWithdrawalQueue',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "WSTETH",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'WSTETH',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IWstETH"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IWstETH',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "addBondCurve",
-    "inputs": [
+    type: 'function',
+    name: 'addBondCurve',
+    inputs: [
       {
-        "name": "bondCurve",
-        "type": "tuple[]",
-        "internalType": "struct ICSBondCurve.BondCurveIntervalInput[]",
-        "components": [
+        name: 'bondCurve',
+        type: 'tuple[]',
+        internalType: 'struct ICSBondCurve.BondCurveIntervalInput[]',
+        components: [
           {
-            "name": "minKeysCount",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'minKeysCount',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "trend",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
+            name: 'trend',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "id",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'id',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "chargeFee",
-    "inputs": [
+    type: 'function',
+    name: 'chargeFee',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "chargePenaltyRecipient",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'chargePenaltyRecipient',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "claimRewardsStETH",
-    "inputs": [
+    type: 'function',
+    name: 'claimRewardsStETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "stETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'stETHAmount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "claimedShares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'claimedShares',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "claimRewardsUnstETH",
-    "inputs": [
+    type: 'function',
+    name: 'claimRewardsUnstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "stETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'stETHAmount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "requestId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'requestId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "claimRewardsWstETH",
-    "inputs": [
+    type: 'function',
+    name: 'claimRewardsWstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "wstETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'wstETHAmount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "claimedWstETH",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'claimedWstETH',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "compensateLockedBondETH",
-    "inputs": [
+    type: 'function',
+    name: 'compensateLockedBondETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "payable"
+    outputs: [],
+    stateMutability: 'payable',
   },
   {
-    "type": "function",
-    "name": "depositETH",
-    "inputs": [
+    type: 'function',
+    name: 'depositETH',
+    inputs: [
       {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
     ],
-    "outputs": [],
-    "stateMutability": "payable"
+    outputs: [],
+    stateMutability: 'payable',
   },
   {
-    "type": "function",
-    "name": "depositETH",
-    "inputs": [
+    type: 'function',
+    name: 'depositStETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "depositStETH",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'stETHAmount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "stETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
-        "components": [
+        name: 'permit',
+        type: 'tuple',
+        internalType: 'struct ICSAccounting.PermitInput',
+        components: [
           {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'value',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'deadline',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
+            name: 'v',
+            type: 'uint8',
+            internalType: 'uint8',
           },
           {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
+            name: 'r',
+            type: 'bytes32',
+            internalType: 'bytes32',
           },
           {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
+            name: 's',
+            type: 'bytes32',
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "depositStETH",
-    "inputs": [
+    type: 'function',
+    name: 'depositWstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "stETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'wstETHAmount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
-        "components": [
+        name: 'permit',
+        type: 'tuple',
+        internalType: 'struct ICSAccounting.PermitInput',
+        components: [
           {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'value',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'deadline',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
+            name: 'v',
+            type: 'uint8',
+            internalType: 'uint8',
           },
           {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
+            name: 'r',
+            type: 'bytes32',
+            internalType: 'bytes32',
           },
           {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
+            name: 's',
+            type: 'bytes32',
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "depositWstETH",
-    "inputs": [
+    type: 'function',
+    name: 'feeDistributor',
+    inputs: [],
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: '',
+        type: 'address',
+        internalType: 'contract ICSFeeDistributor',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'finalizeUpgradeV2',
+    inputs: [
+      {
+        name: 'bondCurvesInputs',
+        type: 'tuple[][]',
+        internalType: 'struct ICSBondCurve.BondCurveIntervalInput[][]',
+        components: [
+          {
+            name: 'minKeysCount',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'trend',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'getActualLockedBond',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getBond',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getBondAmountByKeysCount',
+    inputs: [
+      {
+        name: 'keys',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "wstETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getBondAmountByKeysCountWstETH',
+    inputs: [
+      {
+        name: 'keysCount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
-        "components": [
-          {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "depositWstETH",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
+    ],
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
       },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getBondCurve',
+    inputs: [
       {
-        "name": "wstETHAmount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
+    ],
+    outputs: [
       {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
-        "components": [
+        name: '',
+        type: 'tuple',
+        internalType: 'struct ICSBondCurve.BondCurve',
+        components: [
           {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "feeDistributor",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSFeeDistributor"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "finalizeUpgradeV2",
-    "inputs": [
-      {
-        "name": "bondCurvesInputs",
-        "type": "tuple[][]",
-        "internalType": "struct ICSBondCurve.BondCurveIntervalInput[][]",
-        "components": [
-          {
-            "name": "minKeysCount",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "trend",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "getActualLockedBond",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getBond",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getBondAmountByKeysCount",
-    "inputs": [
-      {
-        "name": "keys",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getBondAmountByKeysCountWstETH",
-    "inputs": [
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getBondCurve",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct ICSBondCurve.BondCurve",
-        "components": [
-          {
-            "name": "intervals",
-            "type": "tuple[]",
-            "internalType": "struct ICSBondCurve.BondCurveInterval[]",
-            "components": [
+            name: 'intervals',
+            type: 'tuple[]',
+            internalType: 'struct ICSBondCurve.BondCurveInterval[]',
+            components: [
               {
-                "name": "minKeysCount",
-                "type": "uint256",
-                "internalType": "uint256"
+                name: 'minKeysCount',
+                type: 'uint256',
+                internalType: 'uint256',
               },
               {
-                "name": "minBond",
-                "type": "uint256",
-                "internalType": "uint256"
+                name: 'minBond',
+                type: 'uint256',
+                internalType: 'uint256',
               },
               {
-                "name": "trend",
-                "type": "uint256",
-                "internalType": "uint256"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'trend',
+                type: 'uint256',
+                internalType: 'uint256',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getBondCurveId",
-    "inputs": [
+    type: 'function',
+    name: 'getBondCurveId',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getBondLockPeriod",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getBondLockPeriod',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getBondShares",
-    "inputs": [
+    type: 'function',
+    name: 'getBondShares',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getBondSummary",
-    "inputs": [
+    type: 'function',
+    name: 'getBondSummary',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "current",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'current',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "required",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'required',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getBondSummaryShares",
-    "inputs": [
+    type: 'function',
+    name: 'getBondSummaryShares',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "current",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'current',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "required",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'required',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getClaimableBondShares",
-    "inputs": [
+    type: 'function',
+    name: 'getClaimableBondShares',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getClaimableRewardsAndBondShares",
-    "inputs": [
+    type: 'function',
+    name: 'getClaimableRewardsAndBondShares',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "claimableShares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'claimableShares',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getCurveInfo",
-    "inputs": [
+    type: 'function',
+    name: 'getCurveInfo',
+    inputs: [
       {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct ICSBondCurve.BondCurve",
-        "components": [
+        name: '',
+        type: 'tuple',
+        internalType: 'struct ICSBondCurve.BondCurve',
+        components: [
           {
-            "name": "intervals",
-            "type": "tuple[]",
-            "internalType": "struct ICSBondCurve.BondCurveInterval[]",
-            "components": [
+            name: 'intervals',
+            type: 'tuple[]',
+            internalType: 'struct ICSBondCurve.BondCurveInterval[]',
+            components: [
               {
-                "name": "minKeysCount",
-                "type": "uint256",
-                "internalType": "uint256"
+                name: 'minKeysCount',
+                type: 'uint256',
+                internalType: 'uint256',
               },
               {
-                "name": "minBond",
-                "type": "uint256",
-                "internalType": "uint256"
+                name: 'minBond',
+                type: 'uint256',
+                internalType: 'uint256',
               },
               {
-                "name": "trend",
-                "type": "uint256",
-                "internalType": "uint256"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'trend',
+                type: 'uint256',
+                internalType: 'uint256',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getCurvesCount",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getCurvesCount',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getInitializedVersion",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getInitializedVersion',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'uint64',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getKeysCountByBondAmount",
-    "inputs": [
+    type: 'function',
+    name: 'getKeysCountByBondAmount',
+    inputs: [
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getLockedBondInfo",
-    "inputs": [
+    type: 'function',
+    name: 'getLockedBondInfo',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct ICSBondLock.BondLock",
-        "components": [
+        name: '',
+        type: 'tuple',
+        internalType: 'struct ICSBondLock.BondLock',
+        components: [
           {
-            "name": "amount",
-            "type": "uint128",
-            "internalType": "uint128"
+            name: 'amount',
+            type: 'uint128',
+            internalType: 'uint128',
           },
           {
-            "name": "until",
-            "type": "uint128",
-            "internalType": "uint128"
-          }
-        ]
-      }
+            name: 'until',
+            type: 'uint128',
+            internalType: 'uint128',
+          },
+        ],
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRequiredBondForNextKeys",
-    "inputs": [
+    type: 'function',
+    name: 'getRequiredBondForNextKeys',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "additionalKeys",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'additionalKeys',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRequiredBondForNextKeysWstETH",
-    "inputs": [
+    type: 'function',
+    name: 'getRequiredBondForNextKeysWstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "additionalKeys",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'additionalKeys',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getResumeSinceTimestamp",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getResumeSinceTimestamp',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleAdmin',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMember',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMemberCount',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getUnbondedKeysCount",
-    "inputs": [
+    type: 'function',
+    name: 'getUnbondedKeysCount',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getUnbondedKeysCountToEject",
-    "inputs": [
+    type: 'function',
+    name: 'getUnbondedKeysCountToEject',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
+    type: 'function',
+    name: 'grantRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
+    type: 'function',
+    name: 'hasRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
+    type: 'function',
+    name: 'initialize',
+    inputs: [
       {
-        "name": "bondCurve",
-        "type": "tuple[]",
-        "internalType": "struct ICSBondCurve.BondCurveIntervalInput[]",
-        "components": [
+        name: 'bondCurve',
+        type: 'tuple[]',
+        internalType: 'struct ICSBondCurve.BondCurveIntervalInput[]',
+        components: [
           {
-            "name": "minKeysCount",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'minKeysCount',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "trend",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
+            name: 'trend',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
       },
       {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
+        name: 'admin',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "bondLockPeriod",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'bondLockPeriod',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "_chargePenaltyRecipient",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '_chargePenaltyRecipient',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "isPaused",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'isPaused',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "lockBondETH",
-    "inputs": [
+    type: 'function',
+    name: 'lockBondETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "pauseFor",
-    "inputs": [
+    type: 'function',
+    name: 'pauseFor',
+    inputs: [
       {
-        "name": "duration",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'duration',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "penalize",
-    "inputs": [
+    type: 'function',
+    name: 'penalize',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "pullFeeRewards",
-    "inputs": [
+    type: 'function',
+    name: 'pullFeeRewards',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC1155",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC1155',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'tokenId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC20",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC20',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC721",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC721',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'tokenId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverEther",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'recoverEther',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverStETHShares",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'recoverStETHShares',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "releaseLockedBondETH",
-    "inputs": [
+    type: 'function',
+    name: 'releaseLockedBondETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "renewBurnerAllowance",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'renewBurnerAllowance',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
+    type: 'function',
+    name: 'renounceRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'callerConfirmation',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "resume",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'resume',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
+    type: 'function',
+    name: 'revokeRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setBondCurve",
-    "inputs": [
+    type: 'function',
+    name: 'setBondCurve',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setBondLockPeriod",
-    "inputs": [
+    type: 'function',
+    name: 'setBondLockPeriod',
+    inputs: [
       {
-        "name": "period",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'period',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setChargePenaltyRecipient",
-    "inputs": [
+    type: 'function',
+    name: 'setChargePenaltyRecipient',
+    inputs: [
       {
-        "name": "_chargePenaltyRecipient",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '_chargePenaltyRecipient',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "settleLockedBondETH",
-    "inputs": [
+    type: 'function',
+    name: 'settleLockedBondETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "applied",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: 'applied',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
+    type: 'function',
+    name: 'supportsInterface',
+    inputs: [
       {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
+        name: 'interfaceId',
+        type: 'bytes4',
+        internalType: 'bytes4',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "totalBondShares",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'totalBondShares',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "updateBondCurve",
-    "inputs": [
+    type: 'function',
+    name: 'updateBondCurve',
+    inputs: [
       {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "bondCurve",
-        "type": "tuple[]",
-        "internalType": "struct ICSBondCurve.BondCurveIntervalInput[]",
-        "components": [
+        name: 'bondCurve',
+        type: 'tuple[]',
+        internalType: 'struct ICSBondCurve.BondCurveIntervalInput[]',
+        components: [
           {
-            "name": "minKeysCount",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'minKeysCount',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "trend",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
+            name: 'trend',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "BondBurned",
-    "inputs": [
+    type: 'event',
+    name: 'BondBurned',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "amountToBurn",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'amountToBurn',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "burnedAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'burnedAmount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondCharged",
-    "inputs": [
+    type: 'event',
+    name: 'BondCharged',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "toChargeAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'toChargeAmount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "chargedAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'chargedAmount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondClaimedStETH",
-    "inputs": [
+    type: 'event',
+    name: 'BondClaimedStETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "to",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
+        name: 'to',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondClaimedUnstETH",
-    "inputs": [
+    type: 'event',
+    name: 'BondClaimedUnstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "to",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
+        name: 'to',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "requestId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'requestId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondClaimedWstETH",
-    "inputs": [
+    type: 'event',
+    name: 'BondClaimedWstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "to",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
+        name: 'to',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondCurveAdded",
-    "inputs": [
+    type: 'event',
+    name: 'BondCurveAdded',
+    inputs: [
       {
-        "name": "curveId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'curveId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "bondCurveIntervals",
-        "type": "tuple[]",
-        "indexed": false,
-        "internalType": "struct ICSBondCurve.BondCurveIntervalInput[]",
-        "components": [
+        name: 'bondCurveIntervals',
+        type: 'tuple[]',
+        indexed: false,
+        internalType: 'struct ICSBondCurve.BondCurveIntervalInput[]',
+        components: [
           {
-            "name": "minKeysCount",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'minKeysCount',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "trend",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
+            name: 'trend',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondCurveSet",
-    "inputs": [
+    type: 'event',
+    name: 'BondCurveSet',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "curveId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'curveId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondCurveUpdated",
-    "inputs": [
+    type: 'event',
+    name: 'BondCurveUpdated',
+    inputs: [
       {
-        "name": "curveId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'curveId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "bondCurveIntervals",
-        "type": "tuple[]",
-        "indexed": false,
-        "internalType": "struct ICSBondCurve.BondCurveIntervalInput[]",
-        "components": [
+        name: 'bondCurveIntervals',
+        type: 'tuple[]',
+        indexed: false,
+        internalType: 'struct ICSBondCurve.BondCurveIntervalInput[]',
+        components: [
           {
-            "name": "minKeysCount",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'minKeysCount',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "trend",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
+            name: 'trend',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondDepositedETH",
-    "inputs": [
+    type: 'event',
+    name: 'BondDepositedETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "from",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
+        name: 'from',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondDepositedStETH",
-    "inputs": [
+    type: 'event',
+    name: 'BondDepositedStETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "from",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
+        name: 'from',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondDepositedWstETH",
-    "inputs": [
+    type: 'event',
+    name: 'BondDepositedWstETH',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "from",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
+        name: 'from',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondLockChanged",
-    "inputs": [
+    type: 'event',
+    name: 'BondLockChanged',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "newAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'newAmount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "until",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'until',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondLockCompensated",
-    "inputs": [
+    type: 'event',
+    name: 'BondLockCompensated',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondLockPeriodChanged",
-    "inputs": [
+    type: 'event',
+    name: 'BondLockPeriodChanged',
+    inputs: [
       {
-        "name": "period",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'period',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "BondLockRemoved",
-    "inputs": [
+    type: 'event',
+    name: 'BondLockRemoved',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ChargePenaltyRecipientSet",
-    "inputs": [
+    type: 'event',
+    name: 'ChargePenaltyRecipientSet',
+    inputs: [
       {
-        "name": "chargePenaltyRecipient",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      }
+        name: 'chargePenaltyRecipient',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ERC1155Recovered",
-    "inputs": [
+    type: 'event',
+    name: 'ERC1155Recovered',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'tokenId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ERC20Recovered",
-    "inputs": [
+    type: 'event',
+    name: 'ERC20Recovered',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ERC721Recovered",
-    "inputs": [
+    type: 'event',
+    name: 'ERC721Recovered',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'tokenId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "EtherRecovered",
-    "inputs": [
+    type: 'event',
+    name: 'EtherRecovered',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
+    type: 'event',
+    name: 'Initialized',
+    inputs: [
       {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
+        name: 'version',
+        type: 'uint64',
+        indexed: false,
+        internalType: 'uint64',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Paused",
-    "inputs": [
+    type: 'event',
+    name: 'Paused',
+    inputs: [
       {
-        "name": "duration",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'duration',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Resumed",
-    "inputs": [],
-    "anonymous": false
+    type: 'event',
+    name: 'Resumed',
+    inputs: [],
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
+    type: 'event',
+    name: 'RoleAdminChanged',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'previousAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
+        name: 'newAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
+    type: 'event',
+    name: 'RoleGranted',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
+    type: 'event',
+    name: 'RoleRevoked',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "StETHSharesRecovered",
-    "inputs": [
+    type: 'event',
+    name: 'StETHSharesRecovered',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'shares',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
+    type: 'error',
+    name: 'AccessControlBadConfirmation',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
+    type: 'error',
+    name: 'AccessControlUnauthorizedAccount',
+    inputs: [
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
+        name: 'neededRole',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "ElRewardsVaultReceiveFailed",
-    "inputs": []
+    type: 'error',
+    name: 'ElRewardsVaultReceiveFailed',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "FailedToSendEther",
-    "inputs": []
+    type: 'error',
+    name: 'FailedToSendEther',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondCurveId",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondCurveId',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondCurveLength",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondCurveLength',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondCurveMaxLength",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondCurveMaxLength',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondCurveValues",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondCurveValues',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondCurvesLength",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondCurvesLength',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondLockAmount",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondLockAmount',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBondLockPeriod",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBondLockPeriod',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidInitialization',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInitializationCurveId",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidInitializationCurveId',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NodeOperatorDoesNotExist",
-    "inputs": []
+    type: 'error',
+    name: 'NodeOperatorDoesNotExist',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotAllowedToRecover",
-    "inputs": []
+    type: 'error',
+    name: 'NotAllowedToRecover',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotInitializing",
-    "inputs": []
+    type: 'error',
+    name: 'NotInitializing',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NothingToClaim",
-    "inputs": []
+    type: 'error',
+    name: 'NothingToClaim',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PauseUntilMustBeInFuture",
-    "inputs": []
+    type: 'error',
+    name: 'PauseUntilMustBeInFuture',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PausedExpected",
-    "inputs": []
+    type: 'error',
+    name: 'PausedExpected',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ResumedExpected",
-    "inputs": []
+    type: 'error',
+    name: 'ResumedExpected',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "SafeCastOverflowedUintDowncast",
-    "inputs": [
+    type: 'error',
+    name: 'SafeCastOverflowedUintDowncast',
+    inputs: [
       {
-        "name": "bits",
-        "type": "uint8",
-        "internalType": "uint8"
+        name: 'bits',
+        type: 'uint8',
+        internalType: 'uint8',
       },
       {
-        "name": "value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
+        name: 'value',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "SenderIsNotEligible",
-    "inputs": []
+    type: 'error',
+    name: 'SenderIsNotEligible',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "SenderIsNotModule",
-    "inputs": []
+    type: 'error',
+    name: 'SenderIsNotModule',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroAdminAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroAdminAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroChargePenaltyRecipientAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroChargePenaltyRecipientAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroFeeDistributorAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroFeeDistributorAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroLocatorAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroLocatorAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroModuleAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroModuleAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroPauseDuration",
-    "inputs": []
-  }
+    type: 'error',
+    name: 'ZeroPauseDuration',
+    inputs: [],
+  },
 ] as const;

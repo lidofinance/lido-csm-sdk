@@ -1,3 +1,20 @@
-import { PerToken } from '../common/tyles.js';
+import { Address } from 'viem';
 
-export type AmountByKeys = PerToken<bigint>;
+export type NodeOperatorInfo = {
+  totalAddedKeys: number;
+  totalWithdrawnKeys: number;
+  totalDepositedKeys: number;
+  totalVettedKeys: number;
+  stuckValidatorsCount: number;
+  depositableValidatorsCount: number;
+  targetLimit: number;
+  targetLimitMode: number;
+  totalExitedKeys: number;
+  enqueuedCount: number;
+  usedPriorityQueue: boolean;
+  managerAddress: Address;
+  rewardsAddress: Address;
+  extendedManagerPermissions: boolean;
+  proposedManagerAddress?: Address;
+  proposedRewardsAddress?: Address;
+};

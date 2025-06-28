@@ -1,6 +1,10 @@
 import type { Address, Hex } from 'viem';
-import { DepositDataKey, NodeOperatorShortInfo } from '../common/index.js';
-import { CommonTransactionProps, PermitSignature } from '../core-sdk/types.js';
+import {
+  DepositDataKey,
+  NodeOperatorShortInfo,
+  PermitSignatureShort,
+} from '../common/index.js';
+import { CommonTransactionProps } from '../core-sdk/types.js';
 
 export type AddNodeOperatorResult = NodeOperatorShortInfo;
 
@@ -12,7 +16,7 @@ export type AddNodeOperatorProps =
     managerAddress?: Address | string;
     extendedManagerPermissions?: boolean;
     referrer?: Address;
-    permit?: PermitSignature;
+    permit?: PermitSignatureShort;
   };
 
 export type AddNodeOperatorInnerProps =
@@ -27,5 +31,5 @@ export type AddNodeOperatorInnerProps =
       extendedManagerPermissions: boolean;
     };
     referrer: Address;
-    permit?: PermitSignature;
+    permit?: PermitSignatureShort;
   };
