@@ -54,9 +54,7 @@
     "crypto-js": "4.2.0"
   },
   "workspaces": [
-    "packages/*",
-    "playground",
-    "docs"
+    "packages/*"
   ],
   "release": {
     "branches": [

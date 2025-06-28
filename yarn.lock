@@ -1171,27 +1171,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lidofinance/lido-ethereum-sdk@workspace:packages/sdk":
-  version: 0.0.0-use.local
-  resolution: "@lidofinance/lido-ethereum-sdk@workspace:packages/sdk"
-  dependencies:
-    "@ethersproject/bytes": ^5.7.0
-    "@jest/globals": ^29.7.0
-    "@types/fs-extra": ^11.0.1
-    dotenv: ^16.3.1
-    fs-extra: ^11.1.1
-    ganache: ^7.9.2
-    graphql: ^16.8.1
-    graphql-request: ^6.1.0
-    jest: ^29.7.0
-    rimraf: ^5.0.1
-    ts-jest: ^29.1.2
-    typescript: ^5.8.3
-  peerDependencies:
-    viem: ^2.26.0
-  languageName: unknown
-  linkType: soft
-
 "@metamask/abi-utils@npm:^2.0.4":
   version: 2.0.4
   resolution: "@metamask/abi-utils@npm:2.0.4"
