@@ -1,5 +1,5 @@
 import { Hex } from 'viem';
-import { DepositDataKey } from '../tyles.js';
+import { DepositDataKey } from '../types.js';
 
 const formatHex = (keys: string[]): Hex => `0x${keys.join('')}`;
 

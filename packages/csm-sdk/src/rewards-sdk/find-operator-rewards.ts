@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '../common/tyles.js';
+import { NodeOperatorId } from '../common/types.js';
 import { OperatorRewards, RewardsReport } from './types.js';
 
 // FIXME: updated report structure

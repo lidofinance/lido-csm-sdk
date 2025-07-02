@@ -1,2 +1,2 @@
 export * from './constants/index.js';
-export * from './tyles.js';
+export * from './types.js';

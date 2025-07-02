@@ -1,4 +1,4 @@
-import { Erc20Tokens } from '../common/tyles.js';
+import { Erc20Tokens } from '../common/types.js';
 import { CommonTransactionProps } from '../core-sdk/types.js';
 
 type AccountProps = Pick<CommonTransactionProps, 'account'>;

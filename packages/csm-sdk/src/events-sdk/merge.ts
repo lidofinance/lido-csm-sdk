@@ -1,5 +1,5 @@
 import { ROLES } from '../common/index.js';
-import { NodeOperator, NodeOperatorId } from '../common/tyles.js';
+import { NodeOperator, NodeOperatorId } from '../common/types.js';
 
 export type RoleModifier = {
   [key in ROLES]?: boolean; // true if the role is enabled, false if disabled, undefined if not specified - use current.

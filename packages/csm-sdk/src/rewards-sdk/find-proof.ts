@@ -1,5 +1,5 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { NodeOperatorId, Proof, RewardProof } from '../common/tyles.js';
+import { NodeOperatorId, Proof, RewardProof } from '../common/types.js';
 import { RewardsTreeLeaf } from './types.js';
 import { findIndexAndLeaf } from '../common/utils/find-index-and-leaf.js';
 

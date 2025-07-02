@@ -1,5 +1,5 @@
 import { Hash, Hex } from 'viem';
-import { StandardMerkleTreeData } from '../common/tyles.js';
+import { StandardMerkleTreeData } from '../common/types.js';
 
 export type RewardsTreeLeaf = [string, string]; // [nodeOperatorId, rewardAmount]
 
