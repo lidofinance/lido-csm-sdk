@@ -2,7 +2,7 @@
 import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { ROLES } from '../common/index.js';
-import { NodeOperatorInvite } from '../common/tyles.js';
+import { NodeOperatorInvite } from '../common/types.js';
 
 type ChangeAddressLogs =
   | Log<

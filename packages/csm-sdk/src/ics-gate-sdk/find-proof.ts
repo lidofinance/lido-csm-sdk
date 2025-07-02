@@ -1,6 +1,6 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { Address } from 'viem';
-import { Proof } from '../common/tyles.js';
+import { Proof } from '../common/types.js';
 import { findIndexAndLeaf } from '../common/utils/find-index-and-leaf.js';
 import { AddressesTreeLeaf } from './types.js';
 

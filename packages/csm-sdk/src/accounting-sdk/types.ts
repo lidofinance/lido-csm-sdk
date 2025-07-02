@@ -1,4 +1,4 @@
-import { NodeOperatorId, PerToken } from '../common/tyles.js';
+import { NodeOperatorId, PerToken } from '../common/types.js';
 
 export type AmountByKeys = PerToken<bigint>;
 

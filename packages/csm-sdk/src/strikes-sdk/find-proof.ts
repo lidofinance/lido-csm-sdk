@@ -1,6 +1,6 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { Hex } from 'viem';
-import { NodeOperatorId, Proof } from '../common/tyles.js';
+import { NodeOperatorId, Proof } from '../common/types.js';
 import {
   filterLeafs,
   findIndexAndLeaf,

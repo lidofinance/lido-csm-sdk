@@ -1,5 +1,5 @@
 import { STETH_ROUNDING_THRESHOLD } from '../common/index.js';
-import { BondBalance } from '../common/tyles.js';
+import { BondBalance } from '../common/types.js';
 
 type Props = { current: bigint; required: bigint; locked: bigint };
 

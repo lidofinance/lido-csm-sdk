@@ -1,7 +1,7 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 
-import { Erc20Tokens } from '../tyles.js';
+import { Erc20Tokens } from '../types.js';
 import { TOKENS } from './tokens.js';
 
 export const CSM_SUPPORTED_CHAINS = [

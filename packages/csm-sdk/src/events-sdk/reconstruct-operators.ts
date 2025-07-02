@@ -2,7 +2,7 @@
 import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { ROLES } from '../common/index.js';
-import { NodeOperator } from '../common/tyles.js';
+import { NodeOperator } from '../common/types.js';
 import { isNotEmptyRoles, mergeRoles } from './merge.js';
 
 type NodeOperatorLogs =

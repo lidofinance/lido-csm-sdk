@@ -1,4 +1,4 @@
-import { PermitSignatureShort } from '../tyles.js';
+import { PermitSignatureShort } from '../types.js';
 
 export const stripPermit = ({
   v,

@@ -8,7 +8,7 @@ import {
   EJECTABLE_EPOCH_COUNT,
   KEY_STATUS,
 } from '../common/index.js';
-import { NodeOperatorId } from '../common/tyles.js';
+import { NodeOperatorId } from '../common/types.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { isNotUnique, isUnique } from '../common/utils/is-defined.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';

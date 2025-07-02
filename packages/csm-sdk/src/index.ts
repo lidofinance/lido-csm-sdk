@@ -17,3 +17,4 @@ export * from './permissionless-gate-sdk/index.js';
 export * from './ics-gate-sdk/index.js';
 export * from './strikes-sdk/index.js';
 export * from './frame-sdk/index.js';
+export * from './deposit-queue-sdk/index.js';

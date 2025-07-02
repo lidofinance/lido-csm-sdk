@@ -3,6 +3,7 @@ import { BondSDK } from './bond-sdk/bond-sdk.js';
 import { BusRegistry } from './common/class-primitives/bus-registry.js';
 import { CoreSDK } from './core-sdk/core-sdk.js';
 import { CsmCoreProps } from './core-sdk/types.js';
+import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
 import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk.js';
 import { KeysSDK } from './keys-sdk/keys-sdk.js';
@@ -14,7 +15,6 @@ import { PermissionlessGateSDK } from './permissionless-gate-sdk/permissionless-
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
 import { RolesSDK } from './roles-sdk/roles-sdk.js';
 import { SpendingSDK } from './spending-sdk/spending-sdk.js';
-import { StakingRouterSDK } from './staking-router-sdk/staking-router-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
 import { FrameSDK } from './frame-sdk/frame-sdk.js';
 
@@ -35,6 +35,7 @@ export class LidoSDKCsm {
   readonly strikes: StrikesSDK;
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
+  readonly depositQueue: DepositQueueSDK;
 
   constructor(props: CsmCoreProps) {
     const bus = new BusRegistry();
@@ -56,5 +57,6 @@ export class LidoSDKCsm {
     this.icsGate = new IcsGateSDK(commonProps);
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.frame = new FrameSDK(commonProps, 'frame');
+    this.depositQueue = new DepositQueueSDK(commonProps);
   }
 }
