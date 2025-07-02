@@ -36,7 +36,11 @@ import {
   CSM_CONTRACT_ADDRESSES,
   CSM_CONTRACT_NAMES,
   CSM_SUPPORTED_CHAINS,
+  DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN,
   Erc20Tokens,
+  EXTERNAL_LINKS,
+  LINK_TYPE,
+  MODULE_ID_BY_CHAIN,
 } from '../common/index.js';
 import {
   CSM_ADDRESSES,
@@ -48,11 +52,15 @@ import {
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
   readonly overridedAddresses?: CSM_ADDRESSES;
+  readonly clApiUrl?: string;
+  readonly maxEventBlocksRange?: number;
 
   constructor(props: CsmCoreProps) {
     super();
     this.core = props.core;
     this.overridedAddresses = props.overridedAddresses;
+    this.clApiUrl = props.clApiUrl;
+    this.maxEventBlocksRange = props.maxEventBlocksRange;
   }
 
   public get chainId(): CSM_SUPPORTED_CHAINS {
@@ -65,6 +73,10 @@ export class CoreSDK extends CsmSDKCacheable {
 
   public get logMode() {
     return this.core.logMode;
+  }
+
+  public get client() {
+    return this.core.rpcProvider;
   }
 
   @Logger('Utils:')
@@ -227,6 +239,34 @@ export class CoreSDK extends CsmSDKCacheable {
       CSM_CONTRACT_NAMES.validatorsExitBusOracle,
       ValidatorsExitBusOracleAbi,
     );
+  }
+
+  public get moduleId(): number {
+    return MODULE_ID_BY_CHAIN[this.chainId];
+  }
+
+  public get deploymentBlockNumber(): bigint {
+    return DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN[this.chainId];
+  }
+
+  public get externalLinks() {
+    return EXTERNAL_LINKS[this.chainId];
+  }
+
+  public getExternalLink(type: LINK_TYPE) {
+    return this.externalLinks[type];
+  }
+
+  public get keysApiLink() {
+    return this.getExternalLink(LINK_TYPE.keysApi);
+  }
+
+  public get rewardsTreeLink() {
+    return this.getExternalLink(LINK_TYPE.rewardsTree);
+  }
+
+  public getIpfsUrl(cid: string): string {
+    return `https://ipfs.io/ipfs/${cid}`;
   }
 
   public async performTransaction<TDecodedResult = undefined>(

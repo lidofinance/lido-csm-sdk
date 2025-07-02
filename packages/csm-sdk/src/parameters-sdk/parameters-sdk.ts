@@ -65,8 +65,9 @@ export class ParametersSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getAllowedExitDelay(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getAllowedExitDelay([curveId]);
+  public async getAllowedExitDelay(curveId: bigint): Promise<number> {
+    const value = await this.contract.read.getAllowedExitDelay([curveId]);
+    return Number(value);
   }
 
   @Logger('Views:')
@@ -105,7 +106,7 @@ export class ParametersSDK extends CsmSDKModule {
     const [lifetime, threshold] = await this.contract.read.getStrikesParams([
       curveId,
     ]);
-    return { lifetime, threshold };
+    return { lifetime: Number(lifetime), threshold: Number(threshold) };
   }
 
   @Logger('Views:')

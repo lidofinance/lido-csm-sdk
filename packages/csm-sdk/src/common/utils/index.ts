@@ -8,3 +8,4 @@ export * from './slitp-keys.js';
 export * from './compare-lowercase.js';
 export * from './fetch-json.js';
 export * from './strip-permit.js';
+export * from './is-defined.js';

@@ -4,8 +4,8 @@ export type KeyNumberValueInterval = {
 };
 
 export type StrikesConfig = {
-  lifetime: bigint;
-  threshold: bigint;
+  lifetime: number;
+  threshold: number;
 };
 
 export type QueueConfig = {
@@ -29,7 +29,7 @@ export type PerformanceCoefficients = {
 export type CurveParameters = {
   keyRemovalFee: bigint;
   keysLimit: bigint;
-  allowedExitDelay: bigint;
+  allowedExitDelay: number;
   exitDelayPenalty: bigint;
   badPerformancePenalty: bigint;
   elStealingPenalty: bigint;

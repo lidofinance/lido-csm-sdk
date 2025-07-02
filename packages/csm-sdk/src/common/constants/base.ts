@@ -128,13 +128,15 @@ export const CSM_CONTRACT_ADDRESSES: {
   },
 };
 
-export const MODULE_ID_BY_CHAIN: { [key in CHAINS]?: number } = {
+export const MODULE_ID_BY_CHAIN: { [key in CSM_SUPPORTED_CHAINS]: number } = {
   [CHAINS.Mainnet]: 3,
   [CHAINS.Hoodi]: 4,
   [CHAINS.Holesky]: 4,
 };
 
-export const DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN: { [key in CHAINS]?: bigint } = {
+export const DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN: {
+  [key in CSM_SUPPORTED_CHAINS]: bigint;
+} = {
   [CHAINS.Mainnet]: BigInt('0x13f7326'),
   [CHAINS.Hoodi]: BigInt('0x1374'),
   [CHAINS.Holesky]: BigInt('0x1b143a'),

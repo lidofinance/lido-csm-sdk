@@ -1,13 +1,25 @@
 import { Address, GetContractReturnType, Hex, WalletClient } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
+import { StakingRouterAbi } from '../abi/StakingRouter.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CSM_CONTRACT_NAMES,
   SUPPORTED_VERSION_BY_CONTRACT,
 } from '../common/index.js';
+import { fetchJson } from '../common/utils/fetch-json.js';
+import { calculateShareLimit } from './calculate-share-limit.js';
 import { onError } from './on-error.js';
-import { CsmContractsWithVersion, CsmStatus, CsmVersions } from './types.js';
+import {
+  CsmContractsWithVersion,
+  CsmStatus,
+  CsmVersions,
+  ModuleDigest,
+  ModuleOperatorsResponse,
+  ModulesResponse,
+  ShareLimitInfo,
+  ShareLimitStatus,
+} from './types.js';
 
 export class ModuleSDK extends CsmSDKModule {
   protected get contract(): GetContractReturnType<
@@ -15,6 +27,13 @@ export class ModuleSDK extends CsmSDKModule {
     WalletClient
   > {
     return this.core.getContractCSModule();
+  }
+
+  private get stakingRouterContract(): GetContractReturnType<
+    typeof StakingRouterAbi,
+    WalletClient
+  > {
+    return this.core.getContractStakingRouter();
   }
 
   @Logger('Views:')
@@ -100,6 +119,34 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  private async getAllModulesDigests() {
+    return this.stakingRouterContract.read.getAllStakingModuleDigests();
+  }
+
+  @Logger('Utils:')
+  @Cache(10 * 60 * 1000)
+  public async getShareLimit(): Promise<ShareLimitInfo> {
+    const digests = (await this.getAllModulesDigests()) as ModuleDigest[];
+    return calculateShareLimit(digests, this.core.moduleId);
+  }
+
+  @Logger('Utils:')
+  public async getShareLimitStatus(
+    shareLimitThreshold = 200n,
+  ): Promise<ShareLimitStatus> {
+    const info = await this.getShareLimit();
+
+    return info.activeLeft <= 0
+      ? ShareLimitStatus.REACHED
+      : info.activeLeft - info.queue < 0
+        ? ShareLimitStatus.EXHAUSTED
+        : info.activeLeft - info.queue < shareLimitThreshold
+          ? ShareLimitStatus.APPROACHING
+          : ShareLimitStatus.FAR;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getQueues() {
     const queuesCount = await this.contract.read.QUEUE_LOWEST_PRIORITY();
     const pointers = await Promise.all(
@@ -118,5 +165,36 @@ export class ModuleSDK extends CsmSDKModule {
     const role =
       await this.contract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
     return this.hasRole(address, role);
+  }
+
+  @Logger('API:')
+  @ErrorHandler()
+  public async getUsedOtherModule(address: Address): Promise<string | null> {
+    const keysApi = this.core.keysApiLink;
+    const csmId = this.core.moduleId;
+
+    const { data: modules } = await fetchJson<ModulesResponse>(
+      `${keysApi}/v1/modules`,
+    ).catch(() => ({ data: [] }));
+
+    const results = await Promise.all(
+      modules.map(({ id }) =>
+        id === csmId
+          ? undefined
+          : fetchJson<ModuleOperatorsResponse>(
+              `${keysApi}/v1/modules/${id}/operators`,
+            ).catch(() => undefined),
+      ),
+    );
+    const operators = results.flatMap((r) => r?.data.operators || []);
+
+    const matchedOperator = operators.find((o) => o.rewardAddress === address);
+    const matchedModule =
+      matchedOperator &&
+      modules.find(
+        (m) => m.stakingModuleAddress === matchedOperator.moduleAddress,
+      );
+
+    return matchedModule?.name ?? null;
   }
 }

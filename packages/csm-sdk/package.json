@@ -1,6 +1,6 @@
 {
   "name": "@lidofinance/lido-csm-sdk",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -31,11 +31,6 @@
       "default": "./dist/cjs/accounting/index.js",
       "types": "./dist/types/accounting/index.d.ts"
     },
-    "./staking-router": {
-      "import": "./dist/esm/staking-router/index.js",
-      "default": "./dist/cjs/staking-router/index.js",
-      "types": "./dist/types/staking-router/index.d.ts"
-    },
     "./bond-sdk": {
       "import": "./dist/esm/bond-sdk/index.js",
       "default": "./dist/cjs/bond-sdk/index.js",
@@ -55,6 +50,11 @@
       "import": "./dist/esm/keys-sdk/index.js",
       "default": "./dist/cjs/keys-sdk/index.js",
       "types": "./dist/types/keys-sdk/index.d.ts"
+    },
+    "./keys-with-status-sdk": {
+      "import": "./dist/esm/keys-with-status-sdk/index.js",
+      "default": "./dist/cjs/keys-with-status-sdk/index.js",
+      "types": "./dist/types/keys-with-status-sdk/index.d.ts"
     },
     "./module-sdk": {
       "import": "./dist/esm/module-sdk/index.js",
@@ -101,6 +101,11 @@
       "default": "./dist/cjs/strikes-sdk/index.js",
       "types": "./dist/types/strikes-sdk/index.d.ts"
     },
+    "./frame-sdk": {
+      "import": "./dist/esm/frame-sdk/index.js",
+      "default": "./dist/cjs/frame-sdk/index.js",
+      "types": "./dist/types/frame-sdk/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -125,6 +130,9 @@
       ],
       "keys-sdk": [
         "./dist/types/keys-sdk/index.d.ts"
+      ],
+      "keys-with-status-sdk": [
+        "./dist/types/keys-with-status-sdk/index.d.ts"
       ],
       "module-sdk": [
         "./dist/types/module-sdk/index.d.ts"
@@ -153,8 +161,8 @@
       "strikes-sdk": [
         "./dist/types/strikes-sdk/index.d.ts"
       ],
-      "staking-router": [
-        "./dist/types/staking-router/index.d.ts"
+      "frame-sdk": [
+        "./dist/types/frame-sdk/index.d.ts"
       ]
     }
   },

@@ -1,20 +1,21 @@
-import { Address, GetContractReturnType, WalletClient } from 'viem';
+import { Address, GetContractReturnType, Hex, WalletClient } from 'viem';
+import { CSFeeOracleAbi } from '../abi/CSFeeOracle.js';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CSM_CONTRACT_NAMES,
-  DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN,
   NodeOperator,
+  NodeOperatorId,
   NodeOperatorInvite,
 } from '../common/index.js';
 import { requestWithBlockStep } from '../common/utils/request-with-block-step.js';
+import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
 import { EventRangeProps } from './types.js';
-import { CSFeeOracleAbi } from '../abi/CSFeeOracle.js';
-import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
+import { isDefined } from '../common/utils/is-defined.js';
 
 export class EventsSDK extends CsmSDKModule {
   protected get contract(): GetContractReturnType<
@@ -173,11 +174,57 @@ export class EventsSDK extends CsmSDKModule {
     return logs;
   }
 
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getWithdrawalSubmittedKeys(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<Hex[]> {
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.contract.getEvents.WithdrawalSubmitted(
+          { nodeOperatorId },
+          stepProps,
+        ),
+      ),
+    );
+
+    const logs = logResults.flat().sort(sortEventsByBlockNumber);
+
+    return logs.map((e) => e.args.pubkey).filter((k) => k !== undefined);
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getRequestedToExitKeys(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<Hex[]> {
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.core
+          .getContractValidatorsExitBusOracle()
+          .getEvents.ValidatorExitRequest(
+            { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
+            stepProps,
+          ),
+      ),
+    );
+
+    const logs = logResults.flat().sort(sortEventsByBlockNumber);
+
+    return logs.map((e) => e.args.validatorPubkey).filter(isDefined);
+  }
+
   @Logger('Utils:')
   @ErrorHandler()
-  public async parseEventsProps(props?: EventRangeProps) {
-    // FIXME: const 20K and param
-    const step = props?.step ?? 1_000_000;
+  private async parseEventsProps(props?: EventRangeProps) {
+    const step =
+      props?.step ?? this.core.maxEventBlocksRange ?? 1_000_000_000_000;
 
     const toBlock = await this.core.core.toBlockNumber({
       block: props?.toBlock ?? 'latest',
@@ -186,8 +233,7 @@ export class EventsSDK extends CsmSDKModule {
       ? await this.core.core.toBlockNumber({
           block: props.fromBlock ?? 'latest',
         })
-      : DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN[this.core.chainId] ??
-        toBlock - BigInt(step);
+      : this.core.deploymentBlockNumber ?? toBlock - BigInt(step);
 
     return {
       fromBlock,
