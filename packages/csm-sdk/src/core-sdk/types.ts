@@ -22,6 +22,8 @@ export type CSM_ADDRESSES = {
 export type CsmCoreProps = {
   core: LidoSDKCore;
   overridedAddresses?: CSM_ADDRESSES;
+  maxEventBlocksRange?: number;
+  clApiUrl?: string;
 };
 
 // Transaction Props

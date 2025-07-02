@@ -6,6 +6,7 @@ import { CsmCoreProps } from './core-sdk/types.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
 import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk.js';
 import { KeysSDK } from './keys-sdk/keys-sdk.js';
+import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk.js';
 import { ModuleSDK } from './module-sdk/module-sdk.js';
 import { OperatorSDK } from './operator-sdk/operator-sdk.js';
 import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
@@ -15,6 +16,7 @@ import { RolesSDK } from './roles-sdk/roles-sdk.js';
 import { SpendingSDK } from './spending-sdk/spending-sdk.js';
 import { StakingRouterSDK } from './staking-router-sdk/staking-router-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
+import { FrameSDK } from './frame-sdk/frame-sdk.js';
 
 export class LidoSDKCsm {
   readonly core: CoreSDK;
@@ -25,13 +27,14 @@ export class LidoSDKCsm {
   readonly operator: OperatorSDK;
   readonly rewards: RewardsSDK;
   readonly keys: KeysSDK;
+  readonly keysWithStatus: KeysWithStatusSDK;
   readonly bond: BondSDK;
   readonly roles: RolesSDK;
   readonly permissionlessGate: PermissionlessGateSDK;
   readonly icsGate: IcsGateSDK;
   readonly strikes: StrikesSDK;
-  readonly stakingRouter: StakingRouterSDK;
   readonly events: EventsSDK;
+  readonly frame: FrameSDK;
 
   constructor(props: CsmCoreProps) {
     const bus = new BusRegistry();
@@ -45,12 +48,13 @@ export class LidoSDKCsm {
     this.operator = new OperatorSDK(commonProps, 'operator');
     this.rewards = new RewardsSDK(commonProps);
     this.keys = new KeysSDK(commonProps);
+    this.keysWithStatus = new KeysWithStatusSDK(commonProps);
     this.bond = new BondSDK(commonProps);
     this.roles = new RolesSDK(commonProps);
     this.events = new EventsSDK(commonProps, 'events');
     this.permissionlessGate = new PermissionlessGateSDK(commonProps);
     this.icsGate = new IcsGateSDK(commonProps);
-    this.strikes = new StrikesSDK(commonProps);
-    this.stakingRouter = new StakingRouterSDK(commonProps);
+    this.strikes = new StrikesSDK(commonProps, 'strikes');
+    this.frame = new FrameSDK(commonProps, 'frame');
   }
 }

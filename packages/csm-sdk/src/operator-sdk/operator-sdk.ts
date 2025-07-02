@@ -16,6 +16,7 @@ import { splitKeys } from '../common/utils/slitp-keys.js';
 import { NodeOperatorInfo } from './types.js';
 import { calcBondBalance } from './calc-bond-balance.js';
 import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
+import { Cache } from '../common/decorators/cache.js';
 
 export class OperatorSDK extends CsmSDKModule<{
   parameters: ParametersSDK;
@@ -53,6 +54,7 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(10 * 1000)
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
     const info = await this.moduleContract.read.getNodeOperator([id]);
 
@@ -66,9 +68,12 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getKeys(id: NodeOperatorId, start = 0n) {
-    const info = await this.getInfo(id);
-    const count = BigInt(info.totalAddedKeys) - start;
+  @Cache(10 * 1000)
+  public async getKeys(id: NodeOperatorId, start = 0n, count?: bigint) {
+    if (count === undefined) {
+      const info = await this.getInfo(id);
+      count = BigInt(info.totalAddedKeys) - start;
+    }
 
     const keysString = await this.moduleContract.read.getSigningKeys([
       id,
@@ -99,6 +104,12 @@ export class OperatorSDK extends CsmSDKModule<{
 
     if (maxDeposits <= deposited) return 0;
     return Math.min(maxDeposits - deposited, info.enqueuedCount);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getUnboundKeysCount(id: NodeOperatorId): Promise<bigint> {
+    return this.accountingContract.read.getUnbondedKeysCountToEject([id]);
   }
 
   @Logger('Views:')

@@ -3,7 +3,7 @@ import { CSStrikesAbi } from '../abi/index.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { NodeOperatorId, Proof } from '../common/index.js';
-import { fetchWithFallback } from '../common/utils/index.js';
+import { fetchWithFallback, isDefined } from '../common/utils/index.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import {
   filterLeafsByNodeOperator,
@@ -11,9 +11,10 @@ import {
   findProof,
 } from './find-proof.js';
 import { onError } from './on-error.js';
-import { KeyStrikes } from './types.js';
+import { KeyWithStrikes } from './types.js';
+import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 
-export class StrikesSDK extends CsmSDKModule {
+export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   private get contract(): GetContractReturnType<
     typeof CSStrikesAbi,
     WalletClient
@@ -33,7 +34,7 @@ export class StrikesSDK extends CsmSDKModule {
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [`https://ipfs.io/ipfs/${cid}`].filter((v) => v !== undefined);
+    return [this.core.getIpfsUrl(cid)].filter(isDefined);
   }
 
   @Logger('API:')
@@ -58,14 +59,16 @@ export class StrikesSDK extends CsmSDKModule {
   }
 
   @Logger('Utils:')
-  public async getLeaf(pubkey: Hex): Promise<KeyStrikes | null> {
+  public async getStrikes(pubkey: Hex): Promise<KeyWithStrikes | null> {
     const proofTree = await this.getProofTree();
     if (!proofTree) return null;
     return findLeaf(proofTree, pubkey);
   }
 
   @Logger('Utils:')
-  public async getLeafs(nodeOperatorId: NodeOperatorId): Promise<KeyStrikes[]> {
+  public async getKeysWithStrikes(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<KeyWithStrikes[]> {
     const proofTree = await this.getProofTree();
     if (!proofTree) return [];
     return filterLeafsByNodeOperator(proofTree, nodeOperatorId);

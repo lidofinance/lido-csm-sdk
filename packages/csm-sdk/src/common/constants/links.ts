@@ -7,7 +7,7 @@ export enum LINK_TYPE {
 }
 
 export const EXTERNAL_LINKS: {
-  [key in CSM_SUPPORTED_CHAINS]?: { [key2 in LINK_TYPE]?: string };
+  [key in CSM_SUPPORTED_CHAINS]: { [key2 in LINK_TYPE]?: string };
 } = {
   [CHAINS.Mainnet]: {
     [LINK_TYPE.rewardsTree]:

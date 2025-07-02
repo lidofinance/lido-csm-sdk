@@ -1,25 +1,22 @@
 import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
 import { GetContractReturnType, WalletClient } from 'viem';
 import { CSFeeDistributorAbi } from '../abi/CSFeeDistributor.js';
-import { CSFeeOracleAbi } from '../abi/CSFeeOracle.js';
-import { HashConsensusAbi } from '../abi/HashConsensus.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CSM_CONTRACT_NAMES,
-  EXTERNAL_LINKS,
-  LINK_TYPE,
   NodeOperatorId,
   RewardProof,
 } from '../common/index.js';
 import { fetchJson, fetchWithFallback } from '../common/utils/fetch-json.js';
+import { isDefined } from '../common/utils/is-defined.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { fetchRewardsTree } from './fetch-rewards-tree.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
-import { OperatorRewards, RewardsReport } from './types.js';
 import { onError } from './on-error.js';
+import { OperatorRewards, RewardsReport } from './types.js';
 
 export class RewardsSDK extends CsmSDKModule<{
   spending: SpendingSDK;
@@ -32,31 +29,16 @@ export class RewardsSDK extends CsmSDKModule<{
     return this.core.getContractCSFeeDistributor();
   }
 
-  private get oracleContract(): GetContractReturnType<
-    typeof CSFeeOracleAbi,
-    WalletClient
-  > {
-    return this.core.getContractCSFeeOracle();
-  }
-
-  private get consensusContract(): GetContractReturnType<
-    typeof HashConsensusAbi,
-    WalletClient
-  > {
-    return this.core.getContractHashConsensus();
-  }
-
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [
-      EXTERNAL_LINKS[this.core.chainId]?.[LINK_TYPE.rewardsTree],
-      `https://ipfs.io/ipfs/${cid}`,
-    ].filter((v) => v !== undefined);
+    return [this.core.rewardsTreeLink, this.core.getIpfsUrl(cid)].filter(
+      isDefined,
+    );
   }
 
   @Logger('Utils:')
   public getLogUrls(cid: string): string[] {
-    return [`https://ipfs.io/ipfs/${cid}`].filter((v) => v !== undefined);
+    return [this.core.getIpfsUrl(cid)].filter(isDefined);
   }
 
   @Logger('Views:')
@@ -128,31 +110,6 @@ export class RewardsSDK extends CsmSDKModule<{
     );
 
     return contract.read.getPooledEthByShares([amount]);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getLastFrame() {
-    const [
-      [slotsPerEpoch, secondsPerSlot, genesisTime],
-      [, epochsPerFrame],
-      lastRefSlot,
-    ] = await Promise.all([
-      this.consensusContract.read.getChainConfig(),
-      this.consensusContract.read.getFrameConfig(),
-      this.oracleContract.read.getLastProcessingRefSlot(),
-    ]);
-
-    const lastDistribution = lastRefSlot * secondsPerSlot + genesisTime;
-
-    const frameDuration = epochsPerFrame * slotsPerEpoch * secondsPerSlot;
-
-    return {
-      lastDistribution: Number(lastDistribution),
-      nextDistribution: Number(lastDistribution + frameDuration),
-      prevDistribution: Number(lastDistribution - frameDuration),
-      frameDuration: frameDuration,
-    };
   }
 
   @Logger('Views:')

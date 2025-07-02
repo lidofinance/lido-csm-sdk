@@ -27,6 +27,7 @@ import {
 } from '../common/index.js';
 import {
   fetchWithFallback,
+  isDefined,
   parseDepositData,
   stripPermit,
 } from '../common/utils/index.js';
@@ -294,7 +295,7 @@ export class IcsGateSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [`https://ipfs.io/ipfs/${cid}`].filter((v) => v !== undefined);
+    return [this.core.getIpfsUrl(cid)].filter(isDefined);
   }
 
   @Logger('API:')

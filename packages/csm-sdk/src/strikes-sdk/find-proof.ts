@@ -5,7 +5,7 @@ import {
   filterLeafs,
   findIndexAndLeaf,
 } from '../common/utils/find-index-and-leaf.js';
-import { KeyStrikes, StrikesTreeLeaf } from './types.js';
+import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
 
 export const findProof = (
   tree: StandardMerkleTree<StrikesTreeLeaf>,
@@ -22,7 +22,7 @@ export const findProof = (
 export const findLeaf = (
   tree: StandardMerkleTree<StrikesTreeLeaf>,
   pubkey: Hex,
-): KeyStrikes | null => {
+): KeyWithStrikes | null => {
   const [, leaf] = findIndexAndLeaf(tree, (leaf) => leaf[1] === pubkey);
   return leaf ? wrapLeaf(leaf) : null;
 };
@@ -30,11 +30,11 @@ export const findLeaf = (
 export const filterLeafsByNodeOperator = (
   tree: StandardMerkleTree<StrikesTreeLeaf>,
   id: NodeOperatorId,
-): KeyStrikes[] => {
-  return filterLeafs(tree, (leaf) => leaf[0] === id).map(wrapLeaf);
+): KeyWithStrikes[] => {
+  return filterLeafs(tree, (leaf) => BigInt(leaf[0]) === id).map(wrapLeaf);
 };
 
-export const wrapLeaf = (leaf: StrikesTreeLeaf): KeyStrikes => ({
+export const wrapLeaf = (leaf: StrikesTreeLeaf): KeyWithStrikes => ({
   pubkey: leaf[1],
-  strikes: leaf[2],
+  strikes: leaf[2].map(Number),
 });

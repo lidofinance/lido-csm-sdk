@@ -5,7 +5,9 @@ export type StrikesTreeLeaf = [bigint, Hex, bigint[]];
 
 export type StrikesTree = StandardMerkleTreeData<StrikesTreeLeaf>;
 
-export type KeyStrikes = {
+export type KeyStrikes = number[];
+
+export type KeyWithStrikes = {
   pubkey: Hex;
-  strikes: bigint[];
+  strikes: KeyStrikes;
 };
