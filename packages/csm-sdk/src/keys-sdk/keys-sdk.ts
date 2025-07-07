@@ -23,6 +23,7 @@ import {
   EjectKeysByArrayProps,
   EjectKeysProps,
   MigrateKeysProps,
+  NormalizeQueueProps,
   RemoveKeysProps,
 } from './types.js';
 
@@ -303,6 +304,28 @@ export class KeysSDK extends CsmSDKModule<{
         }),
       sendTransaction: (options) =>
         this.contract.write.migrateToPriorityQueue(args, {
+          ...options,
+        }),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async normalizeQueue(
+    props: NormalizeQueueProps,
+  ): Promise<TransactionResult> {
+    const { nodeOperatorId, ...rest } = props;
+
+    const args = [nodeOperatorId] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.contract.estimateGas.updateDepositableValidatorsCount(args, {
+          ...options,
+        }),
+      sendTransaction: (options) =>
+        this.contract.write.updateDepositableValidatorsCount(args, {
           ...options,
         }),
     });

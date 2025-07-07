@@ -111,6 +111,11 @@
       "default": "./dist/cjs/deposit-queue-sdk/index.js",
       "types": "./dist/types/deposit-queue-sdk/index.d.ts"
     },
+    "./stealing-sdk": {
+      "import": "./dist/esm/stealing-sdk/index.js",
+      "default": "./dist/cjs/stealing-sdk/index.js",
+      "types": "./dist/types/stealing-sdk/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -171,6 +176,9 @@
       ],
       "deposit-queue-sdk": [
         "./dist/types/deposit-queue-sdk/index.d.ts"
+      ],
+      "stealing-sdk": [
+        "./dist/types/stealing-sdk/index.d.ts"
       ]
     }
   },

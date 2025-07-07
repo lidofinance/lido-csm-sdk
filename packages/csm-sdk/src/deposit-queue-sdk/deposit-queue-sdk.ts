@@ -1,7 +1,7 @@
 import { GetContractReturnType, WalletClient } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   DepositQueuePointer,
   DepositQueueBatch,
@@ -20,6 +20,7 @@ export class DepositQueueSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(10 * 60 * 1000)
   public async getLowestPriorityQueue(): Promise<bigint> {
     return this.contract.read.QUEUE_LOWEST_PRIORITY();
   }
@@ -84,16 +85,11 @@ export class DepositQueueSDK extends CsmSDKModule {
   public async getAllBatches(): Promise<DepositQueueBatch[][]> {
     const lowestPriorityQueue = await this.getLowestPriorityQueue();
 
-    const queuePromises = [];
-    for (
-      let priority = 0;
-      priority <= Number(lowestPriorityQueue);
-      priority++
-    ) {
-      queuePromises.push(this.getBatchesInQueue(priority));
-    }
-
-    const queueBatches = await Promise.all(queuePromises);
+    const queueBatches = await Promise.all(
+      Array.from({ length: Number(lowestPriorityQueue) + 1 }, (_, priority) =>
+        this.getBatchesInQueue(priority),
+      ),
+    );
 
     return queueBatches;
   }
