@@ -54,6 +54,12 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  public async getLockedBond(id: NodeOperatorId): Promise<bigint> {
+    return this.accountingContract.read.getActualLockedBond([id]);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   @Cache(10 * 1000)
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
     const info = await this.moduleContract.read.getNodeOperator([id]);

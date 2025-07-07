@@ -15,7 +15,7 @@ import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
 import { EventRangeProps } from './types.js';
-import { isDefined } from '../common/utils/is-defined.js';
+import { isDefined, isUnique } from '../common/utils/is-defined.js';
 
 export class EventsSDK extends CsmSDKModule {
   protected get contract(): GetContractReturnType<
@@ -218,6 +218,30 @@ export class EventsSDK extends CsmSDKModule {
     const logs = logResults.flat().sort(sortEventsByBlockNumber);
 
     return logs.map((e) => e.args.validatorPubkey).filter(isDefined);
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getOperatorsWithPenalties(
+    options?: EventRangeProps,
+  ): Promise<NodeOperatorId[]> {
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.core
+          .getContractCSModule()
+          .getEvents.ELRewardsStealingPenaltyReported({}, stepProps),
+      ),
+    );
+
+    const logs = logResults.flat();
+
+    return logs
+      .map((e) => e.args.nodeOperatorId)
+      .filter(isUnique)
+      .filter(isDefined)
+      .sort((a, b) => Number(a - b));
   }
 
   @Logger('Utils:')

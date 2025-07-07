@@ -47,3 +47,7 @@ export type EjectKeysByArrayProps = CommonTransactionProps & {
 export type MigrateKeysProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
 };
+
+export type NormalizeQueueProps = CommonTransactionProps & {
+  nodeOperatorId: NodeOperatorId;
+};

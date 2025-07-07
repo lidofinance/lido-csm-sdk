@@ -11,10 +11,10 @@ export type NodeOperatorInfo = {
   targetLimitMode: number;
   totalExitedKeys: number;
   enqueuedCount: number;
-  usedPriorityQueue: boolean;
   managerAddress: Address;
   rewardsAddress: Address;
-  extendedManagerPermissions: boolean;
   proposedManagerAddress?: Address;
   proposedRewardsAddress?: Address;
+  extendedManagerPermissions: boolean;
+  usedPriorityQueue: boolean;
 };

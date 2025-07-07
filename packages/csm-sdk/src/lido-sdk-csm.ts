@@ -17,6 +17,7 @@ import { RolesSDK } from './roles-sdk/roles-sdk.js';
 import { SpendingSDK } from './spending-sdk/spending-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
 import { FrameSDK } from './frame-sdk/frame-sdk.js';
+import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
 
 export class LidoSDKCsm {
   readonly core: CoreSDK;
@@ -36,6 +37,7 @@ export class LidoSDKCsm {
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
   readonly depositQueue: DepositQueueSDK;
+  readonly stealing: StealingSDK;
 
   constructor(props: CsmCoreProps) {
     const bus = new BusRegistry();
@@ -58,5 +60,6 @@ export class LidoSDKCsm {
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.frame = new FrameSDK(commonProps, 'frame');
     this.depositQueue = new DepositQueueSDK(commonProps);
+    this.stealing = new StealingSDK(commonProps);
   }
 }

@@ -1,4 +1,4 @@
-import { Address, GetContractReturnType, Hex, WalletClient } from 'viem';
+import { Address, GetContractReturnType, WalletClient } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { StakingRouterAbi } from '../abi/StakingRouter.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
@@ -155,16 +155,6 @@ export class ModuleSDK extends CsmSDKModule {
       ),
     );
     return pointers.map(([head, tail]) => ({ head, tail }));
-  }
-
-  public async hasRole(address: Address, role: Hex): Promise<boolean> {
-    return this.contract.read.hasRole([role, address]);
-  }
-
-  public async hasReportStealingRole(address: Address): Promise<boolean> {
-    const role =
-      await this.contract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
-    return this.hasRole(address, role);
   }
 
   @Logger('API:')
