@@ -64,6 +64,7 @@ export class DepositQueueSDK extends CsmSDKModule {
     queuePriority: number,
   ): Promise<DepositQueueBatch[]> {
     const { head, tail } = await this.getQueuePointers(queuePriority);
+    console.log(`>> get batches for ${queuePriority}: [${head}..${tail}]`);
 
     if (head === tail) {
       return [];
@@ -75,7 +76,11 @@ export class DepositQueueSDK extends CsmSDKModule {
       ),
     );
 
+    console.log(`>> batches for ${queuePriority}:`, allBatches);
+
     const activeBatches = filterBatches(allBatches);
+
+    console.log(`>> active batches for ${queuePriority}:`, activeBatches);
 
     return activeBatches;
   }
@@ -84,6 +89,7 @@ export class DepositQueueSDK extends CsmSDKModule {
   @ErrorHandler()
   public async getAllBatches(): Promise<DepositQueueBatch[][]> {
     const lowestPriorityQueue = await this.getLowestPriorityQueue();
+    console.log('>> lowestPriorityQueue:', lowestPriorityQueue);
 
     const queueBatches = await Promise.all(
       Array.from({ length: Number(lowestPriorityQueue) + 1 }, (_, priority) =>
