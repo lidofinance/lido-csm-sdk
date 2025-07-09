@@ -66,6 +66,7 @@ The `LidoSDKCsm` class aggregates the following modules, each responsible for a 
 - **events**: Query protocol events.
 - **depositQueue**: Query deposit queue pointers, batches.
 - **stealing**: Manage execution layer rewards stealing penalties - report and cancel penalties.
+- **satellite**: Helper to simprify query operator IDs by address and read deposit queue batches.
 
 Each module exposes a set of methods tailored to its domain. Refer to the source code or generated API documentation for detailed method signatures and usage.
 

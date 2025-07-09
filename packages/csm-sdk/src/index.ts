@@ -19,3 +19,4 @@ export * from './strikes-sdk/index.js';
 export * from './frame-sdk/index.js';
 export * from './deposit-queue-sdk/index.js';
 export * from './stealing-sdk/index.js';
+export * from './satellite-sdk/index.js';

@@ -116,6 +116,11 @@
       "default": "./dist/cjs/stealing-sdk/index.js",
       "types": "./dist/types/stealing-sdk/index.d.ts"
     },
+    "./satellite-sdk": {
+      "import": "./dist/esm/satellite-sdk/index.js",
+      "default": "./dist/cjs/satellite-sdk/index.js",
+      "types": "./dist/types/satellite-sdk/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -179,6 +184,9 @@
       ],
       "stealing-sdk": [
         "./dist/types/stealing-sdk/index.d.ts"
+      ],
+      "satellite-sdk": [
+        "./dist/types/satellite-sdk/index.d.ts"
       ]
     }
   },

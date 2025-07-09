@@ -12,14 +12,13 @@ export const onError = (err: unknown) => {
         err instanceof ContractFunctionZeroDataError,
     );
     if (
-      revertError instanceof ContractFunctionRevertedError &&
-      revertError.data === undefined
+      revertError instanceof ContractFunctionRevertedError ||
+      revertError instanceof ContractFunctionZeroDataError
     ) {
-      return 1n;
-    } else if (revertError instanceof ContractFunctionZeroDataError) {
       return 0n;
     }
   }
 
   throw err;
 };
+
