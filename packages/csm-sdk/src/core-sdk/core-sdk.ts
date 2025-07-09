@@ -24,6 +24,7 @@ import {
   CSModuleAbi,
   CSParametersRegistryAbi,
   CSStrikesAbi,
+  CSMSatelliteAbi,
   HashConsensusAbi,
   PermissionlessGateAbi,
   StakingRouterAbi,
@@ -239,6 +240,15 @@ export class CoreSDK extends CsmSDKCacheable {
       CSM_CONTRACT_NAMES.validatorsExitBusOracle,
       ValidatorsExitBusOracleAbi,
     );
+  }
+
+  @Logger('Contracts:')
+  @Cache(30 * 60 * 1000)
+  public getContractCSMSatellite(): GetContractReturnType<
+    typeof CSMSatelliteAbi,
+    WalletClient
+  > {
+    return this.getContract(CSM_CONTRACT_NAMES.CSMSatellite, CSMSatelliteAbi);
   }
 
   public get moduleId(): number {

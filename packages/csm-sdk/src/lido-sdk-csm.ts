@@ -18,6 +18,7 @@ import { SpendingSDK } from './spending-sdk/spending-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
 import { FrameSDK } from './frame-sdk/frame-sdk.js';
 import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
+import { SatelliteSDK } from './satellite-sdk/satellite-sdk.js';
 
 export class LidoSDKCsm {
   readonly core: CoreSDK;
@@ -38,6 +39,7 @@ export class LidoSDKCsm {
   readonly frame: FrameSDK;
   readonly depositQueue: DepositQueueSDK;
   readonly stealing: StealingSDK;
+  readonly satellite: SatelliteSDK;
 
   constructor(props: CsmCoreProps) {
     const bus = new BusRegistry();
@@ -61,5 +63,6 @@ export class LidoSDKCsm {
     this.frame = new FrameSDK(commonProps, 'frame');
     this.depositQueue = new DepositQueueSDK(commonProps);
     this.stealing = new StealingSDK(commonProps);
+    this.satellite = new SatelliteSDK(commonProps);
   }
 }
