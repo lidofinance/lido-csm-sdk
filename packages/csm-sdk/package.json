@@ -121,6 +121,11 @@
       "default": "./dist/cjs/satellite-sdk/index.js",
       "types": "./dist/types/satellite-sdk/index.d.ts"
     },
+    "./deposit-data-sdk": {
+      "import": "./dist/esm/deposit-data-sdk/index.js",
+      "default": "./dist/cjs/deposit-data-sdk/index.js",
+      "types": "./dist/types/deposit-data-sdk/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -187,6 +192,9 @@
       ],
       "satellite-sdk": [
         "./dist/types/satellite-sdk/index.d.ts"
+      ],
+      "deposit-data-sdk": [
+        "./dist/types/deposit-data-sdk/index.d.ts"
       ]
     }
   },

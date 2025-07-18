@@ -4,17 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-### Build and Development
+### Monorepo Commands (from root)
+- `yarn build` - Build all packages
+- `yarn build:packages` - Build only publishable packages
+- `yarn test` - Run tests across all packages
+- `yarn lint` - Run linting across all packages
+- `yarn dev` - Start playground development server
+
+### CSM SDK Package Commands (from packages/csm-sdk)
 - `yarn build` - Full build process (clean + build CJS, ESM, and types)
 - `yarn build:cjs` - Build CommonJS distribution
 - `yarn build:esm` - Build ES modules distribution
 - `yarn build:types` - Build TypeScript declaration files
 - `yarn clean` - Remove dist directory
 - `yarn types` - TypeScript type checking without emitting files
-
-### Testing and Quality
 - `yarn test` - Run Jest tests
 - `yarn lint` - Run ESLint with TypeScript support (max 0 warnings)
+
+### Development Workflow
+After implementing changes: `yarn build && yalc push` (from csm-sdk directory) to update package in dependent projects
 
 ## Architecture Overview
 
@@ -22,8 +30,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The SDK follows a modular architecture centered around the `LidoSDKCsm` class, which aggregates specialized modules for different aspects of the Lido Community Staking Module (CSM) ecosystem.
 
 ### Main Entry Point
-- `src/lido-sdk-csm.ts` - Main SDK class that instantiates and manages all sub-modules
-- `src/index.ts` - Primary export file with re-exports from all modules
+- `packages/csm-sdk/src/lido-sdk-csm.ts` - Main SDK class that instantiates and manages all sub-modules
+- `packages/csm-sdk/src/index.ts` - Primary export file with re-exports from all modules
 
 ### Module Organization
 Each module follows a consistent pattern:
@@ -51,9 +59,10 @@ Key modules include:
 - **deposit-queue-sdk** - Deposit queue pointers and batches
 - **deposit-data-sdk** - Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **stealing-sdk** - EL rewards stealing penalty management
+- **satellite-sdk** - Helper for querying operator IDs by address and reading deposit queue batches
 
 ### Common Infrastructure
-- `src/common/` - Shared utilities, constants, and primitives
+- `packages/csm-sdk/src/common/` - Shared utilities, constants, and primitives
   - `class-primitives/` - Base classes including `CsmSDKModule` and `BusRegistry`
   - `constants/` - Contract addresses, roles, and other constants
   - `utils/` - Helper functions for data parsing and manipulation
@@ -66,7 +75,7 @@ Key modules include:
 - **zod** - Runtime type validation
 
 ### ABI Management
-- `src/abi/` - Contract ABI definitions for all CSM contracts
+- `packages/csm-sdk/src/abi/` - Contract ABI definitions for all CSM contracts
 
 ### Configuration
 All modules accept `CsmCoreProps` which includes:
