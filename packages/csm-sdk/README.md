@@ -65,6 +65,7 @@ The `LidoSDKCsm` class aggregates the following modules, each responsible for a 
 - **icsGate**: ICS (Independent Community Staker) vetted entry point for create a new operations with some benefits.
 - **events**: Query protocol events.
 - **depositQueue**: Query deposit queue pointers, batches.
+- **depositData**: Parse and validate deposit data JSON, check for duplicates and previously submitted keys.
 - **stealing**: Manage execution layer rewards stealing penalties - report and cancel penalties.
 - **satellite**: Helper to simprify query operator IDs by address and read deposit queue batches.
 

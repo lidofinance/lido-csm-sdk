@@ -4,6 +4,7 @@ import { BusRegistry } from './common/class-primitives/bus-registry.js';
 import { CoreSDK } from './core-sdk/core-sdk.js';
 import { CsmCoreProps } from './core-sdk/types.js';
 import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
+import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
 import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk.js';
 import { KeysSDK } from './keys-sdk/keys-sdk.js';
@@ -38,6 +39,7 @@ export class LidoSDKCsm {
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
   readonly depositQueue: DepositQueueSDK;
+  readonly depositData: DepositDataSDK;
   readonly stealing: StealingSDK;
   readonly satellite: SatelliteSDK;
 
@@ -62,6 +64,7 @@ export class LidoSDKCsm {
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.frame = new FrameSDK(commonProps, 'frame');
     this.depositQueue = new DepositQueueSDK(commonProps);
+    this.depositData = new DepositDataSDK(commonProps);
     this.stealing = new StealingSDK(commonProps);
     this.satellite = new SatelliteSDK(commonProps);
   }

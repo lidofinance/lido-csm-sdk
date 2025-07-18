@@ -12,7 +12,7 @@ import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import { BondBalance, NodeOperatorId } from '../common/index.js';
 import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
-import { splitKeys } from '../common/utils/slitp-keys.js';
+import { splitKeys } from '../common/utils/split-keys.js';
 import { NodeOperatorInfo } from './types.js';
 import { calcBondBalance } from './calc-bond-balance.js';
 import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
@@ -58,9 +58,9 @@ export class OperatorSDK extends CsmSDKModule<{
     return this.accountingContract.read.getActualLockedBond([id]);
   }
 
+  @Cache(10 * 1000)
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(10 * 1000)
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
     const info = await this.moduleContract.read.getNodeOperator([id]);
 
