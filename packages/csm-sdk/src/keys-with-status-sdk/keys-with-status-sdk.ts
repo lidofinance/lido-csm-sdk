@@ -41,6 +41,8 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       throw new Error('Keys API link is not configured');
     }
 
+    if (pubkeys.length === 0) return [];
+
     const url = `${keysApi}/v1/keys/find`;
 
     const response = await fetchJson<FindKeysResponse>(url, {
