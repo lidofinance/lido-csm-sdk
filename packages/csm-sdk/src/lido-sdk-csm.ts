@@ -55,7 +55,7 @@ export class LidoSDKCsm {
     this.operator = new OperatorSDK(commonProps, 'operator');
     this.rewards = new RewardsSDK(commonProps);
     this.keys = new KeysSDK(commonProps);
-    this.keysWithStatus = new KeysWithStatusSDK(commonProps);
+    this.keysWithStatus = new KeysWithStatusSDK(commonProps, 'keysWithStatus');
     this.bond = new BondSDK(commonProps);
     this.roles = new RolesSDK(commonProps);
     this.events = new EventsSDK(commonProps, 'events');
