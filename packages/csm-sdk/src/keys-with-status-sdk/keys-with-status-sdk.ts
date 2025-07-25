@@ -9,10 +9,12 @@ import {
   KEY_STATUS,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
+import { compareLowercase } from '../common/utils/compare-lowercase.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { isNotUnique, isUnique } from '../common/utils/is-defined.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
+import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
 import { getClUrls, prepareKey } from './cl-chunks.js';
 import {
   ClPreparedKey,
@@ -21,7 +23,6 @@ import {
   KeyWithStatus,
 } from './types.js';
 import { hasNoInterception } from './utils.js';
-import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
@@ -31,10 +32,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('API:')
   @ErrorHandler()
   @Cache(60 * 1000)
-  public async getApiKeysDuplicates(
-    nodeOperatorId: NodeOperatorId,
-    pubkeys: Hex[],
-  ): Promise<Hex[] | null> {
+  public async getApiKeys(pubkeys: Hex[]) {
     const keysApi = this.core.keysApiLink;
 
     if (!keysApi) {
@@ -48,11 +46,23 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     const response = await fetchJson<FindKeysResponse>(url, {
       method: 'POST',
       body: JSON.stringify({ pubkeys }),
+      headers: { 'Content-Type': 'application/json' },
     }).catch(() => null);
 
     if (!response) return null;
 
-    const keys = response.data;
+    return response.data;
+  }
+
+  @Logger('API:')
+  @ErrorHandler()
+  @Cache(60 * 1000)
+  public async getApiKeysDuplicates(
+    nodeOperatorId: NodeOperatorId,
+    pubkeys: Hex[],
+  ): Promise<Hex[] | null> {
+    const keys = await this.getApiKeys(pubkeys);
+    if (!keys) return null;
 
     const csmAddress = this.core.getContractAddress(
       CSM_CONTRACT_NAMES.csModule,
@@ -108,6 +118,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   }
 
   @Logger('Utils:')
+  @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
     const [info, unboundCount, keys, currentEpoch] = await Promise.all([
       this.bus.getOrThrow('operator').getInfo(id),
@@ -186,7 +197,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         ])
       ) {
         const exitRequestIndex = requestedToExit.findIndex((key) =>
-          isAddressEqual(pubkey, key),
+          compareLowercase(pubkey, key),
         );
 
         if (exitRequestIndex >= 0) {

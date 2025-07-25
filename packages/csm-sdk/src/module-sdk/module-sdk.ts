@@ -165,6 +165,9 @@ export class ModuleSDK extends CsmSDKModule {
 
     const { data: modules } = await fetchJson<ModulesResponse>(
       `${keysApi}/v1/modules`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
     ).catch(() => ({ data: [] }));
 
     const results = await Promise.all(
