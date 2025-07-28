@@ -21,7 +21,7 @@ export const calcBondBalance = ({
     required: requiredWithoutLocked,
     current,
     locked,
-    delta: delta < 0 ? -delta : delta, // TODO: may be not .abs() ???
+    delta: delta < 0 ? -delta : delta,
     isInsufficient,
   };
 };

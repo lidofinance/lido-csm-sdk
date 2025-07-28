@@ -31,14 +31,14 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [this.core.rewardsTreeLink, this.core.getIpfsUrl(cid)].filter(
+    return [this.core.rewardsTreeLink, ...this.core.getIpfsUrl(cid)].filter(
       isDefined,
     );
   }
 
   @Logger('Utils:')
   public getLogUrls(cid: string): string[] {
-    return [this.core.getIpfsUrl(cid)].filter(isDefined);
+    return this.core.getIpfsUrl(cid).filter(isDefined);
   }
 
   @Logger('Views:')

@@ -34,7 +34,7 @@ export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [this.core.getIpfsUrl(cid)].filter(isDefined);
+    return this.core.getIpfsUrl(cid).filter(isDefined);
   }
 
   @Logger('API:')

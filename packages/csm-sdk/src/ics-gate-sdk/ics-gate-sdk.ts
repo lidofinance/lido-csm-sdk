@@ -295,7 +295,9 @@ export class IcsGateSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [this.core.getIpfsUrl(cid)].filter(isDefined);
+    return [this.core.icsTreeLink, ...this.core.getIpfsUrl(cid)].filter(
+      isDefined,
+    );
   }
 
   @Logger('API:')
