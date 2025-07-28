@@ -112,7 +112,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSAccounting(): GetContractReturnType<
+  get contractCSAccounting(): GetContractReturnType<
     typeof CSAccountingAbi,
     WalletClient
   > {
@@ -121,7 +121,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSEjector(): GetContractReturnType<
+  get contractCSEjector(): GetContractReturnType<
     typeof CSEjectorAbi,
     WalletClient
   > {
@@ -130,7 +130,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSFeeDistributor(): GetContractReturnType<
+  get contractCSFeeDistributor(): GetContractReturnType<
     typeof CSFeeDistributorAbi,
     WalletClient
   > {
@@ -142,7 +142,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSFeeOracle(): GetContractReturnType<
+  get contractCSFeeOracle(): GetContractReturnType<
     typeof CSFeeOracleAbi,
     WalletClient
   > {
@@ -151,7 +151,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSModule(): GetContractReturnType<
+  get contractCSModule(): GetContractReturnType<
     typeof CSModuleAbi,
     WalletClient
   > {
@@ -160,7 +160,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSParametersRegistry(): GetContractReturnType<
+  get contractCSParametersRegistry(): GetContractReturnType<
     typeof CSParametersRegistryAbi,
     WalletClient
   > {
@@ -172,7 +172,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSStrikes(): GetContractReturnType<
+  get contractCSStrikes(): GetContractReturnType<
     typeof CSStrikesAbi,
     WalletClient
   > {
@@ -181,7 +181,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSExitPenalties(): GetContractReturnType<
+  get contractCSExitPenalties(): GetContractReturnType<
     typeof CSExitPenaltiesAbi,
     WalletClient
   > {
@@ -193,7 +193,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractHashConsensus(): GetContractReturnType<
+  get contractHashConsensus(): GetContractReturnType<
     typeof HashConsensusAbi,
     WalletClient
   > {
@@ -202,7 +202,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractPermissionlessGate(): GetContractReturnType<
+  get contractPermissionlessGate(): GetContractReturnType<
     typeof PermissionlessGateAbi,
     WalletClient
   > {
@@ -214,7 +214,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractVettedGate(): GetContractReturnType<
+  get contractVettedGate(): GetContractReturnType<
     typeof VettedGateAbi,
     WalletClient
   > {
@@ -223,7 +223,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractStakingRouter(): GetContractReturnType<
+  get contractStakingRouter(): GetContractReturnType<
     typeof StakingRouterAbi,
     WalletClient
   > {
@@ -232,7 +232,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractValidatorsExitBusOracle(): GetContractReturnType<
+  get contractValidatorsExitBusOracle(): GetContractReturnType<
     typeof ValidatorsExitBusOracleAbi,
     WalletClient
   > {
@@ -244,7 +244,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(30 * 60 * 1000)
-  public getContractCSMSatellite(): GetContractReturnType<
+  get contractCSMSatellite(): GetContractReturnType<
     typeof CSMSatelliteAbi,
     WalletClient
   > {
@@ -279,7 +279,7 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getExternalLink(LINK_TYPE.icsTree);
   }
 
-  public getIpfsUrl(cid: string): string[] {
+  public getIpfsUrls(cid: string): string[] {
     return [
       `https://ipfs.io/ipfs/${cid}`,
       `https://gateway.pinata.cloud/ipfs/${cid}`,

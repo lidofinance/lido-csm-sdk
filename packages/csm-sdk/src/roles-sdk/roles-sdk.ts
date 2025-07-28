@@ -20,7 +20,7 @@ export class RolesSDK extends CsmSDKModule {
     typeof CSModuleAbi,
     WalletClient
   > {
-    return this.core.getContractCSModule();
+    return this.core.contractCSModule;
   }
 
   @Logger('Call:')

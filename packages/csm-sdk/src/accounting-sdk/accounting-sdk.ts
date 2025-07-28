@@ -16,7 +16,7 @@ export class AccountingSDK extends CsmSDKModule {
     typeof CSAccountingAbi,
     WalletClient
   > {
-    return this.core.getContractCSAccounting();
+    return this.core.contractCSAccounting;
   }
 
   @Logger('Views:')

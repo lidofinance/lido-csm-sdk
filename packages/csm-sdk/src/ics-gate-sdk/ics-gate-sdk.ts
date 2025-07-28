@@ -59,7 +59,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     typeof VettedGateAbi,
     WalletClient
   > {
-    return this.core.getContractVettedGate();
+    return this.core.contractVettedGate;
   }
 
   @Logger('Call:')
@@ -295,7 +295,7 @@ export class IcsGateSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [this.core.icsTreeLink, ...this.core.getIpfsUrl(cid)].filter(
+    return [this.core.icsTreeLink, ...this.core.getIpfsUrls(cid)].filter(
       isDefined,
     );
   }

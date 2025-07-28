@@ -107,7 +107,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       [slotsPerEpoch, secondsPerSlot, genesisTime],
       { timestamp: latestBlockTimestamp },
     ] = await Promise.all([
-      this.core.getContractHashConsensus().read.getChainConfig(),
+      this.core.contractHashConsensus.read.getChainConfig(),
       this.core.client.getBlock({ blockTag: 'latest' }),
     ]);
 

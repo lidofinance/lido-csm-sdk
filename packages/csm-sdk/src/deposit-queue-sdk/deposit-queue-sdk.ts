@@ -15,7 +15,7 @@ export class DepositQueueSDK extends CsmSDKModule {
     typeof CSModuleAbi,
     WalletClient
   > {
-    return this.core.getContractCSModule();
+    return this.core.contractCSModule;
   }
 
   @Logger('Views:')

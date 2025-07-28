@@ -21,7 +21,7 @@ export class SatelliteSDK extends CsmSDKModule {
     typeof CSMSatelliteAbi,
     WalletClient
   > {
-    return this.core.getContractCSMSatellite();
+    return this.core.contractCSMSatellite;
   }
 
   @Logger('Views:')

@@ -25,14 +25,14 @@ export class OperatorSDK extends CsmSDKModule<{
     typeof CSAccountingAbi,
     WalletClient
   > {
-    return this.core.getContractCSAccounting();
+    return this.core.contractCSAccounting;
   }
 
   protected get moduleContract(): GetContractReturnType<
     typeof CSModuleAbi,
     WalletClient
   > {
-    return this.core.getContractCSModule();
+    return this.core.contractCSModule;
   }
 
   @Logger('Views:')

@@ -22,7 +22,7 @@ export class EventsSDK extends CsmSDKModule {
     typeof CSModuleAbi,
     WalletClient
   > {
-    return this.core.getContractCSModule();
+    return this.core.contractCSModule;
   }
 
   protected get contractV1Events(): GetContractReturnType<
@@ -39,7 +39,7 @@ export class EventsSDK extends CsmSDKModule {
     typeof CSFeeOracleAbi,
     WalletClient
   > {
-    return this.core.getContractCSFeeOracle();
+    return this.core.contractCSFeeOracle;
   }
 
   @Logger('Events:')
@@ -207,7 +207,7 @@ export class EventsSDK extends CsmSDKModule {
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
         this.core
-          .getContractValidatorsExitBusOracle()
+          .contractValidatorsExitBusOracle
           .getEvents.ValidatorExitRequest(
             { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
             stepProps,
@@ -230,7 +230,7 @@ export class EventsSDK extends CsmSDKModule {
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
         this.core
-          .getContractCSModule()
+          .contractCSModule
           .getEvents.ELRewardsStealingPenaltyReported({}, stepProps),
       ),
     );

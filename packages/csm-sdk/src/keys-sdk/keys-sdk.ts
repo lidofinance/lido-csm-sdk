@@ -34,11 +34,11 @@ export class KeysSDK extends CsmSDKModule<{
     typeof CSModuleAbi,
     WalletClient
   > {
-    return this.core.getContractCSModule();
+    return this.core.contractCSModule;
   }
 
   private get ejectorContract() {
-    return this.core.getContractCSEjector();
+    return this.core.contractCSEjector;
   }
 
   @Logger('Call:')

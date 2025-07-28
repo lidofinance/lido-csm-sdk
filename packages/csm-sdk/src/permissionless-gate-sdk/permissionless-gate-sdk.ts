@@ -44,7 +44,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     typeof PermissionlessGateAbi,
     WalletClient
   > {
-    return this.core.getContractPermissionlessGate();
+    return this.core.contractPermissionlessGate;
   }
 
   @Logger('Call:')
