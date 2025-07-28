@@ -275,8 +275,15 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getExternalLink(LINK_TYPE.rewardsTree);
   }
 
-  public getIpfsUrl(cid: string): string {
-    return `https://ipfs.io/ipfs/${cid}`;
+  public get icsTreeLink() {
+    return this.getExternalLink(LINK_TYPE.icsTree);
+  }
+
+  public getIpfsUrl(cid: string): string[] {
+    return [
+      `https://ipfs.io/ipfs/${cid}`,
+      `https://gateway.pinata.cloud/ipfs/${cid}`,
+    ];
   }
 
   public async performTransaction<TDecodedResult = undefined>(

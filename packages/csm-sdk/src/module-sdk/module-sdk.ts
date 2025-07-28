@@ -1,4 +1,9 @@
-import { Address, GetContractReturnType, WalletClient } from 'viem';
+import {
+  Address,
+  GetContractReturnType,
+  isAddressEqual,
+  WalletClient,
+} from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { StakingRouterAbi } from '../abi/StakingRouter.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
@@ -181,11 +186,16 @@ export class ModuleSDK extends CsmSDKModule {
     );
     const operators = results.flatMap((r) => r?.data.operators || []);
 
-    const matchedOperator = operators.find((o) => o.rewardAddress === address);
+    const matchedOperator = operators.find((o) =>
+      isAddressEqual(o.rewardAddress as Address, address),
+    );
     const matchedModule =
       matchedOperator &&
-      modules.find(
-        (m) => m.stakingModuleAddress === matchedOperator.moduleAddress,
+      modules.find((m) =>
+        isAddressEqual(
+          m.stakingModuleAddress as Address,
+          matchedOperator.moduleAddress as Address,
+        ),
       );
 
     return matchedModule?.name ?? null;
