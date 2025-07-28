@@ -10,14 +10,14 @@ export class FrameSDK extends CsmSDKModule {
     typeof CSFeeOracleAbi,
     WalletClient
   > {
-    return this.core.getContractCSFeeOracle();
+    return this.core.contractCSFeeOracle;
   }
 
   private get consensusContract(): GetContractReturnType<
     typeof HashConsensusAbi,
     WalletClient
   > {
-    return this.core.getContractHashConsensus();
+    return this.core.contractHashConsensus;
   }
 
   @Logger('Views:')

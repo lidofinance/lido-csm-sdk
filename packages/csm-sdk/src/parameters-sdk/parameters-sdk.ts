@@ -17,14 +17,14 @@ export class ParametersSDK extends CsmSDKModule {
     typeof CSParametersRegistryAbi,
     WalletClient
   > {
-    return this.core.getContractCSParametersRegistry();
+    return this.core.contractCSParametersRegistry;
   }
 
   protected get accountingContract(): GetContractReturnType<
     typeof CSAccountingAbi,
     WalletClient
   > {
-    return this.core.getContractCSAccounting();
+    return this.core.contractCSAccounting;
   }
 
   @Logger('Views:')

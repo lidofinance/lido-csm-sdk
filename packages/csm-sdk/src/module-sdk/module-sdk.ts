@@ -31,21 +31,21 @@ export class ModuleSDK extends CsmSDKModule {
     typeof CSModuleAbi,
     WalletClient
   > {
-    return this.core.getContractCSModule();
+    return this.core.contractCSModule;
   }
 
   private get stakingRouterContract(): GetContractReturnType<
     typeof StakingRouterAbi,
     WalletClient
   > {
-    return this.core.getContractStakingRouter();
+    return this.core.contractStakingRouter;
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getStatus(): Promise<CsmStatus> {
-    const csAccounting = this.core.getContractCSAccounting();
-    const csModule = this.core.getContractCSModule();
+    const csAccounting = this.core.contractCSAccounting;
+    const csModule = this.core.contractCSModule;
 
     const [isPausedModule, isPausedAccounting] = await Promise.all([
       csModule.read.isPaused(),
@@ -70,27 +70,27 @@ export class ModuleSDK extends CsmSDKModule {
       vettedGate,
     ] = await Promise.all([
       this.core
-        .getContractCSModule()
+        .contractCSModule
         .read.getInitializedVersion()
         .catch(onError),
       this.core
-        .getContractCSAccounting()
+        .contractCSAccounting
         .read.getInitializedVersion()
         .catch(onError),
       this.core
-        .getContractCSFeeDistributor()
+        .contractCSFeeDistributor
         .read.getInitializedVersion()
         .catch(onError),
       this.core
-        .getContractCSParametersRegistry()
+        .contractCSParametersRegistry
         .read.getInitializedVersion()
         .catch(onError),
       this.core
-        .getContractCSStrikes()
+        .contractCSStrikes
         .read.getInitializedVersion()
         .catch(onError),
       this.core
-        .getContractVettedGate()
+        .contractVettedGate
         .read.getInitializedVersion()
         .catch(onError),
     ]);

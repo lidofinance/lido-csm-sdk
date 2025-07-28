@@ -19,7 +19,7 @@ export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
     typeof CSStrikesAbi,
     WalletClient
   > {
-    return this.core.getContractCSStrikes();
+    return this.core.contractCSStrikes;
   }
 
   @Logger('Views:')
@@ -34,7 +34,7 @@ export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return this.core.getIpfsUrl(cid).filter(isDefined);
+    return this.core.getIpfsUrls(cid).filter(isDefined);
   }
 
   @Logger('API:')
