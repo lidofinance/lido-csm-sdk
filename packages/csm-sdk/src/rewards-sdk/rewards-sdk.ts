@@ -1,6 +1,4 @@
 import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
-import { GetContractReturnType, WalletClient } from 'viem';
-import { CSFeeDistributorAbi } from '../abi/CSFeeDistributor.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -22,10 +20,7 @@ export class RewardsSDK extends CsmSDKModule<{
   spending: SpendingSDK;
   events: EventsSDK;
 }> {
-  private get distributorContract(): GetContractReturnType<
-    typeof CSFeeDistributorAbi,
-    WalletClient
-  > {
+  private get distributorContract() {
     return this.core.contractCSFeeDistributor;
   }
 

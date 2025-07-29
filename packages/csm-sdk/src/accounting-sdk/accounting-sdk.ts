@@ -1,5 +1,3 @@
-import { GetContractReturnType, WalletClient } from 'viem';
-import { CSAccountingAbi } from '../abi/CSAccounting.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
@@ -12,10 +10,7 @@ import {
 } from './types.js';
 
 export class AccountingSDK extends CsmSDKModule {
-  protected get contract(): GetContractReturnType<
-    typeof CSAccountingAbi,
-    WalletClient
-  > {
+  private get accountingContract() {
     return this.core.contractCSAccounting;
   }
 
@@ -25,7 +20,10 @@ export class AccountingSDK extends CsmSDKModule {
     curveId,
     keysCount,
   }: BondAmountByKeysCountProps) {
-    return this.contract.read.getBondAmountByKeysCount([keysCount, curveId]);
+    return this.accountingContract.read.getBondAmountByKeysCount([
+      keysCount,
+      curveId,
+    ]);
   }
 
   @Logger('Views:')
@@ -34,7 +32,7 @@ export class AccountingSDK extends CsmSDKModule {
     curveId,
     keysCount,
   }: BondAmountByKeysCountProps) {
-    return this.contract.read.getBondAmountByKeysCountWstETH([
+    return this.accountingContract.read.getBondAmountByKeysCountWstETH([
       keysCount,
       curveId,
     ]);
@@ -58,7 +56,7 @@ export class AccountingSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   public async getCurve(curveId: bigint) {
-    return this.contract.read.getCurveInfo([curveId]);
+    return this.accountingContract.read.getCurveInfo([curveId]);
   }
 
   @Logger('Views:')
@@ -67,7 +65,10 @@ export class AccountingSDK extends CsmSDKModule {
     amount,
     curveId,
   }: KeysCountByBondAmountProps) {
-    return this.contract.read.getKeysCountByBondAmount([amount, curveId]);
+    return this.accountingContract.read.getKeysCountByBondAmount([
+      amount,
+      curveId,
+    ]);
   }
 
   @Logger('Views:')
@@ -76,7 +77,7 @@ export class AccountingSDK extends CsmSDKModule {
     nodeOperatorId,
     keysCount,
   }: BondForNextKeysProps) {
-    return this.contract.read.getRequiredBondForNextKeys([
+    return this.accountingContract.read.getRequiredBondForNextKeys([
       nodeOperatorId,
       keysCount,
     ]);
@@ -88,7 +89,7 @@ export class AccountingSDK extends CsmSDKModule {
     nodeOperatorId,
     keysCount,
   }: BondForNextKeysProps) {
-    return this.contract.read.getRequiredBondForNextKeysWstETH([
+    return this.accountingContract.read.getRequiredBondForNextKeysWstETH([
       nodeOperatorId,
       keysCount,
     ]);

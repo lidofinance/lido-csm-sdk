@@ -6,14 +6,12 @@ import {
 import {
   decodeEventLog,
   getAbiItem,
-  GetContractReturnType,
   isAddress,
   toEventHash,
   TransactionReceipt,
-  WalletClient,
   zeroAddress,
 } from 'viem';
-import { CSModuleAbi, PermissionlessGateAbi } from '../abi/index.js';
+import { CSModuleAbi } from '../abi/index.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -40,10 +38,7 @@ const NODE_OPERATOR_ADDED_SIGNATURE = toEventHash(NODE_OPERATOR_ADDED_EVENT);
 export class PermissionlessGateSDK extends CsmSDKModule<{
   spending: SpendingSDK;
 }> {
-  private get contract(): GetContractReturnType<
-    typeof PermissionlessGateAbi,
-    WalletClient
-  > {
+  private get permissionlessContract() {
     return this.core.contractPermissionlessGate;
   }
 
@@ -74,12 +69,12 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addNodeOperatorETH(args, {
+        this.permissionlessContract.estimateGas.addNodeOperatorETH(args, {
           value,
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.addNodeOperatorETH(args, {
+        this.permissionlessContract.write.addNodeOperatorETH(args, {
           value,
           ...options,
         }),
@@ -104,7 +99,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     } = await this.parseProps(props);
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.steth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.steth, amount } as SignPermitOrApproveProps,
       _permit,
     );
     if (hash) return { hash };
@@ -121,9 +116,12 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addNodeOperatorStETH(args, options),
+        this.permissionlessContract.estimateGas.addNodeOperatorStETH(
+          args,
+          options,
+        ),
       sendTransaction: (options) =>
-        this.contract.write.addNodeOperatorStETH(args, options),
+        this.permissionlessContract.write.addNodeOperatorStETH(args, options),
       decodeResult: (receipt) => this.receiptParseEvents(receipt),
     });
   }
@@ -145,7 +143,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     } = await this.parseProps(props);
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.wsteth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.wsteth, amount } as SignPermitOrApproveProps,
       _permit,
     );
     if (hash) return { hash };
@@ -162,9 +160,12 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addNodeOperatorWstETH(args, options),
+        this.permissionlessContract.estimateGas.addNodeOperatorWstETH(
+          args,
+          options,
+        ),
       sendTransaction: (options) =>
-        this.contract.write.addNodeOperatorWstETH(args, options),
+        this.permissionlessContract.write.addNodeOperatorWstETH(args, options),
       decodeResult: (receipt) => this.receiptParseEvents(receipt),
     });
   }
@@ -259,6 +260,6 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getCurveId(): Promise<bigint> {
-    return this.contract.read.CURVE_ID();
+    return this.permissionlessContract.read.CURVE_ID();
   }
 }

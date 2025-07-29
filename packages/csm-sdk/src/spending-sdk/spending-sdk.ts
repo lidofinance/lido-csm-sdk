@@ -88,6 +88,12 @@ export class SpendingSDK extends CsmSDKModule {
     props: CheckAllowanceProps,
   ): Promise<CheckAllowanceResult> {
     const { amount, ...rest } = this.parseProps(props);
+    if (amount === 0n) {
+      return {
+        allowance: 0n,
+        needsApprove: false,
+      };
+    }
     const allowance = await this.allowance(rest);
     const needsApprove = allowance < amount;
     return {

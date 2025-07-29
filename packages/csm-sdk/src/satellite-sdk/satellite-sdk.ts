@@ -1,5 +1,4 @@
-import { GetContractReturnType, isAddressEqual, WalletClient } from 'viem';
-import { CSMSatelliteAbi } from '../abi/index.js';
+import { isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ROLES } from '../common/constants/roles.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -17,10 +16,7 @@ import {
 } from './types.js';
 
 export class SatelliteSDK extends CsmSDKModule {
-  protected get satelliteContract(): GetContractReturnType<
-    typeof CSMSatelliteAbi,
-    WalletClient
-  > {
+  private get satelliteContract() {
     return this.core.contractCSMSatellite;
   }
 

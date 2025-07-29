@@ -49,7 +49,7 @@ export class LidoSDKCsm {
 
     const commonProps = { ...props, core: this.core, bus };
     this.spending = new SpendingSDK(commonProps, 'spending');
-    this.module = new ModuleSDK(commonProps);
+    this.module = new ModuleSDK(commonProps, 'module');
     this.accounting = new AccountingSDK(commonProps);
     this.parameters = new ParametersSDK(commonProps, 'parameters');
     this.operator = new OperatorSDK(commonProps, 'operator');

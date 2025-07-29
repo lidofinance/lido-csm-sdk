@@ -90,7 +90,7 @@ export class CoreSDK extends CsmSDKCacheable {
       CSM_CONTRACT_ADDRESSES[this.chainId]?.[contract];
     invariant(
       address,
-      `CSM contracts are not supported for ${this.core.chain.name}(${this.core.chain.id})`,
+      `CSM contract [${contract}] are not supported for ${this.core.chain.name}(${this.core.chain.id})`,
       ERROR_CODE.NOT_SUPPORTED,
     );
     return address;

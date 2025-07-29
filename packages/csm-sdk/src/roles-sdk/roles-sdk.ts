@@ -3,23 +3,18 @@ import {
   SDKError,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { GetContractReturnType, WalletClient } from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { ROLES } from '../common/index.js';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
   ResetRoleProps,
   WithRole,
 } from './types.js';
-import { ROLES } from '../common/index.js';
 
 export class RolesSDK extends CsmSDKModule {
-  private get contract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 
@@ -35,11 +30,11 @@ export class RolesSDK extends CsmSDKModule {
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.changeNodeOperatorRewardAddress(args, {
+        this.moduleContract.estimateGas.changeNodeOperatorRewardAddress(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.changeNodeOperatorRewardAddress(args, {
+        this.moduleContract.write.changeNodeOperatorRewardAddress(args, {
           ...options,
         }),
     });
@@ -57,16 +52,19 @@ export class RolesSDK extends CsmSDKModule {
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.proposeNodeOperatorManagerAddressChange(
+        this.moduleContract.estimateGas.proposeNodeOperatorManagerAddressChange(
           args,
           {
             ...options,
           },
         ),
       sendTransaction: (options) =>
-        this.contract.write.proposeNodeOperatorManagerAddressChange(args, {
-          ...options,
-        }),
+        this.moduleContract.write.proposeNodeOperatorManagerAddressChange(
+          args,
+          {
+            ...options,
+          },
+        ),
     });
   }
 
@@ -82,11 +80,14 @@ export class RolesSDK extends CsmSDKModule {
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.proposeNodeOperatorRewardAddressChange(args, {
-          ...options,
-        }),
+        this.moduleContract.estimateGas.proposeNodeOperatorRewardAddressChange(
+          args,
+          {
+            ...options,
+          },
+        ),
       sendTransaction: (options) =>
-        this.contract.write.proposeNodeOperatorRewardAddressChange(args, {
+        this.moduleContract.write.proposeNodeOperatorRewardAddressChange(args, {
           ...options,
         }),
     });
@@ -104,11 +105,11 @@ export class RolesSDK extends CsmSDKModule {
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.resetNodeOperatorManagerAddress(args, {
+        this.moduleContract.estimateGas.resetNodeOperatorManagerAddress(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.resetNodeOperatorManagerAddress(args, {
+        this.moduleContract.write.resetNodeOperatorManagerAddress(args, {
           ...options,
         }),
     });
@@ -126,11 +127,14 @@ export class RolesSDK extends CsmSDKModule {
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.confirmNodeOperatorRewardAddressChange(args, {
-          ...options,
-        }),
+        this.moduleContract.estimateGas.confirmNodeOperatorRewardAddressChange(
+          args,
+          {
+            ...options,
+          },
+        ),
       sendTransaction: (options) =>
-        this.contract.write.confirmNodeOperatorRewardAddressChange(args, {
+        this.moduleContract.write.confirmNodeOperatorRewardAddressChange(args, {
           ...options,
         }),
     });
@@ -148,16 +152,19 @@ export class RolesSDK extends CsmSDKModule {
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.confirmNodeOperatorManagerAddressChange(
+        this.moduleContract.estimateGas.confirmNodeOperatorManagerAddressChange(
           args,
           {
             ...options,
           },
         ),
       sendTransaction: (options) =>
-        this.contract.write.confirmNodeOperatorManagerAddressChange(args, {
-          ...options,
-        }),
+        this.moduleContract.write.confirmNodeOperatorManagerAddressChange(
+          args,
+          {
+            ...options,
+          },
+        ),
     });
   }
 

@@ -7,14 +7,12 @@ import {
   Address,
   decodeEventLog,
   getAbiItem,
-  GetContractReturnType,
   isAddress,
   toEventHash,
   TransactionReceipt,
-  WalletClient,
   zeroAddress,
 } from 'viem';
-import { CSModuleAbi, VettedGateAbi } from '../abi/index.js';
+import { CSModuleAbi } from '../abi/index.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -37,13 +35,13 @@ import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import { findProof } from './find-proof.js';
+import { onError } from './on-error.js';
 import {
   AddressProof,
   AddVettedNodeOperatorInnerProps,
   AddVettedNodeOperatorProps,
   ClaimCuvrveProps,
 } from './types.js';
-import { onError } from './on-error.js';
 
 const NODE_OPERATOR_ADDED_EVENT = getAbiItem({
   abi: CSModuleAbi,
@@ -55,10 +53,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   spending: SpendingSDK;
   operator: OperatorSDK;
 }> {
-  private get contract(): GetContractReturnType<
-    typeof VettedGateAbi,
-    WalletClient
-  > {
+  private get icsContract() {
     return this.core.contractVettedGate;
   }
 
@@ -91,12 +86,12 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addNodeOperatorETH(args, {
+        this.icsContract.estimateGas.addNodeOperatorETH(args, {
           value,
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.addNodeOperatorETH(args, {
+        this.icsContract.write.addNodeOperatorETH(args, {
           value,
           ...options,
         }),
@@ -122,7 +117,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     } = await this.parseProps(props);
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.steth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.steth, amount } as SignPermitOrApproveProps,
       _permit,
     );
     if (hash) return { hash };
@@ -140,9 +135,9 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addNodeOperatorStETH(args, options),
+        this.icsContract.estimateGas.addNodeOperatorStETH(args, options),
       sendTransaction: (options) =>
-        this.contract.write.addNodeOperatorStETH(args, options),
+        this.icsContract.write.addNodeOperatorStETH(args, options),
       decodeResult: (receipt) => this.receiptParseEvents(receipt),
     });
   }
@@ -165,7 +160,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     } = await this.parseProps(props);
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.wsteth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.wsteth, amount } as SignPermitOrApproveProps,
       _permit,
     );
     if (hash) return { hash };
@@ -183,9 +178,9 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addNodeOperatorWstETH(args, options),
+        this.icsContract.estimateGas.addNodeOperatorWstETH(args, options),
       sendTransaction: (options) =>
-        this.contract.write.addNodeOperatorWstETH(args, options),
+        this.icsContract.write.addNodeOperatorWstETH(args, options),
       decodeResult: (receipt) => this.receiptParseEvents(receipt),
     });
   }
@@ -280,15 +275,15 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getCurveId(): Promise<bigint> {
-    return this.contract.read.curveId();
+    return this.icsContract.read.curveId();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getTreeConfig() {
     const [root, cid] = await Promise.all([
-      this.contract.read.treeRoot(),
-      this.contract.read.treeCid(),
+      this.icsContract.read.treeRoot(),
+      this.icsContract.read.treeCid(),
     ]).catch(onError);
     return { root, cid };
   }
@@ -333,13 +328,13 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async isConsumed(address: Address): Promise<boolean> {
-    return this.contract.read.isConsumed([address]);
+    return this.icsContract.read.isConsumed([address]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async isPaused(): Promise<boolean> {
-    return this.contract.read.isPaused();
+    return this.icsContract.read.isPaused();
   }
 
   @Logger('Views:')
@@ -359,7 +354,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async verifyProof(address: Address, proof: Proof): Promise<boolean> {
-    return this.contract.read.verifyProof([address, proof]);
+    return this.icsContract.read.verifyProof([address, proof]);
   }
 
   @Logger('Call:')
@@ -372,11 +367,11 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.claimBondCurve(args, {
+        this.icsContract.estimateGas.claimBondCurve(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.claimBondCurve(args, {
+        this.icsContract.write.claimBondCurve(args, {
           ...options,
         }),
     });

@@ -6,10 +6,8 @@ import {
 import {
   decodeEventLog,
   getAbiItem,
-  GetContractReturnType,
   toEventHash,
   TransactionReceipt,
-  WalletClient,
 } from 'viem';
 import { CSAccountingAbi } from '../abi/CSAccounting.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
@@ -22,6 +20,7 @@ import {
   TOKENS,
   WithToken,
 } from '../common/index.js';
+import { stripPermit } from '../common/utils/strip-permit.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
 import {
@@ -31,7 +30,6 @@ import {
   CoverLockedBondProps,
   PullRewardsProps,
 } from './types.js';
-import { stripPermit } from '../common/utils/strip-permit.js';
 
 const BOND_LOCK_CHANGED_EVENT = getAbiItem({
   abi: CSAccountingAbi,
@@ -43,17 +41,14 @@ const BOND_LOCK_CHANGED_SIGNATURE = toEventHash(BOND_LOCK_CHANGED_EVENT);
 export class BondSDK extends CsmSDKModule<{
   spending: SpendingSDK;
 }> {
-  private get contract(): GetContractReturnType<
-    typeof CSAccountingAbi,
-    WalletClient
-  > {
+  private get accountingContract() {
     return this.core.contractCSAccounting;
   }
 
   @Logger('Views:')
   @ErrorHandler()
   private async getBondSummary(id: NodeOperatorId): Promise<AddBondResult> {
-    const [current, required] = await this.contract.read.getBondSummary([id]);
+    const [current, required] = await this.accountingContract.read.getBondSummary([id]);
     return { current, required };
   }
 
@@ -69,12 +64,12 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.depositETH(args, {
+        this.accountingContract.estimateGas.depositETH(args, {
           value,
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.depositETH(args, {
+        this.accountingContract.write.depositETH(args, {
           value,
           ...options,
         }),
@@ -90,7 +85,7 @@ export class BondSDK extends CsmSDKModule<{
     const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.steth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.steth, amount } as SignPermitOrApproveProps,
       _permit,
     );
     if (hash) return { hash };
@@ -100,9 +95,9 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.depositStETH(args, options),
+        this.accountingContract.estimateGas.depositStETH(args, options),
       sendTransaction: (options) =>
-        this.contract.write.depositStETH(args, options),
+        this.accountingContract.write.depositStETH(args, options),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
@@ -115,7 +110,7 @@ export class BondSDK extends CsmSDKModule<{
     const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.wsteth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.wsteth, amount } as SignPermitOrApproveProps,
       _permit,
     );
     if (hash) return { hash };
@@ -125,9 +120,9 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.depositWstETH(args, options),
+        this.accountingContract.estimateGas.depositWstETH(args, options),
       sendTransaction: (options) =>
-        this.contract.write.depositWstETH(args, options),
+        this.accountingContract.write.depositWstETH(args, options),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
@@ -176,12 +171,12 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.compensateLockedBondETH(args, {
+        this.accountingContract.estimateGas.compensateLockedBondETH(args, {
           value,
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.compensateLockedBondETH(args, {
+        this.accountingContract.write.compensateLockedBondETH(args, {
           value,
           ...options,
         }),
@@ -226,11 +221,11 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.pullFeeRewards(args, {
+        this.accountingContract.estimateGas.pullFeeRewards(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.pullFeeRewards(args, {
+        this.accountingContract.write.pullFeeRewards(args, {
           ...options,
         }),
     });
@@ -249,11 +244,11 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.claimRewardsUnstETH(args, {
+        this.accountingContract.estimateGas.claimRewardsUnstETH(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.claimRewardsUnstETH(args, {
+        this.accountingContract.write.claimRewardsUnstETH(args, {
           ...options,
         }),
     });
@@ -272,11 +267,11 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.claimRewardsStETH(args, {
+        this.accountingContract.estimateGas.claimRewardsStETH(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.claimRewardsStETH(args, {
+        this.accountingContract.write.claimRewardsStETH(args, {
           ...options,
         }),
     });
@@ -295,11 +290,11 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.claimRewardsWstETH(args, {
+        this.accountingContract.estimateGas.claimRewardsWstETH(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.claimRewardsWstETH(args, {
+        this.accountingContract.write.claimRewardsWstETH(args, {
           ...options,
         }),
     });
