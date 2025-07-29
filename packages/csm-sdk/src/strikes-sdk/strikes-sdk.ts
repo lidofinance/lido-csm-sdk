@@ -1,9 +1,9 @@
-import { GetContractReturnType, Hex, WalletClient } from 'viem';
-import { CSStrikesAbi } from '../abi/index.js';
+import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { NodeOperatorId, Proof } from '../common/index.js';
 import { fetchWithFallback, isDefined } from '../common/utils/index.js';
+import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import {
   filterLeafsByNodeOperator,
@@ -12,13 +12,9 @@ import {
 } from './find-proof.js';
 import { onError } from './on-error.js';
 import { KeyWithStrikes } from './types.js';
-import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 
 export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
-  private get contract(): GetContractReturnType<
-    typeof CSStrikesAbi,
-    WalletClient
-  > {
+  private get strikesContract() {
     return this.core.contractCSStrikes;
   }
 
@@ -26,8 +22,8 @@ export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   @ErrorHandler()
   public async getTreeConfig() {
     const [root, cid] = await Promise.all([
-      this.contract.read.treeRoot(),
-      this.contract.read.treeCid(),
+      this.strikesContract.read.treeRoot(),
+      this.strikesContract.read.treeCid(),
     ]).catch(onError);
     return { root, cid };
   }

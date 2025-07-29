@@ -1,9 +1,8 @@
-import { GetContractReturnType, WalletClient } from 'viem';
-import { CSAccountingAbi } from '../abi/CSAccounting.js';
-import { CSParametersRegistryAbi } from '../abi/CSParametersRegistry.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
+import { PERCENT_BASIS } from '../common/index.js';
+import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import {
   CurveParameters,
   KeyNumberValueInterval,
@@ -12,61 +11,59 @@ import {
   StrikesConfig,
 } from './types.js';
 
-export class ParametersSDK extends CsmSDKModule {
-  protected get contract(): GetContractReturnType<
-    typeof CSParametersRegistryAbi,
-    WalletClient
-  > {
+export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
+  private get parametersContract() {
     return this.core.contractCSParametersRegistry;
   }
 
-  protected get accountingContract(): GetContractReturnType<
-    typeof CSAccountingAbi,
-    WalletClient
-  > {
+  private get accountingContract() {
     return this.core.contractCSAccounting;
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getKeyRemovalFee(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getKeyRemovalCharge([curveId]);
+    return this.parametersContract.read.getKeyRemovalCharge([curveId]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getMaxWithdrawalRequestFee(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getMaxWithdrawalRequestFee([curveId]);
+    return this.parametersContract.read.getMaxWithdrawalRequestFee([curveId]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getKeysLimit(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getKeysLimit([curveId]);
+    return this.parametersContract.read.getKeysLimit([curveId]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getELStealingPenalty(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getElRewardsStealingAdditionalFine([curveId]);
+    return this.parametersContract.read.getElRewardsStealingAdditionalFine([
+      curveId,
+    ]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getBadPerformancePenalty(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getBadPerformancePenalty([curveId]);
+    return this.parametersContract.read.getBadPerformancePenalty([curveId]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getExitDelayPenalty(curveId: bigint): Promise<bigint> {
-    return this.contract.read.getExitDelayPenalty([curveId]);
+    return this.parametersContract.read.getExitDelayPenalty([curveId]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getAllowedExitDelay(curveId: bigint): Promise<number> {
-    const value = await this.contract.read.getAllowedExitDelay([curveId]);
+    const value = await this.parametersContract.read.getAllowedExitDelay([
+      curveId,
+    ]);
     return Number(value);
   }
 
@@ -75,9 +72,17 @@ export class ParametersSDK extends CsmSDKModule {
   public async getRewardsShare(
     curveId: bigint,
   ): Promise<KeyNumberValueInterval[]> {
-    return (await this.contract.read.getRewardShareData([
-      curveId,
-    ])) as KeyNumberValueInterval[];
+    const [rewardsShare, digest] = await Promise.all([
+      this.parametersContract.read.getRewardShareData([curveId]),
+      this.bus.getOrThrow('module').getDigest(),
+    ]);
+
+    const moduleShare = BigInt(digest.state.stakingModuleFee);
+
+    return rewardsShare.map((item) => ({
+      ...item,
+      value: (item.value * moduleShare) / PERCENT_BASIS,
+    })) as KeyNumberValueInterval[];
   }
 
   @Logger('Views:')
@@ -85,7 +90,7 @@ export class ParametersSDK extends CsmSDKModule {
   public async getPerformanceLewayConfig(
     curveId: bigint,
   ): Promise<KeyNumberValueInterval[]> {
-    return (await this.contract.read.getPerformanceLeewayData([
+    return (await this.parametersContract.read.getPerformanceLeewayData([
       curveId,
     ])) as KeyNumberValueInterval[];
   }
@@ -96,16 +101,15 @@ export class ParametersSDK extends CsmSDKModule {
     curveId: bigint,
   ): Promise<PerformanceCoefficients> {
     const [attestationsWeight, blocksWeight, syncWeight] =
-      await this.contract.read.getPerformanceCoefficients([curveId]);
+      await this.parametersContract.read.getPerformanceCoefficients([curveId]);
     return { attestationsWeight, blocksWeight, syncWeight };
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getStrikesConfig(curveId: bigint): Promise<StrikesConfig> {
-    const [lifetime, threshold] = await this.contract.read.getStrikesParams([
-      curveId,
-    ]);
+    const [lifetime, threshold] =
+      await this.parametersContract.read.getStrikesParams([curveId]);
     return { lifetime: Number(lifetime), threshold: Number(threshold) };
   }
 
@@ -113,8 +117,8 @@ export class ParametersSDK extends CsmSDKModule {
   @ErrorHandler()
   public async getQueueConfig(curveId: bigint): Promise<QueueConfig> {
     const [[priority, maxDeposits], lowestPriority] = await Promise.all([
-      this.contract.read.getQueueConfig([curveId]),
-      this.contract.read.QUEUE_LOWEST_PRIORITY(),
+      this.parametersContract.read.getQueueConfig([curveId]),
+      this.parametersContract.read.QUEUE_LOWEST_PRIORITY(),
     ]);
     return { priority, maxDeposits, lowestPriority: Number(lowestPriority) };
   }

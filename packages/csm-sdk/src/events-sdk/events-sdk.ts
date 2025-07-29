@@ -1,6 +1,4 @@
 import { Address, GetContractReturnType, Hex, WalletClient } from 'viem';
-import { CSFeeOracleAbi } from '../abi/CSFeeOracle.js';
-import { CSModuleAbi } from '../abi/CSModule.js';
 import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -10,22 +8,19 @@ import {
   NodeOperatorId,
   NodeOperatorInvite,
 } from '../common/index.js';
+import { isDefined, isUnique } from '../common/utils/is-defined.js';
 import { requestWithBlockStep } from '../common/utils/request-with-block-step.js';
 import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
 import { EventRangeProps } from './types.js';
-import { isDefined, isUnique } from '../common/utils/is-defined.js';
 
 export class EventsSDK extends CsmSDKModule {
-  protected get contract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 
-  protected get contractV1Events(): GetContractReturnType<
+  private get moduleContractV1(): GetContractReturnType<
     typeof CSModulev1EventsAbi,
     WalletClient
   > {
@@ -35,10 +30,7 @@ export class EventsSDK extends CsmSDKModule {
     );
   }
 
-  private get oracleContract(): GetContractReturnType<
-    typeof CSFeeOracleAbi,
-    WalletClient
-  > {
+  private get oracleContract() {
     return this.core.contractCSFeeOracle;
   }
 
@@ -52,49 +44,49 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all([
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorAdded(
+        this.moduleContract.getEvents.NodeOperatorAdded(
           { managerAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorAdded(
+        this.moduleContract.getEvents.NodeOperatorAdded(
           { rewardAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contractV1Events.getEvents.NodeOperatorAdded(
+        this.moduleContractV1.getEvents.NodeOperatorAdded(
           { managerAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contractV1Events.getEvents.NodeOperatorAdded(
+        this.moduleContractV1.getEvents.NodeOperatorAdded(
           { rewardAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorManagerAddressChanged(
+        this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
           { oldAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorManagerAddressChanged(
+        this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
           { newAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorRewardAddressChanged(
+        this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
           { oldAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorRewardAddressChanged(
+        this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
           { newAddress: address },
           stepProps,
         ),
@@ -116,37 +108,37 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all([
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorManagerAddressChanged(
+        this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
           { newAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorRewardAddressChanged(
+        this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
           { newAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorManagerAddressChangeProposed(
+        this.moduleContract.getEvents.NodeOperatorManagerAddressChangeProposed(
           { oldProposedAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorRewardAddressChangeProposed(
+        this.moduleContract.getEvents.NodeOperatorRewardAddressChangeProposed(
           { oldProposedAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorManagerAddressChangeProposed(
+        this.moduleContract.getEvents.NodeOperatorManagerAddressChangeProposed(
           { newProposedAddress: address },
           stepProps,
         ),
       ),
       ...requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.NodeOperatorRewardAddressChangeProposed(
+        this.moduleContract.getEvents.NodeOperatorRewardAddressChangeProposed(
           { newProposedAddress: address },
           stepProps,
         ),
@@ -184,7 +176,7 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
-        this.contract.getEvents.WithdrawalSubmitted(
+        this.moduleContract.getEvents.WithdrawalSubmitted(
           { nodeOperatorId },
           stepProps,
         ),
@@ -206,12 +198,10 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
-        this.core
-          .contractValidatorsExitBusOracle
-          .getEvents.ValidatorExitRequest(
-            { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
-            stepProps,
-          ),
+        this.core.contractValidatorsExitBusOracle.getEvents.ValidatorExitRequest(
+          { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
+          stepProps,
+        ),
       ),
     );
 
@@ -229,9 +219,10 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
-        this.core
-          .contractCSModule
-          .getEvents.ELRewardsStealingPenaltyReported({}, stepProps),
+        this.core.contractCSModule.getEvents.ELRewardsStealingPenaltyReported(
+          {},
+          stepProps,
+        ),
       ),
     );
 

@@ -1,11 +1,4 @@
-import {
-  Address,
-  GetContractReturnType,
-  isAddressEqual,
-  WalletClient,
-} from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
-import { StakingRouterAbi } from '../abi/StakingRouter.js';
+import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -14,6 +7,7 @@ import {
 } from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
+import { findModuleDigest } from './find-module-digest.js';
 import { onError } from './on-error.js';
 import {
   CsmContractsWithVersion,
@@ -27,17 +21,11 @@ import {
 } from './types.js';
 
 export class ModuleSDK extends CsmSDKModule {
-  protected get contract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 
-  private get stakingRouterContract(): GetContractReturnType<
-    typeof StakingRouterAbi,
-    WalletClient
-  > {
+  private get stakingRouterContract() {
     return this.core.contractStakingRouter;
   }
 
@@ -69,30 +57,18 @@ export class ModuleSDK extends CsmSDKModule {
       strikes,
       vettedGate,
     ] = await Promise.all([
-      this.core
-        .contractCSModule
-        .read.getInitializedVersion()
+      this.core.contractCSModule.read.getInitializedVersion().catch(onError),
+      this.core.contractCSAccounting.read
+        .getInitializedVersion()
         .catch(onError),
-      this.core
-        .contractCSAccounting
-        .read.getInitializedVersion()
+      this.core.contractCSFeeDistributor.read
+        .getInitializedVersion()
         .catch(onError),
-      this.core
-        .contractCSFeeDistributor
-        .read.getInitializedVersion()
+      this.core.contractCSParametersRegistry.read
+        .getInitializedVersion()
         .catch(onError),
-      this.core
-        .contractCSParametersRegistry
-        .read.getInitializedVersion()
-        .catch(onError),
-      this.core
-        .contractCSStrikes
-        .read.getInitializedVersion()
-        .catch(onError),
-      this.core
-        .contractVettedGate
-        .read.getInitializedVersion()
-        .catch(onError),
+      this.core.contractCSStrikes.read.getInitializedVersion().catch(onError),
+      this.core.contractVettedGate.read.getInitializedVersion().catch(onError),
     ]);
 
     return {
@@ -119,17 +95,26 @@ export class ModuleSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   public async getOperatorsCount(): Promise<bigint> {
-    return this.contract.read.getNodeOperatorsCount();
+    return this.moduleContract.read.getNodeOperatorsCount();
   }
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(10 * 60 * 1000)
   private async getAllModulesDigests() {
-    return this.stakingRouterContract.read.getAllStakingModuleDigests();
+    const digests =
+      await this.stakingRouterContract.read.getAllStakingModuleDigests();
+    return digests as ModuleDigest[];
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getDigest() {
+    const digests = await this.getAllModulesDigests();
+    return findModuleDigest(digests, this.core.moduleId);
   }
 
   @Logger('Utils:')
-  @Cache(10 * 60 * 1000)
   public async getShareLimit(): Promise<ShareLimitInfo> {
     const digests = (await this.getAllModulesDigests()) as ModuleDigest[];
     return calculateShareLimit(digests, this.core.moduleId);
@@ -153,10 +138,10 @@ export class ModuleSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   public async getQueues() {
-    const queuesCount = await this.contract.read.QUEUE_LOWEST_PRIORITY();
+    const queuesCount = await this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
     const pointers = await Promise.all(
       Array.from({ length: Number(queuesCount) }, (_, i) =>
-        this.contract.read.depositQueuePointers([BigInt(i)]),
+        this.moduleContract.read.depositQueuePointers([BigInt(i)]),
       ),
     );
     return pointers.map(([head, tail]) => ({ head, tail }));

@@ -1,37 +1,23 @@
-import {
-  Address,
-  GetContractReturnType,
-  isAddressEqual,
-  WalletClient,
-  zeroAddress,
-} from 'viem';
-import { CSAccountingAbi } from '../abi/CSAccounting.js';
-import { CSModuleAbi } from '../abi/CSModule.js';
+import { Address, isAddressEqual, zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import { BondBalance, NodeOperatorId } from '../common/index.js';
 import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
 import { splitKeys } from '../common/utils/split-keys.js';
-import { NodeOperatorInfo } from './types.js';
-import { calcBondBalance } from './calc-bond-balance.js';
 import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
-import { Cache } from '../common/decorators/cache.js';
+import { calcBondBalance } from './calc-bond-balance.js';
+import { NodeOperatorInfo } from './types.js';
 
 export class OperatorSDK extends CsmSDKModule<{
   parameters: ParametersSDK;
 }> {
-  protected get accountingContract(): GetContractReturnType<
-    typeof CSAccountingAbi,
-    WalletClient
-  > {
+  private get accountingContract() {
     return this.core.contractCSAccounting;
   }
 
-  protected get moduleContract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 

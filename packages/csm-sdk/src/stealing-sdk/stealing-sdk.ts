@@ -1,20 +1,16 @@
 import { TransactionResult } from '@lidofinance/lido-ethereum-sdk';
-import { Address, GetContractReturnType, WalletClient } from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
+import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CancelProps, OperatorWithLockedBond, ReportProps } from './types.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
+import { CancelProps, OperatorWithLockedBond, ReportProps } from './types.js';
 
 export class StealingSDK extends CsmSDKModule<{
   events: EventsSDK;
   operator: OperatorSDK;
 }> {
-  protected get contract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 
@@ -28,9 +24,9 @@ export class StealingSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.reportELRewardsStealingPenalty(args, options),
+        this.moduleContract.estimateGas.reportELRewardsStealingPenalty(args, options),
       sendTransaction: (options) =>
-        this.contract.write.reportELRewardsStealingPenalty(args, options),
+        this.moduleContract.write.reportELRewardsStealingPenalty(args, options),
     });
   }
 
@@ -44,9 +40,9 @@ export class StealingSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.cancelELRewardsStealingPenalty(args, options),
+        this.moduleContract.estimateGas.cancelELRewardsStealingPenalty(args, options),
       sendTransaction: (options) =>
-        this.contract.write.cancelELRewardsStealingPenalty(args, options),
+        this.moduleContract.write.cancelELRewardsStealingPenalty(args, options),
     });
   }
 
@@ -54,14 +50,14 @@ export class StealingSDK extends CsmSDKModule<{
   @ErrorHandler()
   @Cache(1000 * 60 * 60)
   private async getReportRole(): Promise<Address> {
-    return this.contract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
+    return this.moduleContract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async hasReportRole(address: Address): Promise<boolean> {
     const role = await this.getReportRole();
-    return this.contract.read.hasRole([role, address]);
+    return this.moduleContract.read.hasRole([role, address]);
   }
 
   // TODO: optimize loading

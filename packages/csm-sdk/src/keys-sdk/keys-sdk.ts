@@ -3,8 +3,7 @@ import {
   SDKError,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { GetContractReturnType, WalletClient, zeroAddress } from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
+import { zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -30,10 +29,7 @@ import {
 export class KeysSDK extends CsmSDKModule<{
   spending: SpendingSDK;
 }> {
-  private get contract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 
@@ -65,12 +61,12 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addValidatorKeysETH(args, {
+        this.moduleContract.estimateGas.addValidatorKeysETH(args, {
           value,
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.addValidatorKeysETH(args, {
+        this.moduleContract.write.addValidatorKeysETH(args, {
           value,
           ...options,
         }),
@@ -91,7 +87,7 @@ export class KeysSDK extends CsmSDKModule<{
     } = await this.parseProps(props);
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.steth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.steth, amount },
       _permit,
     );
     if (hash) return { hash };
@@ -108,9 +104,9 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addValidatorKeysStETH(args, options),
+        this.moduleContract.estimateGas.addValidatorKeysStETH(args, options),
       sendTransaction: (options) =>
-        this.contract.write.addValidatorKeysStETH(args, options),
+        this.moduleContract.write.addValidatorKeysStETH(args, options),
     });
   }
 
@@ -128,7 +124,7 @@ export class KeysSDK extends CsmSDKModule<{
     } = await this.parseProps(props);
 
     const { hash, permit } = await this.getPermit(
-      { token: TOKENS.wsteth, amount, ...rest } as any,
+      { ...rest, token: TOKENS.wsteth, amount },
       _permit,
     );
     if (hash) return { hash };
@@ -145,9 +141,9 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.addValidatorKeysWstETH(args, options),
+        this.moduleContract.estimateGas.addValidatorKeysWstETH(args, options),
       sendTransaction: (options) =>
-        this.contract.write.addValidatorKeysWstETH(args, options),
+        this.moduleContract.write.addValidatorKeysWstETH(args, options),
     });
   }
 
@@ -213,11 +209,11 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.removeKeys(args, {
+        this.moduleContract.estimateGas.removeKeys(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.removeKeys(args, {
+        this.moduleContract.write.removeKeys(args, {
           ...options,
         }),
     });
@@ -299,11 +295,11 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.migrateToPriorityQueue(args, {
+        this.moduleContract.estimateGas.migrateToPriorityQueue(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.migrateToPriorityQueue(args, {
+        this.moduleContract.write.migrateToPriorityQueue(args, {
           ...options,
         }),
     });
@@ -321,11 +317,11 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.contract.estimateGas.updateDepositableValidatorsCount(args, {
+        this.moduleContract.estimateGas.updateDepositableValidatorsCount(args, {
           ...options,
         }),
       sendTransaction: (options) =>
-        this.contract.write.updateDepositableValidatorsCount(args, {
+        this.moduleContract.write.updateDepositableValidatorsCount(args, {
           ...options,
         }),
     });

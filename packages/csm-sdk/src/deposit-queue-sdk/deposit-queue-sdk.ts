@@ -1,20 +1,15 @@
-import { GetContractReturnType, WalletClient } from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import {
-  DepositQueuePointer,
-  DepositQueueBatch,
-  RawDepositQueueBatch,
-} from './types.js';
 import { filterBatches } from './filter-batches.js';
 import { parseBatch } from './parse-batch.js';
+import {
+  DepositQueueBatch,
+  DepositQueuePointer,
+  RawDepositQueueBatch,
+} from './types.js';
 
 export class DepositQueueSDK extends CsmSDKModule {
-  protected get contract(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  private get moduleContract() {
     return this.core.contractCSModule;
   }
 
@@ -22,7 +17,7 @@ export class DepositQueueSDK extends CsmSDKModule {
   @ErrorHandler()
   @Cache(10 * 60 * 1000)
   public async getLowestPriorityQueue(): Promise<bigint> {
-    return this.contract.read.QUEUE_LOWEST_PRIORITY();
+    return this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
   }
 
   @Logger('Views:')
@@ -30,7 +25,7 @@ export class DepositQueueSDK extends CsmSDKModule {
   public async getQueuePointers(
     queuePriority: number,
   ): Promise<DepositQueuePointer> {
-    const [head, tail] = await this.contract.read.depositQueuePointers([
+    const [head, tail] = await this.moduleContract.read.depositQueuePointers([
       BigInt(queuePriority),
     ]);
     return { head, tail };
@@ -53,7 +48,7 @@ export class DepositQueueSDK extends CsmSDKModule {
     queuePriority: number,
     batchIndex: bigint,
   ): Promise<RawDepositQueueBatch> {
-    return this.contract.read
+    return this.moduleContract.read
       .depositQueueItem([BigInt(queuePriority), batchIndex])
       .then((rawBatch) => parseBatch(rawBatch, batchIndex));
   }

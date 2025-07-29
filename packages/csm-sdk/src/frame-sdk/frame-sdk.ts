@@ -1,22 +1,13 @@
-import { GetContractReturnType, WalletClient } from 'viem';
-import { CSFeeOracleAbi } from '../abi/CSFeeOracle.js';
-import { HashConsensusAbi } from '../abi/HashConsensus.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CurrentFrameInfo, FrameInfo } from './types.js';
 
 export class FrameSDK extends CsmSDKModule {
-  private get oracleContract(): GetContractReturnType<
-    typeof CSFeeOracleAbi,
-    WalletClient
-  > {
+  private get oracleContract() {
     return this.core.contractCSFeeOracle;
   }
 
-  private get consensusContract(): GetContractReturnType<
-    typeof HashConsensusAbi,
-    WalletClient
-  > {
+  private get consensusContract() {
     return this.core.contractHashConsensus;
   }
 
