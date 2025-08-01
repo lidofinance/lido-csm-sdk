@@ -40,9 +40,10 @@ const findOperatorRewardsV1 = (
 
 const findOperatorRewardsV2 = (
   nodeOperatorId: NodeOperatorId,
-  report: RewardsReportV2,
+  reports: RewardsReportV2[],
 ): OperatorRewards => {
-  const operator = report.operators[nodeOperatorId.toString() as `${number}`];
+  const report = reports.at(-1);
+  const operator = report?.operators[nodeOperatorId.toString() as `${number}`];
 
   if (!operator)
     return {
