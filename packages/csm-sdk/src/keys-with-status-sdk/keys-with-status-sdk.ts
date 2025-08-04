@@ -153,6 +153,14 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         statuses.push(KEY_STATUS.SLASHED);
       }
 
+      if (
+        keysWithStrikes
+          .find((item) => item.pubkey === pubkey)
+          ?.strikes.reduce((a, b) => a + b, 0)
+      ) {
+        statuses.push(KEY_STATUS.WITH_STRIKES);
+      }
+
       if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
         if (duplicates?.includes(pubkey)) {
           return [...statuses, KEY_STATUS.DUPLICATED];
@@ -215,14 +223,6 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         info.totalAddedKeys - nodeOperatorKeyIndex < unboundCount
       ) {
         statuses.push(KEY_STATUS.UNBONDED);
-      }
-
-      if (
-        keysWithStrikes
-          .find((item) => item.pubkey === pubkey)
-          ?.strikes.reduce((a, b) => a + b, 0)
-      ) {
-        statuses.push(KEY_STATUS.WITH_STRIKES);
       }
 
       return statuses;
