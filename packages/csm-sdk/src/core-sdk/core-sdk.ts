@@ -30,6 +30,7 @@ import {
   StakingRouterAbi,
   ValidatorsExitBusOracleAbi,
   VettedGateAbi,
+  WithdrawalVaultAbi,
 } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
@@ -239,6 +240,18 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getContract(
       CSM_CONTRACT_NAMES.validatorsExitBusOracle,
       ValidatorsExitBusOracleAbi,
+    );
+  }
+
+  @Logger('Contracts:')
+  @Cache(30 * 60 * 1000)
+  get contractWithdrawalVault(): GetContractReturnType<
+    typeof WithdrawalVaultAbi,
+    WalletClient
+  > {
+    return this.getContract(
+      CSM_CONTRACT_NAMES.withdrawalVault,
+      WithdrawalVaultAbi,
     );
   }
 

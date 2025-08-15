@@ -12,4 +12,5 @@ export * from './PermissionlessGate.js';
 export * from './StakingRouter.js';
 export * from './ValidatorsExitBusOracle.js';
 export * from './VettedGate.js';
+export * from './WithdrawalVault.js';
 export * from './CSMSatellite.js';
