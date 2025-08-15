@@ -238,8 +238,7 @@ export class EventsSDK extends CsmSDKModule {
   @Logger('Utils:')
   @ErrorHandler()
   private async parseEventsProps(props?: EventRangeProps) {
-    const step =
-      props?.step ?? this.core.maxEventBlocksRange ?? 1_000_000_000_000;
+    const step = props?.step ?? this.core.maxEventBlocksRange ?? 1_000_000;
 
     const toBlock = await this.core.core.toBlockNumber({
       block: props?.toBlock ?? 'latest',

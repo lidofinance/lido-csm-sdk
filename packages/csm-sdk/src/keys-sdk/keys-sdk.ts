@@ -7,6 +7,8 @@ import { zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
+  EJECT_FEE_MIN_LIMIT,
+  EJECT_FEE_MULTIPLIEER,
   EMPTY_PERMIT,
   PermitSignatureShort,
   TOKENS,
@@ -281,6 +283,17 @@ export class KeysSDK extends CsmSDKModule<{
           ...options,
         }),
     });
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getEjectFeePerKey() {
+    const fee =
+      await this.core.contractWithdrawalVault.read.getWithdrawalRequestFee();
+    const correctedFee = fee * EJECT_FEE_MULTIPLIEER;
+    return correctedFee < EJECT_FEE_MIN_LIMIT
+      ? EJECT_FEE_MIN_LIMIT
+      : correctedFee;
   }
 
   @Logger('Call:')

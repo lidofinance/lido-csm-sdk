@@ -153,6 +153,10 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         statuses.push(KEY_STATUS.SLASHED);
       }
 
+      if (withdrawalSubmitted?.includes(pubkey)) {
+        return [...statuses, KEY_STATUS.WITHDRAWN];
+      }
+
       if (
         keysWithStrikes
           .find((item) => item.pubkey === pubkey)
@@ -167,10 +171,6 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         } else if (nodeOperatorKeyIndex === info.totalVettedKeys) {
           return [...statuses, KEY_STATUS.INVALID];
         }
-      }
-
-      if (withdrawalSubmitted?.includes(pubkey)) {
-        return [...statuses, KEY_STATUS.WITHDRAWN];
       }
 
       if (

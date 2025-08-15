@@ -1,7 +1,11 @@
+import { parseEther } from 'viem';
+
 export const PUBKEY_LENGTH_BYTES = 48;
 export const SIGNATURE_LENGTH_BYTES = 96;
 
 export const EJECTABLE_EPOCH_COUNT = 256n;
+export const EJECT_FEE_MULTIPLIEER = 4n;
+export const EJECT_FEE_MIN_LIMIT = parseEther('0.0001');
 
 export enum KEY_STATUS {
   NON_QUEUED = 'NON_QUEUED',
