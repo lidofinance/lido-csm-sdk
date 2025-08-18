@@ -4,9 +4,9 @@ export const parseBatch = (
   rawBatch: bigint,
   batchIndex: bigint,
 ): RawDepositQueueBatch => {
-  const nodeOperatorId = rawBatch & 0xffffffffffffffffn;
-  const keysCount = (rawBatch >> 64n) & 0xffffffffffffffffn;
-  const nextBatchIndex = rawBatch >> 128n;
+  const nextBatchIndex = rawBatch & 0xffffffffffffffffffffffffffffffffn;
+  const keysCount = (rawBatch >> 128n) & 0xffffffffffffffffn;
+  const nodeOperatorId = rawBatch >> 192n;
 
   return {
     batchIndex,
