@@ -1,6 +1,6 @@
 {
   "name": "@lidofinance/lido-csm-sdk",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
