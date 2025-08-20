@@ -111,7 +111,7 @@ const mergeInvites = (
     (item) => item.id === invite.id && item.role === invite.role,
   );
 
-  if (add && !index) {
+  if (add && index < 0) {
     list.push(invite);
   } else if (!add && index >= 0) {
     list.splice(index, 1);
