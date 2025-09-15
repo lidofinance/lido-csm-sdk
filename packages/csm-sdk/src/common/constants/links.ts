@@ -23,12 +23,7 @@ export const EXTERNAL_LINKS: {
     [LINK_TYPE.rewardsTree]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
     [LINK_TYPE.keysApi]: 'https://keys-api-hoodi.testnet.fi',
-    [LINK_TYPE.feeMonitoringApi]: 'https://api-fees-monitoring-hoodi.testnet.fi',
-  },
-  [CHAINS.Holesky]: {
-    [LINK_TYPE.rewardsTree]:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
-    [LINK_TYPE.keysApi]: 'https://keys-api-holesky.testnet.fi',
-    [LINK_TYPE.feeMonitoringApi]: 'https://api-fees-monitoring-holesky.testnet.fi',
+    [LINK_TYPE.feeMonitoringApi]:
+      'https://api-fees-monitoring-hoodi.testnet.fi',
   },
 };

@@ -58,10 +58,10 @@ Before using the SDK, you need to create an instance of the LidoSDK class:
 // Pass your own viem PublicClient
 
 import { createPublicClient, http } from 'viem';
-import { holesky } from 'viem/chains';
+import { hoodi } from 'viem/chains';
 
 const rpcProvider = createPublicClient({
-  chain: holesky,
+  chain: hoodi,
   transport: http(),
 });
 

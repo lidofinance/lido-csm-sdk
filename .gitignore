@@ -43,6 +43,7 @@ yarn-error.log*
 .vscode
 .idea
 .qudo
+.claude
 
 /public/runtime/
 

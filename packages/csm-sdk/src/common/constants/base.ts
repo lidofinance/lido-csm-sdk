@@ -4,15 +4,8 @@ import { Address } from 'viem';
 import { Erc20Tokens } from '../types.js';
 import { TOKENS } from './tokens.js';
 
-export const CSM_SUPPORTED_CHAINS = [
-  CHAINS.Mainnet,
-  CHAINS.Hoodi,
-  CHAINS.Holesky,
-];
-export type CSM_SUPPORTED_CHAINS =
-  | CHAINS.Mainnet
-  | CHAINS.Hoodi
-  | CHAINS.Holesky;
+export const CSM_SUPPORTED_CHAINS = [CHAINS.Mainnet, CHAINS.Hoodi];
+export type CSM_SUPPORTED_CHAINS = CHAINS.Mainnet | CHAINS.Hoodi;
 
 export enum CSM_CONTRACT_NAMES {
   csAccounting = 'csAccounting',
@@ -102,47 +95,11 @@ export const CSM_CONTRACT_ADDRESSES: {
     [CSM_CONTRACT_NAMES.CSMSatellite]:
       '0x0124A201F2C867Aa40121c4Ac1b7E0C80baB2935',
   },
-  [CHAINS.Holesky]: {
-    [CSM_CONTRACT_NAMES.csAccounting]:
-      '0xc093e53e8F4b55A223c18A2Da6fA00e60DD5EFE1',
-    [CSM_CONTRACT_NAMES.csFeeDistributor]:
-      '0xD7ba648C8F72669C6aE649648B516ec03D07c8ED',
-    [CSM_CONTRACT_NAMES.csFeeOracle]:
-      '0xaF57326C7d513085051b50912D51809ECC5d98Ee',
-    [CSM_CONTRACT_NAMES.csModule]: '0x4562c3e63c2e586cD1651B958C22F88135aCAd4f',
-    [CSM_CONTRACT_NAMES.hashConsensus]:
-      '0xbF38618Ea09B503c1dED867156A0ea276Ca1AE37',
-    [CSM_CONTRACT_NAMES.csEjector]:
-      '0x477589D5A8cB67Bd6682AF3612f99ADB72d09582',
-    [CSM_CONTRACT_NAMES.csExitPenalties]:
-      '0xCF153E01322Ffd038737A25A2A139ECccF1A5bAD',
-    [CSM_CONTRACT_NAMES.csParametersRegistry]:
-      '0x25Cb2bA01849Ff577DD5223C4C8E46292cB15550',
-    [CSM_CONTRACT_NAMES.csStrikes]:
-      '0xa3806442E717308dc7FED0cb4d7b0de1F643546C',
-    [CSM_CONTRACT_NAMES.permissionlessGate]:
-      '0x676626c3940ae32eF1e4F609938F785fF064ee22',
-    [CSM_CONTRACT_NAMES.vettedGate]:
-      '0x92A5aB5e4f98e67Fb7295fe439A652d0E51033bf',
-    [CSM_CONTRACT_NAMES.validatorsExitBusOracle]:
-      '0xffDDF7025410412deaa05E3E1cE68FE53208afcb',
-    [CSM_CONTRACT_NAMES.stakingRouter]:
-      '0xd6EbF043D30A7fe46D1Db32BA90a0A51207FE229',
-    [CSM_CONTRACT_NAMES.withdrawalVault]:
-      '0xF0179dEC45a37423EAD4FaD5fCb136197872EAd9',
-    [CSM_CONTRACT_NAMES.lidoRewardsVault]:
-      '0xE73a3602b99f1f913e72F8bdcBC235e206794Ac8',
-    [CSM_CONTRACT_NAMES.stETH]: '0x3F1c547b21f65e10480dE3ad8E19fAAC46C95034',
-    [CSM_CONTRACT_NAMES.wstETH]: '0x8d09a4502Cc8Cf1547aD300E066060D043f6982D',
-    [CSM_CONTRACT_NAMES.CSMSatellite]:
-      '0x3bc6072A1d2543E50823A9471dbD9F811B0ACd71',
-  },
 };
 
 export const MODULE_ID_BY_CHAIN: { [key in CSM_SUPPORTED_CHAINS]: number } = {
   [CHAINS.Mainnet]: 3,
   [CHAINS.Hoodi]: 4,
-  [CHAINS.Holesky]: 4,
 };
 
 export const DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN: {
@@ -150,7 +107,6 @@ export const DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN: {
 } = {
   [CHAINS.Mainnet]: BigInt('0x13f7326'),
   [CHAINS.Hoodi]: BigInt('0x1374'),
-  [CHAINS.Holesky]: BigInt('0x1b143a'),
 };
 
 export const SUPPORTED_VERSION_BY_CONTRACT = {
