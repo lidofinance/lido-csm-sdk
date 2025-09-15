@@ -292,6 +292,10 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getExternalLink(LINK_TYPE.icsTree);
   }
 
+  public get feeMonitoringApiLink() {
+    return this.getExternalLink(LINK_TYPE.feeMonitoringApi);
+  }
+
   public getIpfsUrls(cid: string): string[] {
     return [
       `https://ipfs.io/ipfs/${cid}`,
