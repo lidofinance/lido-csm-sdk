@@ -11,7 +11,7 @@ export const calcBondBalance = ({
   const requiredWithoutLocked = required - locked;
 
   let delta = current - requiredWithoutLocked;
-  if (delta < -STETH_ROUNDING_THRESHOLD) {
+  if (delta < 0 && delta > -STETH_ROUNDING_THRESHOLD) {
     delta = 0n;
   }
 
