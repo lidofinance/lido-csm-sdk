@@ -4,7 +4,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
-import { CSM_CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
+import { CSM_CONTRACT_NAMES } from '../common/index.js';
 import { FeeMonitoringApiClient } from './api-client.js';
 import { RELAY_CACHE_DURATION } from './constants.js';
 import {

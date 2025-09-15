@@ -45,10 +45,15 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.contractCSAccounting;
   }
 
+  private get moduleContract() {
+    return this.core.contractCSModule;
+  }
+
   @Logger('Views:')
   @ErrorHandler()
   private async getBondSummary(id: NodeOperatorId): Promise<AddBondResult> {
-    const [current, required] = await this.accountingContract.read.getBondSummary([id]);
+    const [current, required] =
+      await this.accountingContract.read.getBondSummary([id]);
     return { current, required };
   }
 
@@ -171,12 +176,15 @@ export class BondSDK extends CsmSDKModule<{
     return this.core.performTransaction({
       ...rest,
       getGasLimit: (options) =>
-        this.accountingContract.estimateGas.compensateLockedBondETH(args, {
-          value,
-          ...options,
-        }),
+        this.moduleContract.estimateGas.compensateELRewardsStealingPenalty(
+          args,
+          {
+            value,
+            ...options,
+          },
+        ),
       sendTransaction: (options) =>
-        this.accountingContract.write.compensateLockedBondETH(args, {
+        this.moduleContract.write.compensateELRewardsStealingPenalty(args, {
           value,
           ...options,
         }),
