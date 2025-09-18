@@ -34,8 +34,11 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getKeysLimit(curveId: bigint): Promise<bigint> {
-    return this.parametersContract.read.getKeysLimit([curveId]);
+  public async getKeysLimit(curveId: bigint): Promise<number> {
+    const keysLimit = await this.parametersContract.read.getKeysLimit([
+      curveId,
+    ]);
+    return Number(keysLimit);
   }
 
   @Logger('Views:')
@@ -77,11 +80,10 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
       this.bus.getOrThrow('module').getDigest(),
     ]);
 
-    const moduleShare = BigInt(digest.state.stakingModuleFee);
-
     return rewardsShare.map((item) => ({
       ...item,
-      value: (item.value * moduleShare) / PERCENT_BASIS,
+      minKeyNumber: Number(item.minKeyNumber),
+      value: (item.value * digest.state.stakingModuleFee) / PERCENT_BASIS,
     })) as KeyNumberValueInterval[];
   }
 
@@ -90,9 +92,12 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   public async getPerformanceLewayConfig(
     curveId: bigint,
   ): Promise<KeyNumberValueInterval[]> {
-    return (await this.parametersContract.read.getPerformanceLeewayData([
-      curveId,
-    ])) as KeyNumberValueInterval[];
+    return (
+      await this.parametersContract.read.getPerformanceLeewayData([curveId])
+    ).map((item) => ({
+      ...item,
+      minKeyNumber: Number(item.minKeyNumber),
+    })) as KeyNumberValueInterval[];
   }
 
   @Logger('Views:')
@@ -132,7 +137,7 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
       curveId,
     ]);
     return intervals.map(({ minKeysCount, trend }) => ({
-      minKeyNumber: minKeysCount,
+      minKeyNumber: Number(minKeysCount),
       value: trend,
     }));
   }

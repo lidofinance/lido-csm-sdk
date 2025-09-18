@@ -101,10 +101,17 @@ export class ModuleSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   @Cache(10 * 60 * 1000)
-  private async getAllModulesDigests() {
+  private async getAllModulesDigests(): Promise<ModuleDigest[]> {
     const digests =
       await this.stakingRouterContract.read.getAllStakingModuleDigests();
-    return digests as ModuleDigest[];
+    return digests.map((digest) => ({
+      ...digest,
+      state: {
+        ...digest.state,
+        stakingModuleFee: BigInt(digest.state.stakingModuleFee),
+        stakeShareLimit: BigInt(digest.state.stakeShareLimit),
+      },
+    }));
   }
 
   @Logger('Views:')

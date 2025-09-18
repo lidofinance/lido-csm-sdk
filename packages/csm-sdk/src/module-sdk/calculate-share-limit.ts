@@ -7,7 +7,7 @@ export const calculateShareLimit = (
   moduleId: number,
 ): ShareLimitInfo => {
   const moduleDigest = findModuleDigest(digests, moduleId);
-  const shareLimit = BigInt(moduleDigest.state.stakeShareLimit);
+  const shareLimit = moduleDigest.state.stakeShareLimit;
 
   const active =
     moduleDigest.summary.totalDepositedValidators -

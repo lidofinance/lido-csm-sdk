@@ -33,9 +33,9 @@ export type ModuleDigest = {
   state: {
     id: number;
     stakingModuleAddress: Address;
-    stakingModuleFee: number;
+    stakingModuleFee: bigint;
     treasuryFee: number;
-    stakeShareLimit: number;
+    stakeShareLimit: bigint;
     status: number;
     name: string;
     lastDepositAt: bigint;

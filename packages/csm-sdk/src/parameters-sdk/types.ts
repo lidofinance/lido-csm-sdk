@@ -1,5 +1,5 @@
 export type KeyNumberValueInterval = {
-  minKeyNumber: bigint;
+  minKeyNumber: number;
   value: bigint;
 };
 
@@ -14,12 +14,6 @@ export type QueueConfig = {
   maxDeposits: number;
 };
 
-export type BondInterval = {
-  minKeysCount: bigint;
-  minBond: bigint;
-  trend: bigint;
-};
-
 export type PerformanceCoefficients = {
   attestationsWeight: bigint;
   blocksWeight: bigint;
@@ -28,7 +22,7 @@ export type PerformanceCoefficients = {
 
 export type CurveParameters = {
   keyRemovalFee: bigint;
-  keysLimit: bigint;
+  keysLimit: number;
   allowedExitDelay: number;
   exitDelayPenalty: bigint;
   badPerformancePenalty: bigint;
