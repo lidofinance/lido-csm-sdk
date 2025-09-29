@@ -181,14 +181,17 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       } else if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
         statuses.push(KEY_STATUS.UNCHECKED);
       } else if (prefilled?.status) {
-        if (prefilled.activationEpoch < ejectableEpoch) {
+        if (
+          prefilled.status === KEY_STATUS.ACTIVE &&
+          prefilled.activationEpoch < ejectableEpoch
+        ) {
           statuses.push(KEY_STATUS.EJECTABLE);
         }
         statuses.push(prefilled.status);
       } else if (nodeOperatorKeyIndex >= info.totalDepositedKeys) {
         statuses.push(KEY_STATUS.DEPOSITABLE);
       } else {
-        if (!prefilled || prefilled.activationEpoch < ejectableEpoch) {
+        if (!clKeysStatus) {
           statuses.push(KEY_STATUS.EJECTABLE);
         }
         statuses.push(
