@@ -47,3 +47,5 @@ yarn-error.log*
 todo.md
 
 /public/runtime/
+
+.claude
