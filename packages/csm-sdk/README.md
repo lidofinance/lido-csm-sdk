@@ -59,6 +59,7 @@ The `LidoSDKCsm` class aggregates the following modules, each responsible for a 
 - **strikes**: Query operator strikes.
 - **keysWithStatus**: Query operator keys with status tracking.
 - **keys**: Manage operator keys.
+- **keysCache**: Pubkey caching to prevent double-submission with 2-week TTL and manual key management.
 - **bond**: Manage operator bond balance.
 - **roles**: Manage operator roles.
 - **permissionlessGate**: Permissionless entry points for create a new operator.
@@ -67,7 +68,8 @@ The `LidoSDKCsm` class aggregates the following modules, each responsible for a 
 - **depositQueue**: Query deposit queue pointers, batches.
 - **depositData**: Parse and validate deposit data JSON, check for duplicates and previously submitted keys.
 - **stealing**: Manage execution layer rewards stealing penalties - report and cancel penalties.
-- **satellite**: Helper to simprify query operator IDs by address and read deposit queue batches.
+- **satellite**: Helper to simplify query operator IDs by address and read deposit queue batches.
+- **feeRecipient**: Manage fee recipient addresses for operators.
 
 Each module exposes a set of methods tailored to its domain. Refer to the source code or generated API documentation for detailed method signatures and usage.
 

@@ -1,124 +1,102 @@
-![Lido SDK Logo](./assets/package_logo.png)
-
 <div style="display: flex;" align="center">
-  <h1 align="center">Lido Ethereum SDK</h1>
+  <h1 align="center">Lido CSM SDK</h1>
 </div>
 
 <div style="display: flex;" align="center">
-   <a href="https://github.com/lidofinance/lido-ethereum-sdk/blob/main/LICENSE.txt"><img alt="GitHub license" src="https://img.shields.io/github/license/lidofinance/lido-ethereum-sdk?color=limegreen"></a>
-   <a href="https://www.npmjs.com/package/@lidofinance/lido-ethereum-sdk"><img alt="Downloads npm" src="https://img.shields.io/npm/dm/@lidofinance/lido-ethereum-sdk?color=limegreen"></a>
-   <a href="https://www.npmjs.com/package/@lidofinance/lido-ethereum-sdk"><img alt="Version npm" src="https://img.shields.io/npm/v/@lidofinance/lido-ethereum-sdk?label=version"></a>
-   <a href="https://www.npmjs.com/package/@lidofinance/lido-ethereum-sdk"><img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/@lidofinance/lido-ethereum-sdk"></a>
-   <a href="https://github.com/lidofinance/lido-ethereum-sdk"><img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lidofinance/lido-ethereum-sdk"></a>
-   <a href="https://github.com/lidofinance/lido-ethereum-sdk/pulls"><img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/lidofinance/lido-ethereum-sdk"></a>
-   <a href="https://github.com/lidofinance/lido-ethereum-sdk/issues"><img alt="GitHub open issues" src="https://img.shields.io/github/issues/lidofinance/lido-ethereum-sdk"></a>
+   <a href="https://github.com/lidofinance/lido-csm-sdk/blob/main/LICENSE.txt"><img alt="GitHub license" src="https://img.shields.io/github/license/lidofinance/lido-csm-sdk?color=limegreen"></a>
+   <a href="https://www.npmjs.com/package/@lidofinance/lido-csm-sdk"><img alt="Downloads npm" src="https://img.shields.io/npm/dm/@lidofinance/lido-csm-sdk?color=limegreen"></a>
+   <a href="https://www.npmjs.com/package/@lidofinance/lido-csm-sdk"><img alt="Version npm" src="https://img.shields.io/npm/v/@lidofinance/lido-csm-sdk?label=version"></a>
+   <a href="https://www.npmjs.com/package/@lidofinance/lido-csm-sdk"><img alt="npm bundle size" src="https://img.shields.io/bundlephobia/min/@lidofinance/lido-csm-sdk"></a>
+   <a href="https://github.com/lidofinance/lido-csm-sdk"><img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lidofinance/lido-csm-sdk"></a>
+   <a href="https://github.com/lidofinance/lido-csm-sdk/pulls"><img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/lidofinance/lido-csm-sdk"></a>
+   <a href="https://github.com/lidofinance/lido-csm-sdk/issues"><img alt="GitHub open issues" src="https://img.shields.io/github/issues/lidofinance/lido-csm-sdk"></a>
 </div>
 <br/>
 
-**Lido Ethereum SDK** is a package that provides convenient tools for interacting with Lido contracts on the Ethereum network through a software development kit (SDK). This SDK simplifies working with Lido contracts and accessing their functionality.
-
-## Changelog
-
-For changes between versions see [CHANGELOG.MD](packages/sdk/CHANGELOG.md)
-
-## Migration
+**Lido CSM SDK** is a TypeScript/JavaScript library that provides a comprehensive set of tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/community-staking-module) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido CSM.
 
 ## Installation
 
-You can install the Lido Ethereum SDK using npm or yarn:
-
-[Docs SDK package](https://lidofinance.github.io/lido-ethereum-sdk/)
+You can install the Lido CSM SDK using npm or yarn:
 
 ```bash
-// SDK (stakes, wrap, withdrawals)
-yarn add @lidofinance/lido-ethereum-sdk
+yarn add @lidofinance/lido-csm-sdk @lidofinance/lido-ethereum-sdk viem
+```
+
+or
+
+```bash
+npm install @lidofinance/lido-csm-sdk @lidofinance/lido-ethereum-sdk viem
 ```
 
 ## Usage
 
-To get started with the Lido Ethereum SDK, you need to import the necessary modules:
+To get started with the Lido CSM SDK, you need to import the necessary modules:
 
 ```ts
-const { LidoSDK } = require('@lidofinance/lido-ethereum-sdk');
-
-// Or, if you are using ES6+:
-import { LidoSDK } from '@lidofinance/lido-ethereum-sdk';
-
-// Or, import separate each module separately to save up on bundle size
-import { LidoSDKStake } from '@lidofinance/lido-ethereum-sdk/stake';
+import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 ```
-
-✨ See also the [examples](./examples/README.md) provided for some more real-life applications.
 
 ## Initialization
 
-Before using the SDK, you need to create an instance of the LidoSDK class:
+Before using the SDK, you need to create an instance of the LidoSDKCsm class:
 
 ```ts
-// Pass your own viem PublicClient
-
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
+import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 import { createPublicClient, http } from 'viem';
-import { hoodi } from 'viem/chains';
+import { mainnet } from 'viem/chains';
 
+// Initialize core SDK first
 const rpcProvider = createPublicClient({
-  chain: hoodi,
+  chain: mainnet
   transport: http(),
 });
 
-const sdk = new LidoSDK({
-  chainId: 17000,
+const core = new LidoSDKCore({
+  chainId: mainnet.id,
   rpcProvider,
-  web3Provider: provider, // optional
 });
-```
 
-```ts
-// Or just rpc urls so it can be created under the hood
-const sdk = new LidoSDK({
-  chainId: 17000,
-  rpcUrls: ['<RPC_URL>'],
-  web3Provider: provider, // optional
-});
+// Then create CSM SDK instance
+const sdk = new LidoSDKCsm({ core });
 ```
-
-Replace `<RPC_URL>` with the url of your Ethereum RPC provider.
 
 ## Examples
 
-All examples and usage instructions can be found in the [Docs SDK package](https://lidofinance.github.io/lido-ethereum-sdk/).
-
 ```ts
-const lidoSDK = new LidoSDK({
-  chainId: 17000,
-  rpcUrls: ['<RPC_URL>'],
-  web3Provider: provider,
-});
+const sdk = new LidoSDKCsm({ ... });
 
-// Views
-const balanceETH = await lidoSDK.core.balanceETH(address);
+// Query operator information
+const operatorsCount = await sdk.module.getOperatorsCount();
+const operator = await sdk.operator.getInfo(69n);
 
-// Calls
-const stakeTx = await lidoSDK.stake.stakeEth({
-  value,
-  callback,
-  referralAddress,
-  account,
-});
-
-// relevant results are returned with transaction
-const { stethReceived, sharesReceived } = stakeTx.result;
-
-console.log(balanceETH.toString(), 'ETH balance');
+// Manage keys
+const keys = await sdk.keys.getKeys(operatorId);
 ```
 
-## Migration
+## SDK Modules
 
-For breaking changes between versions see [MIGRATION.md](packages/sdk/MIGRATION.md)
+The `LidoSDKCsm` class aggregates the following modules:
+
+- **core**: Core SDK for shared logic, configuration, and utilities.
+- **module**: Query CSM status, share limit.
+- **operator**: Query operator data.
+- **keys**: Manage operator keys.
+- **keysCache**: Pubkey caching to prevent double-submission.
+- **bond**: Manage operator bond balance.
+- **rewards**: Query reward distribution.
+- **events**: Query protocol events.
+- **depositQueue**: Query deposit queue pointers, batches.
+- **depositData**: Parse and validate deposit data JSON.
+
+And more - see [packages/csm-sdk/README.md](packages/csm-sdk/README.md) for the complete list.
 
 ## Documentation
 
-For additional information about available methods and functionality, refer to the [the documentation for the Lido Ethereum SDK](https://lidofinance.github.io/lido-ethereum-sdk/).
+For detailed documentation, see [packages/csm-sdk/README.md](packages/csm-sdk/README.md).
 
-## Playground
+## License
 
-To check out SDK in action visit [playground](https://lidofinance.github.io/lido-ethereum-sdk/playground). Or tinker locally by cloning this repo and following [Playground instructions](playground/README.md).
+This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
