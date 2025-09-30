@@ -45,6 +45,7 @@ Key modules include:
 - **operator-sdk** - Operator data management
 - **keys-sdk** - Validator key management
 - **keys-with-status-sdk** - Key tracking with status information
+- **keys-cache-sdk** - Pubkey caching to prevent double-submission with 2-week TTL and manual key management
 - **bond-sdk** - Operator bond balance management
 - **rewards-sdk** - Reward distribution queries
 - **strikes-sdk** - Operator penalty tracking
@@ -90,6 +91,47 @@ The SDK provides a sophisticated transaction handling system with:
 - Gas limit estimation
 - Permit signature support
 - Multi-stage transaction lifecycle tracking
+
+### Keys Cache System
+The **keys-cache-sdk** module provides pubkey caching functionality to prevent double-submission:
+
+#### Purpose
+- Prevent accidental re-submission of the same validator pubkeys
+- Manual key management with 2-week automatic expiration
+- Optional integration with deposit data validation
+
+#### Architecture
+- **Storage Layer** (`storage.ts`): Low-level localStorage operations and utilities
+- **Business Logic** (`keys-cache-sdk.ts`): High-level cache management in SDK class
+- **Clean separation**: Storage utilities vs cache business logic
+
+#### Key Features
+- **Timestamp-based TTL**: 2-week expiration using timestamps (not block numbers)
+- **Chain-specific storage**: localStorage keys include chainId (`lido-csm-keys-cache-${chainId}`)
+- **Automatic cleanup**: Expired keys removed on every add/remove operation
+- **Duplicate detection**: Integration with DepositDataSDK for validation
+
+#### Usage Examples
+```typescript
+const sdk = new LidoSDKCsm({ core });
+
+// Manual key management
+sdk.keysCache.addPubkeys(['0x123...', '0x456...']);
+sdk.keysCache.removePubkeys(['0x123...']);
+sdk.keysCache.clearAllKeys();
+
+// Check for duplicates
+const isDuplicate = sdk.keysCache.isDuplicate('0x123...');
+const hasCached = sdk.keysCache.hasCachedKey('0x123...');
+
+// Get cache information
+const cachedKeys = sdk.keysCache.getCachedKeys();
+const stats = sdk.keysCache.getCacheStats(); // { count, oldestKey, newestKey }
+
+// Automatic integration with deposit validation
+const result = await sdk.depositData.validateDepositData(depositData);
+// Will automatically check for cached duplicates and add valid keys to cache
+```
 
 ### Testing
 - Jest configuration in `jest.config.ts`

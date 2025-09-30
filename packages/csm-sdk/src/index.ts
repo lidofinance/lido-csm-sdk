@@ -7,6 +7,7 @@ export * from './module-sdk/index.js';
 export * from './parameters-sdk/index.js';
 export * from './keys-sdk/index.js';
 export * from './keys-with-status-sdk/index.js';
+export * from './keys-cache-sdk/index.js';
 export * from './bond-sdk/index.js';
 export * from './roles-sdk/index.js';
 export * from './operator-sdk/index.js';

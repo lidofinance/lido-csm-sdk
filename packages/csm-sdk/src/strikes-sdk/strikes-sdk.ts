@@ -2,7 +2,11 @@ import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { NodeOperatorId, Proof } from '../common/index.js';
-import { fetchWithFallback, isDefined } from '../common/utils/index.js';
+import {
+  fetchWithFallback,
+  isDefined,
+  onError,
+} from '../common/utils/index.js';
 import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import {
@@ -10,7 +14,6 @@ import {
   findLeaf,
   findProof,
 } from './find-proof.js';
-import { onError } from './on-error.js';
 import { KeyWithStrikes } from './types.js';
 
 export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {

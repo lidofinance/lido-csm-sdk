@@ -26,6 +26,7 @@ import {
 import {
   fetchWithFallback,
   isDefined,
+  onError,
   parseDepositData,
   stripPermit,
 } from '../common/utils/index.js';
@@ -35,7 +36,6 @@ import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import { findProof } from './find-proof.js';
-import { onError } from './on-error.js';
 import {
   AddressProof,
   AddVettedNodeOperatorInnerProps,

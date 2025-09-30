@@ -4,70 +4,127 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CSM_CONTRACT_NAMES } from '../common/index.js';
 import { compareLowercase } from '../common/utils/compare-lowercase.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { parseDepositData } from './parse/parse-deposit-data.js';
-import { removeKey } from './parse/remove-key.js';
-import { DepositData, DepositDataErrors } from './types.js';
-import { appendError } from './validate/append-error.js';
-import { checkDuplicates } from './validate/check-duplicates.js';
-import { checkItem } from './validate/check-item.js';
-import { checkPreviouslySubmittedDuplicates } from './validate/check-previously-submitted-duplicates.js';
-import { hasErrors } from './validate/has-errors.js';
+import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
+import { parseDepositData, removeKey } from './parser.js';
+import {
+  DepositData,
+  ParseResult,
+  RemoveKeyResult,
+  ValidationError,
+  ValidationErrorCode,
+} from './types.js';
+import { validateDepositData, validateDepositDataSync } from './validator.js';
 
 export class DepositDataSDK extends CsmSDKModule<{
   keysWithStatus: KeysWithStatusSDK;
+  keysCache?: KeysCacheSDK;
 }> {
+  /**
+   * Parse deposit data JSON with enhanced error handling
+   */
   @Logger('Utils:')
-  public parse(json: string) {
+  public parseDepositData(json: string): ParseResult {
     return parseDepositData(json);
   }
 
+  /**
+   * Remove key at specified index with comprehensive validation
+   */
   @Logger('Utils:')
-  public removeKey(json: string, index: number) {
+  public removeKey(json: string, index: number): RemoveKeyResult {
     return removeKey(json, index);
   }
 
+  /**
+   * Validation of deposit data including signature verification
+   */
   @Logger('Utils:')
-  public async validate(depositData: DepositData[]) {
+  public async validateDepositData(
+    depositData: DepositData[],
+  ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
     const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
-    const errors: DepositDataErrors = Array.from(
-      { length: depositData.length },
-      () => [],
-    );
+    const blockNumber = await this.core.client.getBlockNumber();
 
-    depositData.forEach((data, index) => {
-      const error = checkItem(data, chainId, wc);
-      appendError(errors, index, error);
+    const errors = await validateDepositData(depositData, {
+      chainId,
+      withdrawalCredentials: wc,
+      currentBlockNumber: Number(blockNumber),
     });
-    checkDuplicates(depositData, errors);
 
-    if (!hasErrors(errors)) {
-      const blockNumber = await this.core.client.getBlockNumber();
-      checkPreviouslySubmittedDuplicates(
-        depositData,
-        chainId,
-        Number(blockNumber),
-        errors,
-      );
-    }
+    // Extract pubkeys for additional checks
+    const pubkeys = depositData.map((data) => data.pubkey as Hex);
 
-    // if (hasErrors(depositData)) {
-    //   return depositData;
-    // }
-    // await checkUploadedKeys(depositData);
-    return errors;
+    // Check for cached duplicates
+    const duplicateErrors = this.checkCachedKeys(pubkeys);
+
+    // Check for previously uploaded keys
+    const uploadedDuplicateErrors = await this.checkUploadedKeys(pubkeys);
+
+    // Merge all errors
+    return [...errors, ...duplicateErrors, ...uploadedDuplicateErrors];
+  }
+
+  /**
+   * Quick synchronous validation without signature verification
+   */
+  @Logger('Utils:')
+  public validateDepositDataSync(depositData: DepositData[]): ValidationError[] {
+    const chainId = this.core.chainId;
+    const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
+
+    return validateDepositDataSync(depositData, {
+      chainId,
+      withdrawalCredentials: wc,
+    });
   }
 
   @Logger('API:')
   @ErrorHandler()
   @Cache(60 * 1000)
-  public async checkUploadedKeys(pubkeys: Hex[]): Promise<Hex[] | null> {
+  public async checkUploadedKeys(pubkeys: Hex[]): Promise<ValidationError[]> {
     const keys = await this.bus.get('keysWithStatus')?.getApiKeys(pubkeys);
-    if (!keys) return null;
+    const errors: ValidationError[] = [];
 
-    return pubkeys.filter((pubkey) =>
-      // TODO: check comparing is valid
-      keys.find((key) => compareLowercase(key.key, pubkey)),
-    );
+    if (keys) {
+      pubkeys.forEach((pubkey, index) => {
+        const isUploaded = keys.find((key) =>
+          compareLowercase(key.key, pubkey),
+        );
+
+        if (isUploaded) {
+          errors.push({
+            index,
+            message: `pubkey was previously submitted: ${pubkey}`,
+            field: 'pubkey',
+            code: ValidationErrorCode.PREVIOUSLY_SUBMITTED,
+          });
+        }
+      });
+    }
+
+    return errors;
+  }
+
+  @Logger('Utils:')
+  @ErrorHandler()
+  public checkCachedKeys(pubkeys: Hex[]): ValidationError[] {
+    const keysCache = this.bus.get('keysCache');
+    const errors: ValidationError[] = [];
+
+    if (keysCache) {
+      pubkeys.forEach((pubkey, index) => {
+        if (keysCache.isDuplicate(pubkey)) {
+          errors.push({
+            index,
+            message: `pubkey already exists in cache: ${pubkey}`,
+            field: 'pubkey',
+            code: ValidationErrorCode.DUPLICATE_PUBKEY,
+          });
+        }
+      });
+    }
+
+    return errors;
   }
 }

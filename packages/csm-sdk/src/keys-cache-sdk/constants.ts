@@ -1,0 +1,1 @@
+export const KEY_TTL_DURATION = 14 * 24 * 60 * 60 * 1000; // 2 weeks in milliseconds

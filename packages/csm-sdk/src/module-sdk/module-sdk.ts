@@ -6,9 +6,9 @@ import {
   SUPPORTED_VERSION_BY_CONTRACT,
 } from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
+import { onVersionError } from '../common/utils/on-error.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
 import { findModuleDigest } from './find-module-digest.js';
-import { onError } from './on-error.js';
 import {
   CsmContractsWithVersion,
   CsmStatus,
@@ -57,18 +57,24 @@ export class ModuleSDK extends CsmSDKModule {
       strikes,
       vettedGate,
     ] = await Promise.all([
-      this.core.contractCSModule.read.getInitializedVersion().catch(onError),
+      this.core.contractCSModule.read
+        .getInitializedVersion()
+        .catch(onVersionError),
       this.core.contractCSAccounting.read
         .getInitializedVersion()
-        .catch(onError),
+        .catch(onVersionError),
       this.core.contractCSFeeDistributor.read
         .getInitializedVersion()
-        .catch(onError),
+        .catch(onVersionError),
       this.core.contractCSParametersRegistry.read
         .getInitializedVersion()
-        .catch(onError),
-      this.core.contractCSStrikes.read.getInitializedVersion().catch(onError),
-      this.core.contractVettedGate.read.getInitializedVersion().catch(onError),
+        .catch(onVersionError),
+      this.core.contractCSStrikes.read
+        .getInitializedVersion()
+        .catch(onVersionError),
+      this.core.contractVettedGate.read
+        .getInitializedVersion()
+        .catch(onVersionError),
     ]);
 
     return {
@@ -123,7 +129,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Utils:')
   public async getShareLimit(): Promise<ShareLimitInfo> {
-    const digests = (await this.getAllModulesDigests()) as ModuleDigest[];
+    const digests = await this.getAllModulesDigests();
     return calculateShareLimit(digests, this.core.moduleId);
   }
 

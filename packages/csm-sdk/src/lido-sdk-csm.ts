@@ -8,6 +8,7 @@ import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
 import { FeeRecipientSDK } from './fee-recipient-sdk/fee-recipient-sdk.js';
 import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk.js';
+import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk.js';
 import { KeysSDK } from './keys-sdk/keys-sdk.js';
 import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk.js';
 import { ModuleSDK } from './module-sdk/module-sdk.js';
@@ -32,6 +33,7 @@ export class LidoSDKCsm {
   readonly rewards: RewardsSDK;
   readonly keys: KeysSDK;
   readonly keysWithStatus: KeysWithStatusSDK;
+  readonly keysCache: KeysCacheSDK;
   readonly bond: BondSDK;
   readonly roles: RolesSDK;
   readonly permissionlessGate: PermissionlessGateSDK;
@@ -58,6 +60,7 @@ export class LidoSDKCsm {
     this.rewards = new RewardsSDK(commonProps);
     this.keys = new KeysSDK(commonProps);
     this.keysWithStatus = new KeysWithStatusSDK(commonProps, 'keysWithStatus');
+    this.keysCache = new KeysCacheSDK(commonProps, 'keysCache');
     this.bond = new BondSDK(commonProps);
     this.roles = new RolesSDK(commonProps);
     this.events = new EventsSDK(commonProps, 'events');

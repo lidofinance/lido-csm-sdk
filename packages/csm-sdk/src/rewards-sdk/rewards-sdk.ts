@@ -7,13 +7,13 @@ import {
   RewardProof,
 } from '../common/index.js';
 import { fetchJson, fetchWithFallback } from '../common/utils/fetch-json.js';
+import { onError } from '../common/utils/index.js';
 import { isDefined } from '../common/utils/is-defined.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { fetchRewardsTree } from './fetch-rewards-tree.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
-import { onError } from './on-error.js';
 import { OperatorRewards, RewardsReport } from './types.js';
 
 export class RewardsSDK extends CsmSDKModule<{
