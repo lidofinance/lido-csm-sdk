@@ -290,7 +290,7 @@ export class IcsGateSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [this.core.icsTreeLink, ...this.core.getIpfsUrls(cid)].filter(
+    return [...this.core.getIpfsUrls(cid), this.core.icsTreeLink].filter(
       isDefined,
     );
   }

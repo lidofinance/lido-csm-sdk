@@ -34,12 +34,19 @@ export const CSM_CONTRACT_ADDRESSES: {
   };
 } = {
   [CHAINS.Mainnet]: {
-    // [CSM_CONTRACT_NAMES.csEjector]: '0x',
-    // [CSM_CONTRACT_NAMES.csParametersRegistry]: '0x',
-    // [CSM_CONTRACT_NAMES.csStrikes]: '0x',
-    // [CSM_CONTRACT_NAMES.permissionlessGate]: '0x',
-    // [CSM_CONTRACT_NAMES.vettedGate]: '0x',
-    // [CSM_CONTRACT_NAMES.csExitPenalties]: '0x',
+    [CSM_CONTRACT_NAMES.csEjector]:
+      '0xc72b58aa02E0e98cF8A4a0E9Dce75e763800802C',
+    [CSM_CONTRACT_NAMES.csParametersRegistry]:
+      '0x9D28ad303C90DF524BA960d7a2DAC56DcC31e428',
+    [CSM_CONTRACT_NAMES.csStrikes]:
+      '0xaa328816027F2D32B9F56d190BC9Fa4A5C07637f',
+    [CSM_CONTRACT_NAMES.permissionlessGate]:
+      '0xcF33a38111d0B1246A3F38a838fb41D626B454f0',
+    [CSM_CONTRACT_NAMES.vettedGate]:
+      '0xB314D4A76C457c93150d308787939063F4Cc67E0',
+    [CSM_CONTRACT_NAMES.csExitPenalties]:
+      '0x06cd61045f958A209a0f8D746e103eCc625f4193',
+
     [CSM_CONTRACT_NAMES.csAccounting]:
       '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
     [CSM_CONTRACT_NAMES.csFeeDistributor]:

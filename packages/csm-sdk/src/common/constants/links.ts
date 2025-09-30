@@ -12,6 +12,8 @@ export const EXTERNAL_LINKS: {
   [key in CSM_SUPPORTED_CHAINS]: { [key2 in LINK_TYPE]?: string };
 } = {
   [CHAINS.Mainnet]: {
+    [LINK_TYPE.icsTree]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/main/artifacts/mainnet/ics/merkle-tree.json',
     [LINK_TYPE.rewardsTree]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
     [LINK_TYPE.keysApi]: 'https://keys-api.lido.fi',
