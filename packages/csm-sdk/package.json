@@ -1,6 +1,6 @@
 {
   "name": "@lidofinance/lido-csm-sdk",
-  "version": "0.1.20",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -207,14 +207,14 @@
     "sdk",
     "csm"
   ],
-  "homepage": "https://github.com/lidofinance/lido-ethereum-sdk",
+  "homepage": "https://github.com/lidofinance/lido-csm-sdk",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lidofinance/lido-ethereum-sdk.git",
+    "url": "git+https://github.com/lidofinance/lido-csm-sdk.git",
     "directory": "packages/csm-sdk"
   },
   "bugs": {
-    "url": "https://github.com/lidofinance/lido-ethereum-sdk/issues"
+    "url": "https://github.com/lidofinance/lido-csm-sdk/issues"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
