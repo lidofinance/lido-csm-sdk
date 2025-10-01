@@ -44,6 +44,7 @@ yarn-error.log*
 .idea
 .qudo
 .claude
+CLAUDE.local.md
 
 /public/runtime/
 
