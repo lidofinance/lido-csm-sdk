@@ -95,7 +95,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'withdrawal_credentials',
-      message: `withdrawal_credentials is not equal to ${config.withdrawalCredentials}`,
+      message: `withdrawal_credentials is not the Lido Withdrawal Vault`,
       code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
     });
   }

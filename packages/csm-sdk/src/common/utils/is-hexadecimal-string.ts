@@ -1,3 +1,5 @@
+import { Hex } from 'viem';
+
 export const isHexadecimalString = (
   input: string,
   length?: number,
@@ -16,4 +18,8 @@ export const isHexadecimalString = (
 
 export const trimHexPrefix = (input: string): string => {
   return input.startsWith('0x') ? input.slice(2) : input;
+};
+
+export const toHexString = (text: string): Hex => {
+  return text.startsWith('0x') ? (text as Hex) : `0x${text}`;
 };

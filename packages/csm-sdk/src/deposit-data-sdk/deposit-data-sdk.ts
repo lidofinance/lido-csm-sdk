@@ -2,9 +2,9 @@ import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CSM_CONTRACT_NAMES } from '../common/index.js';
-import { compareLowercase } from '../common/utils/compare-lowercase.js';
-import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
+import { compareLowercase, toHexString } from '../common/utils/index.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
+import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
 import { parseDepositData, removeKey } from './parser.js';
 import {
   DepositData,
@@ -53,13 +53,15 @@ export class DepositDataSDK extends CsmSDKModule<{
     });
 
     // Extract pubkeys for additional checks
-    const pubkeys = depositData.map((data) => data.pubkey as Hex);
+    const pubkeys = depositData.map((data) => data.pubkey);
 
     // Check for cached duplicates
     const duplicateErrors = this.checkCachedKeys(pubkeys);
 
     // Check for previously uploaded keys
-    const uploadedDuplicateErrors = await this.checkUploadedKeys(pubkeys);
+    const uploadedDuplicateErrors = await this.checkUploadedKeys(
+      pubkeys.map(toHexString),
+    );
 
     // Merge all errors
     return [...errors, ...duplicateErrors, ...uploadedDuplicateErrors];
@@ -69,7 +71,9 @@ export class DepositDataSDK extends CsmSDKModule<{
    * Quick synchronous validation without signature verification
    */
   @Logger('Utils:')
-  public validateDepositDataSync(depositData: DepositData[]): ValidationError[] {
+  public validateDepositDataSync(
+    depositData: DepositData[],
+  ): ValidationError[] {
     const chainId = this.core.chainId;
     const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
 
@@ -86,44 +90,42 @@ export class DepositDataSDK extends CsmSDKModule<{
     const keys = await this.bus.get('keysWithStatus')?.getApiKeys(pubkeys);
     const errors: ValidationError[] = [];
 
-    if (keys) {
-      pubkeys.forEach((pubkey, index) => {
-        const isUploaded = keys.find((key) =>
-          compareLowercase(key.key, pubkey),
-        );
+    if (!keys) return errors;
 
-        if (isUploaded) {
-          errors.push({
-            index,
-            message: `pubkey was previously submitted: ${pubkey}`,
-            field: 'pubkey',
-            code: ValidationErrorCode.PREVIOUSLY_SUBMITTED,
-          });
-        }
-      });
-    }
+    pubkeys.forEach((pubkey, index) => {
+      const isUploaded = keys.find((key) => compareLowercase(key.key, pubkey));
+
+      if (isUploaded) {
+        errors.push({
+          index,
+          message: `pubkey was previously submitted`,
+          field: 'pubkey',
+          code: ValidationErrorCode.PREVIOUSLY_SUBMITTED,
+        });
+      }
+    });
 
     return errors;
   }
 
   @Logger('Utils:')
   @ErrorHandler()
-  public checkCachedKeys(pubkeys: Hex[]): ValidationError[] {
+  public checkCachedKeys(pubkeys: string[]): ValidationError[] {
     const keysCache = this.bus.get('keysCache');
     const errors: ValidationError[] = [];
 
-    if (keysCache) {
-      pubkeys.forEach((pubkey, index) => {
-        if (keysCache.isDuplicate(pubkey)) {
-          errors.push({
-            index,
-            message: `pubkey already exists in cache: ${pubkey}`,
-            field: 'pubkey',
-            code: ValidationErrorCode.DUPLICATE_PUBKEY,
-          });
-        }
-      });
-    }
+    if (!keysCache) return errors;
+
+    pubkeys.forEach((pubkey, index) => {
+      if (keysCache.isDuplicate(pubkey)) {
+        errors.push({
+          index,
+          message: `pubkey already exists in cache`,
+          field: 'pubkey',
+          code: ValidationErrorCode.DUPLICATE_PUBKEY,
+        });
+      }
+    });
 
     return errors;
   }
