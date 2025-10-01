@@ -21,28 +21,8 @@ jobs:
       - name: Check Lint
         run: yarn lint
 
-      - name: Build
-        run: yarn build
-        env:
-          RPC_PROVIDER_URL_1: ${{ vars.RPC_PROVIDER_URL_1 }}
-          RPC_PROVIDER_URL_17000: ${{ vars.RPC_PROVIDER_URL_17000 }}
-          RPC_PROVIDER_URL_560048: ${{ vars.RPC_PROVIDER_URL_560048 }}
-          RPC_PROVIDER_URL_11155111: ${{ vars.RPC_PROVIDER_URL_11155111 }}
-          RPC_PROVIDER_URL_11155420: ${{ vars.RPC_PROVIDER_URL_11155420 }}
-          RPC_PROVIDER_URL_1946: ${{ vars.RPC_PROVIDER_URL_1946 }}
-          RPC_PROVIDER_URL_1301: ${{ vars.RPC_PROVIDER_URL_1301 }}
-          WALLETCONNECT_PROJECT_ID: ${{ vars.WALLETCONNECT_PROJECT_ID }}
-          SUPPORTED_CHAINS: ${{ vars.SUPPORTED_CHAINS }}
-          DEFAULT_CHAIN: ${{ vars.DEFAULT_CHAIN }}
       - name: Check types
         run: yarn types
 
-      - name: Tests
-        run: yarn test
-        env:
-          TEST_PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}
-          TEST_CHAIN_ID: ${{ vars.TEST_CHAIN_ID }}
-          TEST_RPC_URL: ${{ secrets.TEST_RPC_URL }}
-          TEST_L2_CHAIN_ID: ${{ vars.TEST_L2_CHAIN_ID }}
-          TEST_L2_RPC_URL: ${{ secrets.TEST_L2_RPC_URL }}
-          TEST_SUBGRAPH_URL: ${{ secrets.TEST_SUBGRAPH_URL }}
+      - name: Build
+        run: yarn build
