@@ -1,3 +1,4 @@
+import { TransactionResult } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { filterBatches } from './filter-batches.js';
@@ -7,6 +8,7 @@ import {
   DepositQueuePointer,
   RawDepositQueueBatch,
 } from './types.js';
+import { CommonTransactionProps } from '../core-sdk/types.js';
 
 export class DepositQueueSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -93,5 +95,24 @@ export class DepositQueueSDK extends CsmSDKModule {
     );
 
     return queueBatches;
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async clean(
+    props: CommonTransactionProps & {
+      maxItems?: number;
+    } = {},
+  ): Promise<TransactionResult> {
+    const { maxItems, ...rest } = props;
+    const args = [BigInt(maxItems ?? 1000)] as const;
+
+    return this.core.performTransaction({
+      ...rest,
+      getGasLimit: (options) =>
+        this.moduleContract.estimateGas.cleanDepositQueue(args, options),
+      sendTransaction: (options) =>
+        this.moduleContract.write.cleanDepositQueue(args, options),
+    });
   }
 }
