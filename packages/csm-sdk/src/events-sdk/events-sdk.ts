@@ -41,6 +41,8 @@ export class EventsSDK extends CsmSDKModule {
     address: Address,
     options?: EventRangeProps,
   ): Promise<NodeOperator[]> {
+    if (this.disabled) return [];
+
     const stepConfig = await this.parseEventsProps(options);
 
     const logResults = await Promise.all([
@@ -105,6 +107,8 @@ export class EventsSDK extends CsmSDKModule {
     address: Address,
     options?: EventRangeProps,
   ): Promise<NodeOperatorInvite[]> {
+    if (this.disabled) return [];
+
     const stepConfig = await this.parseEventsProps(options);
 
     const logResults = await Promise.all([
@@ -154,6 +158,8 @@ export class EventsSDK extends CsmSDKModule {
   @Logger('Events:')
   @ErrorHandler()
   public async getRewardsReports(options?: EventRangeProps) {
+    if (this.disabled) return [];
+
     const stepConfig = await this.parseEventsProps(options);
 
     const logResults = await Promise.all(
@@ -195,6 +201,8 @@ export class EventsSDK extends CsmSDKModule {
     nodeOperatorId: NodeOperatorId,
     options?: EventRangeProps,
   ): Promise<Hex[]> {
+    if (this.disabled) return [];
+
     const stepConfig = await this.parseEventsProps(options);
 
     const logResults = await Promise.all(
@@ -216,6 +224,8 @@ export class EventsSDK extends CsmSDKModule {
   public async getOperatorsWithPenalties(
     options?: EventRangeProps,
   ): Promise<NodeOperatorId[]> {
+    if (this.disabled) return [];
+
     const stepConfig = await this.parseEventsProps(options);
 
     const logResults = await Promise.all(
@@ -255,5 +265,9 @@ export class EventsSDK extends CsmSDKModule {
       toBlock,
       step,
     };
+  }
+
+  private get disabled() {
+    return this.core.maxEventBlocksRange === 0;
   }
 }
