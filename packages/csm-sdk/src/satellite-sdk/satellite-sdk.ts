@@ -10,6 +10,7 @@ import {
 import { packRoles } from '../events-sdk/merge.js';
 import {
   FindOperatorIdsProps,
+  GetDepositableKeysCountProps,
   GetNodeOperatorsProps,
   GetQueueBatchesProps,
   SearchMode,
@@ -23,16 +24,12 @@ export class SatelliteSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   @Cache(10 * 1000)
-  public async getNodeOperatorIds(
-    props: FindOperatorIdsProps,
-  ): Promise<NodeOperatorId[]> {
-    const {
-      address,
-      offset = 0n,
-      limit = 1000n,
-      searchMode = SearchMode.CURRENT_ADDRESSES,
-    } = props;
-
+  public async getNodeOperatorIds({
+    address,
+    offset = 0n,
+    limit = 1000n,
+    searchMode = SearchMode.CURRENT_ADDRESSES,
+  }: FindOperatorIdsProps): Promise<NodeOperatorId[]> {
     const result = await this.satelliteContract.read.findNodeOperatorsByAddress(
       [address, offset, limit, searchMode],
     );
@@ -43,26 +40,11 @@ export class SatelliteSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   @Cache(10 * 1000)
-  public async getQueueBatches(props: GetQueueBatchesProps): Promise<bigint[]> {
-    const { queuePriority, startIndex = 0n, limit = 1000n } = props;
-
-    const result = await this.satelliteContract.read.getDepositQueueBatches([
-      queuePriority,
-      startIndex,
-      limit,
-    ]);
-
-    return result as bigint[];
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  @Cache(10 * 1000)
-  public async getNodeOperatorsByAddress(
-    props: GetNodeOperatorsProps,
-  ): Promise<NodeOperator[]> {
-    const { address, offset = 0n, limit = 1000n } = props;
-
+  public async getNodeOperatorsByAddress({
+    address,
+    offset = 0n,
+    limit = 1000n,
+  }: GetNodeOperatorsProps): Promise<NodeOperator[]> {
     const nodeOperators =
       await this.satelliteContract.read.getNodeOperatorsByAddress([
         address,
@@ -82,11 +64,11 @@ export class SatelliteSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   @Cache(10 * 1000)
-  public async getNodeOperatorsByProposedAddress(
-    props: GetNodeOperatorsProps,
-  ): Promise<NodeOperatorInvite[]> {
-    const { address, offset = 0n, limit = 1000n } = props;
-
+  public async getNodeOperatorsByProposedAddress({
+    address,
+    offset = 0n,
+    limit = 1000n,
+  }: GetNodeOperatorsProps): Promise<NodeOperatorInvite[]> {
     const nodeOperators =
       await this.satelliteContract.read.getNodeOperatorsByProposedAddress([
         address,
@@ -111,5 +93,37 @@ export class SatelliteSDK extends CsmSDKModule {
 
       return invites;
     }, []);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(10 * 1000)
+  public async getNodeOperatorsDepositableKeysCount({
+    offset = 0n,
+    limit = 1000n,
+  }: GetDepositableKeysCountProps = {}): Promise<number[]> {
+    const result =
+      await this.satelliteContract.read.getNodeOperatorsDepositableValidatorsCount(
+        [offset, limit],
+      );
+
+    return result.map((count) => Number(count));
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(10 * 1000)
+  public async getQueueBatches({
+    queuePriority,
+    startIndex = 0n,
+    limit = 1000n,
+  }: GetQueueBatchesProps): Promise<bigint[]> {
+    const result = await this.satelliteContract.read.getDepositQueueBatches([
+      BigInt(queuePriority),
+      startIndex,
+      limit,
+    ]);
+
+    return result as bigint[];
   }
 }

@@ -3,29 +3,19 @@ export type DepositQueuePointer = {
   tail: bigint;
 };
 
-export type DepositQueueInfo = {
-  queueId: number;
-  pointer: DepositQueuePointer;
-  isEmpty: boolean;
-  size: bigint;
-};
-
-export type DepositQueueStatus = {
-  queues: DepositQueueInfo[];
-  totalQueuedDeposits: bigint;
-  lowestPriorityQueue: number;
-};
-
 export type RawDepositQueueBatch = {
-  batchIndex: bigint;
   nodeOperatorId: bigint;
-  keysCount: bigint;
+  keysCount: number;
   nextBatchIndex: bigint;
 };
 
+export type RawDepositQueueBatchWithIndex = {
+  batchIndex: bigint;
+} & RawDepositQueueBatch;
+
 export type DepositQueueBatch = {
   nodeOperatorId: bigint;
-  keysCount: bigint;
+  keysCount: number;
 };
 
 export type DepositQueueBatchInfo = {

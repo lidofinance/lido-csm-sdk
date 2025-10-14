@@ -67,7 +67,7 @@ export const CSMSatelliteAbi = [
         internalType: 'uint256',
       },
       {
-        name: '_startIndex',
+        name: '_cursorIndex',
         type: 'uint128',
         internalType: 'uint128',
       },
@@ -79,7 +79,7 @@ export const CSMSatelliteAbi = [
     ],
     outputs: [
       {
-        name: '',
+        name: 'batches',
         type: 'uint256[]',
         internalType: 'Batch[]',
       },
@@ -179,6 +179,30 @@ export const CSMSatelliteAbi = [
             internalType: 'address',
           },
         ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getNodeOperatorsDepositableValidatorsCount',
+    inputs: [
+      {
+        name: '_offset',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_limit',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint32[]',
+        internalType: 'uint32[]',
       },
     ],
     stateMutability: 'view',

@@ -68,10 +68,10 @@ export class LidoSDKCsm {
     this.icsGate = new IcsGateSDK(commonProps);
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.frame = new FrameSDK(commonProps, 'frame');
+    this.satellite = new SatelliteSDK(commonProps, 'satellite');
     this.depositQueue = new DepositQueueSDK(commonProps);
     this.depositData = new DepositDataSDK(commonProps);
     this.stealing = new StealingSDK(commonProps);
-    this.satellite = new SatelliteSDK(commonProps);
     this.feeRecipient = new FeeRecipientSDK(commonProps);
   }
 }

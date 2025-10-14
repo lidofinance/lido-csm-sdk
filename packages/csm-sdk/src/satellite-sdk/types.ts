@@ -14,13 +14,18 @@ export type FindOperatorIdsProps = {
 };
 
 export type GetQueueBatchesProps = {
-  queuePriority: bigint;
+  queuePriority: number;
   startIndex?: bigint;
   limit?: bigint;
 };
 
 export type GetNodeOperatorsProps = {
   address: Address;
+  offset?: bigint;
+  limit?: bigint;
+};
+
+export type GetDepositableKeysCountProps = {
   offset?: bigint;
   limit?: bigint;
 };

@@ -1,23 +1,38 @@
-import { DepositQueueBatch, RawDepositQueueBatch } from './types.js';
+import { DepositQueueBatch } from './types.js';
 
-export const filterBatches = (
-  allBatches: RawDepositQueueBatch[],
-): DepositQueueBatch[] => {
-  const result: DepositQueueBatch[] = [];
-  let nextIndex = 0n;
-  for (const batch of allBatches) {
-    if (!nextIndex || nextIndex >= batch.batchIndex) {
-      result.push(transformBatch(batch));
-      nextIndex = batch.nextBatchIndex;
+export const filterEmptyBatches = (
+  allQueueBatches: DepositQueueBatch[][],
+  depositableKeysCount: number[],
+): DepositQueueBatch[][] => {
+  const remainingKeys: Map<bigint, number> = new Map(
+    Object.entries(depositableKeysCount).map(([k, v]) => [BigInt(k), v]),
+  );
+
+  return allQueueBatches.map((queueBatches) => {
+    const filteredBatches: DepositQueueBatch[] = [];
+
+    for (const batch of queueBatches) {
+      const { nodeOperatorId } = batch;
+      const operatorRemainingKeys = remainingKeys.get(nodeOperatorId) ?? 0;
+
+      const actualKeysCount = Math.min(batch.keysCount, operatorRemainingKeys);
+
+      if (actualKeysCount <= 0) {
+        continue;
+      }
+
+      filteredBatches.push({
+        nodeOperatorId,
+        keysCount: actualKeysCount,
+      });
+
+      // Update remaining keys for this operator
+      remainingKeys.set(
+        nodeOperatorId,
+        operatorRemainingKeys - actualKeysCount,
+      );
     }
-  }
 
-  return result;
-};
-
-const transformBatch = (batch: RawDepositQueueBatch): DepositQueueBatch => {
-  return {
-    nodeOperatorId: batch.nodeOperatorId,
-    keysCount: batch.keysCount,
-  };
+    return filteredBatches;
+  });
 };

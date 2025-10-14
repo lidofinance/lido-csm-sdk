@@ -1,16 +1,20 @@
 import { TransactionResult } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { filterBatches } from './filter-batches.js';
+import { CommonTransactionProps } from '../core-sdk/types.js';
+import { SatelliteSDK } from '../satellite-sdk/satellite-sdk.js';
+import { filterEmptyBatches } from './filter-batches.js';
 import { parseBatch } from './parse-batch.js';
 import {
   DepositQueueBatch,
   DepositQueuePointer,
   RawDepositQueueBatch,
+  RawDepositQueueBatchWithIndex,
 } from './types.js';
-import { CommonTransactionProps } from '../core-sdk/types.js';
 
-export class DepositQueueSDK extends CsmSDKModule {
+export class DepositQueueSDK extends CsmSDKModule<{
+  satellite: SatelliteSDK;
+}> {
   private get moduleContract() {
     return this.core.contractCSModule;
   }
@@ -49,44 +53,32 @@ export class DepositQueueSDK extends CsmSDKModule {
   public async getBatchInQueue(
     queuePriority: number,
     batchIndex: bigint,
-  ): Promise<RawDepositQueueBatch> {
+  ): Promise<RawDepositQueueBatchWithIndex> {
     return this.moduleContract.read
       .depositQueueItem([BigInt(queuePriority), batchIndex])
-      .then((rawBatch) => parseBatch(rawBatch, batchIndex));
+      .then((rawBatch) => ({ ...parseBatch(rawBatch), batchIndex }));
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getBatchesInQueue(
     queuePriority: number,
-  ): Promise<DepositQueueBatch[]> {
-    const { head, tail } = await this.getQueuePointers(queuePriority);
-    // console.log(`>> get batches for ${queuePriority}: [${head}..${tail}]`);
+  ): Promise<RawDepositQueueBatch[]> {
+    const batches = await this.bus
+      .getOrThrow('satellite')
+      ?.getQueueBatches({ queuePriority });
 
-    if (head === tail) {
+    if (!batches) {
       return [];
     }
 
-    const allBatches = await Promise.all(
-      Array.from({ length: Number(tail - head) }, (_, i) =>
-        this.getBatchInQueue(queuePriority, BigInt(i) + head),
-      ),
-    );
-
-    // console.log(`>> batches for ${queuePriority}:`, allBatches);
-
-    const activeBatches = filterBatches(allBatches);
-
-    // console.log(`>> active batches for ${queuePriority}:`, activeBatches);
-
-    return activeBatches;
+    return batches.map(parseBatch);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getAllBatches(): Promise<DepositQueueBatch[][]> {
     const lowestPriorityQueue = await this.getLowestPriorityQueue();
-    // console.log('>> lowestPriorityQueue:', lowestPriorityQueue);
 
     const queueBatches = await Promise.all(
       Array.from({ length: Number(lowestPriorityQueue) + 1 }, (_, priority) =>
@@ -94,7 +86,11 @@ export class DepositQueueSDK extends CsmSDKModule {
       ),
     );
 
-    return queueBatches;
+    const depositableKeysCount = await this.bus
+      .getOrThrow('satellite')
+      .getNodeOperatorsDepositableKeysCount();
+
+    return filterEmptyBatches(queueBatches, depositableKeysCount);
   }
 
   @Logger('Call:')
