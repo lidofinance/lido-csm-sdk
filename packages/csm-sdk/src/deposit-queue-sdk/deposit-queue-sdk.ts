@@ -2,7 +2,11 @@ import { TransactionResult } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CommonTransactionProps } from '../core-sdk/types.js';
-import { SatelliteSDK } from '../satellite-sdk/satellite-sdk.js';
+import {
+  byNextBatchIndex,
+  iteratePages,
+  SatelliteSDK,
+} from '../satellite-sdk/index.js';
 import { filterEmptyBatches } from './filter-batches.js';
 import { parseBatch } from './parse-batch.js';
 import {
@@ -17,6 +21,10 @@ export class DepositQueueSDK extends CsmSDKModule<{
 }> {
   private get moduleContract() {
     return this.core.contractCSModule;
+  }
+
+  private get satellite() {
+    return this.bus.getOrThrow('satellite');
   }
 
   @Logger('Views:')
@@ -64,15 +72,23 @@ export class DepositQueueSDK extends CsmSDKModule<{
   public async getBatchesInQueue(
     queuePriority: number,
   ): Promise<RawDepositQueueBatch[]> {
-    const batches = await this.bus
-      .getOrThrow('satellite')
-      ?.getQueueBatches({ queuePriority });
+    const { head, tail } = await this.getQueuePointers(queuePriority);
 
-    if (!batches) {
+    if (head === tail) {
       return [];
     }
 
-    return batches.map(parseBatch);
+    return iteratePages(
+      async ({ offset: cursorIndex, limit }) => {
+        const batches = await this.satellite.getQueueBatchesPage(
+          queuePriority,
+          { cursorIndex, limit },
+        );
+        return batches.map(parseBatch);
+      },
+      undefined,
+      byNextBatchIndex(tail),
+    );
   }
 
   @Logger('Views:')
@@ -86,9 +102,8 @@ export class DepositQueueSDK extends CsmSDKModule<{
       ),
     );
 
-    const depositableKeysCount = await this.bus
-      .getOrThrow('satellite')
-      .getNodeOperatorsDepositableKeysCount();
+    const depositableKeysCount =
+      await this.satellite.getNodeOperatorsDepositableKeysCount();
 
     return filterEmptyBatches(queueBatches, depositableKeysCount);
   }

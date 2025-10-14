@@ -1,31 +1,15 @@
-import { Address } from 'viem';
-
 export enum SearchMode {
   CURRENT_ADDRESSES = 0,
   PROPOSED_ADDRESSES = 1,
   ALL_ADDRESSES = 2,
 }
 
-export type FindOperatorIdsProps = {
-  address: Address;
-  offset?: bigint;
-  limit?: bigint;
-  searchMode?: SearchMode;
+export type QueueBatchesPagination = {
+  cursorIndex: bigint;
+  limit: bigint;
 };
 
-export type GetQueueBatchesProps = {
-  queuePriority: number;
-  startIndex?: bigint;
-  limit?: bigint;
-};
-
-export type GetNodeOperatorsProps = {
-  address: Address;
-  offset?: bigint;
-  limit?: bigint;
-};
-
-export type GetDepositableKeysCountProps = {
-  offset?: bigint;
-  limit?: bigint;
+export type Pagination = {
+  offset: bigint;
+  limit: bigint;
 };

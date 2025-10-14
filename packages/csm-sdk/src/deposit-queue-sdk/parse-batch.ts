@@ -6,8 +6,8 @@ export const parseBatch = (rawBatch: bigint): RawDepositQueueBatch => {
   const nodeOperatorId = rawBatch >> 192n;
 
   return {
+    nextBatchIndex,
     nodeOperatorId,
     keysCount: Number(keysCount),
-    nextBatchIndex,
   };
 };
