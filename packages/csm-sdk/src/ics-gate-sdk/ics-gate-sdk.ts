@@ -17,7 +17,6 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   EMPTY_PERMIT,
-  NodeOperatorId,
   PermitSignatureShort,
   Proof,
   TOKENS,
@@ -30,7 +29,6 @@ import {
   parseDepositData,
   stripPermit,
 } from '../common/utils/index.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import type { AddNodeOperatorResult } from '../permissionless-gate-sdk/types.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
@@ -51,7 +49,6 @@ const NODE_OPERATOR_ADDED_SIGNATURE = toEventHash(NODE_OPERATOR_ADDED_EVENT);
 
 export class IcsGateSDK extends CsmSDKModule<{
   spending: SpendingSDK;
-  operator: OperatorSDK;
 }> {
   private get icsContract() {
     return this.core.contractVettedGate;
@@ -335,20 +332,6 @@ export class IcsGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async isPaused(): Promise<boolean> {
     return this.icsContract.read.isPaused();
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async canClaimCurve(
-    address: Address,
-    nodeOperatorId: NodeOperatorId,
-  ): Promise<boolean> {
-    const [isPaused, isOwner] = await Promise.all([
-      this.isPaused(),
-      this.bus.getOrThrow('operator').isOwner(nodeOperatorId, address),
-    ]);
-
-    return !isPaused && isOwner;
   }
 
   @Logger('Views:')
