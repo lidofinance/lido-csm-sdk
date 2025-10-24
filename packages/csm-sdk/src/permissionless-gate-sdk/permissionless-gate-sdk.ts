@@ -16,18 +16,16 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   EMPTY_PERMIT,
+  NodeOperatorShortInfo,
   PermitSignatureShort,
   TOKENS,
   WithToken,
 } from '../common/index.js';
 import { parseDepositData, stripPermit } from '../common/utils/index.js';
+import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
-import {
-  AddNodeOperatorInnerProps,
-  AddNodeOperatorProps,
-  AddNodeOperatorResult,
-} from './types.js';
+import { AddNodeOperatorInnerProps, AddNodeOperatorProps } from './types.js';
 
 const NODE_OPERATOR_ADDED_EVENT = getAbiItem({
   abi: CSModuleAbi,
@@ -37,6 +35,7 @@ const NODE_OPERATOR_ADDED_SIGNATURE = toEventHash(NODE_OPERATOR_ADDED_EVENT);
 
 export class PermissionlessGateSDK extends CsmSDKModule<{
   spending: SpendingSDK;
+  operator: OperatorSDK;
 }> {
   private get permissionlessContract() {
     return this.core.contractPermissionlessGate;
@@ -46,7 +45,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async addNodeOperatorETH(
     props: AddNodeOperatorProps,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const {
       amount: value,
       keysCount,
@@ -86,7 +85,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async addNodeOperatorStETH(
     props: AddNodeOperatorProps,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const {
       amount,
       keysCount,
@@ -130,7 +129,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async addNodeOperatorWstETH(
     props: AddNodeOperatorProps,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const {
       amount,
       keysCount,
@@ -172,7 +171,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
 
   public async addNodeOperator(
     props: WithToken<AddNodeOperatorProps>,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { token } = props;
     switch (token) {
       case TOKENS.eth:
@@ -236,7 +235,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
   @Logger('Utils:')
   private async receiptParseEvents(
     receipt: TransactionReceipt,
-  ): Promise<AddNodeOperatorResult> {
+  ): Promise<NodeOperatorShortInfo> {
     for (const log of receipt.logs) {
       // skips non-relevant events
       if (log.topics[0] !== NODE_OPERATOR_ADDED_SIGNATURE) continue;
@@ -245,11 +244,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
         strict: true,
         ...log,
       });
-      return {
-        nodeOperatorId: parsedLog.args.nodeOperatorId,
-        managerAddress: parsedLog.args.managerAddress,
-        rewardsAddress: parsedLog.args.rewardAddress,
-      };
+
+      const { nodeOperatorId } = parsedLog.args;
+      return this.bus
+        .getOrThrow('operator')
+        .getManagementProperties(nodeOperatorId);
     }
     throw new SDKError({
       message: 'could not find NodeOperatorAdded event in transaction',

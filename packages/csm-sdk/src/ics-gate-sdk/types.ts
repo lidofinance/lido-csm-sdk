@@ -2,12 +2,12 @@ import type { Address, Hex } from 'viem';
 import {
   DepositDataKey,
   NodeOperatorId,
+  NodeOperatorShortInfo,
   PermitSignatureShort,
   Proof,
   StandardMerkleTreeData,
 } from '../common/index.js';
 import { CommonTransactionProps } from '../core-sdk/types.js';
-import type { AddNodeOperatorResult } from '../permissionless-gate-sdk/types.js';
 
 export type AddressesTreeLeaf = [Address];
 
@@ -19,7 +19,7 @@ export type AddressProof = {
 };
 
 export type AddVettedNodeOperatorProps =
-  CommonTransactionProps<AddNodeOperatorResult> & {
+  CommonTransactionProps<NodeOperatorShortInfo> & {
     amount: bigint;
     depositData: DepositDataKey[];
     rewardsAddress?: Address | string;
@@ -31,7 +31,7 @@ export type AddVettedNodeOperatorProps =
   };
 
 export type AddVettedNodeOperatorInnerProps =
-  CommonTransactionProps<AddNodeOperatorResult> & {
+  CommonTransactionProps<NodeOperatorShortInfo> & {
     amount: bigint;
     keysCount: bigint;
     publicKeys: Hex;

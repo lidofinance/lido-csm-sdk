@@ -5,7 +5,8 @@ import {
 } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { ROLES } from '../common/index.js';
+import { NodeOperatorShortInfo, ROLES } from '../common/index.js';
+import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
@@ -13,7 +14,9 @@ import {
   WithRole,
 } from './types.js';
 
-export class RolesSDK extends CsmSDKModule {
+export class RolesSDK extends CsmSDKModule<{
+  operator: OperatorSDK;
+}> {
   private get moduleContract() {
     return this.core.contractCSModule;
   }
@@ -22,7 +25,7 @@ export class RolesSDK extends CsmSDKModule {
   @ErrorHandler()
   public async changeRewardsRole(
     props: ChangeRoleProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { nodeOperatorId, address, ...rest } = props;
 
     const args = [nodeOperatorId, address] as const;
@@ -37,6 +40,7 @@ export class RolesSDK extends CsmSDKModule {
         this.moduleContract.write.changeNodeOperatorRewardAddress(args, {
           ...options,
         }),
+      decodeResult: () => this.prepareResult(nodeOperatorId),
     });
   }
 
@@ -44,7 +48,7 @@ export class RolesSDK extends CsmSDKModule {
   @ErrorHandler()
   public async proposeManagerRole(
     props: ChangeRoleProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { nodeOperatorId, address, ...rest } = props;
 
     const args = [nodeOperatorId, address] as const;
@@ -65,6 +69,7 @@ export class RolesSDK extends CsmSDKModule {
             ...options,
           },
         ),
+      decodeResult: () => this.prepareResult(nodeOperatorId),
     });
   }
 
@@ -72,7 +77,7 @@ export class RolesSDK extends CsmSDKModule {
   @ErrorHandler()
   public async proposeRewardsRole(
     props: ChangeRoleProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { nodeOperatorId, address, ...rest } = props;
 
     const args = [nodeOperatorId, address] as const;
@@ -90,6 +95,7 @@ export class RolesSDK extends CsmSDKModule {
         this.moduleContract.write.proposeNodeOperatorRewardAddressChange(args, {
           ...options,
         }),
+      decodeResult: () => this.prepareResult(nodeOperatorId),
     });
   }
 
@@ -97,7 +103,7 @@ export class RolesSDK extends CsmSDKModule {
   @ErrorHandler()
   public async resetManagerRole(
     props: ResetRoleProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { nodeOperatorId, ...rest } = props;
 
     const args = [nodeOperatorId] as const;
@@ -112,6 +118,7 @@ export class RolesSDK extends CsmSDKModule {
         this.moduleContract.write.resetNodeOperatorManagerAddress(args, {
           ...options,
         }),
+      decodeResult: () => this.prepareResult(nodeOperatorId),
     });
   }
 
@@ -119,7 +126,7 @@ export class RolesSDK extends CsmSDKModule {
   @ErrorHandler()
   public async confirmRewardsRole(
     props: ConfirmRoleProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { nodeOperatorId, ...rest } = props;
 
     const args = [nodeOperatorId] as const;
@@ -137,6 +144,7 @@ export class RolesSDK extends CsmSDKModule {
         this.moduleContract.write.confirmNodeOperatorRewardAddressChange(args, {
           ...options,
         }),
+      decodeResult: () => this.prepareResult(nodeOperatorId),
     });
   }
 
@@ -144,7 +152,7 @@ export class RolesSDK extends CsmSDKModule {
   @ErrorHandler()
   public async confirmManagerRole(
     props: ConfirmRoleProps,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { nodeOperatorId, ...rest } = props;
 
     const args = [nodeOperatorId] as const;
@@ -165,12 +173,13 @@ export class RolesSDK extends CsmSDKModule {
             ...options,
           },
         ),
+      decodeResult: () => this.prepareResult(nodeOperatorId),
     });
   }
 
   public async confirmRole(
     props: WithRole<ConfirmRoleProps>,
-  ): Promise<TransactionResult> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { role } = props;
 
     switch (role) {
@@ -184,5 +193,11 @@ export class RolesSDK extends CsmSDKModule {
           code: ERROR_CODE.INVALID_ARGUMENT,
         });
     }
+  }
+
+  private prepareResult(nodeOperatorId: bigint) {
+    return this.bus
+      .getOrThrow('operator')
+      .getManagementProperties(nodeOperatorId);
   }
 }

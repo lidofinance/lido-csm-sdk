@@ -29,6 +29,7 @@ export type NodeOperatorShortInfo = {
   nodeOperatorId: NodeOperatorId;
   managerAddress: Address;
   rewardsAddress: Address;
+  extendedManagerPermissions: boolean;
 };
 
 export type NodeOperator = {

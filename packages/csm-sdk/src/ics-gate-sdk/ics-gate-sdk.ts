@@ -17,6 +17,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   EMPTY_PERMIT,
+  NodeOperatorShortInfo,
   PermitSignatureShort,
   Proof,
   TOKENS,
@@ -29,7 +30,7 @@ import {
   parseDepositData,
   stripPermit,
 } from '../common/utils/index.js';
-import type { AddNodeOperatorResult } from '../permissionless-gate-sdk/types.js';
+import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
@@ -49,6 +50,7 @@ const NODE_OPERATOR_ADDED_SIGNATURE = toEventHash(NODE_OPERATOR_ADDED_EVENT);
 
 export class IcsGateSDK extends CsmSDKModule<{
   spending: SpendingSDK;
+  operator: OperatorSDK;
 }> {
   private get icsContract() {
     return this.core.contractVettedGate;
@@ -58,7 +60,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async addNodeOperatorETH(
     props: AddVettedNodeOperatorProps,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const {
       amount: value,
       keysCount,
@@ -100,7 +102,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async addNodeOperatorStETH(
     props: AddVettedNodeOperatorProps,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const {
       amount,
       keysCount,
@@ -143,7 +145,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async addNodeOperatorWstETH(
     props: AddVettedNodeOperatorProps,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const {
       amount,
       keysCount,
@@ -184,7 +186,7 @@ export class IcsGateSDK extends CsmSDKModule<{
 
   public async addNodeOperator(
     props: WithToken<AddVettedNodeOperatorProps>,
-  ): Promise<TransactionResult<AddNodeOperatorResult>> {
+  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
     const { token } = props;
     switch (token) {
       case TOKENS.eth:
@@ -248,7 +250,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Utils:')
   private async receiptParseEvents(
     receipt: TransactionReceipt,
-  ): Promise<AddNodeOperatorResult> {
+  ): Promise<NodeOperatorShortInfo> {
     for (const log of receipt.logs) {
       // skips non-relevant events
       if (log.topics[0] !== NODE_OPERATOR_ADDED_SIGNATURE) continue;
@@ -257,11 +259,11 @@ export class IcsGateSDK extends CsmSDKModule<{
         strict: true,
         ...log,
       });
-      return {
-        nodeOperatorId: parsedLog.args.nodeOperatorId,
-        managerAddress: parsedLog.args.managerAddress,
-        rewardsAddress: parsedLog.args.rewardAddress,
-      };
+
+      const { nodeOperatorId } = parsedLog.args;
+      return this.bus
+        .getOrThrow('operator')
+        .getManagementProperties(nodeOperatorId);
     }
     throw new SDKError({
       message: 'could not find NodeOperatorAdded event in transaction',

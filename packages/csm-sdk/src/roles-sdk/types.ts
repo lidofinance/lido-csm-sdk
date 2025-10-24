@@ -1,17 +1,17 @@
 import type { Address } from 'viem';
-import { NodeOperatorId, ROLES } from '../common/index.js';
+import { NodeOperatorId, NodeOperatorShortInfo, ROLES } from '../common/index.js';
 import { CommonTransactionProps } from '../core-sdk/types.js';
 
-export type ChangeRoleProps = CommonTransactionProps & {
+export type ChangeRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
   nodeOperatorId: NodeOperatorId;
   address: Address;
 };
 
-export type ResetRoleProps = CommonTransactionProps & {
+export type ResetRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
   nodeOperatorId: NodeOperatorId;
 };
 
-export type ConfirmRoleProps = CommonTransactionProps & {
+export type ConfirmRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
   nodeOperatorId: NodeOperatorId;
 };
 

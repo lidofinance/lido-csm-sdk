@@ -6,10 +6,8 @@ import {
 } from '../common/index.js';
 import { CommonTransactionProps } from '../core-sdk/types.js';
 
-export type AddNodeOperatorResult = NodeOperatorShortInfo;
-
 export type AddNodeOperatorProps =
-  CommonTransactionProps<AddNodeOperatorResult> & {
+  CommonTransactionProps<NodeOperatorShortInfo> & {
     amount: bigint;
     depositData: DepositDataKey[];
     rewardsAddress?: Address | string;
@@ -20,7 +18,7 @@ export type AddNodeOperatorProps =
   };
 
 export type AddNodeOperatorInnerProps =
-  CommonTransactionProps<AddNodeOperatorResult> & {
+  CommonTransactionProps<NodeOperatorShortInfo> & {
     amount: bigint;
     keysCount: bigint;
     publicKeys: Hex;

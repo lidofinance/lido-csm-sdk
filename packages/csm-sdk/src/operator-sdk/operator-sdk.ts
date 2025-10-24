@@ -3,7 +3,11 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
-import { BondBalance, NodeOperatorId } from '../common/index.js';
+import {
+  BondBalance,
+  NodeOperatorId,
+  NodeOperatorShortInfo,
+} from '../common/index.js';
 import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
 import { splitKeys } from '../common/utils/split-keys.js';
 import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
@@ -114,5 +118,21 @@ export class OperatorSDK extends CsmSDKModule<{
   public async isOwner(id: NodeOperatorId, address: Address): Promise<boolean> {
     const owner = await this.moduleContract.read.getNodeOperatorOwner([id]);
     return isAddressEqual(owner, address) && owner !== zeroAddress;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getManagementProperties(
+    id: NodeOperatorId,
+  ): Promise<NodeOperatorShortInfo> {
+    const properties =
+      await this.moduleContract.read.getNodeOperatorManagementProperties([id]);
+
+    return {
+      nodeOperatorId: id,
+      managerAddress: properties.managerAddress,
+      rewardsAddress: properties.rewardAddress,
+      extendedManagerPermissions: properties.extendedManagerPermissions,
+    };
   }
 }
