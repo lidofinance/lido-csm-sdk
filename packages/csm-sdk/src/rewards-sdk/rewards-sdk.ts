@@ -31,7 +31,7 @@ export class RewardsSDK extends CsmSDKModule {
   }
 
   @Logger('Utils:')
-  public getLogUrls(cid: string): string[] {
+  public getReportUrls(cid: string): string[] {
     // TODO: fallback
     return this.core.getIpfsUrls(cid).filter(isDefined);
   }
@@ -109,11 +109,16 @@ export class RewardsSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  public async getReportByCid(cid: string) {
+    const urls = this.getReportUrls(cid);
+    return fetchWithFallback(urls, (url) => fetchJson<RewardsReport>(url));
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getLastReport() {
     const logCid = await this.distributorContract.read.logCid();
-    const urls = this.getLogUrls(logCid);
-
-    return fetchWithFallback(urls, (url) => fetchJson<RewardsReport>(url));
+    return this.getReportByCid(logCid);
   }
 
   @Logger('Utils:')
@@ -140,5 +145,21 @@ export class RewardsSDK extends CsmSDKModule {
     const lastLog = logs.at(-1);
 
     return lastLog?.transactionHash;
+  }
+
+  @Logger('Utils:')
+  @ErrorHandler()
+  public async getAllReports() {
+    const logs = await this.bus
+      .getOrThrow('events')
+      .getDistributionLogUpdated();
+
+    const cids = logs.map((log) => log.args.logCid).filter(isDefined);
+
+    const reports = await Promise.all(
+      cids.map((cid) => this.getReportByCid(cid)),
+    );
+
+    return reports.filter(isDefined);
   }
 }

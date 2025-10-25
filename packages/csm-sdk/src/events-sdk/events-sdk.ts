@@ -35,6 +35,10 @@ export class EventsSDK extends CsmSDKModule {
     return this.core.contractCSFeeOracle;
   }
 
+  private get distributorContract() {
+    return this.core.contractCSFeeDistributor;
+  }
+
   @Logger('Events:')
   @ErrorHandler()
   public async getNodeOperatorsByAddress(
@@ -165,6 +169,24 @@ export class EventsSDK extends CsmSDKModule {
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
         this.oracleContract.getEvents.ProcessingStarted(undefined, stepProps),
+      ),
+    );
+
+    const logs = logResults.flat().sort(sortEventsByBlockNumber);
+
+    return logs;
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getDistributionLogUpdated(options?: EventRangeProps) {
+    if (this.disabled) return [];
+
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.distributorContract.getEvents.DistributionLogUpdated(stepProps),
       ),
     );
 
