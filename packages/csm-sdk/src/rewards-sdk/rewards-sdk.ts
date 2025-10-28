@@ -7,14 +7,15 @@ import {
   NodeOperatorId,
   RewardProof,
 } from '../common/index.js';
-import { fetchJson, fetchWithFallback } from '../common/utils/fetch-json.js';
+import { fetchOneOf } from '../common/utils/fetch-json.js';
+import { fetchTree } from '../common/utils/fetch-tree.js';
 import { onError } from '../common/utils/index.js';
 import { isDefined } from '../common/utils/is-defined.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { fetchRewardsTree } from './fetch-rewards-tree.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
-import { OperatorRewards, RewardsReport } from './types.js';
+import { parseRewardsTree } from './parse-rewards-tree.js';
 
 export class RewardsSDK extends CsmSDKModule {
   private declare events: EventsSDK;
@@ -58,7 +59,11 @@ export class RewardsSDK extends CsmSDKModule {
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchWithFallback(urls, (url) => fetchRewardsTree(url, root));
+    return fetchTree<RewardsTreeLeaf>({
+      urls,
+      root,
+      parse: parseRewardsTree,
+    });
   }
 
   @Logger('Utils:')
@@ -109,15 +114,21 @@ export class RewardsSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  public async getLastReportCid() {
+    return this.distributorContract.read.logCid();
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getReportByCid(cid: string) {
     const urls = this.getReportUrls(cid);
-    return fetchWithFallback(urls, (url) => fetchJson<RewardsReport>(url));
+    return fetchOneOf<RewardsReport>({ urls });
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getLastReport() {
-    const logCid = await this.distributorContract.read.logCid();
+    const logCid = await this.getLastReportCid();
     return this.getReportByCid(logCid);
   }
 

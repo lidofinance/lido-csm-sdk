@@ -2,18 +2,13 @@ import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CACHE_LONG, NodeOperatorId, Proof } from '../common/index.js';
-import {
-  fetchWithFallback,
-  isDefined,
-  onError,
-} from '../common/utils/index.js';
-import { fetchAddressesTree } from './fetch-proofs-tree.js';
+import { fetchTree, isDefined, onError } from '../common/utils/index.js';
 import {
   filterLeafsByNodeOperator,
   findLeaf,
   findProof,
 } from './find-proof.js';
-import { KeyWithStrikes } from './types.js';
+import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
 
 export class StrikesSDK extends CsmSDKModule {
   private get strikesContract() {
@@ -47,7 +42,10 @@ export class StrikesSDK extends CsmSDKModule {
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchWithFallback(urls, (url) => fetchAddressesTree(url, root));
+    return fetchTree<StrikesTreeLeaf>({
+      urls,
+      root,
+    });
   }
 
   @Logger('Utils:')

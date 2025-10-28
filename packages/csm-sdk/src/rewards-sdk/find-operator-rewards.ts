@@ -13,7 +13,7 @@ const findOperatorRewardsV1 = (
   report: RewardsReportV1,
 ): OperatorRewards => {
   const threshold = report.threshold;
-  const operator = report.operators[nodeOperatorId.toString() as `${number}`];
+  const operator = report.operators[`${nodeOperatorId}`];
 
   if (!operator)
     return {
@@ -43,7 +43,7 @@ const findOperatorRewardsV2 = (
   reports: RewardsReportV2[],
 ): OperatorRewards => {
   const report = reports.at(-1);
-  const operator = report?.operators[nodeOperatorId.toString() as `${number}`];
+  const operator = report?.operators[`${nodeOperatorId}`];
 
   if (!operator)
     return {

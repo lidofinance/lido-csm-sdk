@@ -20,7 +20,7 @@ export type RewardsReportV1 = {
   frame: [number, number];
   threshold: number;
   operators: Record<
-    `${number}`,
+    `${bigint}`,
     {
       distributed: number;
       validators: Record<
@@ -52,7 +52,7 @@ export type RewardsReportV2 = {
   rebate_to_protocol: number;
   frame: [number, number];
   operators: Record<
-    `${number}`,
+    `${bigint}`,
     {
       distributed_rewards: number;
       performance_coefficients: {
@@ -61,7 +61,7 @@ export type RewardsReportV2 = {
         sync_weight: number;
       };
       validators: Record<
-        `${number}`,
+        `${bigint}`,
         {
           attestation_duty: { assigned: number; included: number };
           distributed_rewards: number;

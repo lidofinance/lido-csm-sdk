@@ -4,7 +4,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CACHE_LONG, Proof, TOKENS, WithToken } from '../common/index.js';
 import {
-  fetchWithFallback,
+  fetchTree,
   isDefined,
   onError,
   parseNodeOperatorAddedEvents,
@@ -12,10 +12,10 @@ import {
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { ReceiptLike } from '../tx-sdk/types.js';
-import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import { findProof } from './find-proof.js';
 import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props.js';
 import {
+  AddressesTreeLeaf,
   AddressProof,
   AddVettedNodeOperatorProps,
   ClaimCuvrveProps,
@@ -184,7 +184,10 @@ export class IcsGateSDK extends CsmSDKModule<{
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchWithFallback(urls, (url) => fetchAddressesTree(url, root));
+    return fetchTree<AddressesTreeLeaf>({
+      urls,
+      root,
+    });
   }
 
   @Logger('Utils:')
