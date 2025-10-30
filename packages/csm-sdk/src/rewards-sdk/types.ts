@@ -67,7 +67,7 @@ export type RewardsReportV2 = {
           distributed_rewards: number;
           performance: number;
           proposal_duty: { assigned: number; included: number };
-          rewards_share: number;
+          rewards_share: number; // 1 or 0.5834 - 1 means 6% fee, 0.5834 means 3.5% fee
           slashed: boolean;
           strikes: number;
           sync_duty: { assigned: number; included: number };
@@ -167,4 +167,31 @@ export const isRewardsReportV2 = (
   report: RewardsReport,
 ): report is RewardsReportV2[] => {
   return rewardsReportV2Schema.safeParse(report).success;
+};
+
+export type ValidatorRewards = {
+  indexInReport: number;
+  validatorIndex: string; // CL index
+  performance: number; // Percentage (0-1)
+  threshold: number; // Percentage (0-1)
+  slashed: boolean;
+  receivedShares: bigint; // stETH shares received
+  frame: [number, number]; // epochs [start, end]
+  refSlot: bigint;
+  blockNumber: bigint;
+};
+
+type ValidatorRewardsEntity = ValidatorRewards & {
+  curveId: bigint; // Curve ID applicable during the reward period
+  fee: bigint; // Fee value from rewardsConfig
+  startTimestamp: number; // Unix timestamp
+  endTimestamp: number; // Unix timestamp
+  receivedRewards: bigint; // stETH rewards in ETH (converted from shares)
+};
+
+export type OperatorRewardsHistory = ValidatorRewardsEntity[];
+
+export type StethPoolData = {
+  totalPooledEther: bigint;
+  totalShares: bigint;
 };

@@ -7,21 +7,66 @@ import {
   NodeOperatorId,
   RewardProof,
 } from '../common/index.js';
-import { fetchOneOf } from '../common/utils/fetch-json.js';
-import { fetchTree } from '../common/utils/fetch-tree.js';
-import { onError } from '../common/utils/index.js';
-import { isDefined } from '../common/utils/is-defined.js';
+import {
+  fetchOneOf,
+  fetchTree,
+  isDefined,
+  onError,
+  sortRewardsByRefSlot,
+} from '../common/utils/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { fetchRewardsTree } from './fetch-rewards-tree.js';
+import { FrameSDK } from '../frame-sdk/frame-sdk.js';
+import { epochToTimestamp } from '../frame-sdk/utils.js';
+import {
+  KeyNumberValueInterval,
+  ParametersSDK,
+} from '../parameters-sdk/index.js';
+import { convertSharesToEth } from './convert-shares-to-eth.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
+import { getValidatorsRewards } from './get-validators-rewards.js';
+import { getValidatorFee } from './get-validator-fee.js';
 import { parseRewardsTree } from './parse-rewards-tree.js';
+import {
+  OperatorRewards,
+  OperatorRewardsHistory,
+  RewardsReport,
+  RewardsTreeLeaf,
+  StethPoolData,
+} from './types.js';
+import { getOperatorCurveIdByBlock } from './get-operator-curve-id.js';
 
 export class RewardsSDK extends CsmSDKModule {
   private declare events: EventsSDK;
+  private declare frame: FrameSDK;
+  private declare parameters: ParametersSDK;
 
   private get distributorContract() {
     return this.core.contractCSFeeDistributor;
+  }
+
+  @Logger('Views:')
+  @Cache(30 * 60 * 1000)
+  @ErrorHandler()
+  public async getStethPoolData(): Promise<StethPoolData> {
+    const contract = this.core.getContract(
+      CSM_CONTRACT_NAMES.stETH,
+      stethSharesAbi,
+    );
+
+    const [totalPooledEther, totalShares] = await Promise.all([
+      contract.read.getTotalPooledEther(),
+      contract.read.getTotalShares(),
+    ]);
+
+    return { totalPooledEther, totalShares };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async sharesToEth(amount: bigint) {
+    const poolData = await this.getStethPoolData();
+    return convertSharesToEth(amount, poolData);
   }
 
   @Logger('Utils:')
@@ -103,17 +148,6 @@ export class RewardsSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async sharesToEth(amount: bigint) {
-    const contract = this.core.getContract(
-      CSM_CONTRACT_NAMES.stETH,
-      stethSharesAbi,
-    );
-
-    return contract.read.getPooledEthByShares([amount]);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
   public async getLastReportCid() {
     return this.distributorContract.read.logCid();
   }
@@ -161,9 +195,7 @@ export class RewardsSDK extends CsmSDKModule {
   @Logger('Utils:')
   @ErrorHandler()
   public async getAllReports() {
-    const logs = await this.bus
-      .getOrThrow('events')
-      .getDistributionLogUpdated();
+    const logs = await this.events.getDistributionLogUpdated();
 
     const cids = logs.map((log) => log.args.logCid).filter(isDefined);
 
@@ -172,5 +204,80 @@ export class RewardsSDK extends CsmSDKModule {
     );
 
     return reports.filter(isDefined);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorRewardsHistory(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<OperatorRewardsHistory> {
+    // Fetch all data in parallel for better performance
+    const [
+      reports,
+      frameConfig,
+      curveIdChanges,
+      rewardsConfigsMap,
+      defaultCurveId,
+      poolData, // Used to convert shares to ETH in a single call (current ratio vs block-specific rates)
+    ] = await Promise.all([
+      this.getAllReports(),
+      this.frame.getConfig(),
+      this.events.getOperatorCurveIdChanges(nodeOperatorId),
+      this.getRewardsConfigsMap(),
+      this.parameters.getDefaultCurveId(),
+      this.getStethPoolData(),
+    ]);
+
+    if (reports.length === 0) return [];
+
+    const validatorsRewards = reports.flatMap((report) =>
+      getValidatorsRewards(nodeOperatorId, report),
+    );
+
+    const enhancedRewards = validatorsRewards.map((vr) => {
+      const curveId = getOperatorCurveIdByBlock(
+        vr.blockNumber,
+        curveIdChanges,
+        defaultCurveId,
+      );
+      const fee = getValidatorFee(
+        vr.indexInReport + 1,
+        curveId,
+        rewardsConfigsMap,
+      );
+
+      return {
+        ...vr,
+        fee,
+        curveId,
+        startTimestamp: epochToTimestamp(vr.frame[0], frameConfig),
+        endTimestamp: epochToTimestamp(vr.frame[1], frameConfig),
+        receivedRewards: convertSharesToEth(vr.receivedShares, poolData),
+      };
+    });
+
+    return enhancedRewards.sort(sortRewardsByRefSlot);
+  }
+
+  @Logger('Utils:')
+  @Cache(30 * 60 * 1000)
+  @ErrorHandler()
+  public async getRewardsConfigsMap(): Promise<
+    Map<bigint, KeyNumberValueInterval[]>
+  > {
+    const curvesCount = await this.parameters.getCurvesCount();
+
+    // FIXME: remove cast to number
+    const configs = await Promise.all(
+      // curveId is zero-based
+      Array.from({ length: Number(curvesCount) }, async (_, _curveId) => {
+        const curveId = BigInt(_curveId);
+        const rewardsConfig = await this.parameters.getRewardsShare(curveId);
+
+        return [curveId, rewardsConfig] as const;
+      }),
+    );
+
+    return new Map(configs);
   }
 }

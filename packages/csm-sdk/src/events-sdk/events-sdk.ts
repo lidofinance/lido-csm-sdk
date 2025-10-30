@@ -9,12 +9,16 @@ import {
   NodeOperatorId,
   NodeOperatorInvite,
 } from '../common/index.js';
-import { isDefined, isUnique } from '../common/utils/is-defined.js';
-import { requestWithBlockStep } from '../common/utils/request-with-block-step.js';
-import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
+import {
+  isDefined,
+  isPropsDefined,
+  isUnique,
+  requestWithBlockStep,
+  sortEventsByBlockNumber,
+} from '../common/utils/index.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
-import { EventRangeProps } from './types.js';
+import { EventRangeProps, OperatorCurveIdChange } from './types.js';
 
 export class EventsSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -37,6 +41,10 @@ export class EventsSDK extends CsmSDKModule {
 
   private get distributorContract() {
     return this.core.contractCSFeeDistributor;
+  }
+
+  private get accountingContract() {
+    return this.core.contractCSAccounting;
   }
 
   @Logger('Events:')
@@ -266,6 +274,32 @@ export class EventsSDK extends CsmSDKModule {
       .filter(isUnique)
       .filter(isDefined)
       .sort((a, b) => Number(a - b));
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getOperatorCurveIdChanges(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<OperatorCurveIdChange[]> {
+    if (this.disabled) return [];
+
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.accountingContract.getEvents.BondCurveSet(
+          { nodeOperatorId },
+          stepProps,
+        ),
+      ),
+    );
+
+    return logResults
+      .flat()
+      .map(({ args: { curveId }, blockNumber }) => ({ curveId, blockNumber }))
+      .filter(isPropsDefined('curveId'))
+      .sort(sortEventsByBlockNumber);
   }
 
   @Logger('Utils:')

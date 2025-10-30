@@ -27,7 +27,22 @@ export const slotToEpoch = (
   return Number(BigInt(slot) / slotsPerEpoch);
 };
 
-export const getStotsPerFrame = ({
+export const epochToSlot = (
+  epoch: number | bigint,
+  { slotsPerEpoch }: Pick<FrameConfig, 'slotsPerEpoch'>,
+) => {
+  return BigInt(epoch) * slotsPerEpoch;
+};
+
+export const epochToTimestamp = (
+  epoch: number | bigint,
+  config: Pick<FrameConfig, 'slotsPerEpoch' | 'secondsPerSlot' | 'genesisTime'>,
+) => {
+  const slot = epochToSlot(epoch, config);
+  return slotToTimestamp(slot, config);
+};
+
+export const getSlotsPerFrame = ({
   epochsPerFrame,
   slotsPerEpoch,
 }: Pick<FrameConfig, 'epochsPerFrame' | 'slotsPerEpoch'>) => {

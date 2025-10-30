@@ -3,7 +3,7 @@ import { ErrorHandler, Logger, Cache } from '../common/decorators/index.js';
 import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types.js';
 import {
   getFrameDuration,
-  getStotsPerFrame,
+  getSlotsPerFrame,
   slotToEpoch,
   slotToTimestamp,
   timestampToSlot,
@@ -70,7 +70,7 @@ export class FrameSDK extends CsmSDKModule {
         this.core.publicClient.getBlock({ blockTag: 'latest' }),
       ]);
 
-    const slotsPerFrame = getStotsPerFrame(config);
+    const slotsPerFrame = getSlotsPerFrame(config);
     const latestSlot = timestampToSlot(latestBlockTimestamp, config);
 
     const startSlot =

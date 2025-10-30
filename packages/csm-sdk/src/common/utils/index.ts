@@ -3,7 +3,7 @@ export * from './is-bigint.js';
 export * from './parse-deposit-data.js';
 export * from './parse-value.js';
 export * from './request-with-block-step.js';
-export * from './sort-events.js';
+export * from './sort.js';
 export * from './split-keys.js';
 export * from './compare-lowercase.js';
 export * from './fetch-json.js';
