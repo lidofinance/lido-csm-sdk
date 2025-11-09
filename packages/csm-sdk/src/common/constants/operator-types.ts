@@ -5,6 +5,7 @@ export enum OPERATOR_TYPE {
   CC = 'CC',
 }
 
+// TODO: read from gates
 export const OPERATOR_TYPE_CURVE_ID = {
   [OPERATOR_TYPE.DEF]: 0n,
   [OPERATOR_TYPE.LEA]: 1n,

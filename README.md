@@ -88,6 +88,7 @@ The `LidoSDKCsm` class aggregates the following modules:
 - **bond**: Manage operator bond balance.
 - **rewards**: Query reward distribution.
 - **events**: Query protocol events.
+- **tx**: Unified transaction handling with multi-wallet support (EOA, multisig, Abstract Accounts).
 - **depositQueue**: Query deposit queue pointers, batches.
 - **depositData**: Parse and validate deposit data JSON.
 

@@ -91,10 +91,10 @@
       "default": "./dist/cjs/roles-sdk/index.js",
       "types": "./dist/types/roles-sdk/index.d.ts"
     },
-    "./spending-sdk": {
-      "import": "./dist/esm/spending-sdk/index.js",
-      "default": "./dist/cjs/spending-sdk/index.js",
-      "types": "./dist/types/spending-sdk/index.d.ts"
+    "./tx-sdk": {
+      "import": "./dist/esm/tx-sdk/index.js",
+      "default": "./dist/cjs/tx-sdk/index.js",
+      "types": "./dist/types/tx-sdk/index.d.ts"
     },
     "./strikes-sdk": {
       "import": "./dist/esm/strikes-sdk/index.js",
@@ -175,8 +175,8 @@
       "roles-sdk": [
         "./dist/types/roles-sdk/index.d.ts"
       ],
-      "spending-sdk": [
-        "./dist/types/spending-sdk/index.d.ts"
+      "tx-sdk": [
+        "./dist/types/tx-sdk/index.d.ts"
       ],
       "strikes-sdk": [
         "./dist/types/strikes-sdk/index.d.ts"

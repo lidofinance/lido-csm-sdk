@@ -28,6 +28,7 @@ export enum CSM_CONTRACT_NAMES {
   CSMSatellite = 'CSMSatellite',
 }
 
+// TODO: less hardcoded way to get addresses
 export const CSM_CONTRACT_ADDRESSES: {
   [key in CSM_SUPPORTED_CHAINS]?: {
     [key2 in CSM_CONTRACT_NAMES | Erc20Tokens]: Address;
@@ -127,3 +128,5 @@ export const SUPPORTED_VERSION_BY_CONTRACT = {
 } as const;
 
 export const PERCENT_BASIS = 10_000n;
+
+export const DEFAULT_CLEAN_MAX_ITEMS = 1000;

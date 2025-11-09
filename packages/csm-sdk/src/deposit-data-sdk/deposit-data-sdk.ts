@@ -15,10 +15,10 @@ import {
 } from './types.js';
 import { validateDepositData, validateDepositDataSync } from './validator.js';
 
-export class DepositDataSDK extends CsmSDKModule<{
-  keysWithStatus: KeysWithStatusSDK;
-  keysCache?: KeysCacheSDK;
-}> {
+export class DepositDataSDK extends CsmSDKModule {
+  private declare keysWithStatus: KeysWithStatusSDK;
+  private declare keysCache?: KeysCacheSDK;
+
   /**
    * Parse deposit data JSON with enhanced error handling
    */
@@ -44,7 +44,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
     const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
-    const blockNumber = await this.core.client.getBlockNumber();
+    const blockNumber = await this.core.publicClient.getBlockNumber();
 
     const errors = await validateDepositData(depositData, {
       chainId,
@@ -87,7 +87,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   @ErrorHandler()
   @Cache(60 * 1000)
   public async checkUploadedKeys(pubkeys: Hex[]): Promise<ValidationError[]> {
-    const keys = await this.bus.get('keysWithStatus')?.getApiKeys(pubkeys);
+    const keys = await this.keysWithStatus?.getApiKeys(pubkeys);
     const errors: ValidationError[] = [];
 
     if (!keys) return errors;
@@ -111,7 +111,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   @Logger('Utils:')
   @ErrorHandler()
   public checkCachedKeys(pubkeys: string[]): ValidationError[] {
-    const keysCache = this.bus.get('keysCache');
+    const keysCache = this.keysCache;
     const errors: ValidationError[] = [];
 
     if (!keysCache) return errors;

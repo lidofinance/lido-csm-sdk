@@ -46,7 +46,7 @@ export class FrameSDK extends CsmSDKModule {
       this.consensusContract.read.getChainConfig(),
       this.consensusContract.read.getFrameConfig(),
       this.oracleContract.read.getLastProcessingRefSlot(),
-      this.core.client.getBlock({ blockTag: 'latest' }),
+      this.core.publicClient.getBlock({ blockTag: 'latest' }),
     ]);
 
     const latestSlot = (latestBlockTimestamp - genesisTime) / secondsPerSlot;

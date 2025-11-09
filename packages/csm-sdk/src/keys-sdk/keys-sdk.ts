@@ -1,25 +1,16 @@
-import {
-  ERROR_CODE,
-  SDKError,
-  TransactionResult,
-} from '@lidofinance/lido-ethereum-sdk';
+import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   EJECT_FEE_MIN_LIMIT,
   EJECT_FEE_MULTIPLIEER,
-  EMPTY_PERMIT,
-  PermitSignatureShort,
   TOKENS,
   WithToken,
 } from '../common/index.js';
-import { parseDepositData } from '../common/utils/parse-deposit-data.js';
-import { stripPermit } from '../common/utils/strip-permit.js';
-import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
-import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
+import { prepCall, TxSDK } from '../tx-sdk/index.js';
+import { parseAddKeysProps } from './parse-add-keys-props.js';
 import {
-  AddKeysInnerProps,
   AddKeysProps,
   EjectKeysByArrayProps,
   EjectKeysProps,
@@ -28,9 +19,9 @@ import {
   RemoveKeysProps,
 } from './types.js';
 
-export class KeysSDK extends CsmSDKModule<{
-  spending: SpendingSDK;
-}> {
+export class KeysSDK extends CsmSDKModule {
+  private declare tx: TxSDK;
+
   private get moduleContract() {
     return this.core.contractCSModule;
   }
@@ -41,117 +32,86 @@ export class KeysSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addKeysETH(props: AddKeysProps): Promise<TransactionResult> {
-    const {
-      nodeOperatorId,
-      amount: value,
-      keysCount,
-      publicKeys,
-      signatures,
-      permit,
-      ...rest
-    } = await this.parseProps(props);
-
-    const args = [
-      rest.account.address,
-      nodeOperatorId,
-      keysCount,
-      publicKeys,
-      signatures,
-    ] as const;
-
-    return this.core.performTransaction({
-      ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.addValidatorKeysETH(args, {
-          value,
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.moduleContract.write.addValidatorKeysETH(args, {
-          value,
-          ...options,
-        }),
-    });
-  }
-
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addKeysStETH(props: AddKeysProps): Promise<TransactionResult> {
+  public async addKeysETH(props: AddKeysProps) {
     const {
       nodeOperatorId,
       amount,
       keysCount,
       publicKeys,
       signatures,
-      permit: _permit,
-      ...rest
-    } = await this.parseProps(props);
-
-    const { hash, permit } = await this.getPermit(
-      { ...rest, token: TOKENS.steth, amount },
-      _permit,
-    );
-    if (hash) return { hash };
-
-    const args = [
-      rest.account.address,
-      nodeOperatorId,
-      keysCount,
-      publicKeys,
-      signatures,
       permit,
-    ] as const;
+      ...rest
+    } = await parseAddKeysProps(props);
 
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.addValidatorKeysStETH(args, options),
-      sendTransaction: (options) =>
-        this.moduleContract.write.addValidatorKeysStETH(args, options),
+      call: ({ from }) =>
+        prepCall(
+          this.moduleContract,
+          'addValidatorKeysETH',
+          [from, nodeOperatorId, keysCount, publicKeys, signatures],
+          amount,
+        ),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addKeysWstETH(props: AddKeysProps): Promise<TransactionResult> {
+  public async addKeysStETH(props: AddKeysProps) {
     const {
       nodeOperatorId,
       amount,
       keysCount,
       publicKeys,
       signatures,
-      permit: _permit,
+      permit,
       ...rest
-    } = await this.parseProps(props);
+    } = await parseAddKeysProps(props);
 
-    const { hash, permit } = await this.getPermit(
-      { ...rest, token: TOKENS.wsteth, amount },
-      _permit,
-    );
-    if (hash) return { hash };
+    return this.tx.perform({
+      ...rest,
+      spend: { token: TOKENS.steth, amount, permit },
+      call: ({ from, permit }) =>
+        prepCall(this.moduleContract, 'addValidatorKeysStETH', [
+          from,
+          nodeOperatorId,
+          keysCount,
+          publicKeys,
+          signatures,
+          permit,
+        ]),
+    });
+  }
 
-    const args = [
-      rest.account.address,
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addKeysWstETH(props: AddKeysProps) {
+    const {
       nodeOperatorId,
+      amount,
       keysCount,
       publicKeys,
       signatures,
       permit,
-    ] as const;
+      ...rest
+    } = await parseAddKeysProps(props);
 
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.addValidatorKeysWstETH(args, options),
-      sendTransaction: (options) =>
-        this.moduleContract.write.addValidatorKeysWstETH(args, options),
+      spend: { token: TOKENS.wsteth, amount, permit },
+      call: ({ from, permit }) =>
+        prepCall(this.moduleContract, 'addValidatorKeysWstETH', [
+          from,
+          nodeOperatorId,
+          keysCount,
+          publicKeys,
+          signatures,
+          permit,
+        ]),
     });
   }
 
-  public async addKeys(
-    props: WithToken<AddKeysProps>,
-  ): Promise<TransactionResult> {
+  public async addKeys(props: WithToken<AddKeysProps>) {
     const { token } = props;
 
     if (props.amount === 0n) {
@@ -173,115 +133,66 @@ export class KeysSDK extends CsmSDKModule<{
     }
   }
 
-  @Logger('Utils:')
-  private async parseProps(props: AddKeysProps): Promise<AddKeysInnerProps> {
-    const { keysCount, publicKeys, signatures } = parseDepositData(
-      props.depositData,
-    );
-    const account = await this.core.core.useAccount(props.account);
-    return {
-      ...props,
-      keysCount,
-      publicKeys,
-      signatures,
-      account,
-    };
-  }
-
-  @Logger('Utils:')
-  private async getPermit(
-    props: SignPermitOrApproveProps,
-    preparedPermit?: PermitSignatureShort,
-  ) {
-    if (preparedPermit) return { permit: stripPermit(preparedPermit) };
-    const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
-    return {
-      hash: result?.hash,
-      permit: stripPermit(result?.permit ?? EMPTY_PERMIT),
-    };
-  }
-
   @Logger('Call:')
   @ErrorHandler()
-  public async removeKeys(props: RemoveKeysProps): Promise<TransactionResult> {
+  public async removeKeys(props: RemoveKeysProps) {
     const { nodeOperatorId, startIndex, keysCount, ...rest } = props;
 
-    const args = [nodeOperatorId, startIndex, keysCount] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.removeKeys(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.moduleContract.write.removeKeys(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.moduleContract, 'removeKeys', [
+          nodeOperatorId,
+          startIndex,
+          keysCount,
+        ]),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async ejectKeys(props: EjectKeysProps): Promise<TransactionResult> {
+  public async ejectKeys(props: EjectKeysProps) {
     const {
       nodeOperatorId,
       startIndex,
       keysCount,
-      amount: value,
+      amount,
       refundRecipient = zeroAddress,
       ...rest
     } = props;
 
-    const args = [
-      nodeOperatorId,
-      startIndex,
-      keysCount,
-      refundRecipient,
-    ] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.ejectorContract.estimateGas.voluntaryEject(args, {
-          value,
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.ejectorContract.write.voluntaryEject(args, {
-          value,
-          ...options,
-        }),
+      call: () =>
+        prepCall(
+          this.ejectorContract,
+          'voluntaryEject',
+          [nodeOperatorId, startIndex, keysCount, refundRecipient],
+          amount,
+        ),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async ejectKeysByArray(
-    props: EjectKeysByArrayProps,
-  ): Promise<TransactionResult> {
+  public async ejectKeysByArray(props: EjectKeysByArrayProps) {
     const {
       nodeOperatorId,
       keyIndices,
-      amount: value,
+      amount,
       refundRecipient = zeroAddress,
       ...rest
     } = props;
 
-    const args = [nodeOperatorId, keyIndices, refundRecipient] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.ejectorContract.estimateGas.voluntaryEjectByArray(args, {
-          value,
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.ejectorContract.write.voluntaryEjectByArray(args, {
-          value,
-          ...options,
-        }),
+      call: () =>
+        prepCall(
+          this.ejectorContract,
+          'voluntaryEjectByArray',
+          [nodeOperatorId, keyIndices, refundRecipient],
+          amount,
+        ),
     });
   }
 
@@ -298,45 +209,29 @@ export class KeysSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async migrateToPriorityQueue(
-    props: MigrateKeysProps,
-  ): Promise<TransactionResult> {
+  public async migrateToPriorityQueue(props: MigrateKeysProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.migrateToPriorityQueue(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.moduleContract.write.migrateToPriorityQueue(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.moduleContract, 'migrateToPriorityQueue', [
+          nodeOperatorId,
+        ]),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async normalizeQueue(
-    props: NormalizeQueueProps,
-  ): Promise<TransactionResult> {
+  public async normalizeQueue(props: NormalizeQueueProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.updateDepositableValidatorsCount(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.moduleContract.write.updateDepositableValidatorsCount(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.moduleContract, 'updateDepositableValidatorsCount', [
+          nodeOperatorId,
+        ]),
     });
   }
 }

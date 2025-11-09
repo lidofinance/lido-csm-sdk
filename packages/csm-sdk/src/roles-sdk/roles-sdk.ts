@@ -1,12 +1,9 @@
-import {
-  ERROR_CODE,
-  SDKError,
-  TransactionResult,
-} from '@lidofinance/lido-ethereum-sdk';
+import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { NodeOperatorShortInfo, ROLES } from '../common/index.js';
+import { ROLES } from '../common/index.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
+import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
@@ -14,172 +11,114 @@ import {
   WithRole,
 } from './types.js';
 
-export class RolesSDK extends CsmSDKModule<{
-  operator: OperatorSDK;
-}> {
+export class RolesSDK extends CsmSDKModule {
+  private declare tx: TxSDK;
+  private declare operator: OperatorSDK;
+
   private get moduleContract() {
     return this.core.contractCSModule;
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async changeRewardsRole(
-    props: ChangeRoleProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async changeRewardsRole(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
-    const args = [nodeOperatorId, address] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.changeNodeOperatorRewardAddress(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.moduleContract.write.changeNodeOperatorRewardAddress(args, {
-          ...options,
-        }),
-      decodeResult: () => this.prepareResult(nodeOperatorId),
+      call: () =>
+        prepCall(this.moduleContract, 'changeNodeOperatorRewardAddress', [
+          nodeOperatorId,
+          address,
+        ]),
+      decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async proposeManagerRole(
-    props: ChangeRoleProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async proposeManagerRole(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
-    const args = [nodeOperatorId, address] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.proposeNodeOperatorManagerAddressChange(
-          args,
-          {
-            ...options,
-          },
+      call: () =>
+        prepCall(
+          this.moduleContract,
+          'proposeNodeOperatorManagerAddressChange',
+          [nodeOperatorId, address],
         ),
-      sendTransaction: (options) =>
-        this.moduleContract.write.proposeNodeOperatorManagerAddressChange(
-          args,
-          {
-            ...options,
-          },
-        ),
-      decodeResult: () => this.prepareResult(nodeOperatorId),
+      decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async proposeRewardsRole(
-    props: ChangeRoleProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async proposeRewardsRole(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
-    const args = [nodeOperatorId, address] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.proposeNodeOperatorRewardAddressChange(
-          args,
-          {
-            ...options,
-          },
+      call: () =>
+        prepCall(
+          this.moduleContract,
+          'proposeNodeOperatorRewardAddressChange',
+          [nodeOperatorId, address],
         ),
-      sendTransaction: (options) =>
-        this.moduleContract.write.proposeNodeOperatorRewardAddressChange(args, {
-          ...options,
-        }),
-      decodeResult: () => this.prepareResult(nodeOperatorId),
+      decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async resetManagerRole(
-    props: ResetRoleProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async resetManagerRole(props: ResetRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.resetNodeOperatorManagerAddress(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.moduleContract.write.resetNodeOperatorManagerAddress(args, {
-          ...options,
-        }),
-      decodeResult: () => this.prepareResult(nodeOperatorId),
+      call: () =>
+        prepCall(this.moduleContract, 'resetNodeOperatorManagerAddress', [
+          nodeOperatorId,
+        ]),
+      decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async confirmRewardsRole(
-    props: ConfirmRoleProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async confirmRewardsRole(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.confirmNodeOperatorRewardAddressChange(
-          args,
-          {
-            ...options,
-          },
+      call: () =>
+        prepCall(
+          this.moduleContract,
+          'confirmNodeOperatorRewardAddressChange',
+          [nodeOperatorId],
         ),
-      sendTransaction: (options) =>
-        this.moduleContract.write.confirmNodeOperatorRewardAddressChange(args, {
-          ...options,
-        }),
-      decodeResult: () => this.prepareResult(nodeOperatorId),
+      decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async confirmManagerRole(
-    props: ConfirmRoleProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async confirmManagerRole(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.confirmNodeOperatorManagerAddressChange(
-          args,
-          {
-            ...options,
-          },
+      call: () =>
+        prepCall(
+          this.moduleContract,
+          'confirmNodeOperatorManagerAddressChange',
+          [nodeOperatorId],
         ),
-      sendTransaction: (options) =>
-        this.moduleContract.write.confirmNodeOperatorManagerAddressChange(
-          args,
-          {
-            ...options,
-          },
-        ),
-      decodeResult: () => this.prepareResult(nodeOperatorId),
+      decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
-  public async confirmRole(
-    props: WithRole<ConfirmRoleProps>,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async confirmRole(props: WithRole<ConfirmRoleProps>) {
     const { role } = props;
 
     switch (role) {
@@ -195,9 +134,7 @@ export class RolesSDK extends CsmSDKModule<{
     }
   }
 
-  private prepareResult(nodeOperatorId: bigint) {
-    return this.bus
-      .getOrThrow('operator')
-      .getManagementProperties(nodeOperatorId);
+  private prepareRoleResult(nodeOperatorId: bigint) {
+    return this.operator.getManagementProperties(nodeOperatorId);
   }
 }

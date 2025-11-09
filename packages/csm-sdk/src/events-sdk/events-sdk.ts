@@ -195,6 +195,7 @@ export class EventsSDK extends CsmSDKModule {
     return logs.map((e) => e.args.pubkey).filter((k) => k !== undefined);
   }
 
+  // TODO: limit to 2 weeks
   @Logger('Events:')
   @ErrorHandler()
   public async getRequestedToExitKeys(

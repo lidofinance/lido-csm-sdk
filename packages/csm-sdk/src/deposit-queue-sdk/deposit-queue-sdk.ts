@@ -1,12 +1,13 @@
-import { TransactionResult } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { DEFAULT_CLEAN_MAX_ITEMS } from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CommonTransactionProps } from '../core-sdk/types.js';
+import { CommonTransactionProps } from '../tx-sdk/types.js';
 import {
   byNextBatchIndex,
   iteratePages,
   SatelliteSDK,
 } from '../satellite-sdk/index.js';
+import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { filterEmptyBatches } from './filter-batches.js';
 import { parseBatch } from './parse-batch.js';
 import {
@@ -16,15 +17,12 @@ import {
   RawDepositQueueBatchWithIndex,
 } from './types.js';
 
-export class DepositQueueSDK extends CsmSDKModule<{
-  satellite: SatelliteSDK;
-}> {
+export class DepositQueueSDK extends CsmSDKModule {
+  private declare tx: TxSDK;
+  private declare satellite: SatelliteSDK;
+
   private get moduleContract() {
     return this.core.contractCSModule;
-  }
-
-  private get satellite() {
-    return this.bus.getOrThrow('satellite');
   }
 
   @Logger('Views:')
@@ -114,16 +112,15 @@ export class DepositQueueSDK extends CsmSDKModule<{
     props: CommonTransactionProps & {
       maxItems?: number;
     } = {},
-  ): Promise<TransactionResult> {
+  ) {
     const { maxItems, ...rest } = props;
-    const args = [BigInt(maxItems ?? 1000)] as const;
 
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.cleanDepositQueue(args, options),
-      sendTransaction: (options) =>
-        this.moduleContract.write.cleanDepositQueue(args, options),
+      call: () =>
+        prepCall(this.moduleContract, 'cleanDepositQueue', [
+          BigInt(maxItems ?? DEFAULT_CLEAN_MAX_ITEMS),
+        ]),
     });
   }
 }
