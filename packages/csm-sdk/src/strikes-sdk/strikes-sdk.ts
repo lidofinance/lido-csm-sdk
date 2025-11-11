@@ -7,7 +7,6 @@ import {
   isDefined,
   onError,
 } from '../common/utils/index.js';
-import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import {
   filterLeafsByNodeOperator,
@@ -16,7 +15,7 @@ import {
 } from './find-proof.js';
 import { KeyWithStrikes } from './types.js';
 
-export class StrikesSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
+export class StrikesSDK extends CsmSDKModule {
   private get strikesContract() {
     return this.core.contractCSStrikes;
   }

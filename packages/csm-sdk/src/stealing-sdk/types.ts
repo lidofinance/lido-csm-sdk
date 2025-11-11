@@ -1,6 +1,6 @@
 import { Hex } from 'viem';
 import { NodeOperatorId } from '../common/index.js';
-import { CommonTransactionProps } from '../core-sdk/types.js';
+import { CommonTransactionProps } from '../tx-sdk/types.js';
 
 export type ReportProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;

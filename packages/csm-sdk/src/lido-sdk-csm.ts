@@ -17,15 +17,15 @@ import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { PermissionlessGateSDK } from './permissionless-gate-sdk/permissionless-gate-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
 import { RolesSDK } from './roles-sdk/roles-sdk.js';
-import { SpendingSDK } from './spending-sdk/spending-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
 import { FrameSDK } from './frame-sdk/frame-sdk.js';
 import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
 import { SatelliteSDK } from './satellite-sdk/satellite-sdk.js';
+import { TxSDK } from './tx-sdk/tx-sdk.js';
 
 export class LidoSDKCsm {
   readonly core: CoreSDK;
-  readonly spending: SpendingSDK;
+  readonly tx: TxSDK;
   readonly module: ModuleSDK;
   readonly accounting: AccountingSDK;
   readonly parameters: ParametersSDK;
@@ -52,7 +52,7 @@ export class LidoSDKCsm {
     this.core = new CoreSDK(props);
 
     const commonProps = { ...props, core: this.core, bus };
-    this.spending = new SpendingSDK(commonProps, 'spending');
+    this.tx = new TxSDK(commonProps, 'tx');
     this.module = new ModuleSDK(commonProps, 'module');
     this.accounting = new AccountingSDK(commonProps);
     this.parameters = new ParametersSDK(commonProps, 'parameters');

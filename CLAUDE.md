@@ -54,7 +54,7 @@ Key modules include:
 - **parameters-sdk** - Curve parameters access
 - **frame-sdk** - Protocol frame configuration
 - **roles-sdk** - Operator role management
-- **spending-sdk** - Spending operation management
+- **tx-sdk** - Unified transaction handling layer with Abstract Account (AA) support (replaces deprecated spending-sdk)
 - **permissionless-gate-sdk** - Permissionless operator creation
 - **ics-gate-sdk** - ICS (Independent Community Staker) entry points
 - **deposit-queue-sdk** - Deposit queue pointers and batches
@@ -85,12 +85,77 @@ All modules accept `CsmCoreProps` which includes:
 - `maxEventBlocksRange?: number` - Event query range limits
 - `clApiUrl?: string` - Consensus layer API URL
 
-### Transaction Handling
-The SDK provides a sophisticated transaction handling system with:
-- Transaction callbacks for monitoring progress
-- Gas limit estimation
-- Permit signature support
-- Multi-stage transaction lifecycle tracking
+### Transaction System (tx-sdk)
+The **tx-sdk** module provides unified transaction handling across different wallet types, replacing the deprecated **spending-sdk** module.
+
+#### Purpose
+- Unified API for transactions across EOA, multisig, and Abstract Account wallets
+- Automatic wallet type detection and appropriate flow selection
+- Built-in permit/approve handling for token spending
+- Support for EIP-5792 batch transactions (sendCalls) for Abstract Accounts
+
+#### Wallet Type Support
+1. **EOA (Externally Owned Accounts)**: Standard wallets with permit signature support
+2. **Multisig Wallets**: Contract-based wallets requiring explicit approve transactions
+3. **Abstract Accounts (AA)**: Smart contract wallets supporting EIP-5792 batch operations via `sendCalls`
+
+#### Transaction Flow
+The tx-sdk automatically detects wallet type and routes to the appropriate flow:
+- **EOA wallets**: Permit signature → Transaction
+- **Multisig wallets**: Approve transaction → Main transaction
+- **Abstract Accounts**: Batch operations via `sendCalls` (single transaction for approve + main operation)
+
+#### Core API
+The primary method is `tx.perform()` which handles all transaction types:
+
+```typescript
+return this.tx.perform({
+  account,           // User's wallet address
+  callback,          // Optional transaction lifecycle callbacks
+  spend: {           // Optional spending configuration
+    token: TOKENS.steth,
+    amount,
+    permit           // Optional permit preferences
+  },
+  call: ({ permit }) => prepCall(contract, 'method', [args]),
+  decodeResult: (receipt) => parseReceiptData(receipt),
+});
+```
+
+#### Helper Utilities
+
+**prepCall**: Type-safe utility for preparing contract calls
+```typescript
+// Non-payable function
+prepCall(contract, 'transfer', [address, amount])
+
+// Payable function (value required as 3rd argument)
+prepCall(contract, 'deposit', [operatorId], value)
+```
+
+**Other helpers**:
+- `allowance(account, spender, token)` - Check ERC20 token allowance
+- `checkAllowance(account, spender, amount, token)` - Determine if approval needed
+- `signPermit(account, spender, amount, token, deadline)` - Sign EIP-2612 permit
+- `approve(account, spender, amount, token, callback)` - Execute approve transaction
+
+#### Transaction Lifecycle Callbacks
+The tx-sdk provides detailed transaction lifecycle tracking via callbacks:
+- `PERMIT_SIGN` - Signing permit for gasless approval
+- `APPROVE_SIGN` - Signing approval transaction
+- `APPROVE_RECEIPT` - Approval transaction confirmed
+- `GAS_LIMIT` - Gas estimation complete
+- `SIGN` - Signing main transaction
+- `RECEIPT` - Waiting for transaction receipt
+- `CONFIRMATION` - Transaction confirmed on chain
+- `DONE` - Complete with decoded result
+- `MULTISIG_DONE` - Multisig transaction submitted (not yet executed)
+- `ERROR` - Error occurred
+
+#### Architecture
+- **tx-sdk.ts**: Main TxSDK class with perform() method and helpers
+- **types.ts**: Type definitions for transaction operations
+- **utils/**: Helper functions including prepCall and event parsing utilities
 
 ### Keys Cache System
 The **keys-cache-sdk** module provides pubkey caching functionality to prevent double-submission:
