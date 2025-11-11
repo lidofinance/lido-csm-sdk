@@ -1,28 +1,10 @@
-import {
-  ERROR_CODE,
-  SDKError,
-  TransactionResult,
-} from '@lidofinance/lido-ethereum-sdk';
-import {
-  decodeEventLog,
-  getAbiItem,
-  toEventHash,
-  TransactionReceipt,
-} from 'viem';
-import { CSAccountingAbi } from '../abi/CSAccounting.js';
+import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import {
-  EMPTY_PERMIT,
-  NodeOperatorId,
-  PermitSignatureShort,
-  RewardProof,
-  TOKENS,
-  WithToken,
-} from '../common/index.js';
-import { stripPermit } from '../common/utils/strip-permit.js';
-import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
-import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
+import { NodeOperatorId, TOKENS, WithToken } from '../common/index.js';
+import { prepCall, TxSDK } from '../tx-sdk/index.js';
+import { parseClaimProps } from './parse-claim-props.js';
+import { parseCoverReceiptEvents } from './parse-cover-receipt-events.js';
 import {
   AddBondProps,
   AddBondResult,
@@ -31,16 +13,9 @@ import {
   PullRewardsProps,
 } from './types.js';
 
-const BOND_LOCK_CHANGED_EVENT = getAbiItem({
-  abi: CSAccountingAbi,
-  name: 'BondLockChanged',
-});
+export class BondSDK extends CsmSDKModule {
+  private declare tx: TxSDK;
 
-const BOND_LOCK_CHANGED_SIGNATURE = toEventHash(BOND_LOCK_CHANGED_EVENT);
-
-export class BondSDK extends CsmSDKModule<{
-  spending: SpendingSDK;
-}> {
   private get accountingContract() {
     return this.core.contractCSAccounting;
   }
@@ -59,82 +34,59 @@ export class BondSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addBondETH(
-    props: AddBondProps,
-  ): Promise<TransactionResult<AddBondResult>> {
-    const { nodeOperatorId, amount: value, permit, ...rest } = props;
+  public async addBondETH(props: AddBondProps) {
+    const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.depositETH(args, {
-          value,
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.accountingContract.write.depositETH(args, {
-          value,
-          ...options,
-        }),
+      call: () =>
+        prepCall(
+          this.accountingContract,
+          'depositETH',
+          [nodeOperatorId],
+          amount,
+        ),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addBondStETH(
-    props: AddBondProps,
-  ): Promise<TransactionResult<AddBondResult>> {
-    const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
+  public async addBondStETH(props: AddBondProps) {
+    const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    const { hash, permit } = await this.getPermit(
-      { ...rest, token: TOKENS.steth, amount } as SignPermitOrApproveProps,
-      _permit,
-    );
-    if (hash) return { hash };
-
-    const args = [nodeOperatorId, amount, permit] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.depositStETH(args, options),
-      sendTransaction: (options) =>
-        this.accountingContract.write.depositStETH(args, options),
+      spend: { token: TOKENS.steth, amount, permit },
+      call: ({ permit }) =>
+        prepCall(this.accountingContract, 'depositStETH', [
+          nodeOperatorId,
+          amount,
+          permit,
+        ]),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addBondWstETH(
-    props: AddBondProps,
-  ): Promise<TransactionResult<AddBondResult>> {
-    const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
+  public async addBondWstETH(props: AddBondProps) {
+    const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    const { hash, permit } = await this.getPermit(
-      { ...rest, token: TOKENS.wsteth, amount } as SignPermitOrApproveProps,
-      _permit,
-    );
-    if (hash) return { hash };
-
-    const args = [nodeOperatorId, amount, permit] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.depositWstETH(args, options),
-      sendTransaction: (options) =>
-        this.accountingContract.write.depositWstETH(args, options),
+      spend: { token: TOKENS.wsteth, amount, permit },
+      call: ({ permit }) =>
+        prepCall(this.accountingContract, 'depositWstETH', [
+          nodeOperatorId,
+          amount,
+          permit,
+        ]),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
-  public async addBond(
-    props: WithToken<AddBondProps>,
-  ): Promise<TransactionResult<AddBondResult>> {
+  public async addBond(props: WithToken<AddBondProps>) {
     const { token } = props;
     switch (token) {
       case TOKENS.eth:
@@ -151,178 +103,105 @@ export class BondSDK extends CsmSDKModule<{
     }
   }
 
-  @Logger('Utils:')
-  private async getPermit(
-    props: SignPermitOrApproveProps,
-    preparedPermit?: PermitSignatureShort,
-  ) {
-    if (preparedPermit) return { permit: stripPermit(preparedPermit) };
-    const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
-    return {
-      hash: result?.hash,
-      permit: stripPermit(result?.permit ?? EMPTY_PERMIT),
-    };
-  }
-
   @Logger('Call:')
   @ErrorHandler()
-  public async coverLockedBond(
-    props: CoverLockedBondProps,
-  ): Promise<TransactionResult<bigint>> {
-    const { nodeOperatorId, amount: value, ...rest } = props;
+  public async coverLockedBond(props: CoverLockedBondProps) {
+    const { nodeOperatorId, amount, ...rest } = props;
 
-    const args = [nodeOperatorId] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.moduleContract.estimateGas.compensateELRewardsStealingPenalty(
-          args,
-          {
-            value,
-            ...options,
-          },
+      call: () =>
+        prepCall(
+          this.moduleContract,
+          'compensateELRewardsStealingPenalty',
+          [nodeOperatorId],
+          amount,
         ),
-      sendTransaction: (options) =>
-        this.moduleContract.write.compensateELRewardsStealingPenalty(args, {
-          value,
-          ...options,
-        }),
-      decodeResult: (receipt) => this.coverReceiptParseEvents(receipt),
+      decodeResult: (receipt) => parseCoverReceiptEvents(receipt),
     });
-  }
-
-  @Logger('Utils:')
-  private async coverReceiptParseEvents(
-    receipt: TransactionReceipt,
-  ): Promise<bigint> {
-    for (const log of receipt.logs) {
-      // skips non-relevant events
-      if (log.topics[0] !== BOND_LOCK_CHANGED_SIGNATURE) continue;
-      const parsedLog = decodeEventLog({
-        abi: [BOND_LOCK_CHANGED_EVENT],
-        strict: true,
-        ...log,
-      });
-      return parsedLog.args.newAmount;
-    }
-    throw new SDKError({
-      message: 'could not find BondLockChanged event in transaction',
-      code: ERROR_CODE.TRANSACTION_ERROR,
-    });
-  }
-
-  public parseClaimProps<T>(props: T & Partial<RewardProof>): T & RewardProof {
-    return { ...props, proof: props.proof ?? [], shares: props.shares ?? 0n };
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async pullRewards(
-    props: PullRewardsProps,
-  ): Promise<TransactionResult> {
-    const { nodeOperatorId, shares, proof, ...rest } =
-      this.parseClaimProps(props);
+  public async pullRewards(props: PullRewardsProps) {
+    const { nodeOperatorId, shares, proof, ...rest } = parseClaimProps(props);
 
-    const args = [nodeOperatorId, shares, proof] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.pullFeeRewards(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.accountingContract.write.pullFeeRewards(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.accountingContract, 'pullFeeRewards', [
+          nodeOperatorId,
+          shares,
+          proof,
+        ]),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async claimBondUnstETH(
-    props: ClaimBondProps,
-  ): Promise<TransactionResult> {
+  public async claimBondUnstETH(props: ClaimBondProps) {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
-      this.parseClaimProps(props);
+      parseClaimProps(props);
 
-    const args = [nodeOperatorId, amount, shares, proof] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.claimRewardsUnstETH(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.accountingContract.write.claimRewardsUnstETH(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.accountingContract, 'claimRewardsUnstETH', [
+          nodeOperatorId,
+          amount,
+          shares,
+          proof,
+        ]),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async claimBondStETH(
-    props: ClaimBondProps,
-  ): Promise<TransactionResult> {
+  public async claimBondStETH(props: ClaimBondProps) {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
-      this.parseClaimProps(props);
+      parseClaimProps(props);
 
-    const args = [nodeOperatorId, amount, shares, proof] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.claimRewardsStETH(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.accountingContract.write.claimRewardsStETH(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.accountingContract, 'claimRewardsStETH', [
+          nodeOperatorId,
+          amount,
+          shares,
+          proof,
+        ]),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async claimBondWstETH(
-    props: ClaimBondProps,
-  ): Promise<TransactionResult> {
+  public async claimBondWstETH(props: ClaimBondProps) {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
-      this.parseClaimProps(props);
+      parseClaimProps(props);
 
-    const args = [nodeOperatorId, amount, shares, proof] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.accountingContract.estimateGas.claimRewardsWstETH(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.accountingContract.write.claimRewardsWstETH(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.accountingContract, 'claimRewardsWstETH', [
+          nodeOperatorId,
+          amount,
+          shares,
+          proof,
+        ]),
     });
   }
 
-  public async claimBond(
-    props: WithToken<ClaimBondProps>,
-  ): Promise<TransactionResult> {
-    const { token } = props;
+  public async claimBond(props: WithToken<ClaimBondProps>) {
+    const { token, amount } = props;
 
-    if (props.amount === 0n) {
-      return this.pullRewards(props);
-    }
-
-    switch (token) {
-      case TOKENS.eth:
+    switch (true) {
+      case amount === 0n:
+        return this.pullRewards(props);
+      case token === TOKENS.eth:
         return this.claimBondUnstETH(props);
-      case TOKENS.steth:
+      case token === TOKENS.steth:
         return this.claimBondStETH(props);
-      case TOKENS.wsteth:
+      case token === TOKENS.wsteth:
         return this.claimBondWstETH(props);
       default:
         throw new SDKError({

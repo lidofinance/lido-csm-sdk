@@ -10,16 +10,14 @@ import { fetchJson, fetchWithFallback } from '../common/utils/fetch-json.js';
 import { onError } from '../common/utils/index.js';
 import { isDefined } from '../common/utils/is-defined.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
 import { fetchRewardsTree } from './fetch-rewards-tree.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
 import { OperatorRewards, RewardsReport } from './types.js';
 
-export class RewardsSDK extends CsmSDKModule<{
-  spending: SpendingSDK;
-  events: EventsSDK;
-}> {
+export class RewardsSDK extends CsmSDKModule {
+  private declare events: EventsSDK;
+
   private get distributorContract() {
     return this.core.contractCSFeeDistributor;
   }
@@ -137,7 +135,7 @@ export class RewardsSDK extends CsmSDKModule<{
   @Logger('Utils:')
   public async getLastReportTransactionHash() {
     // TODO: get events block range by ref-slot
-    const logs = await this.bus.getOrThrow('events').getRewardsReports();
+    const logs = await this.events.getRewardsReports();
     const lastLog = logs.at(-1);
 
     return lastLog?.transactionHash;

@@ -1,108 +1,42 @@
-import {
-  ERROR_CODE,
-  SDKError,
-  TransactionResult,
-} from '@lidofinance/lido-ethereum-sdk';
-import {
-  Address,
-  decodeEventLog,
-  getAbiItem,
-  isAddress,
-  toEventHash,
-  TransactionReceipt,
-  zeroAddress,
-} from 'viem';
-import { CSModuleAbi } from '../abi/index.js';
+import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
+import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import {
-  EMPTY_PERMIT,
-  NodeOperatorShortInfo,
-  PermitSignatureShort,
-  Proof,
-  TOKENS,
-  WithToken,
-} from '../common/index.js';
+import { Proof, TOKENS, WithToken } from '../common/index.js';
 import {
   fetchWithFallback,
   isDefined,
   onError,
-  parseDepositData,
-  stripPermit,
+  parseNodeOperatorAddedEvents,
 } from '../common/utils/index.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { SpendingSDK } from '../spending-sdk/spending-sdk.js';
-import { SignPermitOrApproveProps } from '../spending-sdk/types.js';
+import { prepCall, TxSDK } from '../tx-sdk/index.js';
+import { ReceiptLike } from '../tx-sdk/types.js';
 import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import { findProof } from './find-proof.js';
+import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props.js';
 import {
   AddressProof,
-  AddVettedNodeOperatorInnerProps,
   AddVettedNodeOperatorProps,
   ClaimCuvrveProps,
 } from './types.js';
 
-const NODE_OPERATOR_ADDED_EVENT = getAbiItem({
-  abi: CSModuleAbi,
-  name: 'NodeOperatorAdded',
-});
-const NODE_OPERATOR_ADDED_SIGNATURE = toEventHash(NODE_OPERATOR_ADDED_EVENT);
+export class IcsGateSDK extends CsmSDKModule {
+  private declare tx: TxSDK;
+  private declare operator: OperatorSDK;
 
-export class IcsGateSDK extends CsmSDKModule<{
-  spending: SpendingSDK;
-  operator: OperatorSDK;
-}> {
   private get icsContract() {
     return this.core.contractVettedGate;
   }
 
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorETH(
-    props: AddVettedNodeOperatorProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
-    const {
-      amount: value,
-      keysCount,
-      publicKeys,
-      signatures,
-      managementProperties,
-      proof,
-      referrer,
-      permit,
-      ...rest
-    } = await this.parseProps(props);
-
-    const args = [
-      keysCount,
-      publicKeys,
-      signatures,
-      managementProperties,
-      proof,
-      referrer,
-    ] as const;
-
-    return this.core.performTransaction({
-      ...rest,
-      getGasLimit: (options) =>
-        this.icsContract.estimateGas.addNodeOperatorETH(args, {
-          value,
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.icsContract.write.addNodeOperatorETH(args, {
-          value,
-          ...options,
-        }),
-      decodeResult: (receipt) => this.receiptParseEvents(receipt),
-    });
+  private async parseOperatorFromReceipt(receipt: ReceiptLike) {
+    const nodeOperatorId = await parseNodeOperatorAddedEvents(receipt);
+    return this.operator.getManagementProperties(nodeOperatorId);
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addNodeOperatorStETH(
-    props: AddVettedNodeOperatorProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async addNodeOperatorETH(props: AddVettedNodeOperatorProps) {
     const {
       amount,
       keysCount,
@@ -111,41 +45,33 @@ export class IcsGateSDK extends CsmSDKModule<{
       managementProperties,
       proof,
       referrer,
-      permit: _permit,
-      ...rest
-    } = await this.parseProps(props);
-
-    const { hash, permit } = await this.getPermit(
-      { ...rest, token: TOKENS.steth, amount } as SignPermitOrApproveProps,
-      _permit,
-    );
-    if (hash) return { hash };
-
-    const args = [
-      keysCount,
-      publicKeys,
-      signatures,
-      managementProperties,
       permit,
-      proof,
-      referrer,
-    ] as const;
+      ...rest
+    } = await parseAddVettedOperatorProps(props);
 
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.icsContract.estimateGas.addNodeOperatorStETH(args, options),
-      sendTransaction: (options) =>
-        this.icsContract.write.addNodeOperatorStETH(args, options),
-      decodeResult: (receipt) => this.receiptParseEvents(receipt),
+      call: () =>
+        prepCall(
+          this.icsContract,
+          'addNodeOperatorETH',
+          [
+            keysCount,
+            publicKeys,
+            signatures,
+            managementProperties,
+            proof,
+            referrer,
+          ],
+          amount,
+        ),
+      decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async addNodeOperatorWstETH(
-    props: AddVettedNodeOperatorProps,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async addNodeOperatorStETH(props: AddVettedNodeOperatorProps) {
     const {
       amount,
       keysCount,
@@ -154,39 +80,60 @@ export class IcsGateSDK extends CsmSDKModule<{
       managementProperties,
       proof,
       referrer,
-      permit: _permit,
+      permit,
       ...rest
-    } = await this.parseProps(props);
+    } = await parseAddVettedOperatorProps(props);
 
-    const { hash, permit } = await this.getPermit(
-      { ...rest, token: TOKENS.wsteth, amount } as SignPermitOrApproveProps,
-      _permit,
-    );
-    if (hash) return { hash };
+    return this.tx.perform({
+      ...rest,
+      spend: { token: TOKENS.steth, amount, permit },
+      call: ({ permit }) =>
+        prepCall(this.icsContract, 'addNodeOperatorStETH', [
+          keysCount,
+          publicKeys,
+          signatures,
+          managementProperties,
+          permit,
+          proof,
+          referrer,
+        ]),
+      decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
+    });
+  }
 
-    const args = [
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorWstETH(props: AddVettedNodeOperatorProps) {
+    const {
+      amount,
       keysCount,
       publicKeys,
       signatures,
       managementProperties,
-      permit,
       proof,
       referrer,
-    ] as const;
+      permit,
+      ...rest
+    } = await parseAddVettedOperatorProps(props);
 
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.icsContract.estimateGas.addNodeOperatorWstETH(args, options),
-      sendTransaction: (options) =>
-        this.icsContract.write.addNodeOperatorWstETH(args, options),
-      decodeResult: (receipt) => this.receiptParseEvents(receipt),
+      spend: { token: TOKENS.wsteth, amount, permit },
+      call: ({ permit }) =>
+        prepCall(this.icsContract, 'addNodeOperatorWstETH', [
+          keysCount,
+          publicKeys,
+          signatures,
+          managementProperties,
+          permit,
+          proof,
+          referrer,
+        ]),
+      decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
   }
 
-  public async addNodeOperator(
-    props: WithToken<AddVettedNodeOperatorProps>,
-  ): Promise<TransactionResult<NodeOperatorShortInfo>> {
+  public async addNodeOperator(props: WithToken<AddVettedNodeOperatorProps>) {
     const { token } = props;
     switch (token) {
       case TOKENS.eth:
@@ -201,74 +148,6 @@ export class IcsGateSDK extends CsmSDKModule<{
           code: ERROR_CODE.INVALID_ARGUMENT,
         });
     }
-  }
-
-  @Logger('Utils:')
-  private async parseProps(
-    props: AddVettedNodeOperatorProps,
-  ): Promise<AddVettedNodeOperatorInnerProps> {
-    const { keysCount, publicKeys, signatures } = parseDepositData(
-      props.depositData,
-    );
-    return {
-      ...props,
-      keysCount,
-      publicKeys,
-      signatures,
-      managementProperties: {
-        rewardAddress:
-          props.rewardsAddress && isAddress(props.rewardsAddress)
-            ? props.rewardsAddress
-            : zeroAddress,
-        managerAddress:
-          props.managerAddress && isAddress(props.managerAddress)
-            ? props.managerAddress
-            : zeroAddress,
-        extendedManagerPermissions: props.extendedManagerPermissions ?? false,
-      },
-      referrer:
-        props.referrer && isAddress(props.referrer)
-          ? props.referrer
-          : zeroAddress,
-    };
-  }
-
-  // FIXME: duplicate
-  @Logger('Utils:')
-  private async getPermit(
-    props: SignPermitOrApproveProps,
-    preparedPermit?: PermitSignatureShort,
-  ) {
-    if (preparedPermit) return { permit: stripPermit(preparedPermit) };
-    const result = await this.bus?.get('spending')?.signPermitOrApprove(props);
-    return {
-      hash: result?.hash,
-      permit: stripPermit(result?.permit ?? EMPTY_PERMIT),
-    };
-  }
-
-  @Logger('Utils:')
-  private async receiptParseEvents(
-    receipt: TransactionReceipt,
-  ): Promise<NodeOperatorShortInfo> {
-    for (const log of receipt.logs) {
-      // skips non-relevant events
-      if (log.topics[0] !== NODE_OPERATOR_ADDED_SIGNATURE) continue;
-      const parsedLog = decodeEventLog({
-        abi: [NODE_OPERATOR_ADDED_EVENT],
-        strict: true,
-        ...log,
-      });
-
-      const { nodeOperatorId } = parsedLog.args;
-      return this.bus
-        .getOrThrow('operator')
-        .getManagementProperties(nodeOperatorId);
-    }
-    throw new SDKError({
-      message: 'could not find NodeOperatorAdded event in transaction',
-      code: ERROR_CODE.TRANSACTION_ERROR,
-    });
   }
 
   @Logger('Views:')
@@ -344,21 +223,13 @@ export class IcsGateSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async claimCurve(props: ClaimCuvrveProps): Promise<TransactionResult> {
+  public async claimCurve(props: ClaimCuvrveProps) {
     const { nodeOperatorId, proof, ...rest } = props;
 
-    const args = [nodeOperatorId, proof] as const;
-
-    return this.core.performTransaction({
+    return this.tx.perform({
       ...rest,
-      getGasLimit: (options) =>
-        this.icsContract.estimateGas.claimBondCurve(args, {
-          ...options,
-        }),
-      sendTransaction: (options) =>
-        this.icsContract.write.claimBondCurve(args, {
-          ...options,
-        }),
+      call: () =>
+        prepCall(this.icsContract, 'claimBondCurve', [nodeOperatorId, proof]),
     });
   }
 }

@@ -2,10 +2,6 @@ import {
   ERROR_CODE,
   invariant,
   LidoSDKCore,
-  NOOP,
-  TransactionOptions,
-  TransactionResult,
-  withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
 import {
   Abi,
@@ -22,9 +18,9 @@ import {
   CSFeeDistributorAbi,
   CSFeeOracleAbi,
   CSModuleAbi,
+  CSMSatelliteAbi,
   CSParametersRegistryAbi,
   CSStrikesAbi,
-  CSMSatelliteAbi,
   HashConsensusAbi,
   PermissionlessGateAbi,
   StakingRouterAbi,
@@ -44,12 +40,7 @@ import {
   LINK_TYPE,
   MODULE_ID_BY_CHAIN,
 } from '../common/index.js';
-import {
-  CSM_ADDRESSES,
-  CsmCoreProps,
-  PerformTransactionOptions,
-  TransactionCallbackStage,
-} from './types.js';
+import { CSM_ADDRESSES, CsmCoreProps } from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
@@ -77,8 +68,12 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.core.logMode;
   }
 
-  public get client() {
+  public get publicClient() {
     return this.core.rpcProvider;
+  }
+
+  public get walletClient() {
+    return this.core.useWeb3Provider();
   }
 
   @Logger('Utils:')
@@ -97,15 +92,15 @@ export class CoreSDK extends CsmSDKCacheable {
     return address;
   }
 
-  public getContract<T extends Abi>(
-    contractName: CSM_CONTRACT_NAMES,
-    abi: T,
-  ): GetContractReturnType<T, WalletClient> {
+  public getContract<TAbi extends Abi>(
+    contractName: CSM_CONTRACT_NAMES | Erc20Tokens,
+    abi: TAbi,
+  ): GetContractReturnType<TAbi, WalletClient> {
     return getContract({
       address: this.getContractAddress(contractName),
       abi,
       client: {
-        public: this.core.rpcProvider,
+        public: this.publicClient,
         wallet: this.core.web3Provider as WalletClient,
       },
     });
@@ -301,124 +296,5 @@ export class CoreSDK extends CsmSDKCacheable {
       `https://ipfs.io/ipfs/${cid}`,
       `https://gateway.pinata.cloud/ipfs/${cid}`,
     ];
-  }
-
-  public async performTransaction<TDecodedResult = undefined>(
-    props: PerformTransactionOptions<TDecodedResult>,
-  ): Promise<TransactionResult<TDecodedResult>> {
-    // this guards against not having web3Provider
-    this.core.useWeb3Provider();
-    const {
-      callback = NOOP,
-      getGasLimit,
-      sendTransaction,
-      decodeResult,
-      waitForTransactionReceiptParameters = {},
-    } = props;
-    const account = await this.core.useAccount(props.account);
-    const isContract = await this.core.isContract(account.address);
-
-    let overrides: TransactionOptions = {
-      account,
-      chain: this.core.chain,
-      gas: undefined,
-      maxFeePerGas: undefined,
-      maxPriorityFeePerGas: undefined,
-    };
-
-    if (isContract) {
-      // passing these stub params prevent unnecessary possibly errorish RPC calls
-      overrides = {
-        ...overrides,
-        gas: 21000n,
-        maxFeePerGas: 1n,
-        maxPriorityFeePerGas: 1n,
-        nonce: 1,
-      };
-    } else {
-      await callback({ stage: TransactionCallbackStage.GAS_LIMIT });
-      const feeData = await this.core.getFeeData();
-      overrides.maxFeePerGas = feeData.maxFeePerGas;
-      overrides.maxPriorityFeePerGas = feeData.maxPriorityFeePerGas;
-      try {
-        overrides.gas = await getGasLimit({ ...overrides });
-      } catch {
-        // we retry without fees to see if tx will go trough
-        await withSDKError(
-          getGasLimit({
-            ...overrides,
-            maxFeePerGas: undefined,
-            maxPriorityFeePerGas: undefined,
-          }),
-          ERROR_CODE.TRANSACTION_ERROR,
-        );
-        throw this.core.error({
-          code: ERROR_CODE.TRANSACTION_ERROR,
-          message: 'Not enough ether for gas',
-        });
-      }
-    }
-
-    const customGas = await callback({
-      stage: TransactionCallbackStage.SIGN,
-      payload: { gas: overrides.gas },
-    });
-
-    if (typeof customGas === 'bigint') overrides.gas = customGas;
-
-    const hash = await withSDKError(
-      sendTransaction({
-        ...overrides,
-      }),
-      ERROR_CODE.TRANSACTION_ERROR,
-    );
-
-    if (isContract) {
-      await callback({ stage: TransactionCallbackStage.MULTISIG_DONE });
-      return { hash };
-    }
-
-    await callback({
-      stage: TransactionCallbackStage.RECEIPT,
-      payload: { hash },
-    });
-
-    const receipt = await withSDKError(
-      this.core.rpcProvider.waitForTransactionReceipt({
-        hash,
-        timeout: 120_000,
-        ...waitForTransactionReceiptParameters,
-      }),
-      ERROR_CODE.TRANSACTION_ERROR,
-    );
-
-    await callback({
-      stage: TransactionCallbackStage.CONFIRMATION,
-      payload: { receipt, hash },
-    });
-
-    const confirmations =
-      await this.core.rpcProvider.getTransactionConfirmations({
-        hash: receipt.transactionHash,
-      });
-
-    const result = await decodeResult?.(receipt);
-
-    await callback({
-      stage: TransactionCallbackStage.DONE,
-      payload: {
-        result: result as Awaited<TDecodedResult>,
-        confirmations,
-        receipt,
-        hash,
-      },
-    });
-
-    return {
-      hash,
-      receipt,
-      result,
-      confirmations,
-    };
   }
 }

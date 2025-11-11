@@ -4,7 +4,7 @@ import {
   NodeOperatorShortInfo,
   PermitSignatureShort,
 } from '../common/index.js';
-import { CommonTransactionProps } from '../core-sdk/types.js';
+import { CommonTransactionProps } from '../tx-sdk/types.js';
 
 export type AddNodeOperatorProps =
   CommonTransactionProps<NodeOperatorShortInfo> & {

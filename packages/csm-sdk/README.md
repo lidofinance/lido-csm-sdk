@@ -49,7 +49,7 @@ const operator = await sdk.operator.getInfo(69n);
 The `LidoSDKCsm` class aggregates the following modules, each responsible for a specific domain of the Lido CSM ecosystem:
 
 - **core**: Core SDK for shared logic, configuration, and utilities.
-- **spending**: Manage and query spending operations.
+- **tx**: Unified transaction handling with multi-wallet support (EOA, multisig, Abstract Accounts), permit/approve flow, and batch operations.
 - **module**: Query CSM status, share limit.
 - **accounting**: Access accounting data such as balances and supply.
 - **parameters**: Read a curve parameters.

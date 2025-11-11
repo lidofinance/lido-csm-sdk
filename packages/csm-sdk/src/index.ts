@@ -13,7 +13,7 @@ export * from './roles-sdk/index.js';
 export * from './operator-sdk/index.js';
 export * from './rewards-sdk/index.js';
 export * from './events-sdk/index.js';
-export * from './spending-sdk/index.js';
+export * from './tx-sdk/index.js';
 export * from './permissionless-gate-sdk/index.js';
 export * from './ics-gate-sdk/index.js';
 export * from './strikes-sdk/index.js';

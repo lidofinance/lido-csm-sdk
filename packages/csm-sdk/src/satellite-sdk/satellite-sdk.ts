@@ -12,9 +12,9 @@ import { packRoles } from '../events-sdk/merge.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { QueueBatchesPagination, SearchMode, Pagination } from './types.js';
 
-export class SatelliteSDK extends CsmSDKModule<{
-  module: ModuleSDK;
-}> {
+export class SatelliteSDK extends CsmSDKModule {
+  private declare module: ModuleSDK;
+
   private get satelliteContract() {
     return this.core.contractCSMSatellite;
   }
@@ -36,7 +36,7 @@ export class SatelliteSDK extends CsmSDKModule<{
   ): Promise<T[]> {
     const getNextOffset = pagination
       ? onePage
-      : byTotalCount(await this.bus.getOrThrow('module').getOperatorsCount());
+      : byTotalCount(await this.module.getOperatorsCount());
 
     return iteratePages(fetchPage, pagination, getNextOffset);
   }

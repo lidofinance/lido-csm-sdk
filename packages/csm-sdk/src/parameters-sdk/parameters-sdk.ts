@@ -11,7 +11,9 @@ import {
   StrikesConfig,
 } from './types.js';
 
-export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
+export class ParametersSDK extends CsmSDKModule {
+  private declare module: ModuleSDK;
+
   private get parametersContract() {
     return this.core.contractCSParametersRegistry;
   }
@@ -77,7 +79,7 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<KeyNumberValueInterval[]> {
     const [rewardsShare, digest] = await Promise.all([
       this.parametersContract.read.getRewardShareData([curveId]),
-      this.bus.getOrThrow('module').getDigest(),
+      this.module.getDigest(),
     ]);
 
     return rewardsShare.map((item) => ({

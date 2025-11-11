@@ -1,6 +1,6 @@
 import type { Address } from 'viem';
 import { NodeOperatorId, NodeOperatorShortInfo, ROLES } from '../common/index.js';
-import { CommonTransactionProps } from '../core-sdk/types.js';
+import { CommonTransactionProps } from '../tx-sdk/types.js';
 
 export type ChangeRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
   nodeOperatorId: NodeOperatorId;
