@@ -24,11 +24,11 @@ import {
 } from './types.js';
 import { hasNoInterception } from './utils.js';
 
-export class KeysWithStatusSDK extends CsmSDKModule {
-  private declare operator: OperatorSDK;
-  private declare strikes: StrikesSDK;
-  private declare events: EventsSDK;
-
+export class KeysWithStatusSDK extends CsmSDKModule<{
+  operator: OperatorSDK;
+  strikes: StrikesSDK;
+  events: EventsSDK;
+}> {
   @Logger('API:')
   @ErrorHandler()
   @Cache(60 * 1000)
@@ -121,9 +121,9 @@ export class KeysWithStatusSDK extends CsmSDKModule {
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
     const [info, unboundCount, keys, currentEpoch] = await Promise.all([
-      this.operator.getInfo(id),
-      this.operator.getUnboundKeysCount(id),
-      this.operator.getKeys(id),
+      this.bus.operator.getInfo(id),
+      this.bus.operator.getUnboundKeysCount(id),
+      this.bus.operator.getKeys(id),
       this.getCurrentEpoch(),
     ]);
     const [
@@ -133,11 +133,11 @@ export class KeysWithStatusSDK extends CsmSDKModule {
       clKeysStatus,
       keysWithStrikes,
     ] = await Promise.all([
-      this.events.getWithdrawalSubmittedKeys(id),
-      this.events.getRequestedToExitKeys(id),
+      this.bus.events.getWithdrawalSubmittedKeys(id),
+      this.bus.events.getRequestedToExitKeys(id),
       this.getApiKeysDuplicates(id, keys),
       this.getClKeysStatus(keys),
-      this.strikes.getKeysWithStrikes(id),
+      this.bus.strikes.getKeysWithStrikes(id),
     ]);
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;

@@ -9,17 +9,17 @@ import { ReceiptLike } from '../tx-sdk/types.js';
 import { parseAddOperatorProps } from './parse-add-operator-props.js';
 import { AddNodeOperatorProps } from './types.js';
 
-export class PermissionlessGateSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-  private declare operator: OperatorSDK;
-
+export class PermissionlessGateSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  operator: OperatorSDK;
+}> {
   private get permissionlessContract() {
     return this.core.contractPermissionlessGate;
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {
     const nodeOperatorId = await parseNodeOperatorAddedEvents(receipt);
-    return this.operator.getManagementProperties(nodeOperatorId);
+    return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
   @Logger('Call:')
@@ -36,7 +36,7 @@ export class PermissionlessGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -63,7 +63,7 @@ export class PermissionlessGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
@@ -93,7 +93,7 @@ export class PermissionlessGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>

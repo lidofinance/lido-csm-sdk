@@ -14,9 +14,7 @@ import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 import { calcBondBalance } from './calc-bond-balance.js';
 import { NodeOperatorInfo } from './types.js';
 
-export class OperatorSDK extends CsmSDKModule {
-  private declare parameters: ParametersSDK;
-
+export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   private get accountingContract() {
     return this.core.contractCSAccounting;
   }
@@ -90,7 +88,7 @@ export class OperatorSDK extends CsmSDKModule {
     if (info.usedPriorityQueue) return 0;
 
     const [{ priority, maxDeposits }, legacyQueue] = await Promise.all([
-      this.parameters.getQueueConfig(curveId),
+      this.bus.parameters.getQueueConfig(curveId),
       this.moduleContract.read.QUEUE_LEGACY_PRIORITY(),
     ]);
 

@@ -21,17 +21,17 @@ import {
   ClaimCuvrveProps,
 } from './types.js';
 
-export class IcsGateSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-  private declare operator: OperatorSDK;
-
+export class IcsGateSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  operator: OperatorSDK;
+}> {
   private get icsContract() {
     return this.core.contractVettedGate;
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {
     const nodeOperatorId = await parseNodeOperatorAddedEvents(receipt);
-    return this.operator.getManagementProperties(nodeOperatorId);
+    return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
   @Logger('Call:')
@@ -49,7 +49,7 @@ export class IcsGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddVettedOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -84,7 +84,7 @@ export class IcsGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddVettedOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
@@ -116,7 +116,7 @@ export class IcsGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddVettedOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
@@ -226,7 +226,7 @@ export class IcsGateSDK extends CsmSDKModule {
   public async claimCurve(props: ClaimCuvrveProps) {
     const { nodeOperatorId, proof, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.icsContract, 'claimBondCurve', [nodeOperatorId, proof]),
