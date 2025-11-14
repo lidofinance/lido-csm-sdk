@@ -195,7 +195,6 @@ export class EventsSDK extends CsmSDKModule {
     return logs.map((e) => e.args.pubkey).filter((k) => k !== undefined);
   }
 
-  // TODO: limit to 2 weeks
   @Logger('Events:')
   @ErrorHandler()
   public async getRequestedToExitKeys(
@@ -255,11 +254,19 @@ export class EventsSDK extends CsmSDKModule {
     const toBlock = await this.core.core.toBlockNumber({
       block: props?.toBlock ?? 'latest',
     });
-    const fromBlock = props?.fromBlock
-      ? await this.core.core.toBlockNumber({
-          block: props.fromBlock ?? 'latest',
-        })
-      : this.core.deploymentBlockNumber ?? toBlock - BigInt(step);
+
+    let fromBlock: bigint;
+    if (props?.fromBlock) {
+      fromBlock = await this.core.core.toBlockNumber({
+        block: props.fromBlock ?? 'latest',
+      });
+    } else if (props?.maxBlocksDepth !== undefined) {
+      const depthLimit = toBlock - props.maxBlocksDepth;
+      const deploymentBlock = this.core.deploymentBlockNumber ?? 0n;
+      fromBlock = depthLimit > deploymentBlock ? depthLimit : deploymentBlock;
+    } else {
+      fromBlock = this.core.deploymentBlockNumber ?? toBlock - BigInt(step);
+    }
 
     return {
       fromBlock,

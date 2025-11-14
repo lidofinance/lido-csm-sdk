@@ -7,6 +7,7 @@ import {
   CSM_CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
   KEY_STATUS,
+  MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
 import { compareLowercase } from '../common/utils/compare-lowercase.js';
@@ -133,8 +134,12 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       clKeysStatus,
       keysWithStrikes,
     ] = await Promise.all([
-      this.bus.events.getWithdrawalSubmittedKeys(id),
-      this.bus.events.getRequestedToExitKeys(id),
+      this.bus.events.getWithdrawalSubmittedKeys(id, {
+        maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
+      }),
+      this.bus.events.getRequestedToExitKeys(id, {
+        maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
+      }),
       this.getApiKeysDuplicates(id, keys),
       this.getClKeysStatus(keys),
       this.bus.strikes.getKeysWithStrikes(id),

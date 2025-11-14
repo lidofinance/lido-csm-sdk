@@ -1,6 +1,5 @@
-import { PermitSignatureShort } from '../types.js';
+import { PermitSignatureShort } from '../common/types.js';
 
-// TODO: move to tx-sdk package
 export const stripPermit = ({
   v,
   r,

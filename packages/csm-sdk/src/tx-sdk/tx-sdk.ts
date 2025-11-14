@@ -25,7 +25,6 @@ import {
   PermitSignatureShort,
 } from '../common/index.js';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
-import { stripPermit } from '../common/utils/strip-permit.js';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts.js';
 import {
   PerformCallOptions,
@@ -34,6 +33,7 @@ import {
 } from './internal-types.js';
 import { parseSpendingProps } from './parse-spending-props.js';
 import { prepCall } from './prep-call.js';
+import { stripPermit } from './strip-permit.js';
 import {
   AllowanceProps,
   AmountAndTokenProps,

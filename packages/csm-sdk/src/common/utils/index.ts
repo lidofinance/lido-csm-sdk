@@ -7,7 +7,6 @@ export * from './sort-events.js';
 export * from './split-keys.js';
 export * from './compare-lowercase.js';
 export * from './fetch-json.js';
-export * from './strip-permit.js';
 export * from './is-defined.js';
 export * from './is-hexadecimal-string.js';
 export * from './on-error.js';
