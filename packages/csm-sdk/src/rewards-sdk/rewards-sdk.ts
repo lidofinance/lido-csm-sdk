@@ -16,7 +16,11 @@ import {
 } from '../common/utils/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { FrameSDK } from '../frame-sdk/frame-sdk.js';
-import { epochToTimestamp } from '../frame-sdk/utils.js';
+import {
+  epochToTimestamp,
+  ESTIMATED_BLOCK_GAP,
+  slotToApproximateBlockNumber,
+} from '../frame-sdk/utils.js';
 import {
   KeyNumberValueInterval,
   ParametersSDK,
@@ -185,8 +189,20 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public async getLastReportTransactionHash() {
-    // TODO: get events block range by ref-slot
-    const logs = await this.bus.events.getRewardsReports();
+    const [config, lastRefSlot, currentBlock] = await Promise.all([
+      this.bus.frame.getConfig(),
+      this.bus.frame.getLastProcessedRefSlot(),
+      this.core.publicClient.getBlock({ blockTag: 'latest' }),
+    ]);
+
+    const estimatedBlock = slotToApproximateBlockNumber(
+      lastRefSlot,
+      config,
+      currentBlock,
+    );
+    const fromBlock = estimatedBlock - ESTIMATED_BLOCK_GAP;
+
+    const logs = await this.bus.events.getRewardsReports({ fromBlock });
     const lastLog = logs.at(-1);
 
     return lastLog?.transactionHash;
