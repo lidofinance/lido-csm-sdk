@@ -2,6 +2,7 @@ import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
+  CACHE_MID,
   CSM_CONTRACT_NAMES,
   SUPPORTED_VERSION_BY_CONTRACT,
 } from '../common/index.js';
@@ -106,7 +107,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(10 * 60 * 1000)
+  @Cache(CACHE_MID)
   private async getAllModulesDigests(): Promise<ModuleDigest[]> {
     const digests =
       await this.stakingRouterContract.read.getAllStakingModuleDigests();

@@ -2,6 +2,7 @@ import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
+  CACHE_LONG,
   CSM_CONTRACT_NAMES,
   NodeOperatorId,
   RewardProof,
@@ -47,7 +48,7 @@ export class RewardsSDK extends CsmSDKModule {
   }
 
   @Logger('API:')
-  @Cache(300 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
 

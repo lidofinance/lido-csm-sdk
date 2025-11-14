@@ -31,6 +31,7 @@ import {
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
 import {
+  CACHE_LONG,
   CSM_CONTRACT_ADDRESSES,
   CSM_CONTRACT_NAMES,
   CSM_SUPPORTED_CHAINS,
@@ -77,7 +78,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Utils:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public getContractAddress(
     contract: CSM_CONTRACT_NAMES | Erc20Tokens,
   ): Address {
@@ -107,7 +108,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSAccounting(): GetContractReturnType<
     typeof CSAccountingAbi,
     WalletClient
@@ -116,7 +117,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSEjector(): GetContractReturnType<
     typeof CSEjectorAbi,
     WalletClient
@@ -125,7 +126,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSFeeDistributor(): GetContractReturnType<
     typeof CSFeeDistributorAbi,
     WalletClient
@@ -137,7 +138,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSFeeOracle(): GetContractReturnType<
     typeof CSFeeOracleAbi,
     WalletClient
@@ -146,7 +147,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSModule(): GetContractReturnType<
     typeof CSModuleAbi,
     WalletClient
@@ -155,7 +156,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSParametersRegistry(): GetContractReturnType<
     typeof CSParametersRegistryAbi,
     WalletClient
@@ -167,7 +168,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSStrikes(): GetContractReturnType<
     typeof CSStrikesAbi,
     WalletClient
@@ -176,7 +177,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSExitPenalties(): GetContractReturnType<
     typeof CSExitPenaltiesAbi,
     WalletClient
@@ -188,7 +189,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractHashConsensus(): GetContractReturnType<
     typeof HashConsensusAbi,
     WalletClient
@@ -197,7 +198,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractPermissionlessGate(): GetContractReturnType<
     typeof PermissionlessGateAbi,
     WalletClient
@@ -209,7 +210,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractVettedGate(): GetContractReturnType<
     typeof VettedGateAbi,
     WalletClient
@@ -218,7 +219,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractStakingRouter(): GetContractReturnType<
     typeof StakingRouterAbi,
     WalletClient
@@ -227,7 +228,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractValidatorsExitBusOracle(): GetContractReturnType<
     typeof ValidatorsExitBusOracleAbi,
     WalletClient
@@ -239,7 +240,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractWithdrawalVault(): GetContractReturnType<
     typeof WithdrawalVaultAbi,
     WalletClient
@@ -251,7 +252,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_LONG)
   get contractCSMSatellite(): GetContractReturnType<
     typeof CSMSatelliteAbi,
     WalletClient

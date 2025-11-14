@@ -4,6 +4,7 @@ import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import {
+  CACHE_MID,
   CSM_CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
   KEY_STATUS,
@@ -32,7 +33,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 }> {
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async getApiKeys(pubkeys: Hex[]) {
     const keysApi = this.core.keysApiLink;
 
@@ -57,7 +58,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async getApiKeysDuplicates(
     nodeOperatorId: NodeOperatorId,
     pubkeys: Hex[],
@@ -85,7 +86,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async getClKeysStatus(
     pubkeys: Hex[],
   ): Promise<ClPreparedKey[] | null> {

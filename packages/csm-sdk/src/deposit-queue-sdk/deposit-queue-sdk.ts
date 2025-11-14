@@ -1,5 +1,8 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { DEFAULT_CLEAN_MAX_ITEMS } from '../common/constants/index.js';
+import {
+  CACHE_LONG,
+  DEFAULT_CLEAN_MAX_ITEMS,
+} from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CommonTransactionProps } from '../tx-sdk/types.js';
 import {
@@ -27,7 +30,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(10 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getLowestPriorityQueue(): Promise<bigint> {
     return this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
   }

@@ -1,4 +1,5 @@
 export * from './base.js';
+export * from './cache-durations.js';
 export * from './keys.js';
 export * from './links.js';
 export * from './operator-types.js';

@@ -1,7 +1,7 @@
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { NodeOperatorId, Proof } from '../common/index.js';
+import { CACHE_LONG, NodeOperatorId, Proof } from '../common/index.js';
 import {
   fetchWithFallback,
   isDefined,
@@ -37,7 +37,7 @@ export class StrikesSDK extends CsmSDKModule {
   }
 
   @Logger('API:')
-  @Cache(300 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
 

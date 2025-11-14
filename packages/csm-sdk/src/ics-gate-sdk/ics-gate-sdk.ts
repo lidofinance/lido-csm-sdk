@@ -2,7 +2,7 @@ import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { Proof, TOKENS, WithToken } from '../common/index.js';
+import { CACHE_LONG, Proof, TOKENS, WithToken } from '../common/index.js';
 import {
   fetchWithFallback,
   isDefined,
@@ -174,7 +174,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   }
 
   @Logger('API:')
-  @Cache(300 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
 

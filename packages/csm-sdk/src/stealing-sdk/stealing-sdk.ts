@@ -1,5 +1,6 @@
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CACHE_LONG } from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
@@ -48,7 +49,7 @@ export class StealingSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(1000 * 60 * 60)
+  @Cache(CACHE_LONG)
   private async getReportRole(): Promise<Address> {
     return this.moduleContract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
   }

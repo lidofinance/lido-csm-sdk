@@ -5,6 +5,7 @@ import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import {
   BondBalance,
+  CACHE_SHORT,
   NodeOperatorId,
   NodeOperatorShortInfo,
 } from '../common/index.js';
@@ -46,7 +47,7 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
     return this.accountingContract.read.getActualLockedBond([id]);
   }
 
-  @Cache(10 * 1000)
+  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
@@ -62,7 +63,7 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(10 * 1000)
+  @Cache(CACHE_SHORT)
   public async getKeys(id: NodeOperatorId, start = 0n, count?: bigint) {
     if (count === undefined) {
       const info = await this.getInfo(id);
