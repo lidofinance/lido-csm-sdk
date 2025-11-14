@@ -36,11 +36,11 @@ import {
 } from './types.js';
 import { getOperatorCurveIdByBlock } from './get-operator-curve-id.js';
 
-export class RewardsSDK extends CsmSDKModule {
-  private declare events: EventsSDK;
-  private declare frame: FrameSDK;
-  private declare parameters: ParametersSDK;
-
+export class RewardsSDK extends CsmSDKModule<{
+  events: EventsSDK;
+  parameters: ParametersSDK;
+  frame: FrameSDK;
+}> {
   private get distributorContract() {
     return this.core.contractCSFeeDistributor;
   }
@@ -186,7 +186,7 @@ export class RewardsSDK extends CsmSDKModule {
   @Logger('Utils:')
   public async getLastReportTransactionHash() {
     // TODO: get events block range by ref-slot
-    const logs = await this.events.getRewardsReports();
+    const logs = await this.bus.events.getRewardsReports();
     const lastLog = logs.at(-1);
 
     return lastLog?.transactionHash;
@@ -195,7 +195,7 @@ export class RewardsSDK extends CsmSDKModule {
   @Logger('Utils:')
   @ErrorHandler()
   public async getAllReports() {
-    const logs = await this.events.getDistributionLogUpdated();
+    const logs = await this.bus.events.getDistributionLogUpdated();
 
     const cids = logs.map((log) => log.args.logCid).filter(isDefined);
 
@@ -221,10 +221,10 @@ export class RewardsSDK extends CsmSDKModule {
       poolData, // Used to convert shares to ETH in a single call (current ratio vs block-specific rates)
     ] = await Promise.all([
       this.getAllReports(),
-      this.frame.getConfig(),
-      this.events.getOperatorCurveIdChanges(nodeOperatorId),
+      this.bus.frame.getConfig(),
+      this.bus.events.getOperatorCurveIdChanges(nodeOperatorId),
       this.getRewardsConfigsMap(),
-      this.parameters.getDefaultCurveId(),
+      this.bus.parameters.getDefaultCurveId(),
       this.getStethPoolData(),
     ]);
 
@@ -265,14 +265,15 @@ export class RewardsSDK extends CsmSDKModule {
   public async getRewardsConfigsMap(): Promise<
     Map<bigint, KeyNumberValueInterval[]>
   > {
-    const curvesCount = await this.parameters.getCurvesCount();
+    const curvesCount = await this.bus.parameters.getCurvesCount();
 
     // FIXME: remove cast to number
     const configs = await Promise.all(
       // curveId is zero-based
       Array.from({ length: Number(curvesCount) }, async (_, _curveId) => {
         const curveId = BigInt(_curveId);
-        const rewardsConfig = await this.parameters.getRewardsShare(curveId);
+        const rewardsConfig =
+          await this.bus.parameters.getRewardsShare(curveId);
 
         return [curveId, rewardsConfig] as const;
       }),
