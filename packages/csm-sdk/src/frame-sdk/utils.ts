@@ -31,7 +31,7 @@ export const slotToEpoch = (
   slot: number | bigint,
   { slotsPerEpoch }: Pick<FrameConfig, 'slotsPerEpoch'>,
 ) => {
-  return Number(BigInt(slot) / slotsPerEpoch);
+  return BigInt(slot) / slotsPerEpoch;
 };
 
 export const epochToSlot = (

@@ -3,6 +3,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_LONG,
+  CACHE_MID,
   CSM_CONTRACT_NAMES,
   NodeOperatorId,
   RewardProof,
@@ -50,7 +51,7 @@ export class RewardsSDK extends CsmSDKModule<{
   }
 
   @Logger('Views:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getStethPoolData(): Promise<StethPoolData> {
     const contract = this.core.getContract(
@@ -192,7 +193,7 @@ export class RewardsSDK extends CsmSDKModule<{
     const [config, lastRefSlot, currentBlock] = await Promise.all([
       this.bus.frame.getConfig(),
       this.bus.frame.getLastProcessedRefSlot(),
-      this.core.publicClient.getBlock({ blockTag: 'latest' }),
+      this.bus.frame.getLatestBlock(),
     ]);
 
     const estimatedBlock = slotToApproximateBlockNumber(
@@ -276,7 +277,7 @@ export class RewardsSDK extends CsmSDKModule<{
   }
 
   @Logger('Utils:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getRewardsConfigsMap(): Promise<
     Map<bigint, KeyNumberValueInterval[]>

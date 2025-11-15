@@ -1,5 +1,6 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger, Cache } from '../common/decorators/index.js';
+import { CACHE_LONG, CACHE_SHORT } from '../common/index.js';
 import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types.js';
 import {
   getFrameDuration,
@@ -19,14 +20,21 @@ export class FrameSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
-  @Cache(60 * 1000)
+  @Cache(CACHE_SHORT)
   @ErrorHandler()
   public async getLastProcessedRefSlot(): Promise<bigint> {
     return this.oracleContract.read.getLastProcessingRefSlot();
   }
 
   @Logger('Views:')
-  @Cache(30 * 60 * 1000)
+  @Cache(CACHE_SHORT)
+  @ErrorHandler()
+  public async getLatestBlock() {
+    return this.core.publicClient.getBlock({ blockTag: 'latest' });
+  }
+
+  @Logger('Views:')
+  @Cache(CACHE_LONG)
   @ErrorHandler()
   public async getConfig(): Promise<FrameConfig> {
     const [[slotsPerEpoch, secondsPerSlot, genesisTime], [, epochsPerFrame]] =
@@ -62,12 +70,24 @@ export class FrameSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  public async getCurrentEpoch(): Promise<bigint> {
+    const [config, { timestamp: latestBlockTimestamp }] = await Promise.all([
+      this.getConfig(),
+      this.getLatestBlock(),
+    ]);
+
+    const latestSlot = timestampToSlot(latestBlockTimestamp, config);
+    return slotToEpoch(latestSlot, config);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getCurentFrame(): Promise<CurrentFrameInfo> {
     const [config, lastRefSlot, { timestamp: latestBlockTimestamp }] =
       await Promise.all([
         this.getConfig(),
         this.getLastProcessedRefSlot(),
-        this.core.publicClient.getBlock({ blockTag: 'latest' }),
+        this.getLatestBlock(),
       ]);
 
     const slotsPerFrame = getSlotsPerFrame(config);
