@@ -159,7 +159,10 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         statuses.push(KEY_STATUS.SLASHED);
       }
 
-      if (withdrawalSubmitted?.includes(pubkey)) {
+      if (
+        withdrawalSubmitted?.includes(pubkey) ||
+        prefilled?.status === KEY_STATUS.WITHDRAWN
+      ) {
         return [...statuses, KEY_STATUS.WITHDRAWN];
       }
 
