@@ -2,6 +2,7 @@ import { NodeOperatorId } from '../common/types.js';
 import {
   isRewardsReportV1,
   isRewardsReportV2,
+  isRewardsReportV2Array,
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
@@ -84,6 +85,8 @@ export const getValidatorsRewards = (
   if (isRewardsReportV1(report)) {
     return getValidatorsRewardsV1(nodeOperatorId, report);
   } else if (isRewardsReportV2(report)) {
+    return getValidatorsRewardsV2(nodeOperatorId, [report]);
+  } else if (isRewardsReportV2Array(report)) {
     return getValidatorsRewardsV2(nodeOperatorId, report);
   } else {
     throw new Error('Unknown rewards report version');

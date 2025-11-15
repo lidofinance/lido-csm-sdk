@@ -22,29 +22,35 @@ import {
   ESTIMATED_BLOCK_GAP,
   slotToApproximateBlockNumber,
 } from '../frame-sdk/utils.js';
+import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
 import {
   KeyNumberValueInterval,
   ParametersSDK,
 } from '../parameters-sdk/index.js';
-import { convertSharesToEth } from './convert-shares-to-eth.js';
+import {
+  convertEthToShares,
+  convertSharesToEth,
+} from './convert-shares-to-eth.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
-import { getValidatorsRewards } from './get-validators-rewards.js';
+import { getOperatorCurveIdByBlock } from './get-operator-curve-id.js';
 import { getValidatorFee } from './get-validator-fee.js';
+import { getValidatorsRewards } from './get-validators-rewards.js';
 import { parseRewardsTree } from './parse-rewards-tree.js';
 import {
+  isRewardsReportV2Array,
   OperatorRewards,
   OperatorRewardsHistory,
   RewardsReport,
   RewardsTreeLeaf,
   StethPoolData,
 } from './types.js';
-import { getOperatorCurveIdByBlock } from './get-operator-curve-id.js';
 
 export class RewardsSDK extends CsmSDKModule<{
   events: EventsSDK;
   parameters: ParametersSDK;
   frame: FrameSDK;
+  keysWithStatus: KeysWithStatusSDK;
 }> {
   private get distributorContract() {
     return this.core.contractCSFeeDistributor;
@@ -53,15 +59,15 @@ export class RewardsSDK extends CsmSDKModule<{
   @Logger('Views:')
   @Cache(CACHE_MID)
   @ErrorHandler()
-  public async getStethPoolData(): Promise<StethPoolData> {
+  public async getStethPoolData(blockNumber?: bigint): Promise<StethPoolData> {
     const contract = this.core.getContract(
       CSM_CONTRACT_NAMES.stETH,
       stethSharesAbi,
     );
 
     const [totalPooledEther, totalShares] = await Promise.all([
-      contract.read.getTotalPooledEther(),
-      contract.read.getTotalShares(),
+      contract.read.getTotalPooledEther({ blockNumber }),
+      contract.read.getTotalShares({ blockNumber }),
     ]);
 
     return { totalPooledEther, totalShares };
@@ -69,9 +75,24 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  public async sharesToEth(amount: bigint) {
-    const poolData = await this.getStethPoolData();
+  /**
+   * Converts stETH shares to ETH amount using the current pool ratio.
+   * Also work for converting wstETH to stETH.
+   */
+  public async sharesToEth(amount: bigint, blockNumber?: bigint) {
+    const poolData = await this.getStethPoolData(blockNumber);
     return convertSharesToEth(amount, poolData);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  /**
+   * Converts ETH amount to stETH shares using the current pool ratio.
+   * Also work for converting stETH to wstETH.
+   */
+  public async ethToShares(amount: bigint, blockNumber?: bigint) {
+    const poolData = await this.getStethPoolData(blockNumber);
+    return convertEthToShares(amount, poolData);
   }
 
   @Logger('Utils:')
@@ -168,7 +189,10 @@ export class RewardsSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async getLastReport() {
     const logCid = await this.getLastReportCid();
-    return this.getReportByCid(logCid);
+    const report = await this.getReportByCid(logCid);
+
+    if (report && isRewardsReportV2Array(report)) return report.at(-1);
+    return report;
   }
 
   @Logger('Utils:')
@@ -183,7 +207,8 @@ export class RewardsSDK extends CsmSDKModule<{
       report,
     );
 
-    const distributed = await this.sharesToEth(shares);
+    const blockNumber = BigInt(report.blockstamp.block_number);
+    const distributed = await this.sharesToEth(shares, blockNumber);
 
     return { ...rest, distributed };
   }
@@ -228,27 +253,38 @@ export class RewardsSDK extends CsmSDKModule<{
   public async getOperatorRewardsHistory(
     nodeOperatorId: NodeOperatorId,
   ): Promise<OperatorRewardsHistory> {
-    // Fetch all data in parallel for better performance
     const [
       reports,
+      keys,
       frameConfig,
       curveIdChanges,
       rewardsConfigsMap,
       defaultCurveId,
-      poolData, // Used to convert shares to ETH in a single call (current ratio vs block-specific rates)
     ] = await Promise.all([
       this.getAllReports(),
+      this.bus.keysWithStatus.getClKeysStatus(nodeOperatorId),
       this.bus.frame.getConfig(),
       this.bus.events.getOperatorCurveIdChanges(nodeOperatorId),
       this.getRewardsConfigsMap(),
       this.bus.parameters.getDefaultCurveId(),
-      this.getStethPoolData(),
     ]);
 
     if (reports.length === 0) return [];
 
     const validatorsRewards = reports.flatMap((report) =>
       getValidatorsRewards(nodeOperatorId, report),
+    );
+
+    const uniqueBlocks = [
+      ...new Set(validatorsRewards.map((r) => r.blockNumber)),
+    ];
+    const poolDataByBlock = new Map(
+      await Promise.all(
+        uniqueBlocks.map(
+          async (blockNumber) =>
+            [blockNumber, await this.getStethPoolData(blockNumber)] as const,
+        ),
+      ),
     );
 
     const enhancedRewards = validatorsRewards.map((vr) => {
@@ -262,11 +298,17 @@ export class RewardsSDK extends CsmSDKModule<{
         curveId,
         rewardsConfigsMap,
       );
+      const pubkey = keys?.find(
+        (k) => k.validatorIndex === vr.validatorIndex,
+      )?.pubkey;
+
+      const poolData = poolDataByBlock.get(vr.blockNumber) as StethPoolData;
 
       return {
         ...vr,
         fee,
         curveId,
+        pubkey,
         startTimestamp: epochToTimestamp(vr.frame[0], frameConfig),
         endTimestamp: epochToTimestamp(vr.frame[1], frameConfig),
         receivedRewards: convertSharesToEth(vr.receivedShares, poolData),

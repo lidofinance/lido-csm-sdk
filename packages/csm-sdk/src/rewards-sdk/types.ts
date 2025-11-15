@@ -78,7 +78,10 @@ export type RewardsReportV2 = {
   >;
 };
 
-export type RewardsReport = RewardsReportV1 | RewardsReportV2[];
+export type RewardsReport =
+  | RewardsReportV1
+  | RewardsReportV2
+  | RewardsReportV2[];
 
 export type OperatorRewards = {
   distributed: bigint;
@@ -157,6 +160,8 @@ const rewardsReportV2Schema = z.array(
   }),
 );
 
+const rewardsReportV2ArraySchema = z.array(rewardsReportV2Schema);
+
 export const isRewardsReportV1 = (
   report: RewardsReport,
 ): report is RewardsReportV1 => {
@@ -165,8 +170,14 @@ export const isRewardsReportV1 = (
 
 export const isRewardsReportV2 = (
   report: RewardsReport,
-): report is RewardsReportV2[] => {
+): report is RewardsReportV2 => {
   return rewardsReportV2Schema.safeParse(report).success;
+};
+
+export const isRewardsReportV2Array = (
+  report: RewardsReport,
+): report is RewardsReportV2[] => {
+  return rewardsReportV2ArraySchema.safeParse(report).success;
 };
 
 export type ValidatorRewards = {
@@ -187,6 +198,7 @@ type ValidatorRewardsEntity = ValidatorRewards & {
   startTimestamp: number; // Unix timestamp
   endTimestamp: number; // Unix timestamp
   receivedRewards: bigint; // stETH rewards in ETH (converted from shares)
+  pubkey: Hex | undefined; // Validator public key
 };
 
 export type OperatorRewardsHistory = ValidatorRewardsEntity[];
