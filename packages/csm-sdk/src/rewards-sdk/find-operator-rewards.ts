@@ -1,12 +1,14 @@
 import { NodeOperatorId } from '../common/types.js';
 import {
+  isRewardsReportV1,
+  isRewardsReportV2,
+  isRewardsReportV2Array,
+} from './parse-report.js';
+import {
   OperatorRewards,
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
-  isRewardsReportV1,
-  isRewardsReportV2,
-  isRewardsReportV2Array,
 } from './types.js';
 
 const findOperatorRewardsV1 = (

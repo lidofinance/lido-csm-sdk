@@ -1,3 +1,4 @@
+import { JSONParse } from 'json-with-bigint';
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -8,6 +9,7 @@ import {
   findLeaf,
   findProof,
 } from './find-proof.js';
+import { parseStrikesTree } from './parse-tree.js';
 import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
 
 export class StrikesSDK extends CsmSDKModule {
@@ -45,6 +47,7 @@ export class StrikesSDK extends CsmSDKModule {
     return fetchTree<StrikesTreeLeaf>({
       urls,
       root,
+      parse: (data) => parseStrikesTree(JSONParse(data)),
     });
   }
 

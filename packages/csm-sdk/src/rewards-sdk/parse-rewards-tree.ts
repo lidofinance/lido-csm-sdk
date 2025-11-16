@@ -1,16 +1,12 @@
-// import { JSONParse } from 'json-with-bigint';
+import z from 'zod';
+import { createMerkleTreeSchema } from '../common/utils/index.js';
 
-import { StandardMerkleTreeData } from '../common/types.js';
-import { RewardsTreeLeaf } from './types.js';
+const RewardsLeaf = z.tuple([z.coerce.bigint(), z.coerce.bigint()]);
 
-const prepare = (text: string) =>
-  text.replace(
-    /"value"\s*:\s*\[\s*(\d+)\s*,\s*(\d+)\s*\]/gm,
-    '"value":["$1","$2"]',
-  );
+export type RewardsTreeLeaf = z.infer<typeof RewardsLeaf>;
 
-export const parseRewardsTree = (
-  text: string,
-): StandardMerkleTreeData<RewardsTreeLeaf> => {
-  return JSON.parse(prepare(text));
+const RewardsMerkleTreeSchema = createMerkleTreeSchema(RewardsLeaf);
+
+export const parseRewardsTree = (data: unknown) => {
+  return RewardsMerkleTreeSchema.parse(data);
 };

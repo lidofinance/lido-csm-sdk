@@ -1,24 +1,17 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { StandardMerkleTreeData } from '../types.js';
+import { StandardMerkleTreeData } from './create-merkle-tree-schema.js';
 import { compareLowercase } from './compare-lowercase.js';
 import { fetchOneOf, ParseFn } from './fetch-json.js';
 
-export const parseTree = <T extends any[]>(text: string) => {
-  const data: StandardMerkleTreeData<T> = JSON.parse(text);
-  return StandardMerkleTree.load(data);
-};
-
-export const customParseTree =
-  <T extends any[]>(parse: ParseFn<StandardMerkleTreeData<T>>) =>
+export const parseTree =
+  <T extends any[]>(parse: ParseFn<StandardMerkleTreeData<T>> = JSON.parse) =>
   (text: string) => {
     const data: StandardMerkleTreeData<T> = parse(text);
     return StandardMerkleTree.load(data);
   };
 
-export const verifyRoot =
-  <T extends any[]>(treeRoot: string) =>
-  (tree: StandardMerkleTree<T>) =>
-    compareLowercase(tree.root, treeRoot);
+export const verifyRoot = (treeRoot: string) => (tree: StandardMerkleTree<any>) =>
+  compareLowercase(tree.root, treeRoot);
 
 export const fetchTree = async <T extends any[]>({
   urls,
@@ -31,8 +24,8 @@ export const fetchTree = async <T extends any[]>({
 }): Promise<StandardMerkleTree<T> | null> => {
   const tree = await fetchOneOf({
     urls,
-    parse: parse ? customParseTree(parse) : parseTree<T>,
-    validate: verifyRoot<T>(root),
+    parse: parseTree(parse),
+    validate: verifyRoot(root),
   });
   return tree ?? null;
 };

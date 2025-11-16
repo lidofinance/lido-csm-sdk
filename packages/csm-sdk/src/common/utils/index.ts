@@ -13,3 +13,4 @@ export * from './is-hexadecimal-string.js';
 export * from './on-error.js';
 export * from './is-capability-supported.js';
 export * from './parse-node-operator-added-events.js';
+export * from './create-merkle-tree-schema.js';

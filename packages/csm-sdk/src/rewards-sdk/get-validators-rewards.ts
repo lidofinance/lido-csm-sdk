@@ -3,6 +3,8 @@ import {
   isRewardsReportV1,
   isRewardsReportV2,
   isRewardsReportV2Array,
+} from './parse-report.js';
+import {
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,

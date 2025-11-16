@@ -1,4 +1,5 @@
 import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
+import { JSONParse } from 'json-with-bigint';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -32,17 +33,16 @@ import {
   convertSharesToEth,
 } from './convert-shares-to-eth.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
-import { EMPTY_PROOF, findProofAndAmount } from './find-proof.js';
+import { findProofAndAmount } from './find-proof.js';
 import { getOperatorCurveIdByBlock } from './get-operator-curve-id.js';
 import { getValidatorFee } from './get-validator-fee.js';
 import { getValidatorsRewards } from './get-validators-rewards.js';
+import { isRewardsReportV2Array, parseReport } from './parse-report.js';
 import { parseRewardsTree } from './parse-rewards-tree.js';
 import {
-  isRewardsReportV2Array,
   OperatorRewards,
   OperatorRewardsHistory,
   RewardsReport,
-  RewardsTreeLeaf,
   StethPoolData,
 } from './types.js';
 
@@ -130,17 +130,17 @@ export class RewardsSDK extends CsmSDKModule<{
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchTree<RewardsTreeLeaf>({
+    return fetchTree({
       urls,
       root,
-      parse: parseRewardsTree,
+      parse: (data) => parseRewardsTree(JSONParse(data)),
     });
   }
 
   @Logger('Utils:')
   public async getProof(nodeOperatorId: NodeOperatorId) {
     const proofTree = await this.getProofTree();
-    if (!proofTree) return EMPTY_PROOF;
+
     return findProofAndAmount(proofTree, nodeOperatorId);
   }
 
@@ -182,7 +182,10 @@ export class RewardsSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async getReportByCid(cid: string) {
     const urls = this.getReportUrls(cid);
-    return fetchOneOf<RewardsReport>({ urls });
+    return fetchOneOf<RewardsReport>({
+      urls,
+      parse: (data) => parseReport(JSONParse(data)),
+    });
   }
 
   @Logger('Views:')
