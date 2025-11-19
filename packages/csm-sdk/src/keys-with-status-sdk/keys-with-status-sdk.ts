@@ -1,8 +1,6 @@
 import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
   CSM_CONTRACT_NAMES,
@@ -11,10 +9,14 @@ import {
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
-import { compareLowercase } from '../common/utils/compare-lowercase.js';
-import { fetchJson } from '../common/utils/fetch-json.js';
-import { isNotUnique, isUnique } from '../common/utils/is-defined.js';
+import {
+  compareLowercase,
+  fetchJson,
+  isNotUnique,
+  isUnique,
+} from '../common/utils/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
+import { FrameSDK } from '../frame-sdk/frame-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
 import { getClUrls, prepareKey } from './cl-chunks.js';
@@ -29,6 +31,7 @@ import { hasNoInterception } from './utils.js';
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
   strikes: StrikesSDK;
+  frame: FrameSDK;
   events: EventsSDK;
 }> {
   @Logger('API:')
@@ -61,8 +64,9 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Cache(CACHE_MID)
   public async getApiKeysDuplicates(
     nodeOperatorId: NodeOperatorId,
-    pubkeys: Hex[],
   ): Promise<Hex[] | null> {
+    const pubkeys = await this.bus.operator.getKeys(nodeOperatorId);
+
     const keys = await this.getApiKeys(pubkeys);
     if (!keys) return null;
 
@@ -88,11 +92,13 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @ErrorHandler()
   @Cache(CACHE_MID)
   public async getClKeysStatus(
-    pubkeys: Hex[],
+    nodeOperatorId: NodeOperatorId,
   ): Promise<ClPreparedKey[] | null> {
     if (!this.core.clApiUrl) {
       return null;
     }
+
+    const pubkeys = await this.bus.operator.getKeys(nodeOperatorId);
 
     const urls = getClUrls(pubkeys, this.core.clApiUrl);
     const results = await Promise.all(
@@ -102,23 +108,6 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     return results.flatMap(({ data }) => data.map(prepareKey));
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getCurrentEpoch() {
-    const [
-      [slotsPerEpoch, secondsPerSlot, genesisTime],
-      { timestamp: latestBlockTimestamp },
-    ] = await Promise.all([
-      this.core.contractHashConsensus.read.getChainConfig(),
-      this.core.publicClient.getBlock({ blockTag: 'latest' }),
-    ]);
-
-    const latestSlot = (latestBlockTimestamp - genesisTime) / secondsPerSlot;
-    const currentEpoch = latestSlot / slotsPerEpoch;
-
-    return currentEpoch;
-  }
-
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
@@ -126,7 +115,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       this.bus.operator.getInfo(id),
       this.bus.operator.getUnboundKeysCount(id),
       this.bus.operator.getKeys(id),
-      this.getCurrentEpoch(),
+      this.bus.frame.getCurrentEpoch(),
     ]);
     const [
       withdrawalSubmitted,
@@ -141,8 +130,8 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       this.bus.events.getRequestedToExitKeys(id, {
         maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
       }),
-      this.getApiKeysDuplicates(id, keys),
-      this.getClKeysStatus(keys),
+      this.getApiKeysDuplicates(id),
+      this.getClKeysStatus(id),
       this.bus.strikes.getKeysWithStrikes(id),
     ]);
 

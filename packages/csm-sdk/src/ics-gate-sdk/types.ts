@@ -5,13 +5,10 @@ import {
   NodeOperatorShortInfo,
   PermitSignatureShort,
   Proof,
-  StandardMerkleTreeData,
 } from '../common/index.js';
 import { CommonTransactionProps } from '../tx-sdk/types.js';
 
 export type AddressesTreeLeaf = [Address];
-
-export type AddressesTree = StandardMerkleTreeData<AddressesTreeLeaf>;
 
 export type AddressProof = {
   proof: Proof | null;

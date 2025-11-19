@@ -1,11 +1,14 @@
 import { NodeOperatorId } from '../common/types.js';
 import {
+  isRewardsReportV1,
+  isRewardsReportV2,
+  isRewardsReportV2Array,
+} from './parse-report.js';
+import {
   OperatorRewards,
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
-  isRewardsReportV1,
-  isRewardsReportV2,
 } from './types.js';
 
 const findOperatorRewardsV1 = (
@@ -13,7 +16,7 @@ const findOperatorRewardsV1 = (
   report: RewardsReportV1,
 ): OperatorRewards => {
   const threshold = report.threshold;
-  const operator = report.operators[nodeOperatorId.toString() as `${number}`];
+  const operator = report.operators[`${nodeOperatorId}`];
 
   if (!operator)
     return {
@@ -43,7 +46,7 @@ const findOperatorRewardsV2 = (
   reports: RewardsReportV2[],
 ): OperatorRewards => {
   const report = reports.at(-1);
-  const operator = report?.operators[nodeOperatorId.toString() as `${number}`];
+  const operator = report?.operators[`${nodeOperatorId}`];
 
   if (!operator)
     return {
@@ -75,6 +78,8 @@ export const findOperatorRewards = (
   if (isRewardsReportV1(report)) {
     return findOperatorRewardsV1(nodeOperatorId, report);
   } else if (isRewardsReportV2(report)) {
+    return findOperatorRewardsV2(nodeOperatorId, [report]);
+  } else if (isRewardsReportV2Array(report)) {
     return findOperatorRewardsV2(nodeOperatorId, report);
   } else {
     throw new Error('Unknown rewards report version');
