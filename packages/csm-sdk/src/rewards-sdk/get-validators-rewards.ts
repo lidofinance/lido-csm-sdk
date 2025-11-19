@@ -33,7 +33,7 @@ export const getValidatorsRewardsV1 = (
     ([validatorIndex, { perf, slashed }]) => {
       const performance = perf.assigned > 0 ? perf.included / perf.assigned : 0;
       return {
-        validatorIndex,
+        validatorIndex: validatorIndex as `${number}`,
         slashed,
         performance,
         isEligible: !slashed && performance >= threshold && performance > 0,
@@ -69,7 +69,7 @@ export const getValidatorsRewardsV2 = (
       ([validatorIndex, validatorData], indexInReport) => ({
         ...getBaseFields(report),
         indexInReport,
-        validatorIndex,
+        validatorIndex: validatorIndex as `${number}`,
         performance: validatorData.performance,
         threshold: validatorData.threshold,
         slashed: validatorData.slashed,

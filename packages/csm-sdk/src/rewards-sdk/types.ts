@@ -17,7 +17,7 @@ export type OperatorRewards = {
 
 export type ValidatorRewards = {
   indexInReport: number;
-  validatorIndex: string; // CL index
+  validatorIndex: `${number}`; // CL index
   performance: number; // Percentage (0-1)
   threshold: number; // Percentage (0-1)
   slashed: boolean;
@@ -27,7 +27,7 @@ export type ValidatorRewards = {
   blockNumber: bigint;
 };
 
-type ValidatorRewardsEntity = ValidatorRewards & {
+export type ValidatorRewardsEntity = ValidatorRewards & {
   curveId: bigint; // Curve ID applicable during the reward period
   fee: bigint; // Fee value from rewardsConfig
   startTimestamp: number; // Unix timestamp
