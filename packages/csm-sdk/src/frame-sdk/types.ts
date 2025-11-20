@@ -1,3 +1,10 @@
+export type FrameConfig = {
+  slotsPerEpoch: bigint;
+  secondsPerSlot: bigint;
+  genesisTime: bigint;
+  epochsPerFrame: bigint;
+};
+
 export type FrameInfo = {
   /**
    * Timestamp in seconds of last oracle report

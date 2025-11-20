@@ -1,18 +1,22 @@
 import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
+  CACHE_MID,
   CSM_CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
   KEY_STATUS,
+  MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
-import { compareLowercase } from '../common/utils/compare-lowercase.js';
-import { fetchJson } from '../common/utils/fetch-json.js';
-import { isNotUnique, isUnique } from '../common/utils/is-defined.js';
+import {
+  compareLowercase,
+  fetchJson,
+  isNotUnique,
+  isUnique,
+} from '../common/utils/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
+import { FrameSDK } from '../frame-sdk/frame-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
 import { getClUrls, prepareKey } from './cl-chunks.js';
@@ -24,14 +28,15 @@ import {
 } from './types.js';
 import { hasNoInterception } from './utils.js';
 
-export class KeysWithStatusSDK extends CsmSDKModule {
-  private declare operator: OperatorSDK;
-  private declare strikes: StrikesSDK;
-  private declare events: EventsSDK;
-
+export class KeysWithStatusSDK extends CsmSDKModule<{
+  operator: OperatorSDK;
+  strikes: StrikesSDK;
+  frame: FrameSDK;
+  events: EventsSDK;
+}> {
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async getApiKeys(pubkeys: Hex[]) {
     const keysApi = this.core.keysApiLink;
 
@@ -56,11 +61,12 @@ export class KeysWithStatusSDK extends CsmSDKModule {
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async getApiKeysDuplicates(
     nodeOperatorId: NodeOperatorId,
-    pubkeys: Hex[],
   ): Promise<Hex[] | null> {
+    const pubkeys = await this.bus.operator.getKeys(nodeOperatorId);
+
     const keys = await this.getApiKeys(pubkeys);
     if (!keys) return null;
 
@@ -84,13 +90,15 @@ export class KeysWithStatusSDK extends CsmSDKModule {
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async getClKeysStatus(
-    pubkeys: Hex[],
+    nodeOperatorId: NodeOperatorId,
   ): Promise<ClPreparedKey[] | null> {
     if (!this.core.clApiUrl) {
       return null;
     }
+
+    const pubkeys = await this.bus.operator.getKeys(nodeOperatorId);
 
     const urls = getClUrls(pubkeys, this.core.clApiUrl);
     const results = await Promise.all(
@@ -100,31 +108,14 @@ export class KeysWithStatusSDK extends CsmSDKModule {
     return results.flatMap(({ data }) => data.map(prepareKey));
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getCurrentEpoch() {
-    const [
-      [slotsPerEpoch, secondsPerSlot, genesisTime],
-      { timestamp: latestBlockTimestamp },
-    ] = await Promise.all([
-      this.core.contractHashConsensus.read.getChainConfig(),
-      this.core.publicClient.getBlock({ blockTag: 'latest' }),
-    ]);
-
-    const latestSlot = (latestBlockTimestamp - genesisTime) / secondsPerSlot;
-    const currentEpoch = latestSlot / slotsPerEpoch;
-
-    return currentEpoch;
-  }
-
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
     const [info, unboundCount, keys, currentEpoch] = await Promise.all([
-      this.operator.getInfo(id),
-      this.operator.getUnboundKeysCount(id),
-      this.operator.getKeys(id),
-      this.getCurrentEpoch(),
+      this.bus.operator.getInfo(id),
+      this.bus.operator.getUnboundKeysCount(id),
+      this.bus.operator.getKeys(id),
+      this.bus.frame.getCurrentEpoch(),
     ]);
     const [
       withdrawalSubmitted,
@@ -133,11 +124,15 @@ export class KeysWithStatusSDK extends CsmSDKModule {
       clKeysStatus,
       keysWithStrikes,
     ] = await Promise.all([
-      this.events.getWithdrawalSubmittedKeys(id),
-      this.events.getRequestedToExitKeys(id),
-      this.getApiKeysDuplicates(id, keys),
-      this.getClKeysStatus(keys),
-      this.strikes.getKeysWithStrikes(id),
+      this.bus.events.getWithdrawalSubmittedKeys(id, {
+        maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
+      }),
+      this.bus.events.getRequestedToExitKeys(id, {
+        maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
+      }),
+      this.getApiKeysDuplicates(id),
+      this.getClKeysStatus(id),
+      this.bus.strikes.getKeysWithStrikes(id),
     ]);
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
@@ -153,7 +148,10 @@ export class KeysWithStatusSDK extends CsmSDKModule {
         statuses.push(KEY_STATUS.SLASHED);
       }
 
-      if (withdrawalSubmitted?.includes(pubkey)) {
+      if (
+        withdrawalSubmitted?.includes(pubkey) ||
+        prefilled?.status === KEY_STATUS.WITHDRAWN
+      ) {
         return [...statuses, KEY_STATUS.WITHDRAWN];
       }
 

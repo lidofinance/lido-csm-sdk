@@ -9,12 +9,16 @@ import {
   NodeOperatorId,
   NodeOperatorInvite,
 } from '../common/index.js';
-import { isDefined, isUnique } from '../common/utils/is-defined.js';
-import { requestWithBlockStep } from '../common/utils/request-with-block-step.js';
-import { sortEventsByBlockNumber } from '../common/utils/sort-events.js';
+import {
+  isDefined,
+  isPropsDefined,
+  isUnique,
+  requestWithBlockStep,
+  sortEventsByBlockNumber,
+} from '../common/utils/index.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
-import { EventRangeProps } from './types.js';
+import { EventRangeProps, OperatorCurveIdChange } from './types.js';
 
 export class EventsSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -33,6 +37,14 @@ export class EventsSDK extends CsmSDKModule {
 
   private get oracleContract() {
     return this.core.contractCSFeeOracle;
+  }
+
+  private get distributorContract() {
+    return this.core.contractCSFeeDistributor;
+  }
+
+  private get accountingContract() {
+    return this.core.contractCSAccounting;
   }
 
   @Logger('Events:')
@@ -175,6 +187,24 @@ export class EventsSDK extends CsmSDKModule {
 
   @Logger('Events:')
   @ErrorHandler()
+  public async getDistributionLogUpdated(options?: EventRangeProps) {
+    if (this.disabled) return [];
+
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.distributorContract.getEvents.DistributionLogUpdated(stepProps),
+      ),
+    );
+
+    const logs = logResults.flat().sort(sortEventsByBlockNumber);
+
+    return logs;
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
   public async getWithdrawalSubmittedKeys(
     nodeOperatorId: NodeOperatorId,
     options?: EventRangeProps,
@@ -195,7 +225,6 @@ export class EventsSDK extends CsmSDKModule {
     return logs.map((e) => e.args.pubkey).filter((k) => k !== undefined);
   }
 
-  // TODO: limit to 2 weeks
   @Logger('Events:')
   @ErrorHandler()
   public async getRequestedToExitKeys(
@@ -247,6 +276,32 @@ export class EventsSDK extends CsmSDKModule {
       .sort((a, b) => Number(a - b));
   }
 
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getOperatorCurveIdChanges(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<OperatorCurveIdChange[]> {
+    if (this.disabled) return [];
+
+    const stepConfig = await this.parseEventsProps(options);
+
+    const logResults = await Promise.all(
+      requestWithBlockStep(stepConfig, (stepProps) =>
+        this.accountingContract.getEvents.BondCurveSet(
+          { nodeOperatorId },
+          stepProps,
+        ),
+      ),
+    );
+
+    return logResults
+      .flat()
+      .map(({ args: { curveId }, blockNumber }) => ({ curveId, blockNumber }))
+      .filter(isPropsDefined('curveId'))
+      .sort(sortEventsByBlockNumber);
+  }
+
   @Logger('Utils:')
   @ErrorHandler()
   private async parseEventsProps(props?: EventRangeProps) {
@@ -255,11 +310,19 @@ export class EventsSDK extends CsmSDKModule {
     const toBlock = await this.core.core.toBlockNumber({
       block: props?.toBlock ?? 'latest',
     });
-    const fromBlock = props?.fromBlock
-      ? await this.core.core.toBlockNumber({
-          block: props.fromBlock ?? 'latest',
-        })
-      : this.core.deploymentBlockNumber ?? toBlock - BigInt(step);
+
+    let fromBlock: bigint;
+    if (props?.fromBlock) {
+      fromBlock = await this.core.core.toBlockNumber({
+        block: props.fromBlock ?? 'latest',
+      });
+    } else if (props?.maxBlocksDepth !== undefined) {
+      const depthLimit = toBlock - props.maxBlocksDepth;
+      const deploymentBlock = this.core.deploymentBlockNumber ?? 0n;
+      fromBlock = depthLimit > deploymentBlock ? depthLimit : deploymentBlock;
+    } else {
+      fromBlock = this.core.deploymentBlockNumber ?? toBlock - BigInt(step);
+    }
 
     return {
       fromBlock,

@@ -13,9 +13,7 @@ import {
   PullRewardsProps,
 } from './types.js';
 
-export class BondSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-
+export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get accountingContract() {
     return this.core.contractCSAccounting;
   }
@@ -37,7 +35,7 @@ export class BondSDK extends CsmSDKModule {
   public async addBondETH(props: AddBondProps) {
     const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -55,7 +53,7 @@ export class BondSDK extends CsmSDKModule {
   public async addBondStETH(props: AddBondProps) {
     const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
@@ -73,7 +71,7 @@ export class BondSDK extends CsmSDKModule {
   public async addBondWstETH(props: AddBondProps) {
     const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
@@ -108,7 +106,7 @@ export class BondSDK extends CsmSDKModule {
   public async coverLockedBond(props: CoverLockedBondProps) {
     const { nodeOperatorId, amount, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -126,7 +124,7 @@ export class BondSDK extends CsmSDKModule {
   public async pullRewards(props: PullRewardsProps) {
     const { nodeOperatorId, shares, proof, ...rest } = parseClaimProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.accountingContract, 'pullFeeRewards', [
@@ -143,7 +141,7 @@ export class BondSDK extends CsmSDKModule {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
       parseClaimProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.accountingContract, 'claimRewardsUnstETH', [
@@ -161,7 +159,7 @@ export class BondSDK extends CsmSDKModule {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
       parseClaimProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.accountingContract, 'claimRewardsStETH', [
@@ -179,7 +177,7 @@ export class BondSDK extends CsmSDKModule {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
       parseClaimProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.accountingContract, 'claimRewardsWstETH', [

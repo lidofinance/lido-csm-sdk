@@ -4,9 +4,8 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
-import { CSM_CONTRACT_NAMES } from '../common/index.js';
+import { CACHE_MID, CSM_CONTRACT_NAMES } from '../common/index.js';
 import { FeeMonitoringApiClient } from './api-client.js';
-import { RELAY_CACHE_DURATION } from './constants.js';
 import {
   CheckOperatorKeysProps,
   FeeRecipientIssue,
@@ -34,7 +33,7 @@ export class FeeRecipientSDK extends CsmSDKModule {
   /**
    * Get the API client instance
    */
-  @Cache(1000 * 60)
+  @Cache(CACHE_MID)
   private getApiClient(): FeeMonitoringApiClient {
     if (!this.apiClient) {
       const baseUrl = this.core.feeMonitoringApiLink;
@@ -58,7 +57,7 @@ export class FeeRecipientSDK extends CsmSDKModule {
    */
   @Logger('Call:')
   @ErrorHandler()
-  @Cache(RELAY_CACHE_DURATION)
+  @Cache(CACHE_MID)
   public async getRelays(): Promise<RelayInfo[]> {
     const apiClient = this.getApiClient();
     return apiClient.getRelays();

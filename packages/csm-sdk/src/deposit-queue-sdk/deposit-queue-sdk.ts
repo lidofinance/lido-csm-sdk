@@ -1,5 +1,8 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { DEFAULT_CLEAN_MAX_ITEMS } from '../common/constants/index.js';
+import {
+  CACHE_LONG,
+  DEFAULT_CLEAN_MAX_ITEMS,
+} from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CommonTransactionProps } from '../tx-sdk/types.js';
 import {
@@ -17,17 +20,17 @@ import {
   RawDepositQueueBatchWithIndex,
 } from './types.js';
 
-export class DepositQueueSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-  private declare satellite: SatelliteSDK;
-
+export class DepositQueueSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  satellite: SatelliteSDK;
+}> {
   private get moduleContract() {
     return this.core.contractCSModule;
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(10 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getLowestPriorityQueue(): Promise<bigint> {
     return this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
   }
@@ -78,7 +81,7 @@ export class DepositQueueSDK extends CsmSDKModule {
 
     return iteratePages(
       async ({ offset: cursorIndex, limit }) => {
-        const batches = await this.satellite.getQueueBatchesPage(
+        const batches = await this.bus.satellite.getQueueBatchesPage(
           queuePriority,
           { cursorIndex, limit },
         );
@@ -101,7 +104,7 @@ export class DepositQueueSDK extends CsmSDKModule {
     );
 
     const depositableKeysCount =
-      await this.satellite.getNodeOperatorsDepositableKeysCount();
+      await this.bus.satellite.getNodeOperatorsDepositableKeysCount();
 
     return filterEmptyBatches(queueBatches, depositableKeysCount);
   }
@@ -115,7 +118,7 @@ export class DepositQueueSDK extends CsmSDKModule {
   ) {
     const { maxItems, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'cleanDepositQueue', [

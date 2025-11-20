@@ -60,13 +60,3 @@ export type RewardProof = {
 export type Rewards = RewardProof & {
   available: bigint; // steth amount
 };
-
-export type StandardMerkleTreeData<T extends any[]> = {
-  format: 'standard-v1';
-  tree: string[];
-  values: {
-    value: T;
-    treeIndex: number;
-  }[];
-  leafEncoding: string[];
-};

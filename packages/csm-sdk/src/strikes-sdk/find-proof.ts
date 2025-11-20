@@ -31,10 +31,11 @@ export const filterLeafsByNodeOperator = (
   tree: StandardMerkleTree<StrikesTreeLeaf>,
   id: NodeOperatorId,
 ): KeyWithStrikes[] => {
-  return filterLeafs(tree, (leaf) => BigInt(leaf[0]) === id).map(wrapLeaf);
+  return filterLeafs(tree, (leaf) => leaf[0] === id).map(wrapLeaf);
 };
 
-export const wrapLeaf = (leaf: StrikesTreeLeaf): KeyWithStrikes => ({
-  pubkey: leaf[1],
-  strikes: leaf[2].map(Number),
-});
+export const wrapLeaf = (leaf: StrikesTreeLeaf) =>
+  ({
+    pubkey: leaf[1],
+    strikes: leaf[2],
+  }) as KeyWithStrikes;

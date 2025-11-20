@@ -1,7 +1,7 @@
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CSM_CONTRACT_NAMES } from '../common/index.js';
+import { CACHE_MID, CSM_CONTRACT_NAMES } from '../common/index.js';
 import { compareLowercase, toHexString } from '../common/utils/index.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
@@ -15,10 +15,10 @@ import {
 } from './types.js';
 import { validateDepositData, validateDepositDataSync } from './validator.js';
 
-export class DepositDataSDK extends CsmSDKModule {
-  private declare keysWithStatus: KeysWithStatusSDK;
-  private declare keysCache?: KeysCacheSDK;
-
+export class DepositDataSDK extends CsmSDKModule<{
+  keysWithStatus?: KeysWithStatusSDK;
+  keysCache?: KeysCacheSDK;
+}> {
   /**
    * Parse deposit data JSON with enhanced error handling
    */
@@ -85,9 +85,9 @@ export class DepositDataSDK extends CsmSDKModule {
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(60 * 1000)
+  @Cache(CACHE_MID)
   public async checkUploadedKeys(pubkeys: Hex[]): Promise<ValidationError[]> {
-    const keys = await this.keysWithStatus?.getApiKeys(pubkeys);
+    const keys = await this.bus.keysWithStatus?.getApiKeys(pubkeys);
     const errors: ValidationError[] = [];
 
     if (!keys) return errors;
@@ -111,7 +111,7 @@ export class DepositDataSDK extends CsmSDKModule {
   @Logger('Utils:')
   @ErrorHandler()
   public checkCachedKeys(pubkeys: string[]): ValidationError[] {
-    const keysCache = this.keysCache;
+    const keysCache = this.bus.keysCache;
     const errors: ValidationError[] = [];
 
     if (!keysCache) return errors;

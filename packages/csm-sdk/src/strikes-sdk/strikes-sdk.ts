@@ -1,19 +1,16 @@
+import { JSONParse } from 'json-with-bigint';
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { NodeOperatorId, Proof } from '../common/index.js';
-import {
-  fetchWithFallback,
-  isDefined,
-  onError,
-} from '../common/utils/index.js';
-import { fetchAddressesTree } from './fetch-proofs-tree.js';
+import { CACHE_LONG, NodeOperatorId, Proof } from '../common/index.js';
+import { fetchTree, isDefined, onError } from '../common/utils/index.js';
 import {
   filterLeafsByNodeOperator,
   findLeaf,
   findProof,
 } from './find-proof.js';
-import { KeyWithStrikes } from './types.js';
+import { parseStrikesTree } from './parse-tree.js';
+import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
 
 export class StrikesSDK extends CsmSDKModule {
   private get strikesContract() {
@@ -37,7 +34,7 @@ export class StrikesSDK extends CsmSDKModule {
   }
 
   @Logger('API:')
-  @Cache(300 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
 
@@ -47,7 +44,11 @@ export class StrikesSDK extends CsmSDKModule {
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchWithFallback(urls, (url) => fetchAddressesTree(url, root));
+    return fetchTree<StrikesTreeLeaf>({
+      urls,
+      root,
+      parse: (data) => parseStrikesTree(JSONParse(data)),
+    });
   }
 
   @Logger('Utils:')

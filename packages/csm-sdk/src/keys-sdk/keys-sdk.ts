@@ -19,9 +19,7 @@ import {
   RemoveKeysProps,
 } from './types.js';
 
-export class KeysSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-
+export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get moduleContract() {
     return this.core.contractCSModule;
   }
@@ -43,7 +41,7 @@ export class KeysSDK extends CsmSDKModule {
       ...rest
     } = await parseAddKeysProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: ({ from }) =>
         prepCall(
@@ -68,7 +66,7 @@ export class KeysSDK extends CsmSDKModule {
       ...rest
     } = await parseAddKeysProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ from, permit }) =>
@@ -96,7 +94,7 @@ export class KeysSDK extends CsmSDKModule {
       ...rest
     } = await parseAddKeysProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ from, permit }) =>
@@ -138,7 +136,7 @@ export class KeysSDK extends CsmSDKModule {
   public async removeKeys(props: RemoveKeysProps) {
     const { nodeOperatorId, startIndex, keysCount, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'removeKeys', [
@@ -161,7 +159,7 @@ export class KeysSDK extends CsmSDKModule {
       ...rest
     } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -184,7 +182,7 @@ export class KeysSDK extends CsmSDKModule {
       ...rest
     } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -212,7 +210,7 @@ export class KeysSDK extends CsmSDKModule {
   public async migrateToPriorityQueue(props: MigrateKeysProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'migrateToPriorityQueue', [
@@ -226,7 +224,7 @@ export class KeysSDK extends CsmSDKModule {
   public async normalizeQueue(props: NormalizeQueueProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'updateDepositableValidatorsCount', [

@@ -1250,7 +1250,7 @@ __metadata:
     ts-jest: ^29.1.2
     typescript: ^5.8.3
     viem: ^2.26.0
-    zod: ^3.25.49
+    zod: ^4.1.12
   peerDependencies:
     "@lidofinance/lido-ethereum-sdk": ^4.4.0
     viem: ^2.26.0
@@ -11149,9 +11149,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.49":
-  version: 3.25.49
-  resolution: "zod@npm:3.25.49"
-  checksum: 7432d7ef54fc803fea121b20930a9d528c54d244c8c6549447b75443a3587b94745c5add5ac8550c9a77e0c7cda3ec3d6aff83e33adfc1dc9d34a266856dace8
+"zod@npm:^4.1.12":
+  version: 4.1.12
+  resolution: "zod@npm:4.1.12"
+  checksum: 91174acc7d2ca5572ad522643474ddd60640cf6877b5d76e5d583eb25e3c4072c6f5eb92ab94f231ec5ce61c6acdfc3e0166de45fb1005b1ea54986b026b765f
   languageName: node
   linkType: hard

@@ -11,10 +11,10 @@ import {
   WithRole,
 } from './types.js';
 
-export class RolesSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-  private declare operator: OperatorSDK;
-
+export class RolesSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  operator: OperatorSDK;
+}> {
   private get moduleContract() {
     return this.core.contractCSModule;
   }
@@ -24,7 +24,7 @@ export class RolesSDK extends CsmSDKModule {
   public async changeRewardsRole(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'changeNodeOperatorRewardAddress', [
@@ -40,7 +40,7 @@ export class RolesSDK extends CsmSDKModule {
   public async proposeManagerRole(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -57,7 +57,7 @@ export class RolesSDK extends CsmSDKModule {
   public async proposeRewardsRole(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -74,7 +74,7 @@ export class RolesSDK extends CsmSDKModule {
   public async resetManagerRole(props: ResetRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'resetNodeOperatorManagerAddress', [
@@ -89,7 +89,7 @@ export class RolesSDK extends CsmSDKModule {
   public async confirmRewardsRole(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -106,7 +106,7 @@ export class RolesSDK extends CsmSDKModule {
   public async confirmManagerRole(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -135,6 +135,6 @@ export class RolesSDK extends CsmSDKModule {
   }
 
   private prepareRoleResult(nodeOperatorId: bigint) {
-    return this.operator.getManagementProperties(nodeOperatorId);
+    return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 }

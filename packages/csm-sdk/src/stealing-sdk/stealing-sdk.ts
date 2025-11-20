@@ -1,16 +1,17 @@
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CACHE_LONG } from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { CancelProps, OperatorWithLockedBond, ReportProps } from './types.js';
 
-export class StealingSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-  private declare events: EventsSDK;
-  private declare operator: OperatorSDK;
-
+export class StealingSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  events: EventsSDK;
+  operator: OperatorSDK;
+}> {
   private get moduleContract() {
     return this.core.contractCSModule;
   }
@@ -20,7 +21,7 @@ export class StealingSDK extends CsmSDKModule {
   public async report(props: ReportProps) {
     const { nodeOperatorId, blockHash, amount, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'reportELRewardsStealingPenalty', [
@@ -36,7 +37,7 @@ export class StealingSDK extends CsmSDKModule {
   public async cancel(props: CancelProps) {
     const { nodeOperatorId, amount, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.moduleContract, 'cancelELRewardsStealingPenalty', [
@@ -48,7 +49,7 @@ export class StealingSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(1000 * 60 * 60)
+  @Cache(CACHE_LONG)
   private async getReportRole(): Promise<Address> {
     return this.moduleContract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
   }
@@ -63,11 +64,11 @@ export class StealingSDK extends CsmSDKModule {
   // TODO: optimize loading
   @Logger('Utils:')
   public async getOperatorsWithLockedBond(): Promise<OperatorWithLockedBond[]> {
-    const operators = await this.events.getOperatorsWithPenalties();
+    const operators = await this.bus.events.getOperatorsWithPenalties();
 
     return await Promise.all(
       operators.map((nodeOperatorId) =>
-        this.operator
+        this.bus.operator
           .getLockedBond(nodeOperatorId)
           .then((locked) => ({ nodeOperatorId, locked })),
       ),

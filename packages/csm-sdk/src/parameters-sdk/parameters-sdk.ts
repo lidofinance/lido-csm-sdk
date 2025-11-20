@@ -1,7 +1,8 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
-import { PERCENT_BASIS } from '../common/index.js';
+import { CACHE_LONG, CACHE_MID, PERCENT_BASIS } from '../common/index.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import {
   CurveParameters,
@@ -11,9 +12,7 @@ import {
   StrikesConfig,
 } from './types.js';
 
-export class ParametersSDK extends CsmSDKModule {
-  private declare module: ModuleSDK;
-
+export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get parametersContract() {
     return this.core.contractCSParametersRegistry;
   }
@@ -23,18 +22,35 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_LONG)
+  @ErrorHandler()
+  public async getCurvesCount(): Promise<bigint> {
+    return this.accountingContract.read.getCurvesCount();
+  }
+
+  @Logger('Views:')
+  @Cache(CACHE_MID)
+  @ErrorHandler()
+  public async getDefaultCurveId(): Promise<bigint> {
+    return this.accountingContract.read.DEFAULT_BOND_CURVE_ID();
+  }
+
+  @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getKeyRemovalFee(curveId: bigint): Promise<bigint> {
     return this.parametersContract.read.getKeyRemovalCharge([curveId]);
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getMaxWithdrawalRequestFee(curveId: bigint): Promise<bigint> {
     return this.parametersContract.read.getMaxWithdrawalRequestFee([curveId]);
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getKeysLimit(curveId: bigint): Promise<number> {
     const keysLimit = await this.parametersContract.read.getKeysLimit([
@@ -44,6 +60,7 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getELStealingPenalty(curveId: bigint): Promise<bigint> {
     return this.parametersContract.read.getElRewardsStealingAdditionalFine([
@@ -52,18 +69,21 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getBadPerformancePenalty(curveId: bigint): Promise<bigint> {
     return this.parametersContract.read.getBadPerformancePenalty([curveId]);
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getExitDelayPenalty(curveId: bigint): Promise<bigint> {
     return this.parametersContract.read.getExitDelayPenalty([curveId]);
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getAllowedExitDelay(curveId: bigint): Promise<number> {
     const value = await this.parametersContract.read.getAllowedExitDelay([
@@ -73,13 +93,14 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getRewardsShare(
     curveId: bigint,
   ): Promise<KeyNumberValueInterval[]> {
     const [rewardsShare, digest] = await Promise.all([
       this.parametersContract.read.getRewardShareData([curveId]),
-      this.module.getDigest(),
+      this.bus.module.getDigest(),
     ]);
 
     return rewardsShare.map((item) => ({
@@ -90,6 +111,7 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getPerformanceLewayConfig(
     curveId: bigint,
@@ -103,6 +125,7 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getPerformanceCoefficients(
     curveId: bigint,
@@ -113,6 +136,7 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getStrikesConfig(curveId: bigint): Promise<StrikesConfig> {
     const [lifetime, threshold] =
@@ -121,6 +145,7 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getQueueConfig(curveId: bigint): Promise<QueueConfig> {
     const [[priority, maxDeposits], lowestPriority] = await Promise.all([
@@ -131,6 +156,7 @@ export class ParametersSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
+  @Cache(CACHE_MID)
   @ErrorHandler()
   public async getBondConfig(
     curveId: bigint,

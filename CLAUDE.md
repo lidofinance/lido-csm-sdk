@@ -69,6 +69,63 @@ Key modules include:
   - `utils/` - Helper functions for data parsing and manipulation
   - `decorators/` - Method decorators for caching, logging, and error handling
 
+### BusRegistry & Inter-Module Communication
+The **BusRegistry** provides type-safe inter-module communication with a Proxy-based design:
+
+#### Architecture
+- **Proxy Pattern**: BusRegistry constructor returns a Proxy that intercepts property access
+- **Direct Property Access**: Enables `bus.moduleName.method()` instead of `bus.get('moduleName')?.method()`
+- **Type Safety**: Generic typing ensures TypeScript knows which modules are available
+- **Self-Registration**: Modules auto-register when passing a name to CsmSDKModule constructor
+
+#### How It Works
+1. **BusRegistry** (`bus-registry.ts`):
+   - Constructor returns Proxy wrapping the instance
+   - Proxy intercepts property access, checking:
+     - First: BusRegistry methods (`register`, `get`, `getOrThrow`)
+     - Then: Registered modules from internal registry
+   - Typed via `BusRegistry<TModules>` generic
+
+2. **CsmSDKModule** (`csm-sdk-module.ts`):
+   - Base class for all SDK modules
+   - Accepts optional `bus` parameter (creates new if not provided)
+   - Self-registers if `name` provided: `new ModuleSDK(props, 'moduleName')`
+   - Typed via generic: `extends CsmSDKModule<{ dep1: DepSDK, dep2: DepSDK }>`
+
+3. **LidoSDKCsm** (`lido-sdk-csm.ts`):
+   - Creates single shared BusRegistry
+   - Passes bus to all modules via `commonProps`
+   - Modules auto-register during construction
+
+#### Usage Examples
+```typescript
+// Module with dependencies declared via generic
+export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
+  async method() {
+    // Direct property access via Proxy
+    const config = await this.bus.parameters.getQueueConfig(curveId);
+  }
+}
+
+// Optional dependencies (module may not be registered)
+export class DepositDataSDK extends CsmSDKModule<{
+  keysWithStatus?: KeysWithStatusSDK;
+  keysCache?: KeysCacheSDK;
+}> {
+  async method(pubkeys: Hex[]) {
+    // Use optional chaining for modules that might not exist
+    const keys = await this.bus.keysWithStatus?.getApiKeys(pubkeys);
+    const isDuplicate = this.bus.keysCache?.isDuplicate(pubkey);
+  }
+}
+```
+
+#### Key Benefits
+- **Type-safe**: TypeScript enforces available modules and their methods
+- **Clean syntax**: Natural property access instead of getter methods
+- **Dependency injection**: No circular dependencies between modules
+- **Optional dependencies**: Flexible module composition with `?` operator
+
 ### Key Dependencies
 - **@lidofinance/lido-ethereum-sdk** - Core Lido SDK (peer dependency)
 - **viem** - Ethereum client library (peer dependency)
@@ -109,7 +166,7 @@ The tx-sdk automatically detects wallet type and routes to the appropriate flow:
 The primary method is `tx.perform()` which handles all transaction types:
 
 ```typescript
-return this.tx.perform({
+return this.bus.tx.perform({
   account,           // User's wallet address
   callback,          // Optional transaction lifecycle callbacks
   spend: {           // Optional spending configuration

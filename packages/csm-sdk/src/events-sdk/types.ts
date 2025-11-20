@@ -7,4 +7,12 @@ export type EventRangeProps = {
   step?: number;
   fromBlock?: BlockNumber | NonPendingBlockTag;
   toBlock?: BlockNumber | NonPendingBlockTag;
+  maxBlocksDepth?: bigint;
+};
+
+// Operator Curve ID Change
+
+export type OperatorCurveIdChange = {
+  curveId: bigint;
+  blockNumber: bigint;
 };

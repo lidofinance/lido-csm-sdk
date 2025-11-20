@@ -2,9 +2,9 @@ import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { Proof, TOKENS, WithToken } from '../common/index.js';
+import { CACHE_LONG, Proof, TOKENS, WithToken } from '../common/index.js';
 import {
-  fetchWithFallback,
+  fetchTree,
   isDefined,
   onError,
   parseNodeOperatorAddedEvents,
@@ -12,26 +12,26 @@ import {
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { ReceiptLike } from '../tx-sdk/types.js';
-import { fetchAddressesTree } from './fetch-proofs-tree.js';
 import { findProof } from './find-proof.js';
 import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props.js';
 import {
+  AddressesTreeLeaf,
   AddressProof,
   AddVettedNodeOperatorProps,
   ClaimCuvrveProps,
 } from './types.js';
 
-export class IcsGateSDK extends CsmSDKModule {
-  private declare tx: TxSDK;
-  private declare operator: OperatorSDK;
-
+export class IcsGateSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  operator: OperatorSDK;
+}> {
   private get icsContract() {
     return this.core.contractVettedGate;
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {
     const nodeOperatorId = await parseNodeOperatorAddedEvents(receipt);
-    return this.operator.getManagementProperties(nodeOperatorId);
+    return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
   @Logger('Call:')
@@ -49,7 +49,7 @@ export class IcsGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddVettedOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
@@ -84,7 +84,7 @@ export class IcsGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddVettedOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
@@ -116,7 +116,7 @@ export class IcsGateSDK extends CsmSDKModule {
       ...rest
     } = await parseAddVettedOperatorProps(props);
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
@@ -174,7 +174,7 @@ export class IcsGateSDK extends CsmSDKModule {
   }
 
   @Logger('API:')
-  @Cache(300 * 60 * 1000)
+  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
 
@@ -184,7 +184,10 @@ export class IcsGateSDK extends CsmSDKModule {
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchWithFallback(urls, (url) => fetchAddressesTree(url, root));
+    return fetchTree<AddressesTreeLeaf>({
+      urls,
+      root,
+    });
   }
 
   @Logger('Utils:')
@@ -226,7 +229,7 @@ export class IcsGateSDK extends CsmSDKModule {
   public async claimCurve(props: ClaimCuvrveProps) {
     const { nodeOperatorId, proof, ...rest } = props;
 
-    return this.tx.perform({
+    return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(this.icsContract, 'claimBondCurve', [nodeOperatorId, proof]),

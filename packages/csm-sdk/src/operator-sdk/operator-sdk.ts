@@ -5,6 +5,7 @@ import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import {
   BondBalance,
+  CACHE_SHORT,
   NodeOperatorId,
   NodeOperatorShortInfo,
 } from '../common/index.js';
@@ -14,9 +15,7 @@ import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 import { calcBondBalance } from './calc-bond-balance.js';
 import { NodeOperatorInfo } from './types.js';
 
-export class OperatorSDK extends CsmSDKModule {
-  private declare parameters: ParametersSDK;
-
+export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   private get accountingContract() {
     return this.core.contractCSAccounting;
   }
@@ -48,7 +47,7 @@ export class OperatorSDK extends CsmSDKModule {
     return this.accountingContract.read.getActualLockedBond([id]);
   }
 
-  @Cache(10 * 1000)
+  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
@@ -64,7 +63,7 @@ export class OperatorSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(10 * 1000)
+  @Cache(CACHE_SHORT)
   public async getKeys(id: NodeOperatorId, start = 0n, count?: bigint) {
     if (count === undefined) {
       const info = await this.getInfo(id);
@@ -90,7 +89,7 @@ export class OperatorSDK extends CsmSDKModule {
     if (info.usedPriorityQueue) return 0;
 
     const [{ priority, maxDeposits }, legacyQueue] = await Promise.all([
-      this.parameters.getQueueConfig(curveId),
+      this.bus.parameters.getQueueConfig(curveId),
       this.moduleContract.read.QUEUE_LEGACY_PRIORITY(),
     ]);
 

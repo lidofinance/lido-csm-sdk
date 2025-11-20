@@ -7,11 +7,7 @@ export {
   getRequiredRelays,
   hasValidRequiredRelayRegistration,
 } from './validators.js';
-export {
-  API_REQUEST_TIMEOUT,
-  DEFAULT_PAGE_LIMIT,
-  RELAY_CACHE_DURATION,
-} from './constants.js';
+export { API_REQUEST_TIMEOUT, DEFAULT_PAGE_LIMIT } from './constants.js';
 export type {
   RelayInfo,
   RelayRegistrationDetails,

@@ -42,5 +42,5 @@ const StatusMap: Record<CLStatus, KEY_STATUS> = {
   exited_unslashed: KEY_STATUS.WITHDRAWAL_PENDING,
   exited_slashed: KEY_STATUS.WITHDRAWAL_PENDING,
   withdrawal_possible: KEY_STATUS.WITHDRAWAL_PENDING,
-  withdrawal_done: KEY_STATUS.WITHDRAWAL_PENDING,
+  withdrawal_done: KEY_STATUS.WITHDRAWN,
 };
