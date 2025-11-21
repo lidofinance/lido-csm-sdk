@@ -61,11 +61,14 @@ export class TxSDK extends CsmSDKModule {
 
   @Logger('Views:')
   public async isAbstractAccount(account: Address): Promise<boolean> {
-    const capabilities = await this.core.walletClient.getCapabilities({
-      account,
-    });
-
-    return isCapabilitySupported(capabilities, this.core.chainId, 'atomic');
+    try {
+      const capabilities = await this.core.walletClient.getCapabilities({
+        account,
+      });
+      return isCapabilitySupported(capabilities, this.core.chainId, 'atomic');
+    } catch {
+      return false;
+    }
   }
 
   @Logger('Views:')
