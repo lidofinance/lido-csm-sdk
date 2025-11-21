@@ -51,6 +51,7 @@ Key modules include:
 - **deposit-queue-sdk** - Deposit queue pointers and batches
 - **deposit-data-sdk** - Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **stealing-sdk** - EL rewards stealing penalty management
+- **fees-monitoring-sdk** - Validator fee recipient monitoring and issue detection
 
 ### Common Infrastructure
 - `src/common/` - Shared utilities, constants, and primitives
@@ -58,6 +59,28 @@ Key modules include:
   - `constants/` - Contract addresses, roles, and other constants
   - `utils/` - Helper functions for data parsing and manipulation
   - `decorators/` - Method decorators for caching, logging, and error handling
+
+### Decorator Order Convention
+**Standard order (outermost to innermost):** `@Logger → @ErrorHandler → @Cache`
+
+```typescript
+@Logger('Views:')      // Outermost - logs all calls (including cache hits)
+@ErrorHandler()        // Middle - catches and transforms errors
+@Cache(CACHE_SHORT)    // Innermost - checks/stores cache
+public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo>
+```
+
+**Why this order:**
+- Decorators execute **bottom-to-top** (innermost first)
+- Logger tracks all calls for debugging/monitoring (executes first)
+- ErrorHandler catches errors from both cache and method execution
+- Cache only stores successful results (uses `.then()` without `.catch()`)
+- Errors are never cached regardless of decorator order
+
+**Benefits:**
+- Consistent logging for cache hit rate monitoring
+- Clear error handling boundaries
+- Prevents caching of error states
 
 ### Key Dependencies
 - **@lidofinance/lido-ethereum-sdk** - Core Lido SDK (peer dependency)

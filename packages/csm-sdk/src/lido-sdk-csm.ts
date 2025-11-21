@@ -6,7 +6,7 @@ import { CsmCoreProps } from './core-sdk/types.js';
 import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
 import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
-import { FeeRecipientSDK } from './fee-recipient-sdk/fee-recipient-sdk.js';
+import { FeesMonitoringSDK } from './fees-monitoring-sdk/fees-monitoring-sdk.js';
 import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk.js';
 import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk.js';
 import { KeysSDK } from './keys-sdk/keys-sdk.js';
@@ -45,7 +45,7 @@ export class LidoSDKCsm {
   readonly depositData: DepositDataSDK;
   readonly stealing: StealingSDK;
   readonly satellite: SatelliteSDK;
-  readonly feeRecipient: FeeRecipientSDK;
+  readonly feesMonitoring: FeesMonitoringSDK;
 
   constructor(props: CsmCoreProps) {
     const bus = new BusRegistry();
@@ -72,6 +72,6 @@ export class LidoSDKCsm {
     this.depositQueue = new DepositQueueSDK(commonProps);
     this.depositData = new DepositDataSDK(commonProps);
     this.stealing = new StealingSDK(commonProps);
-    this.feeRecipient = new FeeRecipientSDK(commonProps);
+    this.feesMonitoring = new FeesMonitoringSDK(commonProps);
   }
 }
