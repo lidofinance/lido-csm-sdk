@@ -31,7 +31,7 @@ export const fetchValidatorRegistrations = async (
     params.set('nodeOperatorId', nodeOperatorId.toString());
   }
 
-  const url = `${baseUrl}/api/v1/relays/validators-registration?${params}`;
+  const url = `${baseUrl}/v1/relays/validators-registration?${params}`;
 
   const data = await fetchJson<ValidatorRegistrationResponse>(url, {
     method: 'GET',
