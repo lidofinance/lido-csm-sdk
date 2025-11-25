@@ -60,6 +60,7 @@ Key modules include:
 - **deposit-queue-sdk** - Deposit queue pointers and batches
 - **deposit-data-sdk** - Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **stealing-sdk** - EL rewards stealing penalty management
+- **fees-monitoring-sdk** - Validator fee recipient monitoring and issue detection
 - **satellite-sdk** - Helper for querying operator IDs by address and reading deposit queue batches
 
 ### Common Infrastructure

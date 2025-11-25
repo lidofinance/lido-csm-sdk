@@ -126,6 +126,16 @@
       "default": "./dist/cjs/deposit-data-sdk/index.js",
       "types": "./dist/types/deposit-data-sdk/index.d.ts"
     },
+    "./fees-monitoring-sdk": {
+      "import": "./dist/esm/fees-monitoring-sdk/index.js",
+      "default": "./dist/cjs/fees-monitoring-sdk/index.js",
+      "types": "./dist/types/fees-monitoring-sdk/index.d.ts"
+    },
+    "./keys-cache-sdk": {
+      "import": "./dist/esm/keys-cache-sdk/index.js",
+      "default": "./dist/cjs/keys-cache-sdk/index.js",
+      "types": "./dist/types/keys-cache-sdk/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -195,6 +205,12 @@
       ],
       "deposit-data-sdk": [
         "./dist/types/deposit-data-sdk/index.d.ts"
+      ],
+      "fees-monitoring-sdk": [
+        "./dist/types/fees-monitoring-sdk/index.d.ts"
+      ],
+      "keys-cache-sdk": [
+        "./dist/types/keys-cache-sdk/index.d.ts"
       ]
     }
   },
