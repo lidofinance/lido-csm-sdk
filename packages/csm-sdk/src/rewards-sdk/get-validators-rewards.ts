@@ -11,10 +11,11 @@ import {
   ValidatorRewards,
 } from './types.js';
 
-// TODO: parse as bigint
+const DEFAULT_REWARD_SHARE = 0.5834;
+
 const getBaseFields = (report: RewardsReportV1 | RewardsReportV2) => ({
-  blockNumber: BigInt(report.blockstamp.block_number),
-  refSlot: BigInt(report.blockstamp.ref_slot),
+  blockNumber: report.blockstamp.block_number,
+  refSlot: report.blockstamp.ref_slot,
   frame: report.frame,
 });
 
@@ -52,8 +53,9 @@ export const getValidatorsRewardsV1 = (
     performance: v.performance,
     slashed: v.slashed,
     threshold,
-    receivedShares: v.isEligible ? rewardPerValidator : 0n, // FIXME: continously subtract to prevent rounding issues
-    fee: 0n, // Will be calculated in getOperatorRewardsHistory
+    // FIXME: continously subtract to prevent rounding issues
+    receivedShares: v.isEligible ? rewardPerValidator : 0n,
+    rewardShare: DEFAULT_REWARD_SHARE,
   }));
 };
 
@@ -73,8 +75,8 @@ export const getValidatorsRewardsV2 = (
         performance: validatorData.performance,
         threshold: validatorData.threshold,
         slashed: validatorData.slashed,
-        receivedShares: BigInt(validatorData.distributed_rewards.toString()),
-        fee: 0n, // Will be calculated in getOperatorRewardsHistory
+        receivedShares: validatorData.distributed_rewards,
+        rewardShare: validatorData.rewards_share,
       }),
     );
   });

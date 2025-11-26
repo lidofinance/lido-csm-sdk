@@ -1,4 +1,3 @@
-import { JSONParse } from 'json-with-bigint';
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -29,7 +28,6 @@ export class StrikesSDK extends CsmSDKModule {
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    // TODO: fallback
     return this.core.getIpfsUrls(cid).filter(isDefined);
   }
 
@@ -44,11 +42,7 @@ export class StrikesSDK extends CsmSDKModule {
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchTree<StrikesTreeLeaf>({
-      urls,
-      root,
-      parse: (data) => parseStrikesTree(JSONParse(data)),
-    });
+    return fetchTree<StrikesTreeLeaf>({ urls, root, parse: parseStrikesTree });
   }
 
   @Logger('Utils:')

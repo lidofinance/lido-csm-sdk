@@ -4,13 +4,14 @@ import {
   DEFAULT_CLEAN_MAX_ITEMS,
 } from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
+import { bigIntRange } from '../common/utils/bigint-range.js';
 import {
   byNextBatchIndex,
   iteratePages,
   SatelliteSDK,
 } from '../satellite-sdk/index.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
+import { CommonTransactionProps } from '../tx-sdk/types.js';
 import { filterEmptyBatches } from './filter-batches.js';
 import { parseBatch } from './parse-batch.js';
 import {
@@ -51,8 +52,8 @@ export class DepositQueueSDK extends CsmSDKModule<{
   public async getQueuesPointers(): Promise<DepositQueuePointer[]> {
     const queuesCount = await this.getLowestPriorityQueue();
     return Promise.all(
-      Array.from({ length: Number(queuesCount) }, (_, i) =>
-        this.getQueuePointers(i),
+      [...bigIntRange(queuesCount)].map((i) =>
+        this.getQueuePointers(Number(i)),
       ),
     );
   }
@@ -98,8 +99,8 @@ export class DepositQueueSDK extends CsmSDKModule<{
     const lowestPriorityQueue = await this.getLowestPriorityQueue();
 
     const queueBatches = await Promise.all(
-      Array.from({ length: Number(lowestPriorityQueue) + 1 }, (_, priority) =>
-        this.getBatchesInQueue(priority),
+      [...bigIntRange(lowestPriorityQueue + 1n)].map((priority) =>
+        this.getBatchesInQueue(Number(priority)),
       ),
     );
 

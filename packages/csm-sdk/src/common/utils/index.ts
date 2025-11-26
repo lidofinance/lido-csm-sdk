@@ -1,3 +1,4 @@
+export * from './bigint-range.js';
 export * from './clear-empty-address.js';
 export * from './is-bigint.js';
 export * from './parse-deposit-data.js';

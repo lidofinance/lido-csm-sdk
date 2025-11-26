@@ -9,6 +9,7 @@ export type {
 } from './parse-report.js';
 
 export type OperatorRewards = {
+  shares: bigint;
   distributed: bigint;
   validatorsCount: number;
   validatorsOverThresholdCount: number;
@@ -25,10 +26,10 @@ export type ValidatorRewards = {
   frame: [number, number]; // epochs [start, end]
   refSlot: bigint;
   blockNumber: bigint;
+  rewardShare: number; // Percentage (0-1)
 };
 
 export type ValidatorRewardsEntity = ValidatorRewards & {
-  curveId: bigint; // Curve ID applicable during the reward period
   fee: bigint; // Fee value from rewardsConfig
   startTimestamp: number; // Unix timestamp
   endTimestamp: number; // Unix timestamp
@@ -37,8 +38,3 @@ export type ValidatorRewardsEntity = ValidatorRewards & {
 };
 
 export type OperatorRewardsHistory = ValidatorRewardsEntity[];
-
-export type StethPoolData = {
-  totalPooledEther: bigint;
-  totalShares: bigint;
-};
