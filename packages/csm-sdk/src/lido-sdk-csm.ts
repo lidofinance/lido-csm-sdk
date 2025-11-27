@@ -54,7 +54,7 @@ export class LidoSDKCsm {
     const commonProps = { ...props, core: this.core, bus };
     this.tx = new TxSDK(commonProps, 'tx');
     this.module = new ModuleSDK(commonProps, 'module');
-    this.accounting = new AccountingSDK(commonProps);
+    this.accounting = new AccountingSDK(commonProps, 'accounting');
     this.permissionlessGate = new PermissionlessGateSDK(commonProps);
     this.icsGate = new IcsGateSDK(commonProps);
     this.parameters = new ParametersSDK(commonProps, 'parameters');

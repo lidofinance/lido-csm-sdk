@@ -10,8 +10,9 @@ export const parseTree =
     return StandardMerkleTree.load(data);
   };
 
-export const verifyRoot = (treeRoot: string) => (tree: StandardMerkleTree<any>) =>
-  compareLowercase(tree.root, treeRoot);
+export const verifyRoot =
+  (treeRoot: string) => (tree: StandardMerkleTree<any>) =>
+    compareLowercase(tree.root, treeRoot);
 
 export const fetchTree = async <T extends any[]>({
   urls,

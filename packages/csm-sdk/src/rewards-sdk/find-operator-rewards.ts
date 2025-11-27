@@ -11,20 +11,21 @@ import {
   RewardsReportV2,
 } from './types.js';
 
+const EMPTY_REWARDS: Omit<OperatorRewards, 'distributed'> = {
+  shares: 0n,
+  validatorsCount: 0,
+  validatorsOverThresholdCount: 0,
+  threshold: 0,
+};
+
 const findOperatorRewardsV1 = (
   nodeOperatorId: NodeOperatorId,
   report: RewardsReportV1,
-): OperatorRewards => {
+) => {
   const threshold = report.threshold;
   const operator = report.operators[`${nodeOperatorId}`];
 
-  if (!operator)
-    return {
-      distributed: 0n,
-      validatorsCount: 0,
-      validatorsOverThresholdCount: 0,
-      threshold,
-    };
+  if (!operator) return { ...EMPTY_REWARDS, threshold };
 
   const validators = Object.values(operator.validators);
 
@@ -34,7 +35,7 @@ const findOperatorRewardsV1 = (
   );
 
   return {
-    distributed: BigInt(operator.distributed.toString()),
+    shares: operator.distributed,
     validatorsCount: validators.length,
     validatorsOverThresholdCount: overThreshold.length,
     threshold,
@@ -44,17 +45,11 @@ const findOperatorRewardsV1 = (
 const findOperatorRewardsV2 = (
   nodeOperatorId: NodeOperatorId,
   reports: RewardsReportV2[],
-): OperatorRewards => {
+) => {
   const report = reports.at(-1);
   const operator = report?.operators[`${nodeOperatorId}`];
 
-  if (!operator)
-    return {
-      distributed: 0n,
-      validatorsCount: 0,
-      validatorsOverThresholdCount: 0,
-      threshold: 0,
-    };
+  if (!operator) return EMPTY_REWARDS;
 
   const validators = Object.values(operator.validators);
 
@@ -64,7 +59,7 @@ const findOperatorRewardsV2 = (
   );
 
   return {
-    distributed: BigInt(operator.distributed_rewards.toString()),
+    shares: operator.distributed_rewards,
     validatorsCount: validators.length,
     validatorsOverThresholdCount: overThreshold.length,
     threshold: 0, // V2 uses threshold 0
@@ -74,7 +69,7 @@ const findOperatorRewardsV2 = (
 export const findOperatorRewards = (
   nodeOperatorId: NodeOperatorId,
   report: RewardsReport,
-): OperatorRewards => {
+): Omit<OperatorRewards, 'distributed'> => {
   if (isRewardsReportV1(report)) {
     return findOperatorRewardsV1(nodeOperatorId, report);
   } else if (isRewardsReportV2(report)) {

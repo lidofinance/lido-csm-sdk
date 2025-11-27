@@ -1,3 +1,4 @@
+import { JSONParse } from 'json-with-bigint';
 import z from 'zod';
 import { createMerkleTreeSchema } from '../common/utils/index.js';
 
@@ -7,6 +8,5 @@ export type RewardsTreeLeaf = z.infer<typeof RewardsLeaf>;
 
 const RewardsMerkleTreeSchema = createMerkleTreeSchema(RewardsLeaf);
 
-export const parseRewardsTree = (data: unknown) => {
-  return RewardsMerkleTreeSchema.parse(data);
-};
+export const parseRewardsTree = (data: string) =>
+  RewardsMerkleTreeSchema.parse(JSONParse(data));

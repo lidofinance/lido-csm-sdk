@@ -20,6 +20,7 @@ import {
   ShareLimitInfo,
   ShareLimitStatus,
 } from './types.js';
+import { bigIntRange } from '../common/utils/bigint-range.js';
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -154,8 +155,8 @@ export class ModuleSDK extends CsmSDKModule {
   public async getQueues() {
     const queuesCount = await this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
     const pointers = await Promise.all(
-      Array.from({ length: Number(queuesCount) }, (_, i) =>
-        this.moduleContract.read.depositQueuePointers([BigInt(i)]),
+      [...bigIntRange(queuesCount)].map((i) =>
+        this.moduleContract.read.depositQueuePointers([i]),
       ),
     );
     return pointers.map(([head, tail]) => ({ head, tail }));

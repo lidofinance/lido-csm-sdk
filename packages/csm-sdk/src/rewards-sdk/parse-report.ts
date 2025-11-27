@@ -1,3 +1,4 @@
+import { JSONParse } from 'json-with-bigint';
 import { z } from 'zod';
 
 export type RewardsReport = z.infer<typeof RewardsReportSchema>;
@@ -6,11 +7,11 @@ export type RewardsReportV2 = z.infer<typeof RewardsReportV2Schema>;
 
 const BlockstampSchema = z.object({
   block_hash: z.string(),
-  block_number: z.number(),
+  block_number: z.coerce.bigint(),
   block_timestamp: z.number(),
-  ref_epoch: z.number(),
-  ref_slot: z.number(),
-  slot_number: z.number(),
+  ref_epoch: z.coerce.bigint(),
+  ref_slot: z.coerce.bigint(),
+  slot_number: z.coerce.bigint(),
   state_root: z.string(),
 });
 
@@ -84,9 +85,8 @@ const RewardsReportSchema = z.union([
   RewardsReportV2ArraySchema,
 ]);
 
-export const parseReport = (data: unknown): RewardsReport => {
-  return RewardsReportSchema.parse(data);
-};
+export const parseReport = (data: string): RewardsReport =>
+  RewardsReportSchema.parse(JSONParse(data));
 
 export const isRewardsReportV1 = (
   report: RewardsReport,

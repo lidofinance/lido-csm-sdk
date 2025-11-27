@@ -1,3 +1,4 @@
+import { JSONParse } from 'json-with-bigint';
 import z from 'zod';
 import { createMerkleTreeSchema } from '../common/utils/index.js';
 
@@ -11,6 +12,5 @@ export type StrikesTreeLeaf = z.infer<typeof StrikesLeaf>;
 
 const StrikesMerkleTreeSchema = createMerkleTreeSchema(StrikesLeaf);
 
-export const parseStrikesTree = (data: unknown) => {
-  return StrikesMerkleTreeSchema.parse(data);
-};
+export const parseStrikesTree = (data: string) =>
+  StrikesMerkleTreeSchema.parse(JSONParse(data));

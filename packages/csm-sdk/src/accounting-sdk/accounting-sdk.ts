@@ -1,17 +1,77 @@
+import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
-import { TOKENS } from '../common/index.js';
+import {
+  CACHE_LONG,
+  CACHE_MID,
+  CSM_CONTRACT_NAMES,
+  TOKENS,
+} from '../common/index.js';
+import { convertEthToShares, convertSharesToEth } from './convert-shares.js';
 import {
   AmountByKeys,
   BondAmountByKeysCountProps,
   BondForNextKeysProps,
   KeysCountByBondAmountProps,
+  StethPoolData,
 } from './types.js';
 
 export class AccountingSDK extends CsmSDKModule {
   private get accountingContract() {
     return this.core.contractCSAccounting;
+  }
+
+  @Cache(CACHE_LONG)
+  private get stethContract() {
+    return this.core.getContract(CSM_CONTRACT_NAMES.stETH, stethSharesAbi);
+  }
+
+  @Logger('Views:')
+  @Cache(CACHE_MID)
+  @ErrorHandler()
+  public async getStethPoolData(blockNumber?: bigint): Promise<StethPoolData> {
+    const [totalPooledEther, totalShares] = await Promise.all([
+      this.stethContract.read.getTotalPooledEther({ blockNumber }),
+      this.stethContract.read.getTotalShares({ blockNumber }),
+    ]);
+
+    return { totalPooledEther, totalShares };
+  }
+
+  @Logger('Utils:')
+  public async getStethPoolDataByBlockNumbers(blockNumbers: bigint[]) {
+    return new Map(
+      await Promise.all(
+        blockNumbers.map(
+          async (blockNumber) =>
+            [blockNumber, await this.getStethPoolData(blockNumber)] as const,
+        ),
+      ),
+    );
+  }
+
+  /**
+   * Converts stETH shares to ETH amount using the current pool ratio.
+   * Also works for converting wstETH to stETH.
+   */
+  @Logger('Views:')
+  @ErrorHandler()
+  public async sharesToEth(amount: bigint, blockNumber?: bigint) {
+    const poolData = await this.getStethPoolData(blockNumber);
+    return convertSharesToEth(amount, poolData);
+  }
+
+  /**
+   * Converts ETH amount to stETH shares using the current pool ratio.
+   * Also works for converting stETH to wstETH.
+   */
+  @Logger('Views:')
+  @ErrorHandler()
+  public async ethToShares(amount: bigint, blockNumber?: bigint) {
+    const poolData = await this.getStethPoolData(blockNumber);
+    return convertEthToShares(amount, poolData);
   }
 
   @Logger('Views:')
