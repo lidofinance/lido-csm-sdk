@@ -1,15 +1,6 @@
 import { NodeOperatorId } from '../common/types.js';
-import {
-  isRewardsReportV1,
-  isRewardsReportV2,
-  isRewardsReportV2Array,
-} from './parse-report.js';
-import {
-  RewardsReport,
-  RewardsReportV1,
-  RewardsReportV2,
-  ValidatorRewards,
-} from './types.js';
+import { isRewardsReportV1, isRewardsReportV2 } from './parse-report.js';
+import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types.js';
 
 const DEFAULT_REWARD_SHARE = 0.5834;
 
@@ -61,36 +52,32 @@ export const getValidatorsRewardsV1 = (
 
 export const getValidatorsRewardsV2 = (
   nodeOperatorId: NodeOperatorId,
-  reports: RewardsReportV2[],
+  report: RewardsReportV2,
 ): ValidatorRewards[] => {
-  return reports.flatMap((report) => {
-    const operator = report.operators[`${nodeOperatorId}`];
-    if (!operator) return [];
+  const operator = report.operators[`${nodeOperatorId}`];
+  if (!operator) return [];
 
-    return Object.entries(operator.validators).map(
-      ([validatorIndex, validatorData], indexInReport) => ({
-        ...getBaseFields(report),
-        indexInReport,
-        validatorIndex: validatorIndex as `${number}`,
-        performance: validatorData.performance,
-        threshold: validatorData.threshold,
-        slashed: validatorData.slashed,
-        receivedShares: validatorData.distributed_rewards,
-        rewardShare: validatorData.rewards_share,
-      }),
-    );
-  });
+  return Object.entries(operator.validators).map(
+    ([validatorIndex, validatorData], indexInReport) => ({
+      ...getBaseFields(report),
+      indexInReport,
+      validatorIndex: validatorIndex as `${number}`,
+      performance: validatorData.performance,
+      threshold: validatorData.threshold,
+      slashed: validatorData.slashed,
+      receivedShares: validatorData.distributed_rewards,
+      rewardShare: validatorData.rewards_share,
+    }),
+  );
 };
 
 export const getValidatorsRewards = (
   nodeOperatorId: NodeOperatorId,
-  report: RewardsReport,
+  report: RewardsReportV1 | RewardsReportV2,
 ) => {
   if (isRewardsReportV1(report)) {
     return getValidatorsRewardsV1(nodeOperatorId, report);
   } else if (isRewardsReportV2(report)) {
-    return getValidatorsRewardsV2(nodeOperatorId, [report]);
-  } else if (isRewardsReportV2Array(report)) {
     return getValidatorsRewardsV2(nodeOperatorId, report);
   } else {
     throw new Error('Unknown rewards report version');

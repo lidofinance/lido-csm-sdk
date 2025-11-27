@@ -30,6 +30,7 @@ import {
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { ParametersSDK } from '../parameters-sdk/index.js';
+import { REPORT_V1_LOG_CIDS } from './consts.js';
 import { findOperatorRewards } from './find-operator-rewards.js';
 import { findProofAndAmount } from './find-proof.js';
 import { getValidatorsRewards } from './get-validators-rewards.js';
@@ -196,33 +197,20 @@ export class RewardsSDK extends CsmSDKModule<{
     return lastLog?.transactionHash;
   }
 
-  // TODO: use instead event-based getAllReports
-  public async getAllReports2() {
+  public async getAllReports() {
     const reportsCount = await this.getHistoryCount();
 
-    const reports = await Promise.all(
-      [...bigIntRange(reportsCount)].map(async (index) => {
+    const oldReportLogCids = REPORT_V1_LOG_CIDS[this.core.chainId];
+
+    const reports = await Promise.all([
+      ...oldReportLogCids.map((cid) => this.getReportByCid(cid)),
+      ...[...bigIntRange(reportsCount)].map(async (index) => {
         const { logCid } = await this.getReportConfig(index);
         return this.getReportByCid(logCid);
       }),
-    );
+    ]);
 
-    // TODO: add old reports from v1
-    return reports.filter(isDefined);
-  }
-
-  @Logger('Utils:')
-  @ErrorHandler()
-  public async getAllReports() {
-    const logs = await this.bus.events.getDistributionLogUpdated();
-
-    const cids = logs.map((log) => log.args.logCid).filter(isDefined);
-
-    const reports = await Promise.all(
-      cids.map((cid) => this.getReportByCid(cid)),
-    );
-
-    return reports.filter(isDefined);
+    return reports.flat().filter(isDefined);
   }
 
   @Logger('Views:')
