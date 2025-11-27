@@ -5,6 +5,10 @@ export const REPORT_V1_LOG_CIDS: {
   [key in CSM_SUPPORTED_CHAINS]: string[];
 } = {
   [CHAINS.Mainnet]: [
+    'QmezkGCHPUJ9XSAJfibmo6Sup35VgbhnodfYsc1xNT3rbo',
+    'Qmb5CZUD9uLXP9LS68jnJp1v2GTF1KjYsNLJuML9fpRufE',
+    'QmePUqG8tMXbv3eHDu3j56Dod4gwmGh1Vapsh7u4gxotT4',
+    'QmT5JWn3sR7fYxxxSh3kHBmjZyPBWjKb6CsSLGXMQbLXMX',
     'QmWxANi2GWvoxwnPRsxwZNF6NRyjwMBPAF4bBMcL3HGG3i',
     'QmYQPDuqVbxWq2YNSZS55LE3eTeriy51HTCgBHLiW9fN7N',
     'QmeZduNqrnSMLTVE5tkNDv2WhtL3uAgHRP1915m5CHcCqM',
