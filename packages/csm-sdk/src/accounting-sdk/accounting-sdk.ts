@@ -52,6 +52,12 @@ export class AccountingSDK extends CsmSDKModule {
     );
   }
 
+  @Logger('Utils:')
+  public async getCurrentPoolDataMap(blockNumbers: bigint[]) {
+    const currentPoolData = await this.getStethPoolData();
+    return new Map(blockNumbers.map((bn) => [bn, currentPoolData] as const));
+  }
+
   /**
    * Converts stETH shares to ETH amount using the current pool ratio.
    * Also works for converting wstETH to stETH.

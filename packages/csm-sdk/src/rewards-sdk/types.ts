@@ -38,3 +38,8 @@ export type ValidatorRewardsEntity = ValidatorRewards & {
 };
 
 export type OperatorRewardsHistory = ValidatorRewardsEntity[];
+
+export type RewardsQueryOptions = {
+  /** Use current stETH rate instead of historical rate at report block */
+  useCurrentRate?: boolean;
+};
