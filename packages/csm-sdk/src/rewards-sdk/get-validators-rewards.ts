@@ -2,7 +2,7 @@ import { NodeOperatorId } from '../common/types.js';
 import { isRewardsReportV1, isRewardsReportV2 } from './parse-report.js';
 import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types.js';
 
-const DEFAULT_REWARD_SHARE = 0.5834;
+const DEFAULT_REWARD_SHARE = 1;
 
 const getBaseFields = (report: RewardsReportV1 | RewardsReportV2) => ({
   blockNumber: report.blockstamp.block_number,
@@ -44,7 +44,6 @@ export const getValidatorsRewardsV1 = (
     performance: v.performance,
     slashed: v.slashed,
     threshold,
-    // FIXME: continously subtract to prevent rounding issues
     receivedShares: v.isEligible ? rewardPerValidator : 0n,
     rewardShare: DEFAULT_REWARD_SHARE,
   }));
