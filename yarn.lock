@@ -1237,7 +1237,7 @@ __metadata:
   dependencies:
     "@chainsafe/ssz": ^1.2.2
     "@jest/globals": ^29.7.0
-    "@lidofinance/lido-ethereum-sdk": ^4.4.0
+    "@lidofinance/lido-ethereum-sdk": ^4.5.1
     "@openzeppelin/merkle-tree": ^1.0.8
     "@types/fs-extra": ^11.0.1
     bls-eth-wasm: ^1.4.0
@@ -1257,16 +1257,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lidofinance/lido-ethereum-sdk@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "@lidofinance/lido-ethereum-sdk@npm:4.4.0"
+"@lidofinance/lido-ethereum-sdk@npm:^4.5.1":
+  version: 4.5.1
+  resolution: "@lidofinance/lido-ethereum-sdk@npm:4.5.1"
   dependencies:
     "@ethersproject/bytes": ^5.7.0
     graphql: ^16.8.1
     graphql-request: ^6.1.0
   peerDependencies:
-    viem: ^2.26.0
-  checksum: 6e81cb5a52760c12069a16766e04e7039650e1a93559db71e6775ed4018cb027447e90845784d0c1cd08f6c6f243b08d4e686ebe60d52946abd7a0cf26edecf3
+    viem: ^2.31.0
+  checksum: 1564b156546b0216f26a031ee915c3373b82674b22b6aa2baa784ace34c3931e3692f385142d8ccc54d59014f842a86d2b5ef8161ffd66c473a4d469a288985f
   languageName: node
   linkType: hard
 

@@ -15,7 +15,7 @@ export class FeesMonitoringSDK extends CsmSDKModule {
   public async getKeysWithIssues(
     nodeOperatorId: NodeOperatorId,
   ): Promise<ValidatorInfoIssues[]> {
-    const baseUrl = this.core.feeMonitoringApiLink;
+    const baseUrl = this.core.feesMonitoringApiLink;
 
     invariant(
       baseUrl,
