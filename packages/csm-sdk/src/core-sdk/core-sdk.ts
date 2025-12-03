@@ -50,6 +50,7 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly keysApiUrl?: string;
   readonly feesMonitoringApiUrl?: string;
   readonly maxEventBlocksRange?: number;
+  readonly skipHistoricalCalls: boolean;
 
   constructor(props: CsmCoreProps) {
     super();
@@ -59,6 +60,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.keysApiUrl = props.keysApiUrl;
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
+    this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
   }
 
   public get chainId(): CSM_SUPPORTED_CHAINS {

@@ -39,7 +39,6 @@ import { parseRewardsTree } from './parse-rewards-tree.js';
 import {
   OperatorRewards,
   OperatorRewardsHistory,
-  RewardsQueryOptions,
   RewardsReport,
 } from './types.js';
 
@@ -163,7 +162,6 @@ export class RewardsSDK extends CsmSDKModule<{
   @Logger('Utils:')
   public async getOperatorRewardsInLastReport(
     nodeOperatorId: NodeOperatorId,
-    options?: RewardsQueryOptions,
   ): Promise<OperatorRewards | undefined> {
     const report = await this.getLastReport();
     if (!report) return undefined;
@@ -172,7 +170,7 @@ export class RewardsSDK extends CsmSDKModule<{
 
     const distributed = await this.bus.accounting.sharesToEth(
       shares,
-      options?.useCurrentRate ? undefined : report.blockstamp.block_number,
+      report.blockstamp.block_number,
     );
 
     return { ...rest, shares, distributed };
@@ -219,7 +217,6 @@ export class RewardsSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async getOperatorRewardsHistory(
     nodeOperatorId: NodeOperatorId,
-    options?: RewardsQueryOptions,
   ): Promise<OperatorRewardsHistory> {
     const [reports, keys, frameConfig, digest] = await Promise.all([
       this.getAllReports(),
@@ -238,9 +235,8 @@ export class RewardsSDK extends CsmSDKModule<{
       .map((r) => r.blockNumber)
       .filter(isUnique);
 
-    const poolDataByBlock = options?.useCurrentRate
-      ? await this.bus.accounting.getCurrentPoolDataMap(blockNumbers)
-      : await this.bus.accounting.getStethPoolDataByBlockNumbers(blockNumbers);
+    const poolDataByBlock =
+      await this.bus.accounting.getStethPoolDataByBlockNumbers(blockNumbers);
 
     const enhancedRewards = validatorsRewards.map((vr) => {
       const fee =

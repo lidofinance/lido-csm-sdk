@@ -13,4 +13,5 @@ export type CsmCoreProps = {
   clApiUrl?: string;
   keysApiUrl?: string;
   feesMonitoringApiUrl?: string;
+  skipHistoricalCalls?: boolean;
 };
