@@ -11,4 +11,7 @@ export type CsmCoreProps = {
   overridedAddresses?: CSM_ADDRESSES;
   maxEventBlocksRange?: number;
   clApiUrl?: string;
+  keysApiUrl?: string;
+  feesMonitoringApiUrl?: string;
+  skipHistoricalCalls?: boolean;
 };

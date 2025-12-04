@@ -5,7 +5,7 @@ export enum LINK_TYPE {
   icsTree = 'icsTree',
   rewardsTree = 'rewardsTree',
   keysApi = 'keysApi',
-  feeMonitoringApi = 'feeMonitoringApi',
+  feesMonitoringApi = 'feesMonitoringApi',
 }
 
 export const EXTERNAL_LINKS: {
@@ -17,7 +17,7 @@ export const EXTERNAL_LINKS: {
     [LINK_TYPE.rewardsTree]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
     [LINK_TYPE.keysApi]: 'https://keys-api.lido.fi',
-    [LINK_TYPE.feeMonitoringApi]: 'https://api-fees-monitoring.lido.fi',
+    [LINK_TYPE.feesMonitoringApi]: 'https://api-fees-monitoring.lido.fi',
   },
   [CHAINS.Hoodi]: {
     [LINK_TYPE.icsTree]:
@@ -25,7 +25,7 @@ export const EXTERNAL_LINKS: {
     [LINK_TYPE.rewardsTree]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
     [LINK_TYPE.keysApi]: 'https://keys-api-hoodi.testnet.fi',
-    [LINK_TYPE.feeMonitoringApi]:
+    [LINK_TYPE.feesMonitoringApi]:
       'https://api-fees-monitoring-hoodi.testnet.fi',
   },
 };

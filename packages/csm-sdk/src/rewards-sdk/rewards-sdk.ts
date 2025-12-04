@@ -231,10 +231,12 @@ export class RewardsSDK extends CsmSDKModule<{
       getValidatorsRewards(nodeOperatorId, report),
     );
 
+    const blockNumbers = validatorsRewards
+      .map((r) => r.blockNumber)
+      .filter(isUnique);
+
     const poolDataByBlock =
-      await this.bus.accounting.getStethPoolDataByBlockNumbers(
-        validatorsRewards.map((r) => r.blockNumber).filter(isUnique),
-      );
+      await this.bus.accounting.getStethPoolDataByBlockNumbers(blockNumbers);
 
     const enhancedRewards = validatorsRewards.map((vr) => {
       const fee =

@@ -32,9 +32,17 @@ export class AccountingSDK extends CsmSDKModule {
   @Cache(CACHE_MID)
   @ErrorHandler()
   public async getStethPoolData(blockNumber?: bigint): Promise<StethPoolData> {
+    const effectiveBlockNumber = this.core.skipHistoricalCalls
+      ? undefined
+      : blockNumber;
+
     const [totalPooledEther, totalShares] = await Promise.all([
-      this.stethContract.read.getTotalPooledEther({ blockNumber }),
-      this.stethContract.read.getTotalShares({ blockNumber }),
+      this.stethContract.read.getTotalPooledEther({
+        blockNumber: effectiveBlockNumber,
+      }),
+      this.stethContract.read.getTotalShares({
+        blockNumber: effectiveBlockNumber,
+      }),
     ]);
 
     return { totalPooledEther, totalShares };

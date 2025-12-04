@@ -47,14 +47,20 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
   readonly overridedAddresses?: CSM_ADDRESSES;
   readonly clApiUrl?: string;
+  readonly keysApiUrl?: string;
+  readonly feesMonitoringApiUrl?: string;
   readonly maxEventBlocksRange?: number;
+  readonly skipHistoricalCalls: boolean;
 
   constructor(props: CsmCoreProps) {
     super();
     this.core = props.core;
     this.overridedAddresses = props.overridedAddresses;
     this.clApiUrl = props.clApiUrl;
+    this.keysApiUrl = props.keysApiUrl;
+    this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
+    this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
   }
 
   public get chainId(): CSM_SUPPORTED_CHAINS {
@@ -277,7 +283,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public get keysApiLink() {
-    return this.getExternalLink(LINK_TYPE.keysApi);
+    return this.keysApiUrl ?? this.getExternalLink(LINK_TYPE.keysApi);
   }
 
   public get rewardsTreeLink() {
@@ -288,8 +294,8 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getExternalLink(LINK_TYPE.icsTree);
   }
 
-  public get feeMonitoringApiLink() {
-    return this.getExternalLink(LINK_TYPE.feeMonitoringApi);
+  public get feesMonitoringApiLink() {
+    return this.feesMonitoringApiUrl ?? this.getExternalLink(LINK_TYPE.feesMonitoringApi);
   }
 
   public getIpfsUrls(cid: string): string[] {
