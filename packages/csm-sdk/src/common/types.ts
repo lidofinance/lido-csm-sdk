@@ -4,8 +4,8 @@ import { ROLES } from './constants/roles.js';
 import { TOKENS } from './constants/tokens.js';
 
 export type DepositDataKey = {
-  pubkey: string;
-  signature: string;
+  pubkey: Hex;
+  signature: Hex;
 };
 
 export type PerToken<T> = {

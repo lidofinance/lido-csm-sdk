@@ -23,3 +23,7 @@ export const trimHexPrefix = (input: string): string => {
 export const toHexString = (text: string): Hex => {
   return text.startsWith('0x') ? (text as Hex) : `0x${text}`;
 };
+
+export const normalizeTrimHex = (hex: string | Hex): string => {
+  return trimHexPrefix(hex).toLowerCase();
+};

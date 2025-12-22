@@ -1,13 +1,14 @@
+import { Hex } from 'viem';
 import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
 
 export type DepositDataCommon = {
-  pubkey: string;
-  withdrawal_credentials: string;
+  pubkey: Hex;
+  withdrawal_credentials: Hex;
   amount: number;
-  signature: string;
-  deposit_message_root: string;
-  deposit_data_root: string;
-  fork_version: string;
+  signature: Hex;
+  deposit_message_root: Hex;
+  deposit_data_root: Hex;
+  fork_version: Hex;
   deposit_cli_version: string;
 };
 
@@ -67,8 +68,8 @@ export type ValidationExtendedProps = ValidationProps & {
 };
 
 export type DuplicateProcessingConfig = {
-  pubkey: string;
+  pubkey: Hex;
   index: number;
-  pubkeyMap: Map<string, number[]>;
+  pubkeyMap: Map<Hex, number[]>;
   errors: ValidationError[];
 };
