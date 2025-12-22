@@ -32,7 +32,6 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       signatures,
       managementProperties,
       referrer,
-      permit,
       ...rest
     } = await parseAddOperatorProps(props);
 

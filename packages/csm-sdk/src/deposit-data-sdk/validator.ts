@@ -1,3 +1,4 @@
+import { Hex } from 'viem';
 import { compareLowercase } from '../common/utils/compare-lowercase.js';
 import { isHexadecimalString, trimHexPrefix } from '../common/utils/index.js';
 import {
@@ -171,7 +172,7 @@ const performBasicValidation = (
   config: ValidationProps,
 ): ValidationError[] => {
   const errors: ValidationError[] = [];
-  const pubkeyMap = new Map<string, number[]>();
+  const pubkeyMap = new Map<Hex, number[]>();
 
   // Single pass: basic validation + duplicate detection
   for (const [i, data] of depositData.entries()) {
@@ -189,7 +190,7 @@ const performBasicValidation = (
     errors.push(...basicErrors);
 
     // Efficient duplicate detection using Map
-    const pubkey = data.pubkey?.toLowerCase();
+    const pubkey = data.pubkey?.toLowerCase() as Hex;
     if (pubkey) {
       processDuplicatePubkey({
         pubkey,

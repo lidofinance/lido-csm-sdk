@@ -1,3 +1,4 @@
+import { toHexString } from '../common/utils/is-hexadecimal-string.js';
 import { DepositData, ParseResult, RemoveKeyResult } from './types.js';
 import { MAX_JSON_LENGTH } from './constants.js';
 
@@ -45,8 +46,25 @@ const parseAndValidateJson = (
     };
   }
 
-  // Ensure we have an array
-  const depositData: DepositData[] = Array.isArray(parsed) ? parsed : [parsed];
+  // Ensure we have an array and convert hex fields to Hex type
+  const rawItems = Array.isArray(parsed) ? parsed : [parsed];
+  const depositData: DepositData[] = rawItems.map((item: any) => ({
+    ...item,
+    pubkey: item.pubkey ? toHexString(item.pubkey) : item.pubkey,
+    withdrawal_credentials: item.withdrawal_credentials
+      ? toHexString(item.withdrawal_credentials)
+      : item.withdrawal_credentials,
+    signature: item.signature ? toHexString(item.signature) : item.signature,
+    deposit_message_root: item.deposit_message_root
+      ? toHexString(item.deposit_message_root)
+      : item.deposit_message_root,
+    deposit_data_root: item.deposit_data_root
+      ? toHexString(item.deposit_data_root)
+      : item.deposit_data_root,
+    fork_version: item.fork_version
+      ? toHexString(item.fork_version)
+      : item.fork_version,
+  }));
 
   // Validate array is not empty
   if (depositData.length === 0) {

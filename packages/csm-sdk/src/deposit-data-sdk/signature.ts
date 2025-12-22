@@ -192,12 +192,10 @@ export const verifyDepositSignature = async (
     // Initialize BLS library
     await ensureBLSInit();
 
-    // Parse input data
-    const pubkey = hexToBytes(ensureHex(data.pubkey));
-    const signature = hexToBytes(ensureHex(data.signature));
-    const withdrawalCredentials = hexToBytes(
-      ensureHex(data.withdrawal_credentials),
-    );
+    // Parse input data (fields are already Hex type)
+    const pubkey = hexToBytes(data.pubkey);
+    const signature = hexToBytes(data.signature);
+    const withdrawalCredentials = hexToBytes(data.withdrawal_credentials);
     const amount = BigInt(data.amount);
 
     // Validate input sizes
@@ -216,8 +214,7 @@ export const verifyDepositSignature = async (
     const messageRoot = computeDepositMessageRoot(depositMessage);
 
     // Verify deposit_message_root matches
-    const providedMessageRoot = ensureHex(data.deposit_message_root);
-    if (toHex(messageRoot).toLowerCase() !== providedMessageRoot.toLowerCase()) {
+    if (toHex(messageRoot).toLowerCase() !== data.deposit_message_root.toLowerCase()) {
       return false;
     }
 

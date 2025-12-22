@@ -7,9 +7,9 @@ import {
   isHexadecimalString,
   toHexString,
 } from '../common/utils/index.js';
-import { PUBKEY_LENGTH } from './constants.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
+import { PUBKEY_LENGTH } from './constants.js';
 import { parseDepositData, removeKey } from './parser.js';
 import {
   DepositData,
@@ -57,22 +57,25 @@ export class DepositDataSDK extends CsmSDKModule<{
       currentBlockNumber: Number(blockNumber),
     });
 
-    // Extract pubkeys for additional checks
+    // Extract pubkeys for additional checks (already Hex type from parser)
     const pubkeys = depositData.map((data) => data.pubkey);
 
     // Check for cached duplicates
     const duplicateErrors = this.checkCachedKeys(pubkeys);
 
     // Check for previously uploaded keys
-    const uploadedDuplicateErrors = await this.checkUploadedKeys(
-      pubkeys.map(toHexString),
-    );
+    const uploadedDuplicateErrors = await this.checkUploadedKeys(pubkeys);
 
     // Check for keys already known on CL
     const clErrors = await this.checkClKeys(pubkeys.map(toHexString));
 
     // Merge all errors
-    return [...errors, ...duplicateErrors, ...uploadedDuplicateErrors, ...clErrors];
+    return [
+      ...errors,
+      ...duplicateErrors,
+      ...uploadedDuplicateErrors,
+      ...clErrors,
+    ];
   }
 
   /**
@@ -118,7 +121,7 @@ export class DepositDataSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   @ErrorHandler()
-  public checkCachedKeys(pubkeys: string[]): ValidationError[] {
+  public checkCachedKeys(pubkeys: Hex[]): ValidationError[] {
     const keysCache = this.bus.keysCache;
     const errors: ValidationError[] = [];
 

@@ -1,3 +1,4 @@
+import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { NodeOperatorId } from '../common/types.js';
 import { isRewardsReportV1, isRewardsReportV2 } from './parse-report.js';
 import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types.js';
@@ -79,6 +80,9 @@ export const getValidatorsRewards = (
   } else if (isRewardsReportV2(report)) {
     return getValidatorsRewardsV2(nodeOperatorId, report);
   } else {
-    throw new Error('Unknown rewards report version');
+    throw new SDKError({
+      code: ERROR_CODE.NOT_SUPPORTED,
+      message: 'Unknown rewards report version',
+    });
   }
 };

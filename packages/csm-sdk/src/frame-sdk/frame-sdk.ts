@@ -82,7 +82,7 @@ export class FrameSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getCurentFrame(): Promise<CurrentFrameInfo> {
+  public async getCurrentFrame(): Promise<CurrentFrameInfo> {
     const [config, lastRefSlot, { timestamp: latestBlockTimestamp }] =
       await Promise.all([
         this.getConfig(),

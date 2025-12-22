@@ -45,7 +45,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
           const cachedEntry = cache.get(cacheKey);
           const currentTime = Date.now();
 
-          if (cachedEntry && currentTime - cachedEntry.timestamp <= timeMs) {
+          if (cachedEntry && (cachedEntry.isPromise || currentTime - cachedEntry.timestamp <= timeMs)) {
             callConsoleMessage.call(
               this,
               'Cache:',
@@ -69,10 +69,19 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         );
         const result = (target as () => Value).call(this);
         if (result instanceof Promise) {
-          void result.then((resolvedResult) =>
-            cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now() }),
-          );
-        } else cache.set(cacheKey, { data: result, timestamp: Date.now() });
+          cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: true });
+          return result
+            .then((resolvedResult) => {
+              cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now(), isPromise: false });
+              return resolvedResult;
+            })
+            .catch((error) => {
+              cache.delete(cacheKey);
+              throw error;
+            }) as Value;
+        } else {
+          cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: false });
+        }
 
         return result;
       };
@@ -90,7 +99,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         const cachedEntry = cache.get(cacheKey);
         const currentTime = Date.now();
 
-        if (cachedEntry && currentTime - cachedEntry.timestamp <= timeMs) {
+        if (cachedEntry && (cachedEntry.isPromise || currentTime - cachedEntry.timestamp <= timeMs)) {
           callConsoleMessage.call(
             this,
             'Cache:',
@@ -114,10 +123,19 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
       );
       const result = (target as (...args: any[]) => any).call(this, ...args);
       if (result instanceof Promise) {
-        void result.then((resolvedResult) =>
-          cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now() }),
-        );
-      } else cache.set(cacheKey, { data: result, timestamp: Date.now() });
+        cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: true });
+        return result
+          .then((resolvedResult) => {
+            cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now(), isPromise: false });
+            return resolvedResult;
+          })
+          .catch((error) => {
+            cache.delete(cacheKey);
+            throw error;
+          });
+      } else {
+        cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: false });
+      }
 
       return result;
     };

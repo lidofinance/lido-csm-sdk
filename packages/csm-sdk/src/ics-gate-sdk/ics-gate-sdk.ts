@@ -45,7 +45,6 @@ export class IcsGateSDK extends CsmSDKModule<{
       managementProperties,
       proof,
       referrer,
-      permit,
       ...rest
     } = await parseAddVettedOperatorProps(props);
 

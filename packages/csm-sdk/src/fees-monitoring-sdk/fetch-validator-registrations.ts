@@ -51,6 +51,34 @@ const extractValidators = (
   }));
 };
 
+export const fetchAllValidatorRegistrations = async (
+  baseUrl: string,
+  props: Omit<CheckOperatorKeysProps, 'start'>,
+): Promise<ValidatorInfo[]> => {
+  const { limit = DEFAULT_PAGE_LIMIT, ...rest } = props;
+  const allResults: ValidatorInfo[] = [];
+  let start = 0;
+
+  let hasMore = true;
+  while (hasMore) {
+    const page = await fetchValidatorRegistrations(baseUrl, {
+      ...rest,
+      limit,
+      start,
+    });
+
+    allResults.push(...page);
+
+    if (page.length < limit) {
+      hasMore = false;
+    } else {
+      start += limit;
+    }
+  }
+
+  return allResults;
+};
+
 export const isValidatorWithIssue = (
   validator: ValidatorInfo,
 ): validator is ValidatorInfoIssues => {
