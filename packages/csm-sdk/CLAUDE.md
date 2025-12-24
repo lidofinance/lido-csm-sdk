@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Build and Development
+
 - `yarn build` - Full build process (clean + build CJS, ESM, and types)
 - `yarn build:cjs` - Build CommonJS distribution
 - `yarn build:esm` - Build ES modules distribution
@@ -13,25 +14,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn types` - TypeScript type checking without emitting files
 
 ### Testing and Quality
+
 - `yarn test` - Run Jest tests
 - `yarn lint` - Run ESLint with TypeScript support (max 0 warnings)
 
 ## Architecture Overview
 
 ### Core Structure
+
 The SDK follows a modular architecture centered around the `LidoSDKCsm` class, which aggregates specialized modules for different aspects of the Lido Community Staking Module (CSM) ecosystem.
 
 ### Main Entry Point
+
 - `src/lido-sdk-csm.ts` - Main SDK class that instantiates and manages all sub-modules
 - `src/index.ts` - Primary export file with re-exports from all modules
 
 ### Module Organization
+
 Each module follows a consistent pattern:
+
 - `{module-name}-sdk.ts` - Main SDK implementation
 - `types.ts` - TypeScript type definitions
 - `index.ts` - Module exports
 
 Key modules include:
+
 - **core-sdk** - Shared logic, configuration, and core utilities
 - **module-sdk** - CSM status and share limit queries
 - **operator-sdk** - Operator data management
@@ -54,6 +61,7 @@ Key modules include:
 - **fees-monitoring-sdk** - Validator fee recipient monitoring and issue detection
 
 ### Common Infrastructure
+
 - `src/common/` - Shared utilities, constants, and primitives
   - `class-primitives/` - Base classes including `CsmSDKModule` and `BusRegistry`
   - `constants/` - Contract addresses, roles, and other constants
@@ -61,6 +69,7 @@ Key modules include:
   - `decorators/` - Method decorators for caching, logging, and error handling
 
 ### Decorator Order Convention
+
 **Standard order (outermost to innermost):** `@Logger → @ErrorHandler → @Cache`
 
 ```typescript
@@ -71,6 +80,7 @@ public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo>
 ```
 
 **Why this order:**
+
 - Decorators execute **bottom-to-top** (innermost first)
 - Logger tracks all calls for debugging/monitoring (executes first)
 - ErrorHandler catches errors from both cache and method execution
@@ -78,33 +88,41 @@ public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo>
 - Errors are never cached regardless of decorator order
 
 **Benefits:**
+
 - Consistent logging for cache hit rate monitoring
 - Clear error handling boundaries
 - Prevents caching of error states
 
 ### Key Dependencies
+
 - **@lidofinance/lido-ethereum-sdk** - Core Lido SDK (peer dependency)
 - **viem** - Ethereum client library (peer dependency)
 - **@openzeppelin/merkle-tree** - Merkle tree operations
 - **zod** - Runtime type validation
 
 ### ABI Management
+
 - `src/abi/` - Contract ABI definitions for all CSM contracts
 
 ### Configuration
+
 All modules accept `CsmCoreProps` which includes:
+
 - `core: LidoSDKCore` - Core SDK instance
 - `overridedAddresses?: CSM_ADDRESSES` - Custom contract addresses
 - `maxEventBlocksRange?: number` - Event query range limits
 - `clApiUrl?: string` - Consensus layer API URL
 
 ### Transaction Handling
+
 The SDK provides a sophisticated transaction handling system with:
+
 - Transaction callbacks for monitoring progress
 - Gas limit estimation
 - Permit signature support
 - Multi-stage transaction lifecycle tracking
 
 ### Testing
+
 - Jest configuration in `jest.config.ts`
 - Tests can be run with `yarn test`

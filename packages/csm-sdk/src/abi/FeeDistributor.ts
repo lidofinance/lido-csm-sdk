@@ -1,4 +1,4 @@
-export const CSFeeDistributorAbi = [
+export const FeeDistributorAbi = [
   {
     "type": "constructor",
     "inputs": [
@@ -202,7 +202,7 @@ export const CSFeeDistributorAbi = [
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct ICSFeeDistributor.DistributionData",
+        "internalType": "struct IFeeDistributor.DistributionData",
         "components": [
           {
             "name": "refSlot",

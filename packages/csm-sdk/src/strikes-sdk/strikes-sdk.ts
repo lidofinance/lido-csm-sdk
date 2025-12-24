@@ -13,7 +13,7 @@ import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
 
 export class StrikesSDK extends CsmSDKModule {
   private get strikesContract() {
-    return this.core.contractCSStrikes;
+    return this.core.contractValidatorStrikes;
   }
 
   @Logger('Views:')

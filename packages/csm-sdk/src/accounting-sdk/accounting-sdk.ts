@@ -20,7 +20,7 @@ import {
 
 export class AccountingSDK extends CsmSDKModule {
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.contractAccounting;
   }
 
   @Cache(CACHE_LONG)

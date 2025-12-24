@@ -18,7 +18,7 @@ export const VettedGateAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSAccounting"
+        "internalType": "contract IAccounting"
       }
     ],
     "stateMutability": "view"
@@ -57,7 +57,7 @@ export const VettedGateAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSModule"
+        "internalType": "contract IBaseModule"
       }
     ],
     "stateMutability": "view"
@@ -245,7 +245,7 @@ export const VettedGateAbi = [
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
+        "internalType": "struct IAccounting.PermitInput",
         "components": [
           {
             "name": "value",
@@ -338,7 +338,7 @@ export const VettedGateAbi = [
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
+        "internalType": "struct IAccounting.PermitInput",
         "components": [
           {
             "name": "value",

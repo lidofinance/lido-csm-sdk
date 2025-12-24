@@ -51,7 +51,7 @@ export class RewardsSDK extends CsmSDKModule<{
   module: ModuleSDK;
 }> {
   private get distributorContract() {
-    return this.core.contractCSFeeDistributor;
+    return this.core.contractFeeDistributor;
   }
 
   @Logger('Utils:')

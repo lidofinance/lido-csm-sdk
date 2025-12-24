@@ -14,11 +14,11 @@ import {
 
 export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get parametersContract() {
-    return this.core.contractCSParametersRegistry;
+    return this.core.contractParametersRegistry;
   }
 
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.contractAccounting;
   }
 
   @Logger('Views:')
@@ -63,7 +63,7 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   @Cache(CACHE_MID)
   @ErrorHandler()
   public async getELStealingPenalty(curveId: bigint): Promise<bigint> {
-    return this.parametersContract.read.getElRewardsStealingAdditionalFine([
+    return this.parametersContract.read.getGeneralDelayedPenaltyAdditionalFine([
       curveId,
     ]);
   }
@@ -79,7 +79,7 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   @Cache(CACHE_MID)
   @ErrorHandler()
   public async getExitDelayPenalty(curveId: bigint): Promise<bigint> {
-    return this.parametersContract.read.getExitDelayPenalty([curveId]);
+    return this.parametersContract.read.getExitDelayFee([curveId]);
   }
 
   @Logger('Views:')

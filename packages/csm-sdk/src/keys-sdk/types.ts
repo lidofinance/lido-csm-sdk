@@ -44,10 +44,6 @@ export type EjectKeysByArrayProps = CommonTransactionProps & {
   refundRecipient?: Address;
 };
 
-export type MigrateKeysProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
-};
-
 export type NormalizeQueueProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
 };

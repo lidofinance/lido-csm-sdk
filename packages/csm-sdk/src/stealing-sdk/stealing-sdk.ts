@@ -19,15 +19,16 @@ export class StealingSDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async report(props: ReportProps) {
-    const { nodeOperatorId, blockHash, amount, ...rest } = props;
+    const { nodeOperatorId, penaltyType, amount, details, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'reportELRewardsStealingPenalty', [
+        prepCall(this.moduleContract, 'reportGeneralDelayedPenalty', [
           nodeOperatorId,
-          blockHash,
+          penaltyType,
           amount,
+          details,
         ]),
     });
   }
@@ -40,7 +41,7 @@ export class StealingSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'cancelELRewardsStealingPenalty', [
+        prepCall(this.moduleContract, 'cancelGeneralDelayedPenalty', [
           nodeOperatorId,
           amount,
         ]),
@@ -51,7 +52,7 @@ export class StealingSDK extends CsmSDKModule<{
   @ErrorHandler()
   @Cache(CACHE_LONG)
   private async getReportRole(): Promise<Address> {
-    return this.moduleContract.read.REPORT_EL_REWARDS_STEALING_PENALTY_ROLE();
+    return this.moduleContract.read.REPORT_GENERAL_DELAYED_PENALTY_ROLE();
   }
 
   @Logger('Views:')

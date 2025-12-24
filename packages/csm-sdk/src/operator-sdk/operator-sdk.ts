@@ -17,7 +17,7 @@ import { NodeOperatorInfo } from './types.js';
 
 export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.contractAccounting;
   }
 
   private get moduleContract() {
@@ -77,28 +77,6 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
     ]);
 
     return splitKeys(keysString);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getKeysCountToMigrate(id: NodeOperatorId) {
-    const [info, curveId] = await Promise.all([
-      this.getInfo(id),
-      this.getCurveId(id),
-    ]);
-    if (info.usedPriorityQueue) return 0;
-
-    const [{ priority, maxDeposits }, legacyQueue] = await Promise.all([
-      this.bus.parameters.getQueueConfig(curveId),
-      this.moduleContract.read.QUEUE_LEGACY_PRIORITY(),
-    ]);
-
-    if (BigInt(priority) >= legacyQueue) return 0;
-
-    const deposited = info.totalDepositedKeys;
-
-    if (maxDeposits <= deposited) return 0;
-    return Math.min(maxDeposits - deposited, info.enqueuedCount);
   }
 
   @Logger('Views:')

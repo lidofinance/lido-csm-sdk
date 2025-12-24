@@ -34,7 +34,7 @@ export class ModuleSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   public async getStatus(): Promise<CsmStatus> {
-    const csAccounting = this.core.contractCSAccounting;
+    const csAccounting = this.core.contractAccounting;
     const csModule = this.core.contractCSModule;
 
     const [isPausedModule, isPausedAccounting] = await Promise.all([
@@ -56,22 +56,22 @@ export class ModuleSDK extends CsmSDKModule {
       accounting,
       feeDistributor,
       parametersRegistry,
-      strikes,
+      validatorStrikes,
       vettedGate,
     ] = await Promise.all([
       this.core.contractCSModule.read
         .getInitializedVersion()
         .catch(onVersionError),
-      this.core.contractCSAccounting.read
+      this.core.contractAccounting.read
         .getInitializedVersion()
         .catch(onVersionError),
-      this.core.contractCSFeeDistributor.read
+      this.core.contractFeeDistributor.read
         .getInitializedVersion()
         .catch(onVersionError),
-      this.core.contractCSParametersRegistry.read
+      this.core.contractParametersRegistry.read
         .getInitializedVersion()
         .catch(onVersionError),
-      this.core.contractCSStrikes.read
+      this.core.contractValidatorStrikes.read
         .getInitializedVersion()
         .catch(onVersionError),
       this.core.contractVettedGate.read
@@ -81,10 +81,10 @@ export class ModuleSDK extends CsmSDKModule {
 
     return {
       [CSM_CONTRACT_NAMES.csModule]: module,
-      [CSM_CONTRACT_NAMES.csAccounting]: accounting,
-      [CSM_CONTRACT_NAMES.csFeeDistributor]: feeDistributor,
-      [CSM_CONTRACT_NAMES.csParametersRegistry]: parametersRegistry,
-      [CSM_CONTRACT_NAMES.csStrikes]: strikes,
+      [CSM_CONTRACT_NAMES.accounting]: accounting,
+      [CSM_CONTRACT_NAMES.feeDistributor]: feeDistributor,
+      [CSM_CONTRACT_NAMES.parametersRegistry]: parametersRegistry,
+      [CSM_CONTRACT_NAMES.validatorStrikes]: validatorStrikes,
       [CSM_CONTRACT_NAMES.vettedGate]: vettedGate,
     };
   }

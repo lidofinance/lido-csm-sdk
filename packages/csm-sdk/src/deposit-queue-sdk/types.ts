@@ -22,3 +22,8 @@ export type DepositQueueBatchInfo = {
   queuePriority: number;
   batches: DepositQueueBatch[];
 };
+
+export type CleanDepositQueueResult = {
+  removed: bigint;
+  lastRemovedAtDepth: bigint;
+};

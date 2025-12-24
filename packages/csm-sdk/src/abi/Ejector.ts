@@ -1,4 +1,4 @@
-export const CSEjectorAbi = [
+export const EjectorAbi = [
   {
     "type": "constructor",
     "inputs": [
@@ -510,6 +510,31 @@ export const CSEjectorAbi = [
   },
   {
     "type": "event",
+    "name": "BadPerformerEjectionRequested",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "pubkey",
+        "type": "bytes",
+        "indexed": false,
+        "internalType": "bytes"
+      },
+      {
+        "name": "refundRecipient",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "Paused",
     "inputs": [
       {
@@ -603,6 +628,31 @@ export const CSEjectorAbi = [
     "anonymous": false
   },
   {
+    "type": "event",
+    "name": "VoluntaryEjectionRequested",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "pubkey",
+        "type": "bytes",
+        "indexed": false,
+        "internalType": "bytes"
+      },
+      {
+        "name": "refundRecipient",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
     "type": "error",
     "name": "AccessControlBadConfirmation",
     "inputs": []
@@ -631,6 +681,11 @@ export const CSEjectorAbi = [
   {
     "type": "error",
     "name": "NodeOperatorDoesNotExist",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NothingToEject",
     "inputs": []
   },
   {
