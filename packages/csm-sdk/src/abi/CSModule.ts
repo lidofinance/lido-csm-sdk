@@ -18,7 +18,7 @@ export const CSModuleAbi = [
         "internalType": "address"
       },
       {
-        "name": "_accounting",
+        "name": "accounting",
         "type": "address",
         "internalType": "address"
       },
@@ -38,7 +38,7 @@ export const CSModuleAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSAccounting"
+        "internalType": "contract IAccounting"
       }
     ],
     "stateMutability": "view"
@@ -71,26 +71,13 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "DEPOSIT_SIZE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "EXIT_PENALTIES",
     "inputs": [],
     "outputs": [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSExitPenalties"
+        "internalType": "contract IExitPenalties"
       }
     ],
     "stateMutability": "view"
@@ -129,7 +116,7 @@ export const CSModuleAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSParametersRegistry"
+        "internalType": "contract IParametersRegistry"
       }
     ],
     "stateMutability": "view"
@@ -162,19 +149,6 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "QUEUE_LEGACY_PRIORITY",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "QUEUE_LOWEST_PRIORITY",
     "inputs": [],
     "outputs": [
@@ -201,7 +175,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "REPORT_EL_REWARDS_STEALING_PENALTY_ROLE",
+    "name": "REPORT_GENERAL_DELAYED_PENALTY_ROLE",
     "inputs": [],
     "outputs": [
       {
@@ -227,7 +201,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "SETTLE_EL_REWARDS_STEALING_PENALTY_ROLE",
+    "name": "SETTLE_GENERAL_DELAYED_PENALTY_ROLE",
     "inputs": [],
     "outputs": [
       {
@@ -266,7 +240,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "VERIFIER_ROLE",
+    "name": "SUBMIT_WITHDRAWALS_ROLE",
     "inputs": [],
     "outputs": [
       {
@@ -279,13 +253,13 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "accounting",
+    "name": "VERIFIER_ROLE",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "address",
-        "internalType": "contract ICSAccounting"
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
     "stateMutability": "view"
@@ -355,7 +329,7 @@ export const CSModuleAbi = [
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
+        "internalType": "struct IAccounting.PermitInput",
         "components": [
           {
             "name": "value",
@@ -420,7 +394,7 @@ export const CSModuleAbi = [
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
+        "internalType": "struct IAccounting.PermitInput",
         "components": [
           {
             "name": "value",
@@ -455,7 +429,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "cancelELRewardsStealingPenalty",
+    "name": "cancelGeneralDelayedPenalty",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -515,7 +489,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "compensateELRewardsStealingPenalty",
+    "name": "compensateGeneralDelayedPenalty",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -682,13 +656,6 @@ export const CSModuleAbi = [
       }
     ],
     "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "finalizeUpgradeV2",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -1311,7 +1278,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "isValidatorWithdrawn",
+    "name": "isValidatorSlashed",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -1335,16 +1302,27 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "migrateToPriorityQueue",
+    "name": "isValidatorWithdrawn",
     "inputs": [
       {
         "name": "nodeOperatorId",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "keyIndex",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -1416,6 +1394,24 @@ export const CSModuleAbi = [
       },
       {
         "name": "exitType",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "onValidatorSlashed",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "keyIndex",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1583,7 +1579,7 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "reportELRewardsStealingPenalty",
+    "name": "reportGeneralDelayedPenalty",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -1591,7 +1587,7 @@ export const CSModuleAbi = [
         "internalType": "uint256"
       },
       {
-        "name": "blockHash",
+        "name": "penaltyType",
         "type": "bytes32",
         "internalType": "bytes32"
       },
@@ -1599,6 +1595,11 @@ export const CSModuleAbi = [
         "name": "amount",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "details",
+        "type": "string",
+        "internalType": "string"
       }
     ],
     "outputs": [],
@@ -1627,6 +1628,46 @@ export const CSModuleAbi = [
         "name": "eligibleToExitInSec",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "reportWithdrawnValidators",
+    "inputs": [
+      {
+        "name": "validatorInfos",
+        "type": "tuple[]",
+        "internalType": "struct WithdrawnValidatorInfo[]",
+        "components": [
+          {
+            "name": "nodeOperatorId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "keyIndex",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "exitBalance",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "slashingPenalty",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isSlashed",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
       }
     ],
     "outputs": [],
@@ -1672,47 +1713,17 @@ export const CSModuleAbi = [
   },
   {
     "type": "function",
-    "name": "settleELRewardsStealingPenalty",
+    "name": "settleGeneralDelayedPenalty",
     "inputs": [
       {
         "name": "nodeOperatorIds",
         "type": "uint256[]",
         "internalType": "uint256[]"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "submitWithdrawals",
-    "inputs": [
+      },
       {
-        "name": "withdrawalsInfo",
-        "type": "tuple[]",
-        "internalType": "struct ValidatorWithdrawalInfo[]",
-        "components": [
-          {
-            "name": "nodeOperatorId",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "keyIndex",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "amount",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "isSlashed",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
+        "name": "maxAmounts",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
       }
     ],
     "outputs": [],
@@ -1867,82 +1878,6 @@ export const CSModuleAbi = [
         "name": "depositedKeysCount",
         "type": "uint256",
         "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltyCancelled",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltyCompensated",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltyReported",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "proposedBlockHash",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "stolenAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltySettled",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
         "internalType": "uint256"
       }
     ],
@@ -2453,6 +2388,68 @@ export const CSModuleAbi = [
   },
   {
     "type": "event",
+    "name": "ValidatorSlashingReported",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "keyIndex",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "pubkey",
+        "type": "bytes",
+        "indexed": false,
+        "internalType": "bytes"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ValidatorWithdrawn",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "keyIndex",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "exitBalance",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "slashingPenalty",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "pubkey",
+        "type": "bytes",
+        "indexed": false,
+        "internalType": "bytes"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "VettedSigningKeysCountChanged",
     "inputs": [
       {
@@ -2479,37 +2476,6 @@ export const CSModuleAbi = [
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "WithdrawalSubmitted",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "keyIndex",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
       }
     ],
     "anonymous": false
@@ -2542,12 +2508,12 @@ export const CSModuleAbi = [
   },
   {
     "type": "error",
-    "name": "AlreadyWithdrawn",
+    "name": "CannotAddKeys",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "CannotAddKeys",
+    "name": "DepositQueueHasUnsupportedWithdrawalCredentials",
     "inputs": []
   },
   {
@@ -2603,6 +2569,11 @@ export const CSModuleAbi = [
   {
     "type": "error",
     "name": "InvalidVetKeysPointer",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidWithdrawnValidatorInfo",
     "inputs": []
   },
   {
@@ -2712,6 +2683,16 @@ export const CSModuleAbi = [
   },
   {
     "type": "error",
+    "name": "SlashingPenaltyIsNotApplicable",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ValidatorSlashingAlreadyReported",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "ZeroAccountingAddress",
     "inputs": []
   },
@@ -2722,12 +2703,22 @@ export const CSModuleAbi = [
   },
   {
     "type": "error",
+    "name": "ZeroExitBalance",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "ZeroExitPenaltiesAddress",
     "inputs": []
   },
   {
     "type": "error",
     "name": "ZeroLocatorAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroManagerAddress",
     "inputs": []
   },
   {

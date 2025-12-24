@@ -36,15 +36,15 @@ export class EventsSDK extends CsmSDKModule {
   }
 
   private get oracleContract() {
-    return this.core.contractCSFeeOracle;
+    return this.core.contractFeeOracle;
   }
 
   private get distributorContract() {
-    return this.core.contractCSFeeDistributor;
+    return this.core.contractFeeDistributor;
   }
 
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.contractAccounting;
   }
 
   @Logger('Events:')
@@ -213,7 +213,7 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
-        this.moduleContract.getEvents.WithdrawalSubmitted(
+        this.moduleContract.getEvents.ValidatorWithdrawn(
           { nodeOperatorId },
           stepProps,
         ),
@@ -222,7 +222,7 @@ export class EventsSDK extends CsmSDKModule {
 
     const logs = logResults.flat().sort(sortEventsByBlockNumber);
 
-    return logs.map((e) => e.args.pubkey).filter((k) => k !== undefined);
+    return logs.map((e) => e.args.pubkey).filter(isDefined);
   }
 
   @Logger('Events:')
@@ -260,10 +260,7 @@ export class EventsSDK extends CsmSDKModule {
 
     const logResults = await Promise.all(
       requestWithBlockStep(stepConfig, (stepProps) =>
-        this.core.contractCSModule.getEvents.ELRewardsStealingPenaltyReported(
-          {},
-          stepProps,
-        ),
+        this.accountingContract.getEvents.BondLockChanged({}, stepProps),
       ),
     );
 

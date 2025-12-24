@@ -50,7 +50,7 @@ import {
 
 export class TxSDK extends CsmSDKModule {
   protected get spender(): Address {
-    return this.core.getContractAddress(CSM_CONTRACT_NAMES.csAccounting);
+    return this.core.getContractAddress(CSM_CONTRACT_NAMES.accounting);
   }
 
   private getTokenContract(

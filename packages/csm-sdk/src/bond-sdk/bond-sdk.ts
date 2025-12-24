@@ -15,7 +15,7 @@ import {
 
 export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.contractAccounting;
   }
 
   private get moduleContract() {
@@ -111,7 +111,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
       call: () =>
         prepCall(
           this.moduleContract,
-          'compensateELRewardsStealingPenalty',
+          'compensateGeneralDelayedPenalty',
           [nodeOperatorId],
           amount,
         ),
@@ -127,7 +127,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'pullFeeRewards', [
+        prepCall(this.accountingContract, 'pullAndSplitFeeRewards', [
           nodeOperatorId,
           shares,
           proof,

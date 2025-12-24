@@ -1,4 +1,4 @@
-export const CSParametersRegistryAbi = [
+export const ParametersRegistryAbi = [
   {
     "type": "constructor",
     "inputs": [
@@ -25,13 +25,78 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "QUEUE_LEGACY_PRIORITY",
+    "name": "MANAGE_GENERAL_PENALTIES_AND_CHARGES_ROLE",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MANAGE_KEYS_LIMIT_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MANAGE_PERFORMANCE_PARAMETERS_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MANAGE_QUEUE_CONFIG_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MANAGE_REWARD_SHARE_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MANAGE_VALIDATOR_EXIT_PARAMETERS_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
     "stateMutability": "view"
@@ -77,7 +142,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "defaultElRewardsStealingAdditionalFine",
+    "name": "defaultExitDelayFee",
     "inputs": [],
     "outputs": [
       {
@@ -90,7 +155,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "defaultExitDelayPenalty",
+    "name": "defaultGeneralDelayedPenaltyAdditionalFine",
     "inputs": [],
     "outputs": [
       {
@@ -265,26 +330,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "getElRewardsStealingAdditionalFine",
-    "inputs": [
-      {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "fine",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getExitDelayPenalty",
+    "name": "getExitDelayFee",
     "inputs": [
       {
         "name": "curveId",
@@ -295,6 +341,25 @@ export const CSParametersRegistryAbi = [
     "outputs": [
       {
         "name": "penalty",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGeneralDelayedPenaltyAdditionalFine",
+    "inputs": [
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "fine",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -414,7 +479,7 @@ export const CSParametersRegistryAbi = [
       {
         "name": "data",
         "type": "tuple[]",
-        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
+        "internalType": "struct IParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
             "name": "minKeyNumber",
@@ -469,7 +534,7 @@ export const CSParametersRegistryAbi = [
       {
         "name": "data",
         "type": "tuple[]",
-        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
+        "internalType": "struct IParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
             "name": "minKeyNumber",
@@ -626,40 +691,40 @@ export const CSParametersRegistryAbi = [
       {
         "name": "data",
         "type": "tuple",
-        "internalType": "struct ICSParametersRegistry.InitializationData",
+        "internalType": "struct IParametersRegistry.InitializationData",
         "components": [
           {
-            "name": "keyRemovalCharge",
+            "name": "defaultKeyRemovalCharge",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "elRewardsStealingAdditionalFine",
+            "name": "defaultGeneralDelayedPenaltyAdditionalFine",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "keysLimit",
+            "name": "defaultKeysLimit",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "rewardShare",
+            "name": "defaultRewardShare",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "performanceLeeway",
+            "name": "defaultPerformanceLeeway",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "strikesLifetime",
+            "name": "defaultStrikesLifetime",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "strikesThreshold",
+            "name": "defaultStrikesThreshold",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -674,22 +739,22 @@ export const CSParametersRegistryAbi = [
             "internalType": "uint256"
           },
           {
-            "name": "badPerformancePenalty",
+            "name": "defaultBadPerformancePenalty",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "attestationsWeight",
+            "name": "defaultAttestationsWeight",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "blocksWeight",
+            "name": "defaultBlocksWeight",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "syncWeight",
+            "name": "defaultSyncWeight",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -699,7 +764,7 @@ export const CSParametersRegistryAbi = [
             "internalType": "uint256"
           },
           {
-            "name": "defaultExitDelayPenalty",
+            "name": "defaultExitDelayFee",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -814,10 +879,10 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "setDefaultElRewardsStealingAdditionalFine",
+    "name": "setDefaultExitDelayFee",
     "inputs": [
       {
-        "name": "fine",
+        "name": "penalty",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -827,10 +892,10 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "setDefaultExitDelayPenalty",
+    "name": "setDefaultGeneralDelayedPenaltyAdditionalFine",
     "inputs": [
       {
-        "name": "penalty",
+        "name": "fine",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -964,7 +1029,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "setElRewardsStealingAdditionalFine",
+    "name": "setExitDelayFee",
     "inputs": [
       {
         "name": "curveId",
@@ -972,7 +1037,7 @@ export const CSParametersRegistryAbi = [
         "internalType": "uint256"
       },
       {
-        "name": "fine",
+        "name": "penalty",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -982,7 +1047,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "setExitDelayPenalty",
+    "name": "setGeneralDelayedPenaltyAdditionalFine",
     "inputs": [
       {
         "name": "curveId",
@@ -990,7 +1055,7 @@ export const CSParametersRegistryAbi = [
         "internalType": "uint256"
       },
       {
-        "name": "penalty",
+        "name": "fine",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1092,7 +1157,7 @@ export const CSParametersRegistryAbi = [
       {
         "name": "data",
         "type": "tuple[]",
-        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
+        "internalType": "struct IParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
             "name": "minKeyNumber",
@@ -1145,7 +1210,7 @@ export const CSParametersRegistryAbi = [
       {
         "name": "data",
         "type": "tuple[]",
-        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
+        "internalType": "struct IParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
             "name": "minKeyNumber",
@@ -1233,7 +1298,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "unsetElRewardsStealingAdditionalFine",
+    "name": "unsetExitDelayFee",
     "inputs": [
       {
         "name": "curveId",
@@ -1246,7 +1311,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "function",
-    "name": "unsetExitDelayPenalty",
+    "name": "unsetGeneralDelayedPenaltyAdditionalFine",
     "inputs": [
       {
         "name": "curveId",
@@ -1453,10 +1518,10 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "event",
-    "name": "DefaultElRewardsStealingAdditionalFineSet",
+    "name": "DefaultExitDelayFeeSet",
     "inputs": [
       {
-        "name": "value",
+        "name": "penalty",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -1466,10 +1531,10 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "event",
-    "name": "DefaultExitDelayPenaltySet",
+    "name": "DefaultGeneralDelayedPenaltyAdditionalFineSet",
     "inputs": [
       {
-        "name": "penalty",
+        "name": "value",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -1607,39 +1672,7 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "event",
-    "name": "ElRewardsStealingAdditionalFineSet",
-    "inputs": [
-      {
-        "name": "curveId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "fine",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ElRewardsStealingAdditionalFineUnset",
-    "inputs": [
-      {
-        "name": "curveId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ExitDelayPenaltySet",
+    "name": "ExitDelayFeeSet",
     "inputs": [
       {
         "name": "curveId",
@@ -1658,7 +1691,39 @@ export const CSParametersRegistryAbi = [
   },
   {
     "type": "event",
-    "name": "ExitDelayPenaltyUnset",
+    "name": "ExitDelayFeeUnset",
+    "inputs": [
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GeneralDelayedPenaltyAdditionalFineSet",
+    "inputs": [
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "fine",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GeneralDelayedPenaltyAdditionalFineUnset",
     "inputs": [
       {
         "name": "curveId",
@@ -1836,7 +1901,7 @@ export const CSParametersRegistryAbi = [
         "name": "data",
         "type": "tuple[]",
         "indexed": false,
-        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
+        "internalType": "struct IParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
             "name": "minKeyNumber",
@@ -1918,7 +1983,7 @@ export const CSParametersRegistryAbi = [
         "name": "data",
         "type": "tuple[]",
         "indexed": false,
-        "internalType": "struct ICSParametersRegistry.KeyNumberValueInterval[]",
+        "internalType": "struct IParametersRegistry.KeyNumberValueInterval[]",
         "components": [
           {
             "name": "minKeyNumber",

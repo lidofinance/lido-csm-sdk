@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Monorepo Commands (from root)
+
 - `yarn build` - Build all packages
 - `yarn build:packages` - Build only publishable packages
 - `yarn test` - Run tests across all packages
@@ -12,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn dev` - Start playground development server
 
 ### CSM SDK Package Commands (from packages/csm-sdk)
+
 - `yarn build` - Full build process (clean + build CJS, ESM, and types)
 - `yarn build:cjs` - Build CommonJS distribution
 - `yarn build:esm` - Build ES modules distribution
@@ -22,24 +24,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn lint` - Run ESLint with TypeScript support (max 0 warnings)
 
 ### Development Workflow
+
 After implementing changes: `yarn build && yalc push` (from csm-sdk directory) to update package in dependent projects
 
 ## Architecture Overview
 
 ### Core Structure
+
 The SDK follows a modular architecture centered around the `LidoSDKCsm` class, which aggregates specialized modules for different aspects of the Lido Community Staking Module (CSM) ecosystem.
 
 ### Main Entry Point
+
 - `packages/csm-sdk/src/lido-sdk-csm.ts` - Main SDK class that instantiates and manages all sub-modules
 - `packages/csm-sdk/src/index.ts` - Primary export file with re-exports from all modules
 
 ### Module Organization
+
 Each module follows a consistent pattern:
+
 - `{module-name}-sdk.ts` - Main SDK implementation
 - `types.ts` - TypeScript type definitions
 - `index.ts` - Module exports
 
 Key modules include:
+
 - **core-sdk** - Shared logic, configuration, and core utilities
 - **module-sdk** - CSM status and share limit queries
 - **operator-sdk** - Operator data management
@@ -64,6 +72,7 @@ Key modules include:
 - **satellite-sdk** - Helper for querying operator IDs by address and reading deposit queue batches
 
 ### Common Infrastructure
+
 - `packages/csm-sdk/src/common/` - Shared utilities, constants, and primitives
   - `class-primitives/` - Base classes including `CsmSDKModule` and `BusRegistry`
   - `constants/` - Contract addresses, roles, and other constants
@@ -71,15 +80,18 @@ Key modules include:
   - `decorators/` - Method decorators for caching, logging, and error handling
 
 ### BusRegistry & Inter-Module Communication
+
 The **BusRegistry** provides type-safe inter-module communication with a Proxy-based design:
 
 #### Architecture
+
 - **Proxy Pattern**: BusRegistry constructor returns a Proxy that intercepts property access
 - **Direct Property Access**: Enables `bus.moduleName.method()` instead of `bus.get('moduleName')?.method()`
 - **Type Safety**: Generic typing ensures TypeScript knows which modules are available
 - **Self-Registration**: Modules auto-register when passing a name to CsmSDKModule constructor
 
 #### How It Works
+
 1. **BusRegistry** (`bus-registry.ts`):
    - Constructor returns Proxy wrapping the instance
    - Proxy intercepts property access, checking:
@@ -99,6 +111,7 @@ The **BusRegistry** provides type-safe inter-module communication with a Proxy-b
    - Modules auto-register during construction
 
 #### Usage Examples
+
 ```typescript
 // Module with dependencies declared via generic
 export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
@@ -122,48 +135,75 @@ export class DepositDataSDK extends CsmSDKModule<{
 ```
 
 #### Key Benefits
+
 - **Type-safe**: TypeScript enforces available modules and their methods
 - **Clean syntax**: Natural property access instead of getter methods
 - **Dependency injection**: No circular dependencies between modules
 - **Optional dependencies**: Flexible module composition with `?` operator
 
 ### Key Dependencies
+
 - **@lidofinance/lido-ethereum-sdk** - Core Lido SDK (peer dependency)
 - **viem** - Ethereum client library (peer dependency)
 - **@openzeppelin/merkle-tree** - Merkle tree operations
 - **zod** - Runtime type validation
 
 ### ABI Management
+
 - `packages/csm-sdk/src/abi/` - Contract ABI definitions for all CSM contracts
 
+### Contract References (External Repositories)
+
+**community-staking-module** (main CSM contracts):
+
+- Sources: `community-staking-module/src`
+- ABI: `community-staking-module/out`
+- Deployed addresses:
+  - Mainnet: `community-staking-module/artifacts/mainnet/deploy-mainnet.json`
+  - Hoodi: `community-staking-module/artifacts/hoodi/deploy-hoodi.json`
+
+**csm-satellite** (satellite contracts):
+
+- Sources: `csm-satellite/src`
+- ABI: `csm-satellite/out`
+- Deployed addresses: `csm-satellite/artifacts`
+
 ### Configuration
+
 All modules accept `CsmCoreProps` which includes:
+
 - `core: LidoSDKCore` - Core SDK instance
 - `overridedAddresses?: CSM_ADDRESSES` - Custom contract addresses
 - `maxEventBlocksRange?: number` - Event query range limits
 - `clApiUrl?: string` - Consensus layer API URL
 
 ### Transaction System (tx-sdk)
+
 The **tx-sdk** module provides unified transaction handling across different wallet types, replacing the deprecated **spending-sdk** module.
 
 #### Purpose
+
 - Unified API for transactions across EOA, multisig, and Abstract Account wallets
 - Automatic wallet type detection and appropriate flow selection
 - Built-in permit/approve handling for token spending
 - Support for EIP-5792 batch transactions (sendCalls) for Abstract Accounts
 
 #### Wallet Type Support
+
 1. **EOA (Externally Owned Accounts)**: Standard wallets with permit signature support
 2. **Multisig Wallets**: Contract-based wallets requiring explicit approve transactions
 3. **Abstract Accounts (AA)**: Smart contract wallets supporting EIP-5792 batch operations via `sendCalls`
 
 #### Transaction Flow
+
 The tx-sdk automatically detects wallet type and routes to the appropriate flow:
+
 - **EOA wallets**: Permit signature → Transaction
 - **Multisig wallets**: Approve transaction → Main transaction
 - **Abstract Accounts**: Batch operations via `sendCalls` (single transaction for approve + main operation)
 
 #### Core API
+
 The primary method is `tx.perform()` which handles all transaction types:
 
 ```typescript
@@ -183,6 +223,7 @@ return this.bus.tx.perform({
 #### Helper Utilities
 
 **prepCall**: Type-safe utility for preparing contract calls
+
 ```typescript
 // Non-payable function
 prepCall(contract, 'transfer', [address, amount])
@@ -192,13 +233,16 @@ prepCall(contract, 'deposit', [operatorId], value)
 ```
 
 **Other helpers**:
+
 - `allowance(account, spender, token)` - Check ERC20 token allowance
 - `checkAllowance(account, spender, amount, token)` - Determine if approval needed
 - `signPermit(account, spender, amount, token, deadline)` - Sign EIP-2612 permit
 - `approve(account, spender, amount, token, callback)` - Execute approve transaction
 
 #### Transaction Lifecycle Callbacks
+
 The tx-sdk provides detailed transaction lifecycle tracking via callbacks:
+
 - `PERMIT_SIGN` - Signing permit for gasless approval
 - `APPROVE_SIGN` - Signing approval transaction
 - `APPROVE_RECEIPT` - Approval transaction confirmed
@@ -211,30 +255,36 @@ The tx-sdk provides detailed transaction lifecycle tracking via callbacks:
 - `ERROR` - Error occurred
 
 #### Architecture
+
 - **tx-sdk.ts**: Main TxSDK class with perform() method and helpers
 - **types.ts**: Type definitions for transaction operations
 - **utils/**: Helper functions including prepCall and event parsing utilities
 
 ### Keys Cache System
+
 The **keys-cache-sdk** module provides pubkey caching functionality to prevent double-submission:
 
 #### Purpose
+
 - Prevent accidental re-submission of the same validator pubkeys
 - Manual key management with 2-week automatic expiration
 - Optional integration with deposit data validation
 
 #### Architecture
+
 - **Storage Layer** (`storage.ts`): Low-level localStorage operations and utilities
 - **Business Logic** (`keys-cache-sdk.ts`): High-level cache management in SDK class
 - **Clean separation**: Storage utilities vs cache business logic
 
 #### Key Features
+
 - **Timestamp-based TTL**: 2-week expiration using timestamps (not block numbers)
 - **Chain-specific storage**: localStorage keys include chainId (`lido-csm-keys-cache-${chainId}`)
 - **Automatic cleanup**: Expired keys removed on every add/remove operation
 - **Duplicate detection**: Integration with DepositDataSDK for validation
 
 #### Usage Examples
+
 ```typescript
 const sdk = new LidoSDKCsm({ core });
 
@@ -257,5 +307,6 @@ const result = await sdk.depositData.validateDepositData(depositData);
 ```
 
 ### Testing
+
 - Jest configuration in `jest.config.ts`
 - Tests can be run with `yarn test`

@@ -49,7 +49,7 @@ export const PermissionlessGateAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSModule"
+        "internalType": "contract IBaseModule"
       }
     ],
     "stateMutability": "view"
@@ -167,7 +167,7 @@ export const PermissionlessGateAbi = [
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
+        "internalType": "struct IAccounting.PermitInput",
         "components": [
           {
             "name": "value",
@@ -255,7 +255,7 @@ export const PermissionlessGateAbi = [
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
+        "internalType": "struct IAccounting.PermitInput",
         "components": [
           {
             "name": "value",

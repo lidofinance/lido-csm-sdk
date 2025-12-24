@@ -1,4 +1,4 @@
-export const CSStrikesAbi = [
+export const ValidatorStrikesAbi = [
   {
     "type": "constructor",
     "inputs": [
@@ -33,7 +33,7 @@ export const CSStrikesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSAccounting"
+        "internalType": "contract IAccounting"
       }
     ],
     "stateMutability": "view"
@@ -59,7 +59,7 @@ export const CSStrikesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSExitPenalties"
+        "internalType": "contract IExitPenalties"
       }
     ],
     "stateMutability": "view"
@@ -98,7 +98,7 @@ export const CSStrikesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSParametersRegistry"
+        "internalType": "contract IParametersRegistry"
       }
     ],
     "stateMutability": "view"
@@ -111,7 +111,7 @@ export const CSStrikesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSEjector"
+        "internalType": "contract IEjector"
       }
     ],
     "stateMutability": "view"
@@ -240,7 +240,7 @@ export const CSStrikesAbi = [
       {
         "name": "keyStrikes",
         "type": "tuple",
-        "internalType": "struct ICSStrikes.KeyStrikes",
+        "internalType": "struct IValidatorStrikes.KeyStrikes",
         "components": [
           {
             "name": "nodeOperatorId",
@@ -299,7 +299,7 @@ export const CSStrikesAbi = [
       {
         "name": "keyStrikesList",
         "type": "tuple[]",
-        "internalType": "struct ICSStrikes.KeyStrikes[]",
+        "internalType": "struct IValidatorStrikes.KeyStrikes[]",
         "components": [
           {
             "name": "nodeOperatorId",
@@ -456,7 +456,7 @@ export const CSStrikesAbi = [
       {
         "name": "keyStrikesList",
         "type": "tuple[]",
-        "internalType": "struct ICSStrikes.KeyStrikes[]",
+        "internalType": "struct IValidatorStrikes.KeyStrikes[]",
         "components": [
           {
             "name": "nodeOperatorId",

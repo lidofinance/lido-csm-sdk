@@ -12,7 +12,7 @@ import {
 
 export class FrameSDK extends CsmSDKModule {
   private get oracleContract() {
-    return this.core.contractCSFeeOracle;
+    return this.core.contractFeeOracle;
   }
 
   private get consensusContract() {

@@ -12,15 +12,16 @@ import {
   WalletClient,
 } from 'viem';
 import {
-  CSAccountingAbi,
-  CSEjectorAbi,
-  CSExitPenaltiesAbi,
-  CSFeeDistributorAbi,
-  CSFeeOracleAbi,
+  AccountingAbi,
+  EjectorAbi,
+  ExitPenaltiesAbi,
+  FeeDistributorAbi,
+  FeeOracleAbi,
   CSModuleAbi,
   CSMSatelliteAbi,
-  CSParametersRegistryAbi,
-  CSStrikesAbi,
+  ParametersRegistryAbi,
+  ValidatorStrikesAbi,
+  VerifierAbi,
   HashConsensusAbi,
   PermissionlessGateAbi,
   StakingRouterAbi,
@@ -115,41 +116,41 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSAccounting(): GetContractReturnType<
-    typeof CSAccountingAbi,
+  get contractAccounting(): GetContractReturnType<
+    typeof AccountingAbi,
     WalletClient
   > {
-    return this.getContract(CSM_CONTRACT_NAMES.csAccounting, CSAccountingAbi);
+    return this.getContract(CSM_CONTRACT_NAMES.accounting, AccountingAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSEjector(): GetContractReturnType<
-    typeof CSEjectorAbi,
+  get contractEjector(): GetContractReturnType<
+    typeof EjectorAbi,
     WalletClient
   > {
-    return this.getContract(CSM_CONTRACT_NAMES.csEjector, CSEjectorAbi);
+    return this.getContract(CSM_CONTRACT_NAMES.ejector, EjectorAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSFeeDistributor(): GetContractReturnType<
-    typeof CSFeeDistributorAbi,
+  get contractFeeDistributor(): GetContractReturnType<
+    typeof FeeDistributorAbi,
     WalletClient
   > {
     return this.getContract(
-      CSM_CONTRACT_NAMES.csFeeDistributor,
-      CSFeeDistributorAbi,
+      CSM_CONTRACT_NAMES.feeDistributor,
+      FeeDistributorAbi,
     );
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSFeeOracle(): GetContractReturnType<
-    typeof CSFeeOracleAbi,
+  get contractFeeOracle(): GetContractReturnType<
+    typeof FeeOracleAbi,
     WalletClient
   > {
-    return this.getContract(CSM_CONTRACT_NAMES.csFeeOracle, CSFeeOracleAbi);
+    return this.getContract(CSM_CONTRACT_NAMES.feeOracle, FeeOracleAbi);
   }
 
   @Logger('Contracts:')
@@ -163,35 +164,44 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSParametersRegistry(): GetContractReturnType<
-    typeof CSParametersRegistryAbi,
+  get contractParametersRegistry(): GetContractReturnType<
+    typeof ParametersRegistryAbi,
     WalletClient
   > {
     return this.getContract(
-      CSM_CONTRACT_NAMES.csParametersRegistry,
-      CSParametersRegistryAbi,
+      CSM_CONTRACT_NAMES.parametersRegistry,
+      ParametersRegistryAbi,
     );
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSStrikes(): GetContractReturnType<
-    typeof CSStrikesAbi,
+  get contractValidatorStrikes(): GetContractReturnType<
+    typeof ValidatorStrikesAbi,
     WalletClient
   > {
-    return this.getContract(CSM_CONTRACT_NAMES.csStrikes, CSStrikesAbi);
+    return this.getContract(CSM_CONTRACT_NAMES.validatorStrikes, ValidatorStrikesAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSExitPenalties(): GetContractReturnType<
-    typeof CSExitPenaltiesAbi,
+  get contractExitPenalties(): GetContractReturnType<
+    typeof ExitPenaltiesAbi,
     WalletClient
   > {
     return this.getContract(
-      CSM_CONTRACT_NAMES.csExitPenalties,
-      CSExitPenaltiesAbi,
+      CSM_CONTRACT_NAMES.exitPenalties,
+      ExitPenaltiesAbi,
     );
+  }
+
+  @Logger('Contracts:')
+  @Cache(CACHE_LONG)
+  get contractVerifier(): GetContractReturnType<
+    typeof VerifierAbi,
+    WalletClient
+  > {
+    return this.getContract(CSM_CONTRACT_NAMES.verifier, VerifierAbi);
   }
 
   @Logger('Contracts:')

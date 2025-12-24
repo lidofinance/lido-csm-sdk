@@ -1,4 +1,4 @@
-export const CSExitPenaltiesAbi = [
+export const ExitPenaltiesAbi = [
   {
     "type": "constructor",
     "inputs": [
@@ -28,7 +28,7 @@ export const CSExitPenaltiesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSAccounting"
+        "internalType": "contract IAccounting"
       }
     ],
     "stateMutability": "view"
@@ -41,7 +41,7 @@ export const CSExitPenaltiesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSModule"
+        "internalType": "contract IBaseModule"
       }
     ],
     "stateMutability": "view"
@@ -54,7 +54,7 @@ export const CSExitPenaltiesAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSParametersRegistry"
+        "internalType": "contract IParametersRegistry"
       }
     ],
     "stateMutability": "view"
@@ -120,7 +120,7 @@ export const CSExitPenaltiesAbi = [
         "internalType": "struct ExitPenaltyInfo",
         "components": [
           {
-            "name": "delayPenalty",
+            "name": "delayFee",
             "type": "tuple",
             "internalType": "struct MarkedUint248",
             "components": [
@@ -352,7 +352,7 @@ export const CSExitPenaltiesAbi = [
         "internalType": "bytes"
       },
       {
-        "name": "delayPenalty",
+        "name": "delayFee",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"

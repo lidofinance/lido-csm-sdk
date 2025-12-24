@@ -1,4 +1,4 @@
-export const CSFeeOracleAbi = [
+export const FeeOracleAbi = [
   {
     "type": "constructor",
     "inputs": [
@@ -46,7 +46,7 @@ export const CSFeeOracleAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSFeeDistributor"
+        "internalType": "contract IFeeDistributor"
       }
     ],
     "stateMutability": "view"
@@ -163,7 +163,7 @@ export const CSFeeOracleAbi = [
       {
         "name": "",
         "type": "address",
-        "internalType": "contract ICSStrikes"
+        "internalType": "contract IValidatorStrikes"
       }
     ],
     "stateMutability": "view"
@@ -613,7 +613,7 @@ export const CSFeeOracleAbi = [
       {
         "name": "data",
         "type": "tuple",
-        "internalType": "struct ICSFeeOracle.ReportData",
+        "internalType": "struct IFeeOracle.ReportData",
         "components": [
           {
             "name": "consensusVersion",

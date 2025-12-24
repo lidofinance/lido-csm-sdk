@@ -14,7 +14,6 @@ import {
   AddKeysProps,
   EjectKeysByArrayProps,
   EjectKeysProps,
-  MigrateKeysProps,
   NormalizeQueueProps,
   RemoveKeysProps,
 } from './types.js';
@@ -25,7 +24,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   }
 
   private get ejectorContract() {
-    return this.core.contractCSEjector;
+    return this.core.contractEjector;
   }
 
   @Logger('Call:')
@@ -203,20 +202,6 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return correctedFee < EJECT_FEE_MIN_LIMIT
       ? EJECT_FEE_MIN_LIMIT
       : correctedFee;
-  }
-
-  @Logger('Call:')
-  @ErrorHandler()
-  public async migrateToPriorityQueue(props: MigrateKeysProps) {
-    const { nodeOperatorId, ...rest } = props;
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        prepCall(this.moduleContract, 'migrateToPriorityQueue', [
-          nodeOperatorId,
-        ]),
-    });
   }
 
   @Logger('Call:')

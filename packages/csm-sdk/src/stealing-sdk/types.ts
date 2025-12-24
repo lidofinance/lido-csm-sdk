@@ -4,8 +4,9 @@ import { CommonTransactionProps } from '../tx-sdk/types.js';
 
 export type ReportProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
-  blockHash: Hex;
+  penaltyType: Hex;
   amount: bigint;
+  details: string;
 };
 
 export type CancelProps = CommonTransactionProps & {
