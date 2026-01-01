@@ -3,8 +3,8 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
-  CSM_CONTRACT_NAMES,
-  SUPPORTED_VERSION_BY_CONTRACT,
+  CONTRACT_NAMES,
+  CSM_SUPPORTED_VERSION_BY_CONTRACT,
 } from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { onVersionError } from '../common/utils/on-error.js';
@@ -80,19 +80,19 @@ export class ModuleSDK extends CsmSDKModule {
     ]);
 
     return {
-      [CSM_CONTRACT_NAMES.csModule]: module,
-      [CSM_CONTRACT_NAMES.accounting]: accounting,
-      [CSM_CONTRACT_NAMES.feeDistributor]: feeDistributor,
-      [CSM_CONTRACT_NAMES.parametersRegistry]: parametersRegistry,
-      [CSM_CONTRACT_NAMES.validatorStrikes]: validatorStrikes,
-      [CSM_CONTRACT_NAMES.vettedGate]: vettedGate,
+      [CONTRACT_NAMES.csModule]: module,
+      [CONTRACT_NAMES.accounting]: accounting,
+      [CONTRACT_NAMES.feeDistributor]: feeDistributor,
+      [CONTRACT_NAMES.parametersRegistry]: parametersRegistry,
+      [CONTRACT_NAMES.validatorStrikes]: validatorStrikes,
+      [CONTRACT_NAMES.vettedGate]: vettedGate,
     };
   }
 
   public async isVersionsSupported(): Promise<boolean> {
     const versions = await this.getVersions();
 
-    return Object.entries(SUPPORTED_VERSION_BY_CONTRACT)
+    return Object.entries(CSM_SUPPORTED_VERSION_BY_CONTRACT)
       .map(([key, [min, max]]) => {
         const current = versions[key as CsmContractsWithVersion];
         return current >= min && current <= max;

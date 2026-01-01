@@ -6,7 +6,7 @@ import { Logger } from '../common/decorators/logger.js';
 import {
   CACHE_LONG,
   CACHE_MID,
-  CSM_CONTRACT_NAMES,
+  CONTRACT_NAMES,
   TOKENS,
 } from '../common/index.js';
 import { convertEthToShares, convertSharesToEth } from './convert-shares.js';
@@ -25,7 +25,7 @@ export class AccountingSDK extends CsmSDKModule {
 
   @Cache(CACHE_LONG)
   private get stethContract() {
-    return this.core.getContract(CSM_CONTRACT_NAMES.stETH, stethSharesAbi);
+    return this.core.getContract(CONTRACT_NAMES.stETH, stethSharesAbi);
   }
 
   @Logger('Views:')

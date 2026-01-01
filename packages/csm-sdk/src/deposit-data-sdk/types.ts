@@ -1,5 +1,5 @@
 import { Hex } from 'viem';
-import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
+import { SUPPORTED_CHAINS } from '../common/index.js';
 
 export type DepositDataCommon = {
   pubkey: Hex;
@@ -59,7 +59,7 @@ export type ParseResult = {
 };
 
 export type ValidationProps = {
-  chainId: CSM_SUPPORTED_CHAINS;
+  chainId: SUPPORTED_CHAINS;
   withdrawalCredentials: string;
 };
 

@@ -1,7 +1,7 @@
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, CSM_CONTRACT_NAMES } from '../common/index.js';
+import { CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
 import {
   compareLowercase,
   isHexadecimalString,
@@ -48,7 +48,7 @@ export class DepositDataSDK extends CsmSDKModule<{
     depositData: DepositData[],
   ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
-    const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
+    const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
     const blockNumber = await this.core.publicClient.getBlockNumber();
 
     const errors = await validateDepositData(depositData, {
@@ -86,7 +86,7 @@ export class DepositDataSDK extends CsmSDKModule<{
     depositData: DepositData[],
   ): ValidationError[] {
     const chainId = this.core.chainId;
-    const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
+    const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
 
     return validateDepositDataSync(depositData, {
       chainId,

@@ -4,7 +4,7 @@ import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
-  CSM_CONTRACT_NAMES,
+  CONTRACT_NAMES,
   NodeOperator,
   NodeOperatorId,
   NodeOperatorInvite,
@@ -30,7 +30,7 @@ export class EventsSDK extends CsmSDKModule {
     WalletClient
   > {
     return this.core.getContract(
-      CSM_CONTRACT_NAMES.csModule,
+      CONTRACT_NAMES.csModule,
       CSModulev1EventsAbi,
     );
   }

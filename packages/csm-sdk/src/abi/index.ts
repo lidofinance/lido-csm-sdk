@@ -15,3 +15,6 @@ export * from './ValidatorsExitBusOracle.js';
 export * from './VettedGate.js';
 export * from './WithdrawalVault.js';
 export * from './CSMSatellite.js';
+export * from './CuratedModule.js';
+export * from './CuratedGate.js';
+export * from './OperatorsData.js';

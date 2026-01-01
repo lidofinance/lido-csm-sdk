@@ -15,7 +15,7 @@
 import { ByteVectorType, ContainerType, UintBigintType } from '@chainsafe/ssz';
 import bls from 'bls-eth-wasm';
 import { hexToBytes, toHex, type Hex } from 'viem';
-import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
+import { SUPPORTED_CHAINS } from '../common/index.js';
 import { DepositData } from './types.js';
 import { DOMAIN_DEPOSIT, FIXED_FORK_VERSION } from './constants.js';
 
@@ -85,7 +85,7 @@ const ensureHex = (value: string): Hex => {
  * Get fork version for the chain
  * @throws {Error} If fork version is not found
  */
-const getForkVersion = (chainId: CSM_SUPPORTED_CHAINS): Uint8Array => {
+const getForkVersion = (chainId: SUPPORTED_CHAINS): Uint8Array => {
   const version = FIXED_FORK_VERSION[chainId];
   if (!version) {
     throw new Error(`Fork version not found for chain ${chainId}`);
@@ -186,7 +186,7 @@ const computeDepositMessageRoot = (message: DepositMessage): Uint8Array => {
  */
 export const verifyDepositSignature = async (
   data: DepositData,
-  chainId: CSM_SUPPORTED_CHAINS,
+  chainId: SUPPORTED_CHAINS,
 ): Promise<boolean> => {
   try {
     // Initialize BLS library
