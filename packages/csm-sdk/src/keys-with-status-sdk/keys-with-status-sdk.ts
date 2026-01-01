@@ -3,7 +3,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
-  CSM_CONTRACT_NAMES,
+  CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index.js';
@@ -65,7 +65,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     if (!keys) return null;
 
     const csmAddress = this.core.getContractAddress(
-      CSM_CONTRACT_NAMES.csModule,
+      CONTRACT_NAMES.csModule,
     );
 
     const duplicates = [

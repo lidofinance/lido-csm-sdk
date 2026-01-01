@@ -1,4 +1,4 @@
-import { SUPPORTED_VERSION_BY_CONTRACT } from '../common/index.js';
+import { CSM_SUPPORTED_VERSION_BY_CONTRACT } from '../common/index.js';
 import { Address } from 'viem';
 
 export type CsmStatus = {
@@ -7,7 +7,7 @@ export type CsmStatus = {
 };
 
 export type CsmContractsWithVersion =
-  keyof typeof SUPPORTED_VERSION_BY_CONTRACT;
+  keyof typeof CSM_SUPPORTED_VERSION_BY_CONTRACT;
 
 export type CsmVersions = Record<CsmContractsWithVersion, bigint>;
 

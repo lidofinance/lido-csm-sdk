@@ -19,7 +19,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import {
-  CSM_CONTRACT_NAMES,
+  CONTRACT_NAMES,
   EMPTY_PERMIT,
   Erc20Tokens,
   PermitSignatureShort,
@@ -50,7 +50,7 @@ import {
 
 export class TxSDK extends CsmSDKModule {
   protected get spender(): Address {
-    return this.core.getContractAddress(CSM_CONTRACT_NAMES.accounting);
+    return this.core.getContractAddress(CONTRACT_NAMES.accounting);
   }
 
   private getTokenContract(

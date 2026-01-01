@@ -1,8 +1,8 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
+import { SUPPORTED_CHAINS } from '../common/index.js';
 
 export const REPORT_V1_LOG_CIDS: {
-  [key in CSM_SUPPORTED_CHAINS]: string[];
+  [key in SUPPORTED_CHAINS]: string[];
 } = {
   [CHAINS.Mainnet]: [
     'QmezkGCHPUJ9XSAJfibmo6Sup35VgbhnodfYsc1xNT3rbo',

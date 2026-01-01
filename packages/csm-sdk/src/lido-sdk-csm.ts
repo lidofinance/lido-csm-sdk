@@ -1,8 +1,8 @@
 import { AccountingSDK } from './accounting-sdk/accounting-sdk.js';
 import { BondSDK } from './bond-sdk/bond-sdk.js';
 import { BusRegistry } from './common/class-primitives/bus-registry.js';
-import { CoreSDK } from './core-sdk/core-sdk.js';
-import { CsmCoreProps } from './core-sdk/types.js';
+import { CoreSDK, prepareCoreProps } from './core-sdk/core-sdk.js';
+import { SdkProps } from './core-sdk/types.js';
 import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
 import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
@@ -47,9 +47,11 @@ export class LidoSDKCsm {
   readonly satellite: SatelliteSDK;
   readonly feesMonitoring: FeesMonitoringSDK;
 
-  constructor(props: CsmCoreProps) {
+  constructor(props: SdkProps) {
+    const coreProps = prepareCoreProps(props);
+
     const bus = new BusRegistry();
-    this.core = new CoreSDK(props);
+    this.core = new CoreSDK(coreProps);
 
     const commonProps = { ...props, core: this.core, bus };
     this.tx = new TxSDK(commonProps, 'tx');

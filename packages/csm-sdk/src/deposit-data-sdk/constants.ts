@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
+import { SUPPORTED_CHAINS } from '../common/index.js';
 
 export const TRIM_LENGTH = 6;
 
@@ -12,12 +12,12 @@ export const FIXED_AMOUNT = 32000000000;
 
 export const FIXED_WC_PREFIX = '010000000000000000000000';
 
-export const FIXED_NETWORK: Record<CSM_SUPPORTED_CHAINS, string> = {
+export const FIXED_NETWORK: Record<SUPPORTED_CHAINS, string> = {
   [CHAINS.Mainnet]: 'mainnet',
   [CHAINS.Hoodi]: 'hoodi',
 };
 
-export const FIXED_FORK_VERSION: Record<CSM_SUPPORTED_CHAINS, string> = {
+export const FIXED_FORK_VERSION: Record<SUPPORTED_CHAINS, string> = {
   [CHAINS.Mainnet]: '00000000',
   [CHAINS.Hoodi]: '10000910',
 };

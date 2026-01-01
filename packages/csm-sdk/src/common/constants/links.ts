@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { CSM_SUPPORTED_CHAINS } from './base.js';
+import { SUPPORTED_CHAINS } from './base.js';
 
 export enum LINK_TYPE {
   icsTree = 'icsTree',
@@ -9,7 +9,7 @@ export enum LINK_TYPE {
 }
 
 export const EXTERNAL_LINKS: {
-  [key in CSM_SUPPORTED_CHAINS]: { [key2 in LINK_TYPE]?: string };
+  [key in SUPPORTED_CHAINS]: { [key2 in LINK_TYPE]?: string };
 } = {
   [CHAINS.Mainnet]: {
     [LINK_TYPE.icsTree]:
