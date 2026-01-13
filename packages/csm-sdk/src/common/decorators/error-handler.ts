@@ -61,7 +61,7 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
             );
 
             const txError = SDKError.from(error);
-            callback?.({ stage: 'error', payload: txError });
+            callback?.({ stage: 'error', payload: { error: txError } });
 
             throw txError;
           }) as any;
@@ -77,7 +77,7 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
         );
 
         const txError = SDKError.from(error);
-        callback?.({ stage: 'error', payload: txError });
+        callback?.({ stage: 'error', payload: { error: txError } });
 
         throw txError;
       }

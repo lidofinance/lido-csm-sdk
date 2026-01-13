@@ -63,8 +63,11 @@ export class DepositDataSDK extends CsmSDKModule<{
       pubkeys.map(toHexString),
     );
 
+    // Check for keys already known on CL
+    const clErrors = await this.checkClKeys(pubkeys.map(toHexString));
+
     // Merge all errors
-    return [...errors, ...duplicateErrors, ...uploadedDuplicateErrors];
+    return [...errors, ...duplicateErrors, ...uploadedDuplicateErrors, ...clErrors];
   }
 
   /**
@@ -123,6 +126,29 @@ export class DepositDataSDK extends CsmSDKModule<{
           message: `pubkey already exists in cache`,
           field: 'pubkey',
           code: ValidationErrorCode.DUPLICATE_PUBKEY,
+        });
+      }
+    });
+
+    return errors;
+  }
+
+  @Logger('API:')
+  @ErrorHandler()
+  public async checkClKeys(pubkeys: Hex[]): Promise<ValidationError[]> {
+    const clKeys = await this.bus.keysWithStatus?.getClKeys(pubkeys);
+    const errors: ValidationError[] = [];
+
+    if (!clKeys) return errors;
+
+    pubkeys.forEach((pubkey, index) => {
+      const exists = clKeys.find((k) => compareLowercase(k.pubkey, pubkey));
+      if (exists) {
+        errors.push({
+          index,
+          message: `pubkey already exists as validator on CL`,
+          field: 'pubkey',
+          code: ValidationErrorCode.VALIDATOR_EXISTS,
         });
       }
     });
