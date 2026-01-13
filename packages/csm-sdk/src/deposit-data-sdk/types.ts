@@ -34,6 +34,7 @@ export enum ValidationErrorCode {
   INVALID_BLS_SIGNATURE = 'INVALID_BLS_SIGNATURE',
   MISSING_FIELD = 'MISSING_FIELD',
   INVALID_FORMAT = 'INVALID_FORMAT',
+  VALIDATOR_EXISTS = 'VALIDATOR_EXISTS',
 }
 
 export type ValidationError = {
