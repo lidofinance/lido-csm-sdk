@@ -5,28 +5,22 @@ import {
   CACHE_MID,
   CSM_CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
-  KEY_STATUS,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
-import {
-  compareLowercase,
-  fetchJson,
-  isNotUnique,
-  isUnique,
-} from '../common/utils/index.js';
+import { fetchJson, isNotUnique, isUnique } from '../common/utils/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { FrameSDK } from '../frame-sdk/frame-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
 import { getClUrls, prepareKey } from './cl-chunks.js';
+import { computeStatuses } from './compute-statuses.js';
 import {
   ClPreparedKey,
   ClValidatorsResponse,
   FindKeysResponse,
   KeyWithStatus,
 } from './types.js';
-import { hasNoInterception } from './utils.js';
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
@@ -91,14 +85,10 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('API:')
   @ErrorHandler()
   @Cache(CACHE_MID)
-  public async getClKeysStatus(
-    nodeOperatorId: NodeOperatorId,
-  ): Promise<ClPreparedKey[] | null> {
-    if (!this.core.clApiUrl) {
+  public async getClKeys(pubkeys: Hex[]): Promise<ClPreparedKey[] | null> {
+    if (!this.core.clApiUrl || pubkeys.length === 0) {
       return null;
     }
-
-    const pubkeys = await this.bus.operator.getKeys(nodeOperatorId);
 
     const urls = getClUrls(pubkeys, this.core.clApiUrl);
     const results = await Promise.all(
@@ -106,6 +96,16 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     );
 
     return results.flatMap(({ data }) => data.map(prepareKey));
+  }
+
+  @Logger('API:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
+  public async getClKeysStatus(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<ClPreparedKey[] | null> {
+    const pubkeys = await this.bus.operator.getKeys(nodeOperatorId);
+    return this.getClKeys(pubkeys);
   }
 
   @Logger('Utils:')
@@ -137,105 +137,31 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
 
-    const getStatuses = (
-      pubkey: Hex,
-      nodeOperatorKeyIndex: number,
-    ): KEY_STATUS[] => {
-      const statuses: KEY_STATUS[] = [];
+    return keys.map((pubkey, index) => {
       const prefilled = clKeysStatus?.find((item) => item.pubkey === pubkey);
+      const keyStrikes = keysWithStrikes.find((item) => item.pubkey === pubkey);
 
-      if (prefilled?.slashed) {
-        statuses.push(KEY_STATUS.SLASHED);
-      }
+      const statuses = computeStatuses({
+        pubkey,
+        keyIndex: index,
+        info,
+        prefilled,
+        ejectableEpoch,
+        unboundCount,
+        duplicates,
+        withdrawalSubmitted,
+        requestedToExit,
+        hasCLStatuses: !!clKeysStatus,
+        hasStrikes: !!keyStrikes?.strikes.reduce((a, b) => a + b, 0),
+      });
 
-      if (
-        withdrawalSubmitted?.includes(pubkey) ||
-        prefilled?.status === KEY_STATUS.WITHDRAWN
-      ) {
-        return [...statuses, KEY_STATUS.WITHDRAWN];
-      }
-
-      if (
-        keysWithStrikes
-          .find((item) => item.pubkey === pubkey)
-          ?.strikes.reduce((a, b) => a + b, 0)
-      ) {
-        statuses.push(KEY_STATUS.WITH_STRIKES);
-      }
-
-      if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
-        if (duplicates?.includes(pubkey)) {
-          return [...statuses, KEY_STATUS.DUPLICATED];
-        } else if (nodeOperatorKeyIndex === info.totalVettedKeys) {
-          return [...statuses, KEY_STATUS.INVALID];
-        }
-      }
-
-      if (
-        nodeOperatorKeyIndex >= info.totalDepositedKeys &&
-        info.enqueuedCount < info.depositableValidatorsCount
-      ) {
-        statuses.push(KEY_STATUS.NON_QUEUED);
-      } else if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
-        statuses.push(KEY_STATUS.UNCHECKED);
-      } else if (prefilled?.status) {
-        if (
-          prefilled.status === KEY_STATUS.ACTIVE &&
-          prefilled.activationEpoch < ejectableEpoch
-        ) {
-          statuses.push(KEY_STATUS.EJECTABLE);
-        }
-        statuses.push(prefilled.status);
-      } else if (nodeOperatorKeyIndex >= info.totalDepositedKeys) {
-        statuses.push(KEY_STATUS.DEPOSITABLE);
-      } else {
-        if (!clKeysStatus) {
-          statuses.push(KEY_STATUS.EJECTABLE);
-        }
-        statuses.push(
-          clKeysStatus ? KEY_STATUS.ACTIVATION_PENDING : KEY_STATUS.ACTIVE,
-        );
-      }
-
-      if (
-        hasNoInterception(statuses, [
-          KEY_STATUS.SLASHED,
-          KEY_STATUS.WITHDRAWN,
-          KEY_STATUS.WITHDRAWAL_PENDING,
-          KEY_STATUS.EXITING,
-        ])
-      ) {
-        const exitRequestIndex = requestedToExit.findIndex((key) =>
-          compareLowercase(pubkey, key),
-        );
-
-        if (exitRequestIndex >= 0) {
-          statuses.push(KEY_STATUS.EXIT_REQUESTED);
-        }
-      }
-
-      if (
-        hasNoInterception(statuses, [
-          KEY_STATUS.SLASHED,
-          KEY_STATUS.WITHDRAWN,
-          KEY_STATUS.EXIT_REQUESTED,
-        ]) &&
-        unboundCount &&
-        info.totalAddedKeys - nodeOperatorKeyIndex < unboundCount
-      ) {
-        statuses.push(KEY_STATUS.UNBONDED);
-      }
-
-      return statuses;
-    };
-
-    return keys.map((pubkey, index) => ({
-      pubkey,
-      index,
-      statuses: getStatuses(pubkey, index),
-      validatorIndex: clKeysStatus?.find((item) => item.pubkey === pubkey)
-        ?.validatorIndex,
-      strikes: keysWithStrikes.find((item) => item.pubkey === pubkey)?.strikes,
-    }));
+      return {
+        pubkey,
+        index,
+        statuses,
+        validatorIndex: prefilled?.validatorIndex,
+        strikes: keyStrikes?.strikes,
+      };
+    });
   }
 }

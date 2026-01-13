@@ -1,5 +1,6 @@
 import { Address, Hex } from 'viem';
 import { KEY_STATUS } from '../common/index.js';
+import { NodeOperatorInfo } from '../operator-sdk/types.js';
 import { KeyStrikes } from '../strikes-sdk/types.js';
 
 export type KeyWithStatus = {
@@ -64,3 +65,18 @@ export type ClPreparedKey = {
   slashed: boolean;
   activationEpoch: bigint;
 };
+
+export type StatusContext = {
+  pubkey: Hex;
+  keyIndex: number;
+  info: NodeOperatorInfo;
+  prefilled?: ClPreparedKey;
+  ejectableEpoch: bigint;
+  unboundCount: number;
+  duplicates: Hex[] | null;
+  withdrawalSubmitted: Hex[] | null;
+  requestedToExit: Hex[];
+  hasCLStatuses: boolean;
+  hasStrikes: boolean;
+};
+

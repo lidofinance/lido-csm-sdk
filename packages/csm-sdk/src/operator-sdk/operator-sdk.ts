@@ -103,8 +103,10 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getUnboundKeysCount(id: NodeOperatorId): Promise<bigint> {
-    return this.accountingContract.read.getUnbondedKeysCountToEject([id]);
+  public async getUnboundKeysCount(id: NodeOperatorId): Promise<number> {
+    const value =
+      await this.accountingContract.read.getUnbondedKeysCountToEject([id]);
+    return Number(value);
   }
 
   @Logger('Views:')
