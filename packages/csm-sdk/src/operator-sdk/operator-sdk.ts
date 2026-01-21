@@ -107,6 +107,7 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
     const properties =
       await this.moduleContract.read.getNodeOperatorManagementProperties([id]);
 
+    // TODO: review for CM
     return {
       nodeOperatorId: id,
       managerAddress: properties.managerAddress,

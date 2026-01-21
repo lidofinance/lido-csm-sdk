@@ -1,1141 +1,1141 @@
 export const HashConsensusAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "slotsPerEpoch",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'slotsPerEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "secondsPerSlot",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'secondsPerSlot',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "genesisTime",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'genesisTime',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "epochsPerFrame",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'epochsPerFrame',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "fastLaneLengthSlots",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'fastLaneLengthSlots',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
+        name: 'admin',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "reportProcessor",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'reportProcessor',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DEFAULT_ADMIN_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "DISABLE_CONSENSUS_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DISABLE_CONSENSUS_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MANAGE_FAST_LANE_CONFIG_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MANAGE_FAST_LANE_CONFIG_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MANAGE_FRAME_CONFIG_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MANAGE_FRAME_CONFIG_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MANAGE_MEMBERS_AND_QUORUM_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MANAGE_MEMBERS_AND_QUORUM_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MANAGE_REPORT_PROCESSOR_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MANAGE_REPORT_PROCESSOR_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "addMember",
-    "inputs": [
+    type: 'function',
+    name: 'addMember',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "internalType": "address"
+        name: 'addr',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "quorum",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'quorum',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "disableConsensus",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'disableConsensus',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "getChainConfig",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getChainConfig',
+    inputs: [],
+    outputs: [
       {
-        "name": "slotsPerEpoch",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'slotsPerEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "secondsPerSlot",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'secondsPerSlot',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "genesisTime",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'genesisTime',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getConsensusState",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getConsensusState',
+    inputs: [],
+    outputs: [
       {
-        "name": "refSlot",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'refSlot',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "consensusReport",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'consensusReport',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "isReportProcessing",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: 'isReportProcessing',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getConsensusStateForMember",
-    "inputs": [
+    type: 'function',
+    name: 'getConsensusStateForMember',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'addr',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "result",
-        "type": "tuple",
-        "internalType": "struct HashConsensus.MemberConsensusState",
-        "components": [
+        name: 'result',
+        type: 'tuple',
+        internalType: 'struct HashConsensus.MemberConsensusState',
+        components: [
           {
-            "name": "currentFrameRefSlot",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'currentFrameRefSlot',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "currentFrameConsensusReport",
-            "type": "bytes32",
-            "internalType": "bytes32"
+            name: 'currentFrameConsensusReport',
+            type: 'bytes32',
+            internalType: 'bytes32',
           },
           {
-            "name": "isMember",
-            "type": "bool",
-            "internalType": "bool"
+            name: 'isMember',
+            type: 'bool',
+            internalType: 'bool',
           },
           {
-            "name": "isFastLane",
-            "type": "bool",
-            "internalType": "bool"
+            name: 'isFastLane',
+            type: 'bool',
+            internalType: 'bool',
           },
           {
-            "name": "canReport",
-            "type": "bool",
-            "internalType": "bool"
+            name: 'canReport',
+            type: 'bool',
+            internalType: 'bool',
           },
           {
-            "name": "lastMemberReportRefSlot",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'lastMemberReportRefSlot',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "currentFrameMemberReport",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
+            name: 'currentFrameMemberReport',
+            type: 'bytes32',
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getCurrentFrame",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getCurrentFrame',
+    inputs: [],
+    outputs: [
       {
-        "name": "refSlot",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'refSlot',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "reportProcessingDeadlineSlot",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'reportProcessingDeadlineSlot',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getFastLaneMembers",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getFastLaneMembers',
+    inputs: [],
+    outputs: [
       {
-        "name": "addresses",
-        "type": "address[]",
-        "internalType": "address[]"
+        name: 'addresses',
+        type: 'address[]',
+        internalType: 'address[]',
       },
       {
-        "name": "lastReportedRefSlots",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
-      }
+        name: 'lastReportedRefSlots',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getFrameConfig",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getFrameConfig',
+    inputs: [],
+    outputs: [
       {
-        "name": "initialEpoch",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'initialEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "epochsPerFrame",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'epochsPerFrame',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "fastLaneLengthSlots",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'fastLaneLengthSlots',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getInitialRefSlot",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getInitialRefSlot',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getIsFastLaneMember",
-    "inputs": [
+    type: 'function',
+    name: 'getIsFastLaneMember',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'addr',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getIsMember",
-    "inputs": [
+    type: 'function',
+    name: 'getIsMember',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'addr',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getMembers",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getMembers',
+    inputs: [],
+    outputs: [
       {
-        "name": "addresses",
-        "type": "address[]",
-        "internalType": "address[]"
+        name: 'addresses',
+        type: 'address[]',
+        internalType: 'address[]',
       },
       {
-        "name": "lastReportedRefSlots",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
-      }
+        name: 'lastReportedRefSlots',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getQuorum",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getQuorum',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getReportProcessor",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getReportProcessor',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getReportVariants",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getReportVariants',
+    inputs: [],
+    outputs: [
       {
-        "name": "variants",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
+        name: 'variants',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
       },
       {
-        "name": "support",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
-      }
+        name: 'support',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleAdmin',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMember',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMemberCount',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
+    type: 'function',
+    name: 'grantRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
+    type: 'function',
+    name: 'hasRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "removeMember",
-    "inputs": [
+    type: 'function',
+    name: 'removeMember',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "internalType": "address"
+        name: 'addr',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "quorum",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'quorum',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
+    type: 'function',
+    name: 'renounceRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'callerConfirmation',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
+    type: 'function',
+    name: 'revokeRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setFastLaneLengthSlots",
-    "inputs": [
+    type: 'function',
+    name: 'setFastLaneLengthSlots',
+    inputs: [
       {
-        "name": "fastLaneLengthSlots",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'fastLaneLengthSlots',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setFrameConfig",
-    "inputs": [
+    type: 'function',
+    name: 'setFrameConfig',
+    inputs: [
       {
-        "name": "epochsPerFrame",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'epochsPerFrame',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "fastLaneLengthSlots",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'fastLaneLengthSlots',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setQuorum",
-    "inputs": [
+    type: 'function',
+    name: 'setQuorum',
+    inputs: [
       {
-        "name": "quorum",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'quorum',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setReportProcessor",
-    "inputs": [
+    type: 'function',
+    name: 'setReportProcessor',
+    inputs: [
       {
-        "name": "newProcessor",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'newProcessor',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "submitReport",
-    "inputs": [
+    type: 'function',
+    name: 'submitReport',
+    inputs: [
       {
-        "name": "slot",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'slot',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "report",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'report',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "consensusVersion",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'consensusVersion',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
+    type: 'function',
+    name: 'supportsInterface',
+    inputs: [
       {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
+        name: 'interfaceId',
+        type: 'bytes4',
+        internalType: 'bytes4',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "updateInitialEpoch",
-    "inputs": [
+    type: 'function',
+    name: 'updateInitialEpoch',
+    inputs: [
       {
-        "name": "initialEpoch",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'initialEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "ConsensusLost",
-    "inputs": [
+    type: 'event',
+    name: 'ConsensusLost',
+    inputs: [
       {
-        "name": "refSlot",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
+        name: 'refSlot',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ConsensusReached",
-    "inputs": [
+    type: 'event',
+    name: 'ConsensusReached',
+    inputs: [
       {
-        "name": "refSlot",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'refSlot',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "report",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
+        name: 'report',
+        type: 'bytes32',
+        indexed: false,
+        internalType: 'bytes32',
       },
       {
-        "name": "support",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'support',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "FastLaneConfigSet",
-    "inputs": [
+    type: 'event',
+    name: 'FastLaneConfigSet',
+    inputs: [
       {
-        "name": "fastLaneLengthSlots",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'fastLaneLengthSlots',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "FrameConfigSet",
-    "inputs": [
+    type: 'event',
+    name: 'FrameConfigSet',
+    inputs: [
       {
-        "name": "newInitialEpoch",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'newInitialEpoch',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "newEpochsPerFrame",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'newEpochsPerFrame',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
+    type: 'event',
+    name: 'Initialized',
+    inputs: [
       {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
+        name: 'version',
+        type: 'uint64',
+        indexed: false,
+        internalType: 'uint64',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "MemberAdded",
-    "inputs": [
+    type: 'event',
+    name: 'MemberAdded',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'addr',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "newTotalMembers",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'newTotalMembers',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "newQuorum",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'newQuorum',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "MemberRemoved",
-    "inputs": [
+    type: 'event',
+    name: 'MemberRemoved',
+    inputs: [
       {
-        "name": "addr",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'addr',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "newTotalMembers",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'newTotalMembers',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "newQuorum",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'newQuorum',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "QuorumSet",
-    "inputs": [
+    type: 'event',
+    name: 'QuorumSet',
+    inputs: [
       {
-        "name": "newQuorum",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'newQuorum',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "totalMembers",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'totalMembers',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "prevQuorum",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'prevQuorum',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ReportProcessorSet",
-    "inputs": [
+    type: 'event',
+    name: 'ReportProcessorSet',
+    inputs: [
       {
-        "name": "processor",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'processor',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "prevProcessor",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'prevProcessor',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ReportReceived",
-    "inputs": [
+    type: 'event',
+    name: 'ReportReceived',
+    inputs: [
       {
-        "name": "refSlot",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'refSlot',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "member",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'member',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "report",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
-      }
+        name: 'report',
+        type: 'bytes32',
+        indexed: false,
+        internalType: 'bytes32',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
+    type: 'event',
+    name: 'RoleAdminChanged',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'previousAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
+        name: 'newAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
+    type: 'event',
+    name: 'RoleGranted',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
+    type: 'event',
+    name: 'RoleRevoked',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
+    type: 'error',
+    name: 'AccessControlBadConfirmation',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
+    type: 'error',
+    name: 'AccessControlUnauthorizedAccount',
+    inputs: [
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
+        name: 'neededRole',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "AddressCannotBeZero",
-    "inputs": []
+    type: 'error',
+    name: 'AddressCannotBeZero',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "AdminCannotBeZero",
-    "inputs": []
+    type: 'error',
+    name: 'AdminCannotBeZero',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ConsensusReportAlreadyProcessing",
-    "inputs": []
+    type: 'error',
+    name: 'ConsensusReportAlreadyProcessing',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "DuplicateMember",
-    "inputs": []
+    type: 'error',
+    name: 'DuplicateMember',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "DuplicateReport",
-    "inputs": []
+    type: 'error',
+    name: 'DuplicateReport',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "EmptyReport",
-    "inputs": []
+    type: 'error',
+    name: 'EmptyReport',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "EpochsPerFrameCannotBeZero",
-    "inputs": []
+    type: 'error',
+    name: 'EpochsPerFrameCannotBeZero',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "FastLanePeriodCannotBeLongerThanFrame",
-    "inputs": []
+    type: 'error',
+    name: 'FastLanePeriodCannotBeLongerThanFrame',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InitialEpochAlreadyArrived",
-    "inputs": []
+    type: 'error',
+    name: 'InitialEpochAlreadyArrived',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InitialEpochIsYetToArrive",
-    "inputs": []
+    type: 'error',
+    name: 'InitialEpochIsYetToArrive',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InitialEpochRefSlotCannotBeEarlierThanProcessingSlot",
-    "inputs": []
+    type: 'error',
+    name: 'InitialEpochRefSlotCannotBeEarlierThanProcessingSlot',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidChainConfig",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidChainConfig',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidInitialization',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidSlot",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidSlot',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NewProcessorCannotBeTheSame",
-    "inputs": []
+    type: 'error',
+    name: 'NewProcessorCannotBeTheSame',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NonFastLaneMemberCannotReportWithinFastLaneInterval",
-    "inputs": []
+    type: 'error',
+    name: 'NonFastLaneMemberCannotReportWithinFastLaneInterval',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NonMember",
-    "inputs": []
+    type: 'error',
+    name: 'NonMember',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotInitializing",
-    "inputs": []
+    type: 'error',
+    name: 'NotInitializing',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NumericOverflow",
-    "inputs": []
+    type: 'error',
+    name: 'NumericOverflow',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "QuorumTooSmall",
-    "inputs": [
+    type: 'error',
+    name: 'QuorumTooSmall',
+    inputs: [
       {
-        "name": "minQuorum",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'minQuorum',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "receivedQuorum",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
+        name: 'receivedQuorum',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "ReportProcessorCannotBeZero",
-    "inputs": []
+    type: 'error',
+    name: 'ReportProcessorCannotBeZero',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "SafeCastOverflowedUintDowncast",
-    "inputs": [
+    type: 'error',
+    name: 'SafeCastOverflowedUintDowncast',
+    inputs: [
       {
-        "name": "bits",
-        "type": "uint8",
-        "internalType": "uint8"
+        name: 'bits',
+        type: 'uint8',
+        internalType: 'uint8',
       },
       {
-        "name": "value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
+        name: 'value',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "StaleReport",
-    "inputs": []
+    type: 'error',
+    name: 'StaleReport',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "UnexpectedConsensusVersion",
-    "inputs": [
+    type: 'error',
+    name: 'UnexpectedConsensusVersion',
+    inputs: [
       {
-        "name": "expected",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'expected',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "received",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
-  }
+        name: 'received',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+  },
 ] as const;

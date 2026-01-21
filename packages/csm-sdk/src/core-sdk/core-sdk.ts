@@ -13,24 +13,24 @@ import {
 } from 'viem';
 import {
   AccountingAbi,
+  CSModuleAbi,
+  CSMSatelliteAbi,
+  CuratedGateAbi,
+  CuratedModuleAbi,
   EjectorAbi,
   ExitPenaltiesAbi,
   FeeDistributorAbi,
   FeeOracleAbi,
-  CSModuleAbi,
-  CSMSatelliteAbi,
-  ParametersRegistryAbi,
-  ValidatorStrikesAbi,
-  VerifierAbi,
   HashConsensusAbi,
+  OperatorsDataAbi,
+  ParametersRegistryAbi,
   PermissionlessGateAbi,
   StakingRouterAbi,
   ValidatorsExitBusOracleAbi,
+  ValidatorStrikesAbi,
+  VerifierAbi,
   VettedGateAbi,
   WithdrawalVaultAbi,
-  CuratedModuleAbi,
-  CuratedGateAbi,
-  OperatorsDataAbi,
 } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
@@ -41,11 +41,8 @@ import {
   EXTERNAL_LINKS,
   LINK_TYPE,
   SUPPORTED_CHAINS,
-  CSM_CONTRACT_ADDRESSES,
-  CSM_DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN,
-  CSM_MODULE_ID_BY_CHAIN,
 } from '../common/index.js';
-import { ContractAddresses, CoreProps, SdkProps } from './types.js';
+import { ContractAddresses, CoreProps } from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
@@ -63,10 +60,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.core = props.core;
     this.contractAddresses = props.contractAddresses;
     this.moduleId = props.moduleId;
-    this.deploymentBlockNumber =
-      props.deploymentBlockNumber ??
-      CSM_DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN[this.chainId] ??
-      0n;
+    this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.clApiUrl = props.clApiUrl;
     this.keysApiUrl = props.keysApiUrl;
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
@@ -144,10 +138,7 @@ export class CoreSDK extends CsmSDKCacheable {
     typeof FeeDistributorAbi,
     WalletClient
   > {
-    return this.getContract(
-      CONTRACT_NAMES.feeDistributor,
-      FeeDistributorAbi,
-    );
+    return this.getContract(CONTRACT_NAMES.feeDistributor, FeeDistributorAbi);
   }
 
   @Logger('Contracts:')
@@ -186,7 +177,10 @@ export class CoreSDK extends CsmSDKCacheable {
     typeof ValidatorStrikesAbi,
     WalletClient
   > {
-    return this.getContract(CONTRACT_NAMES.validatorStrikes, ValidatorStrikesAbi);
+    return this.getContract(
+      CONTRACT_NAMES.validatorStrikes,
+      ValidatorStrikesAbi,
+    );
   }
 
   @Logger('Contracts:')
@@ -195,10 +189,7 @@ export class CoreSDK extends CsmSDKCacheable {
     typeof ExitPenaltiesAbi,
     WalletClient
   > {
-    return this.getContract(
-      CONTRACT_NAMES.exitPenalties,
-      ExitPenaltiesAbi,
-    );
+    return this.getContract(CONTRACT_NAMES.exitPenalties, ExitPenaltiesAbi);
   }
 
   @Logger('Contracts:')
@@ -267,10 +258,7 @@ export class CoreSDK extends CsmSDKCacheable {
     typeof WithdrawalVaultAbi,
     WalletClient
   > {
-    return this.getContract(
-      CONTRACT_NAMES.withdrawalVault,
-      WithdrawalVaultAbi,
-    );
+    return this.getContract(CONTRACT_NAMES.withdrawalVault, WithdrawalVaultAbi);
   }
 
   @Logger('Contracts:')
@@ -330,7 +318,10 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public get feesMonitoringApiLink() {
-    return this.feesMonitoringApiUrl ?? this.getExternalLink(LINK_TYPE.feesMonitoringApi);
+    return (
+      this.feesMonitoringApiUrl ??
+      this.getExternalLink(LINK_TYPE.feesMonitoringApi)
+    );
   }
 
   public getIpfsUrls(cid: string): string[] {
@@ -341,15 +332,3 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 }
 
-export const prepareCoreProps = (props: SdkProps): CoreProps => {
-  const chainId = props.core.chain.id as SUPPORTED_CHAINS;
-  return {
-    ...props,
-    contractAddresses: {
-      ...CSM_CONTRACT_ADDRESSES[chainId],
-      ...props.overridedAddresses,
-    },
-    moduleId: CSM_MODULE_ID_BY_CHAIN[chainId],
-    deploymentBlockNumber: CSM_DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN[chainId],
-  };
-};

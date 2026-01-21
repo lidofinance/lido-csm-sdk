@@ -4,7 +4,7 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
   CONTRACT_NAMES,
-  CSM_SUPPORTED_VERSION_BY_CONTRACT,
+  SUPPORTED_CONTRACT_VERSIONS,
 } from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { onVersionError } from '../common/utils/on-error.js';
@@ -20,7 +20,6 @@ import {
   ShareLimitInfo,
   ShareLimitStatus,
 } from './types.js';
-import { bigIntRange } from '../common/utils/bigint-range.js';
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -52,9 +51,11 @@ export class ModuleSDK extends CsmSDKModule {
   @ErrorHandler()
   public async getVersions(): Promise<CsmVersions> {
     const [
-      module,
+      csModule,
+      curatedModule,
       accounting,
       feeDistributor,
+      feeOracle,
       parametersRegistry,
       validatorStrikes,
       vettedGate,
@@ -62,11 +63,17 @@ export class ModuleSDK extends CsmSDKModule {
       this.core.contractCSModule.read
         .getInitializedVersion()
         .catch(onVersionError),
+      this.core.contractCuratedModule.read
+        .getInitializedVersion()
+        .catch(onVersionError),
       this.core.contractAccounting.read
         .getInitializedVersion()
         .catch(onVersionError),
       this.core.contractFeeDistributor.read
         .getInitializedVersion()
+        .catch(onVersionError),
+      this.core.contractFeeOracle.read
+        .getContractVersion()
         .catch(onVersionError),
       this.core.contractParametersRegistry.read
         .getInitializedVersion()
@@ -80,9 +87,11 @@ export class ModuleSDK extends CsmSDKModule {
     ]);
 
     return {
-      [CONTRACT_NAMES.csModule]: module,
+      [CONTRACT_NAMES.csModule]: csModule,
+      [CONTRACT_NAMES.curatedModule]: curatedModule,
       [CONTRACT_NAMES.accounting]: accounting,
       [CONTRACT_NAMES.feeDistributor]: feeDistributor,
+      [CONTRACT_NAMES.feeOracle]: feeOracle,
       [CONTRACT_NAMES.parametersRegistry]: parametersRegistry,
       [CONTRACT_NAMES.validatorStrikes]: validatorStrikes,
       [CONTRACT_NAMES.vettedGate]: vettedGate,
@@ -92,7 +101,7 @@ export class ModuleSDK extends CsmSDKModule {
   public async isVersionsSupported(): Promise<boolean> {
     const versions = await this.getVersions();
 
-    return Object.entries(CSM_SUPPORTED_VERSION_BY_CONTRACT)
+    return Object.entries(SUPPORTED_CONTRACT_VERSIONS)
       .map(([key, [min, max]]) => {
         const current = versions[key as CsmContractsWithVersion];
         return current >= min && current <= max;
@@ -148,18 +157,6 @@ export class ModuleSDK extends CsmSDKModule {
         : info.activeLeft - info.queue < shareLimitThreshold
           ? ShareLimitStatus.APPROACHING
           : ShareLimitStatus.FAR;
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getQueues() {
-    const queuesCount = await this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
-    const pointers = await Promise.all(
-      [...bigIntRange(queuesCount)].map((i) =>
-        this.moduleContract.read.depositQueuePointers([i]),
-      ),
-    );
-    return pointers.map(([head, tail]) => ({ head, tail }));
   }
 
   @Logger('API:')

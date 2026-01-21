@@ -204,6 +204,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
       : correctedFee;
   }
 
+  // FIXME: move to Queue SDK
   @Logger('Call:')
   @ErrorHandler()
   public async normalizeQueue(props: NormalizeQueueProps) {

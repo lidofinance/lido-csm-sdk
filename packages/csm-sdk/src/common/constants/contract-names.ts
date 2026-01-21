@@ -31,3 +31,15 @@ export enum CONTRACT_NAMES {
   curatedGate = 'curatedGate',
   operatorsData = 'operatorsData',
 }
+
+// TODO: what changed in contracts to bump versions? can I support v2 and v3 simultaneously?
+export const SUPPORTED_CONTRACT_VERSIONS = {
+  [CONTRACT_NAMES.accounting]: [3n, 3n],
+  [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
+  [CONTRACT_NAMES.feeOracle]: [3n, 3n],
+  [CONTRACT_NAMES.csModule]: [3n, 3n],
+  [CONTRACT_NAMES.curatedModule]: [1n, 1n],
+  [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
+  [CONTRACT_NAMES.validatorStrikes]: [1n, 1n],
+  [CONTRACT_NAMES.vettedGate]: [1n, 1n],
+} as const;

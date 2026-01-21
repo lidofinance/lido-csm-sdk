@@ -18,3 +18,5 @@ export * from './CSMSatellite.js';
 export * from './CuratedModule.js';
 export * from './CuratedGate.js';
 export * from './OperatorsData.js';
+export * from './ICSModule.js';
+export * from './CuratedGateFactory.js';
