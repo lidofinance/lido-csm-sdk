@@ -1,1627 +1,1627 @@
 export const VerifierAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "withdrawalAddress",
-        "type": "address",
-        "internalType": "address"
+        name: 'withdrawalAddress',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "module",
-        "type": "address",
-        "internalType": "address"
+        name: 'module',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "slotsPerEpoch",
-        "type": "uint64",
-        "internalType": "uint64"
+        name: 'slotsPerEpoch',
+        type: 'uint64',
+        internalType: 'uint64',
       },
       {
-        "name": "slotsPerHistoricalRoot",
-        "type": "uint64",
-        "internalType": "uint64"
+        name: 'slotsPerHistoricalRoot',
+        type: 'uint64',
+        internalType: 'uint64',
       },
       {
-        "name": "gindices",
-        "type": "tuple",
-        "internalType": "struct IVerifier.GIndices",
-        "components": [
+        name: 'gindices',
+        type: 'tuple',
+        internalType: 'struct IVerifier.GIndices',
+        components: [
           {
-            "name": "gIFirstWithdrawalPrev",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstWithdrawalPrev',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstWithdrawalCurr",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstWithdrawalCurr',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstValidatorPrev",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstValidatorPrev',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstValidatorCurr",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstValidatorCurr',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstHistoricalSummaryPrev",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstHistoricalSummaryPrev',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstHistoricalSummaryCurr",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstHistoricalSummaryCurr',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstBlockRootInSummaryPrev",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstBlockRootInSummaryPrev',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstBlockRootInSummaryCurr",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstBlockRootInSummaryCurr',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstBalanceNodePrev",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstBalanceNodePrev',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstBalanceNodeCurr",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstBalanceNodeCurr',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstPendingConsolidationPrev",
-            "type": "bytes32",
-            "internalType": "GIndex"
+            name: 'gIFirstPendingConsolidationPrev',
+            type: 'bytes32',
+            internalType: 'GIndex',
           },
           {
-            "name": "gIFirstPendingConsolidationCurr",
-            "type": "bytes32",
-            "internalType": "GIndex"
-          }
-        ]
+            name: 'gIFirstPendingConsolidationCurr',
+            type: 'bytes32',
+            internalType: 'GIndex',
+          },
+        ],
       },
       {
-        "name": "firstSupportedSlot",
-        "type": "uint64",
-        "internalType": "Slot"
+        name: 'firstSupportedSlot',
+        type: 'uint64',
+        internalType: 'Slot',
       },
       {
-        "name": "pivotSlot",
-        "type": "uint64",
-        "internalType": "Slot"
+        name: 'pivotSlot',
+        type: 'uint64',
+        internalType: 'Slot',
       },
       {
-        "name": "capellaSlot",
-        "type": "uint64",
-        "internalType": "Slot"
+        name: 'capellaSlot',
+        type: 'uint64',
+        internalType: 'Slot',
       },
       {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'admin',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "BEACON_ROOTS",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'BEACON_ROOTS',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "CAPELLA_SLOT",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'CAPELLA_SLOT',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "Slot"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'Slot',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DEFAULT_ADMIN_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "FIRST_SUPPORTED_SLOT",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'FIRST_SUPPORTED_SLOT',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "Slot"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'Slot',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_BALANCES_NODE_CURR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_BALANCES_NODE_CURR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_BALANCES_NODE_PREV",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_BALANCES_NODE_PREV',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_BLOCK_ROOT_IN_SUMMARY_CURR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_BLOCK_ROOT_IN_SUMMARY_CURR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_BLOCK_ROOT_IN_SUMMARY_PREV",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_BLOCK_ROOT_IN_SUMMARY_PREV',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_HISTORICAL_SUMMARY_CURR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_HISTORICAL_SUMMARY_CURR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_HISTORICAL_SUMMARY_PREV",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_HISTORICAL_SUMMARY_PREV',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_PENDING_CONSOLIDATION_CURR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_PENDING_CONSOLIDATION_CURR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_PENDING_CONSOLIDATION_PREV",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_PENDING_CONSOLIDATION_PREV',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_VALIDATOR_CURR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_VALIDATOR_CURR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_VALIDATOR_PREV",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_VALIDATOR_PREV',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_WITHDRAWAL_CURR",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_WITHDRAWAL_CURR',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "GI_FIRST_WITHDRAWAL_PREV",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'GI_FIRST_WITHDRAWAL_PREV',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "GIndex"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'GIndex',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MODULE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MODULE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IBaseModule"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IBaseModule',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PAUSE_INFINITELY",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PAUSE_INFINITELY',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PAUSE_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PAUSE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PIVOT_SLOT",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PIVOT_SLOT',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "Slot"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'Slot',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "RESUME_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'RESUME_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "SLOTS_PER_EPOCH",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'SLOTS_PER_EPOCH',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'uint64',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "SLOTS_PER_HISTORICAL_ROOT",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'SLOTS_PER_HISTORICAL_ROOT',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'uint64',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "WITHDRAWAL_ADDRESS",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'WITHDRAWAL_ADDRESS',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getResumeSinceTimestamp",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getResumeSinceTimestamp',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleAdmin',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMember',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMemberCount',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
+    type: 'function',
+    name: 'grantRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
+    type: 'function',
+    name: 'hasRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "isPaused",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'isPaused',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "pauseFor",
-    "inputs": [
+    type: 'function',
+    name: 'pauseFor',
+    inputs: [
       {
-        "name": "duration",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'duration',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "processConsolidation",
-    "inputs": [
+    type: 'function',
+    name: 'processConsolidation',
+    inputs: [
       {
-        "name": "data",
-        "type": "tuple",
-        "internalType": "struct IVerifier.ProcessConsolidationInput",
-        "components": [
+        name: 'data',
+        type: 'tuple',
+        internalType: 'struct IVerifier.ProcessConsolidationInput',
+        components: [
           {
-            "name": "consolidation",
-            "type": "tuple",
-            "internalType": "struct IVerifier.PendingConsolidationWitness",
-            "components": [
+            name: 'consolidation',
+            type: 'tuple',
+            internalType: 'struct IVerifier.PendingConsolidationWitness',
+            components: [
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct PendingConsolidation",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct PendingConsolidation',
+                components: [
                   {
-                    "name": "sourceIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'sourceIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "targetIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'targetIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "offset",
-                "type": "uint64",
-                "internalType": "uint64"
+                name: 'offset',
+                type: 'uint64',
+                internalType: 'uint64',
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "validator",
-            "type": "tuple",
-            "internalType": "struct IVerifier.ValidatorWitness",
-            "components": [
+            name: 'validator',
+            type: 'tuple',
+            internalType: 'struct IVerifier.ValidatorWitness',
+            components: [
               {
-                "name": "index",
-                "type": "uint64",
-                "internalType": "uint64"
+                name: 'index',
+                type: 'uint64',
+                internalType: 'uint64',
               },
               {
-                "name": "nodeOperatorId",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'nodeOperatorId',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "keyIndex",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'keyIndex',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct Validator",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Validator',
+                components: [
                   {
-                    "name": "pubkey",
-                    "type": "bytes",
-                    "internalType": "bytes"
+                    name: 'pubkey',
+                    type: 'bytes',
+                    internalType: 'bytes',
                   },
                   {
-                    "name": "withdrawalCredentials",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'withdrawalCredentials',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "effectiveBalance",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'effectiveBalance',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "slashed",
-                    "type": "bool",
-                    "internalType": "bool"
+                    name: 'slashed',
+                    type: 'bool',
+                    internalType: 'bool',
                   },
                   {
-                    "name": "activationEligibilityEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEligibilityEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "activationEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "exitEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'exitEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "withdrawableEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'withdrawableEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "balance",
-            "type": "tuple",
-            "internalType": "struct IVerifier.BalanceWitness",
-            "components": [
+            name: 'balance',
+            type: 'tuple',
+            internalType: 'struct IVerifier.BalanceWitness',
+            components: [
               {
-                "name": "node",
-                "type": "bytes32",
-                "internalType": "bytes32"
+                name: 'node',
+                type: 'bytes32',
+                internalType: 'bytes32',
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "recentBlock",
-            "type": "tuple",
-            "internalType": "struct IVerifier.RecentHeaderWitness",
-            "components": [
+            name: 'recentBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.RecentHeaderWitness',
+            components: [
               {
-                "name": "header",
-                "type": "tuple",
-                "internalType": "struct BeaconBlockHeader",
-                "components": [
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
                   {
-                    "name": "slot",
-                    "type": "uint64",
-                    "internalType": "Slot"
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
                   },
                   {
-                    "name": "proposerIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "parentRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "stateRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "bodyRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
-                  }
-                ]
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
-                "name": "rootsTimestamp",
-                "type": "uint64",
-                "internalType": "uint64"
-              }
-            ]
+                name: 'rootsTimestamp',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+            ],
           },
           {
-            "name": "consolidationBlock",
-            "type": "tuple",
-            "internalType": "struct IVerifier.HistoricalHeaderWitness",
-            "components": [
+            name: 'consolidationBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.HistoricalHeaderWitness',
+            components: [
               {
-                "name": "header",
-                "type": "tuple",
-                "internalType": "struct BeaconBlockHeader",
-                "components": [
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
                   {
-                    "name": "slot",
-                    "type": "uint64",
-                    "internalType": "Slot"
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
                   },
                   {
-                    "name": "proposerIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "parentRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "stateRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "bodyRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
-                  }
-                ]
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "processHistoricalWithdrawalProof",
-    "inputs": [
+    type: 'function',
+    name: 'processHistoricalWithdrawalProof',
+    inputs: [
       {
-        "name": "data",
-        "type": "tuple",
-        "internalType": "struct IVerifier.ProcessHistoricalWithdrawalInput",
-        "components": [
+        name: 'data',
+        type: 'tuple',
+        internalType: 'struct IVerifier.ProcessHistoricalWithdrawalInput',
+        components: [
           {
-            "name": "withdrawal",
-            "type": "tuple",
-            "internalType": "struct IVerifier.WithdrawalWitness",
-            "components": [
+            name: 'withdrawal',
+            type: 'tuple',
+            internalType: 'struct IVerifier.WithdrawalWitness',
+            components: [
               {
-                "name": "offset",
-                "type": "uint8",
-                "internalType": "uint8"
+                name: 'offset',
+                type: 'uint8',
+                internalType: 'uint8',
               },
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct Withdrawal",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Withdrawal',
+                components: [
                   {
-                    "name": "index",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'index',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "validatorIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'validatorIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "withdrawalAddress",
-                    "type": "address",
-                    "internalType": "address"
+                    name: 'withdrawalAddress',
+                    type: 'address',
+                    internalType: 'address',
                   },
                   {
-                    "name": "amount",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'amount',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "validator",
-            "type": "tuple",
-            "internalType": "struct IVerifier.ValidatorWitness",
-            "components": [
+            name: 'validator',
+            type: 'tuple',
+            internalType: 'struct IVerifier.ValidatorWitness',
+            components: [
               {
-                "name": "index",
-                "type": "uint64",
-                "internalType": "uint64"
+                name: 'index',
+                type: 'uint64',
+                internalType: 'uint64',
               },
               {
-                "name": "nodeOperatorId",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'nodeOperatorId',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "keyIndex",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'keyIndex',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct Validator",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Validator',
+                components: [
                   {
-                    "name": "pubkey",
-                    "type": "bytes",
-                    "internalType": "bytes"
+                    name: 'pubkey',
+                    type: 'bytes',
+                    internalType: 'bytes',
                   },
                   {
-                    "name": "withdrawalCredentials",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'withdrawalCredentials',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "effectiveBalance",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'effectiveBalance',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "slashed",
-                    "type": "bool",
-                    "internalType": "bool"
+                    name: 'slashed',
+                    type: 'bool',
+                    internalType: 'bool',
                   },
                   {
-                    "name": "activationEligibilityEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEligibilityEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "activationEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "exitEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'exitEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "withdrawableEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'withdrawableEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "recentBlock",
-            "type": "tuple",
-            "internalType": "struct IVerifier.RecentHeaderWitness",
-            "components": [
+            name: 'recentBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.RecentHeaderWitness',
+            components: [
               {
-                "name": "header",
-                "type": "tuple",
-                "internalType": "struct BeaconBlockHeader",
-                "components": [
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
                   {
-                    "name": "slot",
-                    "type": "uint64",
-                    "internalType": "Slot"
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
                   },
                   {
-                    "name": "proposerIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "parentRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "stateRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "bodyRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
-                  }
-                ]
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
-                "name": "rootsTimestamp",
-                "type": "uint64",
-                "internalType": "uint64"
-              }
-            ]
+                name: 'rootsTimestamp',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+            ],
           },
           {
-            "name": "withdrawalBlock",
-            "type": "tuple",
-            "internalType": "struct IVerifier.HistoricalHeaderWitness",
-            "components": [
+            name: 'withdrawalBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.HistoricalHeaderWitness',
+            components: [
               {
-                "name": "header",
-                "type": "tuple",
-                "internalType": "struct BeaconBlockHeader",
-                "components": [
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
                   {
-                    "name": "slot",
-                    "type": "uint64",
-                    "internalType": "Slot"
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
                   },
                   {
-                    "name": "proposerIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "parentRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "stateRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "bodyRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
-                  }
-                ]
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "processSlashedProof",
-    "inputs": [
+    type: 'function',
+    name: 'processSlashedProof',
+    inputs: [
       {
-        "name": "data",
-        "type": "tuple",
-        "internalType": "struct IVerifier.ProcessSlashedInput",
-        "components": [
+        name: 'data',
+        type: 'tuple',
+        internalType: 'struct IVerifier.ProcessSlashedInput',
+        components: [
           {
-            "name": "validator",
-            "type": "tuple",
-            "internalType": "struct IVerifier.ValidatorWitness",
-            "components": [
+            name: 'validator',
+            type: 'tuple',
+            internalType: 'struct IVerifier.ValidatorWitness',
+            components: [
               {
-                "name": "index",
-                "type": "uint64",
-                "internalType": "uint64"
+                name: 'index',
+                type: 'uint64',
+                internalType: 'uint64',
               },
               {
-                "name": "nodeOperatorId",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'nodeOperatorId',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "keyIndex",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'keyIndex',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct Validator",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Validator',
+                components: [
                   {
-                    "name": "pubkey",
-                    "type": "bytes",
-                    "internalType": "bytes"
+                    name: 'pubkey',
+                    type: 'bytes',
+                    internalType: 'bytes',
                   },
                   {
-                    "name": "withdrawalCredentials",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'withdrawalCredentials',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "effectiveBalance",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'effectiveBalance',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "slashed",
-                    "type": "bool",
-                    "internalType": "bool"
+                    name: 'slashed',
+                    type: 'bool',
+                    internalType: 'bool',
                   },
                   {
-                    "name": "activationEligibilityEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEligibilityEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "activationEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "exitEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'exitEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "withdrawableEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'withdrawableEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "recentBlock",
-            "type": "tuple",
-            "internalType": "struct IVerifier.RecentHeaderWitness",
-            "components": [
+            name: 'recentBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.RecentHeaderWitness',
+            components: [
               {
-                "name": "header",
-                "type": "tuple",
-                "internalType": "struct BeaconBlockHeader",
-                "components": [
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
                   {
-                    "name": "slot",
-                    "type": "uint64",
-                    "internalType": "Slot"
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
                   },
                   {
-                    "name": "proposerIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "parentRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "stateRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "bodyRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
-                  }
-                ]
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
-                "name": "rootsTimestamp",
-                "type": "uint64",
-                "internalType": "uint64"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'rootsTimestamp',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "processWithdrawalProof",
-    "inputs": [
+    type: 'function',
+    name: 'processWithdrawalProof',
+    inputs: [
       {
-        "name": "data",
-        "type": "tuple",
-        "internalType": "struct IVerifier.ProcessWithdrawalInput",
-        "components": [
+        name: 'data',
+        type: 'tuple',
+        internalType: 'struct IVerifier.ProcessWithdrawalInput',
+        components: [
           {
-            "name": "withdrawal",
-            "type": "tuple",
-            "internalType": "struct IVerifier.WithdrawalWitness",
-            "components": [
+            name: 'withdrawal',
+            type: 'tuple',
+            internalType: 'struct IVerifier.WithdrawalWitness',
+            components: [
               {
-                "name": "offset",
-                "type": "uint8",
-                "internalType": "uint8"
+                name: 'offset',
+                type: 'uint8',
+                internalType: 'uint8',
               },
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct Withdrawal",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Withdrawal',
+                components: [
                   {
-                    "name": "index",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'index',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "validatorIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'validatorIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "withdrawalAddress",
-                    "type": "address",
-                    "internalType": "address"
+                    name: 'withdrawalAddress',
+                    type: 'address',
+                    internalType: 'address',
                   },
                   {
-                    "name": "amount",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'amount',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "validator",
-            "type": "tuple",
-            "internalType": "struct IVerifier.ValidatorWitness",
-            "components": [
+            name: 'validator',
+            type: 'tuple',
+            internalType: 'struct IVerifier.ValidatorWitness',
+            components: [
               {
-                "name": "index",
-                "type": "uint64",
-                "internalType": "uint64"
+                name: 'index',
+                type: 'uint64',
+                internalType: 'uint64',
               },
               {
-                "name": "nodeOperatorId",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'nodeOperatorId',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "keyIndex",
-                "type": "uint32",
-                "internalType": "uint32"
+                name: 'keyIndex',
+                type: 'uint32',
+                internalType: 'uint32',
               },
               {
-                "name": "object",
-                "type": "tuple",
-                "internalType": "struct Validator",
-                "components": [
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Validator',
+                components: [
                   {
-                    "name": "pubkey",
-                    "type": "bytes",
-                    "internalType": "bytes"
+                    name: 'pubkey',
+                    type: 'bytes',
+                    internalType: 'bytes',
                   },
                   {
-                    "name": "withdrawalCredentials",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'withdrawalCredentials',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "effectiveBalance",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'effectiveBalance',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "slashed",
-                    "type": "bool",
-                    "internalType": "bool"
+                    name: 'slashed',
+                    type: 'bool',
+                    internalType: 'bool',
                   },
                   {
-                    "name": "activationEligibilityEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEligibilityEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "activationEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'activationEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "exitEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'exitEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "withdrawableEpoch",
-                    "type": "uint64",
-                    "internalType": "uint64"
-                  }
-                ]
+                    name: 'withdrawableEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
-                "name": "proof",
-                "type": "bytes32[]",
-                "internalType": "bytes32[]"
-              }
-            ]
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
-            "name": "withdrawalBlock",
-            "type": "tuple",
-            "internalType": "struct IVerifier.RecentHeaderWitness",
-            "components": [
+            name: 'withdrawalBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.RecentHeaderWitness',
+            components: [
               {
-                "name": "header",
-                "type": "tuple",
-                "internalType": "struct BeaconBlockHeader",
-                "components": [
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
                   {
-                    "name": "slot",
-                    "type": "uint64",
-                    "internalType": "Slot"
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
                   },
                   {
-                    "name": "proposerIndex",
-                    "type": "uint64",
-                    "internalType": "uint64"
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
                   },
                   {
-                    "name": "parentRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "stateRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
                   },
                   {
-                    "name": "bodyRoot",
-                    "type": "bytes32",
-                    "internalType": "bytes32"
-                  }
-                ]
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
-                "name": "rootsTimestamp",
-                "type": "uint64",
-                "internalType": "uint64"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'rootsTimestamp',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
+    type: 'function',
+    name: 'renounceRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'callerConfirmation',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "resume",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'resume',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
+    type: 'function',
+    name: 'revokeRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
+    type: 'function',
+    name: 'supportsInterface',
+    inputs: [
       {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
+        name: 'interfaceId',
+        type: 'bytes4',
+        internalType: 'bytes4',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "Paused",
-    "inputs": [
+    type: 'event',
+    name: 'Paused',
+    inputs: [
       {
-        "name": "duration",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'duration',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Resumed",
-    "inputs": [],
-    "anonymous": false
+    type: 'event',
+    name: 'Resumed',
+    inputs: [],
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
+    type: 'event',
+    name: 'RoleAdminChanged',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'previousAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
+        name: 'newAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
+    type: 'event',
+    name: 'RoleGranted',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
+    type: 'event',
+    name: 'RoleRevoked',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
+    type: 'error',
+    name: 'AccessControlBadConfirmation',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
+    type: 'error',
+    name: 'AccessControlUnauthorizedAccount',
+    inputs: [
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
+        name: 'neededRole',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "HistoricalSummaryDoesNotExist",
-    "inputs": []
+    type: 'error',
+    name: 'HistoricalSummaryDoesNotExist',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "IndexOutOfRange",
-    "inputs": []
+    type: 'error',
+    name: 'IndexOutOfRange',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidBlockHeader",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidBlockHeader',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidCapellaSlot",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidCapellaSlot',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidChainConfig",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidChainConfig',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidConsolidationSource",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidConsolidationSource',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidPivotSlot",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidPivotSlot',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidPublicKey",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidPublicKey',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidValidatorIndex",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidValidatorIndex',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidWithdrawalAddress",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidWithdrawalAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PartialWithdrawal",
-    "inputs": []
+    type: 'error',
+    name: 'PartialWithdrawal',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PauseUntilMustBeInFuture",
-    "inputs": []
+    type: 'error',
+    name: 'PauseUntilMustBeInFuture',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PausedExpected",
-    "inputs": []
+    type: 'error',
+    name: 'PausedExpected',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ResumedExpected",
-    "inputs": []
+    type: 'error',
+    name: 'ResumedExpected',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "RootNotFound",
-    "inputs": []
+    type: 'error',
+    name: 'RootNotFound',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "UnsupportedSlot",
-    "inputs": [
+    type: 'error',
+    name: 'UnsupportedSlot',
+    inputs: [
       {
-        "name": "slot",
-        "type": "uint64",
-        "internalType": "Slot"
-      }
-    ]
+        name: 'slot',
+        type: 'uint64',
+        internalType: 'Slot',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "ValidatorIsNotSlashed",
-    "inputs": []
+    type: 'error',
+    name: 'ValidatorIsNotSlashed',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ValidatorIsNotWithdrawable",
-    "inputs": []
+    type: 'error',
+    name: 'ValidatorIsNotWithdrawable',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ValidatorIsSlashed",
-    "inputs": []
+    type: 'error',
+    name: 'ValidatorIsSlashed',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroAdminAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroAdminAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroModuleAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroModuleAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroPauseDuration",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroPauseDuration',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroWithdrawalAddress",
-    "inputs": []
-  }
+    type: 'error',
+    name: 'ZeroWithdrawalAddress',
+    inputs: [],
+  },
 ] as const;

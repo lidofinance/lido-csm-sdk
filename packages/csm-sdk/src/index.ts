@@ -1,4 +1,5 @@
 export * from './lido-sdk-csm.js';
+export * from './lido-sdk-cm.js';
 
 export * from './common/index.js';
 export * from './core-sdk/index.js';

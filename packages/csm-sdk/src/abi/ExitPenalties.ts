@@ -1,409 +1,409 @@
 export const ExitPenaltiesAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "module",
-        "type": "address",
-        "internalType": "address"
+        name: 'module',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "parametersRegistry",
-        "type": "address",
-        "internalType": "address"
+        name: 'parametersRegistry',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "strikes",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'strikes',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "ACCOUNTING",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'ACCOUNTING',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IAccounting"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IAccounting',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MODULE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MODULE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IBaseModule"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IBaseModule',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PARAMETERS_REGISTRY",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PARAMETERS_REGISTRY',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IParametersRegistry"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IParametersRegistry',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "STRIKES",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'STRIKES',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "STRIKES_EXIT_TYPE_ID",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'STRIKES_EXIT_TYPE_ID',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint8",
-        "internalType": "uint8"
-      }
+        name: '',
+        type: 'uint8',
+        internalType: 'uint8',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "VOLUNTARY_EXIT_TYPE_ID",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'VOLUNTARY_EXIT_TYPE_ID',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint8",
-        "internalType": "uint8"
-      }
+        name: '',
+        type: 'uint8',
+        internalType: 'uint8',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getExitPenaltyInfo",
-    "inputs": [
+    type: 'function',
+    name: 'getExitPenaltyInfo',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
+        name: 'publicKey',
+        type: 'bytes',
+        internalType: 'bytes',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct ExitPenaltyInfo",
-        "components": [
+        name: '',
+        type: 'tuple',
+        internalType: 'struct ExitPenaltyInfo',
+        components: [
           {
-            "name": "delayFee",
-            "type": "tuple",
-            "internalType": "struct MarkedUint248",
-            "components": [
+            name: 'delayFee',
+            type: 'tuple',
+            internalType: 'struct MarkedUint248',
+            components: [
               {
-                "name": "value",
-                "type": "uint248",
-                "internalType": "uint248"
+                name: 'value',
+                type: 'uint248',
+                internalType: 'uint248',
               },
               {
-                "name": "isValue",
-                "type": "bool",
-                "internalType": "bool"
-              }
-            ]
+                name: 'isValue',
+                type: 'bool',
+                internalType: 'bool',
+              },
+            ],
           },
           {
-            "name": "strikesPenalty",
-            "type": "tuple",
-            "internalType": "struct MarkedUint248",
-            "components": [
+            name: 'strikesPenalty',
+            type: 'tuple',
+            internalType: 'struct MarkedUint248',
+            components: [
               {
-                "name": "value",
-                "type": "uint248",
-                "internalType": "uint248"
+                name: 'value',
+                type: 'uint248',
+                internalType: 'uint248',
               },
               {
-                "name": "isValue",
-                "type": "bool",
-                "internalType": "bool"
-              }
-            ]
+                name: 'isValue',
+                type: 'bool',
+                internalType: 'bool',
+              },
+            ],
           },
           {
-            "name": "withdrawalRequestFee",
-            "type": "tuple",
-            "internalType": "struct MarkedUint248",
-            "components": [
+            name: 'withdrawalRequestFee',
+            type: 'tuple',
+            internalType: 'struct MarkedUint248',
+            components: [
               {
-                "name": "value",
-                "type": "uint248",
-                "internalType": "uint248"
+                name: 'value',
+                type: 'uint248',
+                internalType: 'uint248',
               },
               {
-                "name": "isValue",
-                "type": "bool",
-                "internalType": "bool"
-              }
-            ]
-          }
-        ]
-      }
+                name: 'isValue',
+                type: 'bool',
+                internalType: 'bool',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "isValidatorExitDelayPenaltyApplicable",
-    "inputs": [
+    type: 'function',
+    name: 'isValidatorExitDelayPenaltyApplicable',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'publicKey',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "eligibleToExitInSec",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'eligibleToExitInSec',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "processExitDelayReport",
-    "inputs": [
+    type: 'function',
+    name: 'processExitDelayReport',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'publicKey',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "eligibleToExitInSec",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'eligibleToExitInSec',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "processStrikesReport",
-    "inputs": [
+    type: 'function',
+    name: 'processStrikesReport',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
+        name: 'publicKey',
+        type: 'bytes',
+        internalType: 'bytes',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "processTriggeredExit",
-    "inputs": [
+    type: 'function',
+    name: 'processTriggeredExit',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'publicKey',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "withdrawalRequestPaidFee",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'withdrawalRequestPaidFee',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "exitType",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'exitType',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "StrikesPenaltyProcessed",
-    "inputs": [
+    type: 'event',
+    name: 'StrikesPenaltyProcessed',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
+        name: 'pubkey',
+        type: 'bytes',
+        indexed: false,
+        internalType: 'bytes',
       },
       {
-        "name": "strikesPenalty",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'strikesPenalty',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "TriggeredExitFeeRecorded",
-    "inputs": [
+    type: 'event',
+    name: 'TriggeredExitFeeRecorded',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "exitType",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'exitType',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
+        name: 'pubkey',
+        type: 'bytes',
+        indexed: false,
+        internalType: 'bytes',
       },
       {
-        "name": "withdrawalRequestPaidFee",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'withdrawalRequestPaidFee',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "withdrawalRequestRecordedFee",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'withdrawalRequestRecordedFee',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ValidatorExitDelayProcessed",
-    "inputs": [
+    type: 'event',
+    name: 'ValidatorExitDelayProcessed',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
+        name: 'pubkey',
+        type: 'bytes',
+        indexed: false,
+        internalType: 'bytes',
       },
       {
-        "name": "delayFee",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'delayFee',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "error",
-    "name": "SafeCastOverflowedUintDowncast",
-    "inputs": [
+    type: 'error',
+    name: 'SafeCastOverflowedUintDowncast',
+    inputs: [
       {
-        "name": "bits",
-        "type": "uint8",
-        "internalType": "uint8"
+        name: 'bits',
+        type: 'uint8',
+        internalType: 'uint8',
       },
       {
-        "name": "value",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
+        name: 'value',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "SenderIsNotModule",
-    "inputs": []
+    type: 'error',
+    name: 'SenderIsNotModule',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "SenderIsNotStrikes",
-    "inputs": []
+    type: 'error',
+    name: 'SenderIsNotStrikes',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ValidatorExitDelayNotApplicable",
-    "inputs": []
+    type: 'error',
+    name: 'ValidatorExitDelayNotApplicable',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroModuleAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroModuleAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroParametersRegistryAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroParametersRegistryAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroStrikesAddress",
-    "inputs": []
-  }
+    type: 'error',
+    name: 'ZeroStrikesAddress',
+    inputs: [],
+  },
 ] as const;

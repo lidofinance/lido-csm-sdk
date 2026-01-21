@@ -1,1334 +1,1334 @@
 export const VettedGateAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "module",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'module',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "ACCOUNTING",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'ACCOUNTING',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IAccounting"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IAccounting',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DEFAULT_ADMIN_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "END_REFERRAL_SEASON_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'END_REFERRAL_SEASON_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "MODULE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'MODULE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IBaseModule"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IBaseModule',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PAUSE_INFINITELY",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PAUSE_INFINITELY',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "PAUSE_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'PAUSE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "RECOVERER_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'RECOVERER_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "RESUME_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'RESUME_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "SET_TREE_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'SET_TREE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "START_REFERRAL_SEASON_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'START_REFERRAL_SEASON_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "addNodeOperatorETH",
-    "inputs": [
+    type: 'function',
+    name: 'addNodeOperatorETH',
+    inputs: [
       {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'keysCount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'publicKeys',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'signatures',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "managementProperties",
-        "type": "tuple",
-        "internalType": "struct NodeOperatorManagementProperties",
-        "components": [
+        name: 'managementProperties',
+        type: 'tuple',
+        internalType: 'struct NodeOperatorManagementProperties',
+        components: [
           {
-            "name": "managerAddress",
-            "type": "address",
-            "internalType": "address"
+            name: 'managerAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
-            "name": "rewardAddress",
-            "type": "address",
-            "internalType": "address"
+            name: 'rewardAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
-            "name": "extendedManagerPermissions",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
+            name: 'extendedManagerPermissions',
+            type: 'bool',
+            internalType: 'bool',
+          },
+        ],
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
       },
       {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'referrer',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "payable"
+    stateMutability: 'payable',
   },
   {
-    "type": "function",
-    "name": "addNodeOperatorStETH",
-    "inputs": [
+    type: 'function',
+    name: 'addNodeOperatorStETH',
+    inputs: [
       {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'keysCount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'publicKeys',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'signatures',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "managementProperties",
-        "type": "tuple",
-        "internalType": "struct NodeOperatorManagementProperties",
-        "components": [
+        name: 'managementProperties',
+        type: 'tuple',
+        internalType: 'struct NodeOperatorManagementProperties',
+        components: [
           {
-            "name": "managerAddress",
-            "type": "address",
-            "internalType": "address"
+            name: 'managerAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
-            "name": "rewardAddress",
-            "type": "address",
-            "internalType": "address"
+            name: 'rewardAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
-            "name": "extendedManagerPermissions",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
+            name: 'extendedManagerPermissions',
+            type: 'bool',
+            internalType: 'bool',
+          },
+        ],
       },
       {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct IAccounting.PermitInput",
-        "components": [
+        name: 'permit',
+        type: 'tuple',
+        internalType: 'struct IAccounting.PermitInput',
+        components: [
           {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'value',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'deadline',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
+            name: 'v',
+            type: 'uint8',
+            internalType: 'uint8',
           },
           {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
+            name: 'r',
+            type: 'bytes32',
+            internalType: 'bytes32',
           },
           {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
+            name: 's',
+            type: 'bytes32',
+            internalType: 'bytes32',
+          },
+        ],
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
       },
       {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'referrer',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "addNodeOperatorWstETH",
-    "inputs": [
+    type: 'function',
+    name: 'addNodeOperatorWstETH',
+    inputs: [
       {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'keysCount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'publicKeys',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: 'signatures',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
-        "name": "managementProperties",
-        "type": "tuple",
-        "internalType": "struct NodeOperatorManagementProperties",
-        "components": [
+        name: 'managementProperties',
+        type: 'tuple',
+        internalType: 'struct NodeOperatorManagementProperties',
+        components: [
           {
-            "name": "managerAddress",
-            "type": "address",
-            "internalType": "address"
+            name: 'managerAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
-            "name": "rewardAddress",
-            "type": "address",
-            "internalType": "address"
+            name: 'rewardAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
-            "name": "extendedManagerPermissions",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
+            name: 'extendedManagerPermissions',
+            type: 'bool',
+            internalType: 'bool',
+          },
+        ],
       },
       {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct IAccounting.PermitInput",
-        "components": [
+        name: 'permit',
+        type: 'tuple',
+        internalType: 'struct IAccounting.PermitInput',
+        components: [
           {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'value',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'deadline',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
+            name: 'v',
+            type: 'uint8',
+            internalType: 'uint8',
           },
           {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
+            name: 'r',
+            type: 'bytes32',
+            internalType: 'bytes32',
           },
           {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
+            name: 's',
+            type: 'bytes32',
+            internalType: 'bytes32',
+          },
+        ],
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
       },
       {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'referrer',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "claimBondCurve",
-    "inputs": [
+    type: 'function',
+    name: 'claimBondCurve',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "claimReferrerBondCurve",
-    "inputs": [
+    type: 'function',
+    name: 'claimReferrerBondCurve',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "curveId",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'curveId',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "endCurrentReferralProgramSeason",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'endCurrentReferralProgramSeason',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "getInitializedVersion",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getInitializedVersion',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'uint64',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getReferralsCount",
-    "inputs": [
+    type: 'function',
+    name: 'getReferralsCount',
+    inputs: [
       {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'referrer',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getReferralsCount",
-    "inputs": [
+    type: 'function',
+    name: 'getReferralsCount',
+    inputs: [
       {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
+        name: 'referrer',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "season",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'season',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getResumeSinceTimestamp",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getResumeSinceTimestamp',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleAdmin',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMember',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMemberCount',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
+    type: 'function',
+    name: 'grantRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
+    type: 'function',
+    name: 'hasRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "hashLeaf",
-    "inputs": [
+    type: 'function',
+    name: 'hashLeaf',
+    inputs: [
       {
-        "name": "member",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'member',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "pure"
+    stateMutability: 'pure',
   },
   {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
+    type: 'function',
+    name: 'initialize',
+    inputs: [
       {
-        "name": "_curveId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: '_curveId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "_treeRoot",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: '_treeRoot',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "_treeCid",
-        "type": "string",
-        "internalType": "string"
+        name: '_treeCid',
+        type: 'string',
+        internalType: 'string',
       },
       {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'admin',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "isConsumed",
-    "inputs": [
+    type: 'function',
+    name: 'isConsumed',
+    inputs: [
       {
-        "name": "member",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'member',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "isPaused",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'isPaused',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "isReferralProgramSeasonActive",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'isReferralProgramSeasonActive',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "isReferrerConsumed",
-    "inputs": [
+    type: 'function',
+    name: 'isReferrerConsumed',
+    inputs: [
       {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'referrer',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "pauseFor",
-    "inputs": [
+    type: 'function',
+    name: 'pauseFor',
+    inputs: [
       {
-        "name": "duration",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'duration',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC1155",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC1155',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'tokenId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC20",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC20',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC721",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC721',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'tokenId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverEther",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'recoverEther',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "referralCurveId",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'referralCurveId',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "referralProgramSeasonNumber",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'referralProgramSeasonNumber',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "referralsThreshold",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'referralsThreshold',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
+    type: 'function',
+    name: 'renounceRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'callerConfirmation',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "resume",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'resume',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
+    type: 'function',
+    name: 'revokeRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setTreeParams",
-    "inputs": [
+    type: 'function',
+    name: 'setTreeParams',
+    inputs: [
       {
-        "name": "_treeRoot",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: '_treeRoot',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "_treeCid",
-        "type": "string",
-        "internalType": "string"
-      }
+        name: '_treeCid',
+        type: 'string',
+        internalType: 'string',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "startNewReferralProgramSeason",
-    "inputs": [
+    type: 'function',
+    name: 'startNewReferralProgramSeason',
+    inputs: [
       {
-        "name": "_referralCurveId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: '_referralCurveId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "_referralsThreshold",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '_referralsThreshold',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "season",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'season',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
+    type: 'function',
+    name: 'supportsInterface',
+    inputs: [
       {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
+        name: 'interfaceId',
+        type: 'bytes4',
+        internalType: 'bytes4',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "treeCid",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'treeCid',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
+        name: '',
+        type: 'string',
+        internalType: 'string',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "treeRoot",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'treeRoot',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "verifyProof",
-    "inputs": [
+    type: 'function',
+    name: 'verifyProof',
+    inputs: [
       {
-        "name": "member",
-        "type": "address",
-        "internalType": "address"
+        name: 'member',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "Consumed",
-    "inputs": [
+    type: 'event',
+    name: 'Consumed',
+    inputs: [
       {
-        "name": "member",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'member',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
+    type: 'event',
+    name: 'Initialized',
+    inputs: [
       {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
+        name: 'version',
+        type: 'uint64',
+        indexed: false,
+        internalType: 'uint64',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Paused",
-    "inputs": [
+    type: 'event',
+    name: 'Paused',
+    inputs: [
       {
-        "name": "duration",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'duration',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ReferralProgramSeasonEnded",
-    "inputs": [
+    type: 'event',
+    name: 'ReferralProgramSeasonEnded',
+    inputs: [
       {
-        "name": "season",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
+        name: 'season',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ReferralProgramSeasonStarted",
-    "inputs": [
+    type: 'event',
+    name: 'ReferralProgramSeasonStarted',
+    inputs: [
       {
-        "name": "season",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'season',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "referralCurveId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'referralCurveId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "referralsThreshold",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'referralsThreshold',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ReferralRecorded",
-    "inputs": [
+    type: 'event',
+    name: 'ReferralRecorded',
+    inputs: [
       {
-        "name": "referrer",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'referrer',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "season",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'season',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "referralNodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
+        name: 'referralNodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ReferrerConsumed",
-    "inputs": [
+    type: 'event',
+    name: 'ReferrerConsumed',
+    inputs: [
       {
-        "name": "referrer",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'referrer',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "season",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
+        name: 'season',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Resumed",
-    "inputs": [],
-    "anonymous": false
+    type: 'event',
+    name: 'Resumed',
+    inputs: [],
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
+    type: 'event',
+    name: 'RoleAdminChanged',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'previousAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
+        name: 'newAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
+    type: 'event',
+    name: 'RoleGranted',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
+    type: 'event',
+    name: 'RoleRevoked',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "TreeSet",
-    "inputs": [
+    type: 'event',
+    name: 'TreeSet',
+    inputs: [
       {
-        "name": "treeRoot",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'treeRoot',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "treeCid",
-        "type": "string",
-        "indexed": false,
-        "internalType": "string"
-      }
+        name: 'treeCid',
+        type: 'string',
+        indexed: false,
+        internalType: 'string',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
+    type: 'error',
+    name: 'AccessControlBadConfirmation',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
+    type: 'error',
+    name: 'AccessControlUnauthorizedAccount',
+    inputs: [
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
+        name: 'neededRole',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "AlreadyConsumed",
-    "inputs": []
+    type: 'error',
+    name: 'AlreadyConsumed',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidCurveId",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidCurveId',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidInitialization',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidProof",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidProof',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidReferralsThreshold",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidReferralsThreshold',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidTreeCid",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidTreeCid',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidTreeRoot",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidTreeRoot',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NodeOperatorDoesNotExist",
-    "inputs": []
+    type: 'error',
+    name: 'NodeOperatorDoesNotExist',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotAllowedToClaim",
-    "inputs": []
+    type: 'error',
+    name: 'NotAllowedToClaim',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotEnoughReferrals",
-    "inputs": []
+    type: 'error',
+    name: 'NotEnoughReferrals',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotInitializing",
-    "inputs": []
+    type: 'error',
+    name: 'NotInitializing',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PauseUntilMustBeInFuture",
-    "inputs": []
+    type: 'error',
+    name: 'PauseUntilMustBeInFuture',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "PausedExpected",
-    "inputs": []
+    type: 'error',
+    name: 'PausedExpected',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ReferralProgramIsActive",
-    "inputs": []
+    type: 'error',
+    name: 'ReferralProgramIsActive',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ReferralProgramIsNotActive",
-    "inputs": []
+    type: 'error',
+    name: 'ReferralProgramIsNotActive',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ResumedExpected",
-    "inputs": []
+    type: 'error',
+    name: 'ResumedExpected',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroAdminAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroAdminAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroModuleAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroModuleAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroPauseDuration",
-    "inputs": []
-  }
+    type: 'error',
+    name: 'ZeroPauseDuration',
+    inputs: [],
+  },
 ] as const;

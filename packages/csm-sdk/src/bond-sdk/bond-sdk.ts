@@ -25,6 +25,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
   @Logger('Views:')
   @ErrorHandler()
   private async getBondSummary(id: NodeOperatorId): Promise<AddBondResult> {
+    // TODO: review for CM
     const [current, required] =
       await this.accountingContract.read.getBondSummary([id]);
     return { current, required };

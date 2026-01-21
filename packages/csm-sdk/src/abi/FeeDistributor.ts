@@ -1,1065 +1,1059 @@
 export const FeeDistributorAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "stETH",
-        "type": "address",
-        "internalType": "address"
+        name: 'stETH',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "accounting",
-        "type": "address",
-        "internalType": "address"
+        name: 'accounting',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "oracle",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'oracle',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "ACCOUNTING",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'ACCOUNTING',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'DEFAULT_ADMIN_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "ORACLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'ORACLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "RECOVERER_ROLE",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'RECOVERER_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "STETH",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'STETH',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IStETH"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'contract IStETH',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "distributeFees",
-    "inputs": [
+    type: 'function',
+    name: 'distributeFees',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "sharesToDistribute",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'sharesToDistribute',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "distributedShares",
-    "inputs": [
+    type: 'function',
+    name: 'distributedShares',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "distributed",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'distributed',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "distributionDataHistoryCount",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'distributionDataHistoryCount',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "finalizeUpgradeV2",
-    "inputs": [
-      {
-        "name": "_rebateRecipient",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'finalizeUpgradeV3',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "getFeesToDistribute",
-    "inputs": [
+    type: 'function',
+    name: 'getFeesToDistribute',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "proof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
+        name: 'proof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "sharesToDistribute",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'sharesToDistribute',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getHistoricalDistributionData",
-    "inputs": [
+    type: 'function',
+    name: 'getHistoricalDistributionData',
+    inputs: [
       {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct IFeeDistributor.DistributionData",
-        "components": [
+        name: '',
+        type: 'tuple',
+        internalType: 'struct IFeeDistributor.DistributionData',
+        components: [
           {
-            "name": "refSlot",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'refSlot',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "treeRoot",
-            "type": "bytes32",
-            "internalType": "bytes32"
+            name: 'treeRoot',
+            type: 'bytes32',
+            internalType: 'bytes32',
           },
           {
-            "name": "treeCid",
-            "type": "string",
-            "internalType": "string"
+            name: 'treeCid',
+            type: 'string',
+            internalType: 'string',
           },
           {
-            "name": "logCid",
-            "type": "string",
-            "internalType": "string"
+            name: 'logCid',
+            type: 'string',
+            internalType: 'string',
           },
           {
-            "name": "distributed",
-            "type": "uint256",
-            "internalType": "uint256"
+            name: 'distributed',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
-            "name": "rebate",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      }
+            name: 'rebate',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getInitializedVersion",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'getInitializedVersion',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
+        name: '',
+        type: 'uint64',
+        internalType: 'uint64',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleAdmin',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMember',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
+    type: 'function',
+    name: 'getRoleMemberCount',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
+    type: 'function',
+    name: 'grantRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
+    type: 'function',
+    name: 'hasRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "hashLeaf",
-    "inputs": [
+    type: 'function',
+    name: 'hashLeaf',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'shares',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "pure"
+    stateMutability: 'pure',
   },
   {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
+    type: 'function',
+    name: 'initialize',
+    inputs: [
       {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
+        name: 'admin',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "_rebateRecipient",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '_rebateRecipient',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "logCid",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'logCid',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
+        name: '',
+        type: 'string',
+        internalType: 'string',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "pendingSharesToDistribute",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'pendingSharesToDistribute',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "processOracleReport",
-    "inputs": [
+    type: 'function',
+    name: 'processOracleReport',
+    inputs: [
       {
-        "name": "_treeRoot",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: '_treeRoot',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "_treeCid",
-        "type": "string",
-        "internalType": "string"
+        name: '_treeCid',
+        type: 'string',
+        internalType: 'string',
       },
       {
-        "name": "_logCid",
-        "type": "string",
-        "internalType": "string"
+        name: '_logCid',
+        type: 'string',
+        internalType: 'string',
       },
       {
-        "name": "distributed",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'distributed',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "rebate",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'rebate',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "refSlot",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'refSlot',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "rebateRecipient",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'rebateRecipient',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "recoverERC1155",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC1155',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'tokenId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC20",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC20',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverERC721",
-    "inputs": [
+    type: 'function',
+    name: 'recoverERC721',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: 'tokenId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "recoverEther",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    type: 'function',
+    name: 'recoverEther',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
+    type: 'function',
+    name: 'renounceRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'callerConfirmation',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
+    type: 'function',
+    name: 'revokeRole',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "setRebateRecipient",
-    "inputs": [
+    type: 'function',
+    name: 'setRebateRecipient',
+    inputs: [
       {
-        "name": "_rebateRecipient",
-        "type": "address",
-        "internalType": "address"
-      }
+        name: '_rebateRecipient',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
+    type: 'function',
+    name: 'supportsInterface',
+    inputs: [
       {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
+        name: 'interfaceId',
+        type: 'bytes4',
+        internalType: 'bytes4',
+      },
     ],
-    "outputs": [
+    outputs: [
       {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "totalClaimableShares",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'totalClaimableShares',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "treeCid",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'treeCid',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
+        name: '',
+        type: 'string',
+        internalType: 'string',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "treeRoot",
-    "inputs": [],
-    "outputs": [
+    type: 'function',
+    name: 'treeRoot',
+    inputs: [],
+    outputs: [
       {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
     ],
-    "stateMutability": "view"
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "DistributionDataUpdated",
-    "inputs": [
+    type: 'event',
+    name: 'DistributionDataUpdated',
+    inputs: [
       {
-        "name": "totalClaimableShares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'totalClaimableShares',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "treeRoot",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
+        name: 'treeRoot',
+        type: 'bytes32',
+        indexed: false,
+        internalType: 'bytes32',
       },
       {
-        "name": "treeCid",
-        "type": "string",
-        "indexed": false,
-        "internalType": "string"
-      }
+        name: 'treeCid',
+        type: 'string',
+        indexed: false,
+        internalType: 'string',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "DistributionLogUpdated",
-    "inputs": [
+    type: 'event',
+    name: 'DistributionLogUpdated',
+    inputs: [
       {
-        "name": "logCid",
-        "type": "string",
-        "indexed": false,
-        "internalType": "string"
-      }
+        name: 'logCid',
+        type: 'string',
+        indexed: false,
+        internalType: 'string',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ERC1155Recovered",
-    "inputs": [
+    type: 'event',
+    name: 'ERC1155Recovered',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'tokenId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ERC20Recovered",
-    "inputs": [
+    type: 'event',
+    name: 'ERC20Recovered',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ERC721Recovered",
-    "inputs": [
+    type: 'event',
+    name: 'ERC721Recovered',
+    inputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'token',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'tokenId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "EtherRecovered",
-    "inputs": [
+    type: 'event',
+    name: 'EtherRecovered',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
+    type: 'event',
+    name: 'Initialized',
+    inputs: [
       {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
+        name: 'version',
+        type: 'uint64',
+        indexed: false,
+        internalType: 'uint64',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "ModuleFeeDistributed",
-    "inputs": [
+    type: 'event',
+    name: 'ModuleFeeDistributed',
+    inputs: [
       {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'shares',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "OperatorFeeDistributed",
-    "inputs": [
+    type: 'event',
+    name: 'OperatorFeeDistributed',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'shares',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RebateRecipientSet",
-    "inputs": [
+    type: 'event',
+    name: 'RebateRecipientSet',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      }
+        name: 'recipient',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RebateTransferred",
-    "inputs": [
+    type: 'event',
+    name: 'RebateTransferred',
+    inputs: [
       {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'shares',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
+    type: 'event',
+    name: 'RoleAdminChanged',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'previousAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
+        name: 'newAdminRole',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
+    type: 'event',
+    name: 'RoleGranted',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
+    type: 'event',
+    name: 'RoleRevoked',
+    inputs: [
       {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'role',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
+        name: 'sender',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "StETHSharesRecovered",
-    "inputs": [
+    type: 'event',
+    name: 'StETHSharesRecovered',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'recipient',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
       },
       {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
+        name: 'shares',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
+    type: 'error',
+    name: 'AccessControlBadConfirmation',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
+    type: 'error',
+    name: 'AccessControlUnauthorizedAccount',
+    inputs: [
       {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
+        name: 'account',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
+        name: 'neededRole',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
-    "type": "error",
-    "name": "FailedToSendEther",
-    "inputs": []
+    type: 'error',
+    name: 'FailedToSendEther',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "FeeSharesDecrease",
-    "inputs": []
+    type: 'error',
+    name: 'FeeSharesDecrease',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidInitialization',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidLogCID",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidLogCID',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidProof",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidProof',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidReportData",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidReportData',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidShares",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidShares',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidTreeCid",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidTreeCid',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidTreeRoot",
-    "inputs": []
+    type: 'error',
+    name: 'InvalidTreeRoot',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotAllowedToRecover",
-    "inputs": []
+    type: 'error',
+    name: 'NotAllowedToRecover',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotEnoughShares",
-    "inputs": []
+    type: 'error',
+    name: 'NotEnoughShares',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "NotInitializing",
-    "inputs": []
+    type: 'error',
+    name: 'NotInitializing',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "SenderIsNotAccounting",
-    "inputs": []
+    type: 'error',
+    name: 'SenderIsNotAccounting',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "SenderIsNotOracle",
-    "inputs": []
+    type: 'error',
+    name: 'SenderIsNotOracle',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroAccountingAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroAccountingAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroAdminAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroAdminAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroOracleAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroOracleAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroRebateRecipientAddress",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroRebateRecipientAddress',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ZeroStEthAddress",
-    "inputs": []
-  }
+    type: 'error',
+    name: 'ZeroStEthAddress',
+    inputs: [],
+  },
 ] as const;

@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { SUPPORTED_CHAINS } from './base.js';
+import { PerSupportedChain } from './supported-chains.js';
 
 export enum LINK_TYPE {
   icsTree = 'icsTree',
@@ -8,9 +8,9 @@ export enum LINK_TYPE {
   feesMonitoringApi = 'feesMonitoringApi',
 }
 
-export const EXTERNAL_LINKS: {
-  [key in SUPPORTED_CHAINS]: { [key2 in LINK_TYPE]?: string };
-} = {
+export const EXTERNAL_LINKS: PerSupportedChain<{
+  [key2 in LINK_TYPE]?: string;
+}> = {
   [CHAINS.Mainnet]: {
     [LINK_TYPE.icsTree]:
       'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/main/artifacts/mainnet/ics/merkle-tree.json',
