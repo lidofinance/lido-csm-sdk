@@ -2,7 +2,12 @@ import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CACHE_MID, CSM_CONTRACT_NAMES } from '../common/index.js';
-import { compareLowercase, toHexString } from '../common/utils/index.js';
+import {
+  compareLowercase,
+  isHexadecimalString,
+  toHexString,
+} from '../common/utils/index.js';
+import { PUBKEY_LENGTH } from './constants.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
 import { parseDepositData, removeKey } from './parser.js';
@@ -136,7 +141,10 @@ export class DepositDataSDK extends CsmSDKModule<{
   @Logger('API:')
   @ErrorHandler()
   public async checkClKeys(pubkeys: Hex[]): Promise<ValidationError[]> {
-    const clKeys = await this.bus.keysWithStatus?.getClKeys(pubkeys);
+    const validPubkeys = pubkeys.filter((p) =>
+      isHexadecimalString(p, PUBKEY_LENGTH),
+    );
+    const clKeys = await this.bus.keysWithStatus?.getClKeys(validPubkeys);
     const errors: ValidationError[] = [];
 
     if (!clKeys) return errors;
