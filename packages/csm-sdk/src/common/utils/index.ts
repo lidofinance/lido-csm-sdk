@@ -14,4 +14,6 @@ export * from './is-hexadecimal-string.js';
 export * from './on-error.js';
 export * from './is-capability-supported.js';
 export * from './parse-node-operator-added-events.js';
+export * from './parse-curated-module-node-operator-added-events.js';
+export * from './find-address-proof.js';
 export * from './create-merkle-tree-schema.js';

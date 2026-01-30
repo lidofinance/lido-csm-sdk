@@ -27,3 +27,8 @@ export type CleanDepositQueueResult = {
   removed: bigint;
   lastRemovedAtDepth: bigint;
 };
+
+export type QueueBatchesPagination = {
+  cursorIndex: bigint;
+  limit: bigint;
+};

@@ -23,21 +23,16 @@ import {
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {
-    return this.core.contractCSModule;
-  }
-
-  private get stakingRouterContract() {
-    return this.core.contractStakingRouter;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getStatus(): Promise<CsmStatus> {
     const csAccounting = this.core.contractAccounting;
-    const csModule = this.core.contractCSModule;
 
     const [isPausedModule, isPausedAccounting] = await Promise.all([
-      csModule.read.isPaused(),
+      this.moduleContract.read.isPaused(),
       csAccounting.read.isPaused(),
     ]);
 
@@ -60,9 +55,7 @@ export class ModuleSDK extends CsmSDKModule {
       validatorStrikes,
       vettedGate,
     ] = await Promise.all([
-      this.core.contractCSModule.read
-        .getInitializedVersion()
-        .catch(onVersionError),
+      this.moduleContract.read.getInitializedVersion().catch(onVersionError),
       this.core.contractCuratedModule.read
         .getInitializedVersion()
         .catch(onVersionError),
@@ -120,7 +113,7 @@ export class ModuleSDK extends CsmSDKModule {
   @Cache(CACHE_MID)
   private async getAllModulesDigests(): Promise<ModuleDigest[]> {
     const digests =
-      await this.stakingRouterContract.read.getAllStakingModuleDigests();
+      await this.core.contractStakingRouter.read.getAllStakingModuleDigests();
     return digests.map((digest) => ({
       ...digest,
       state: {

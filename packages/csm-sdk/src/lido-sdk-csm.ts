@@ -2,6 +2,7 @@ import { AccountingSDK } from './accounting-sdk/accounting-sdk.js';
 import { BondSDK } from './bond-sdk/bond-sdk.js';
 import { BusRegistry } from './common/class-primitives/bus-registry.js';
 import {
+  CONTRACT_NAMES,
   CSM_CONTRACT_ADDRESSES,
   CSM_DEPLOYMENT_BLOCK_NUMBERS,
   CSM_MODULE_IDS,
@@ -24,7 +25,7 @@ import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { PermissionlessGateSDK } from './permissionless-gate-sdk/permissionless-gate-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
 import { RolesSDK } from './roles-sdk/roles-sdk.js';
-import { SatelliteSDK } from './satellite-sdk/satellite-sdk.js';
+import { DiscoverySDK } from './discovery-sdk/discovery-sdk.js';
 import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
 import { TxSDK } from './tx-sdk/tx-sdk.js';
@@ -50,7 +51,7 @@ export class LidoSDKCsm {
   readonly depositQueue: DepositQueueSDK;
   readonly depositData: DepositDataSDK;
   readonly stealing: StealingSDK;
-  readonly satellite: SatelliteSDK;
+  readonly discovery: DiscoverySDK;
   readonly feesMonitoring: FeesMonitoringSDK;
 
   constructor(props: SdkProps) {
@@ -75,7 +76,7 @@ export class LidoSDKCsm {
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.rewards = new RewardsSDK(commonProps);
     this.frame = new FrameSDK(commonProps, 'frame');
-    this.satellite = new SatelliteSDK(commonProps, 'satellite');
+    this.discovery = new DiscoverySDK(commonProps, 'discovery');
     this.events = new EventsSDK(commonProps, 'events');
     this.depositQueue = new DepositQueueSDK(commonProps);
     this.depositData = new DepositDataSDK(commonProps);
@@ -92,6 +93,7 @@ const prepareCoreProps = (props: SdkProps): CoreProps => {
       ...CSM_CONTRACT_ADDRESSES[chainId],
       ...props.overridedAddresses,
     },
+    moduleName: CONTRACT_NAMES.csModule,
     moduleId: CSM_MODULE_IDS[chainId],
     deploymentBlockNumber: CSM_DEPLOYMENT_BLOCK_NUMBERS[chainId],
   };

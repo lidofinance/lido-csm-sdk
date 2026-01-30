@@ -14,13 +14,12 @@ import {
   AddKeysProps,
   EjectKeysByArrayProps,
   EjectKeysProps,
-  NormalizeQueueProps,
   RemoveKeysProps,
 } from './types.js';
 
 export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   private get ejectorContract() {
@@ -202,20 +201,5 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return correctedFee < EJECT_FEE_MIN_LIMIT
       ? EJECT_FEE_MIN_LIMIT
       : correctedFee;
-  }
-
-  // FIXME: move to Queue SDK
-  @Logger('Call:')
-  @ErrorHandler()
-  public async normalizeQueue(props: NormalizeQueueProps) {
-    const { nodeOperatorId, ...rest } = props;
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        prepCall(this.moduleContract, 'updateDepositableValidatorsCount', [
-          nodeOperatorId,
-        ]),
-    });
   }
 }

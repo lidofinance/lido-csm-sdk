@@ -3,18 +3,13 @@ import {
   invariant,
   LidoSDKCore,
 } from '@lidofinance/lido-ethereum-sdk';
-import {
-  Abi,
-  Address,
-  Chain,
-  getContract,
-  GetContractReturnType,
-  WalletClient,
-} from 'viem';
+import { Abi, Address, Chain, getContract, WalletClient } from 'viem';
 import {
   AccountingAbi,
+  BaseModuleAbi,
   CSModuleAbi,
   CSMSatelliteAbi,
+  SMDiscoveryAbi,
   CuratedGateAbi,
   CuratedModuleAbi,
   EjectorAbi,
@@ -42,7 +37,12 @@ import {
   LINK_TYPE,
   SUPPORTED_CHAINS,
 } from '../common/index.js';
-import { ContractAddresses, CoreProps } from './types.js';
+import {
+  BindedContract,
+  ContractAddresses,
+  CoreProps,
+  ModuleName,
+} from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
@@ -54,6 +54,7 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly feesMonitoringApiUrl?: string;
   readonly maxEventBlocksRange?: number;
   readonly skipHistoricalCalls: boolean;
+  readonly moduleName: ModuleName;
 
   constructor(props: CoreProps) {
     super();
@@ -66,6 +67,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
+    this.moduleName = props.moduleName ?? CONTRACT_NAMES.csModule;
   }
 
   public get chainId(): SUPPORTED_CHAINS {
@@ -103,7 +105,7 @@ export class CoreSDK extends CsmSDKCacheable {
   public getContract<TAbi extends Abi>(
     contractName: CONTRACT_NAMES | Erc20Tokens,
     abi: TAbi,
-  ): GetContractReturnType<TAbi, WalletClient> {
+  ): BindedContract<TAbi> {
     return getContract({
       address: this.getContractAddress(contractName),
       abi,
@@ -116,54 +118,38 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractAccounting(): GetContractReturnType<
-    typeof AccountingAbi,
-    WalletClient
-  > {
+  get contractAccounting(): BindedContract<typeof AccountingAbi> {
     return this.getContract(CONTRACT_NAMES.accounting, AccountingAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractEjector(): GetContractReturnType<
-    typeof EjectorAbi,
-    WalletClient
-  > {
+  get contractEjector(): BindedContract<typeof EjectorAbi> {
     return this.getContract(CONTRACT_NAMES.ejector, EjectorAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractFeeDistributor(): GetContractReturnType<
-    typeof FeeDistributorAbi,
-    WalletClient
-  > {
+  get contractFeeDistributor(): BindedContract<typeof FeeDistributorAbi> {
     return this.getContract(CONTRACT_NAMES.feeDistributor, FeeDistributorAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractFeeOracle(): GetContractReturnType<
-    typeof FeeOracleAbi,
-    WalletClient
-  > {
+  get contractFeeOracle(): BindedContract<typeof FeeOracleAbi> {
     return this.getContract(CONTRACT_NAMES.feeOracle, FeeOracleAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSModule(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
+  get contractCSModule(): BindedContract<typeof CSModuleAbi> {
     return this.getContract(CONTRACT_NAMES.csModule, CSModuleAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractParametersRegistry(): GetContractReturnType<
-    typeof ParametersRegistryAbi,
-    WalletClient
+  get contractParametersRegistry(): BindedContract<
+    typeof ParametersRegistryAbi
   > {
     return this.getContract(
       CONTRACT_NAMES.parametersRegistry,
@@ -173,10 +159,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractValidatorStrikes(): GetContractReturnType<
-    typeof ValidatorStrikesAbi,
-    WalletClient
-  > {
+  get contractValidatorStrikes(): BindedContract<typeof ValidatorStrikesAbi> {
     return this.getContract(
       CONTRACT_NAMES.validatorStrikes,
       ValidatorStrikesAbi,
@@ -185,36 +168,26 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractExitPenalties(): GetContractReturnType<
-    typeof ExitPenaltiesAbi,
-    WalletClient
-  > {
+  get contractExitPenalties(): BindedContract<typeof ExitPenaltiesAbi> {
     return this.getContract(CONTRACT_NAMES.exitPenalties, ExitPenaltiesAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractVerifier(): GetContractReturnType<
-    typeof VerifierAbi,
-    WalletClient
-  > {
+  get contractVerifier(): BindedContract<typeof VerifierAbi> {
     return this.getContract(CONTRACT_NAMES.verifier, VerifierAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractHashConsensus(): GetContractReturnType<
-    typeof HashConsensusAbi,
-    WalletClient
-  > {
+  get contractHashConsensus(): BindedContract<typeof HashConsensusAbi> {
     return this.getContract(CONTRACT_NAMES.hashConsensus, HashConsensusAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractPermissionlessGate(): GetContractReturnType<
-    typeof PermissionlessGateAbi,
-    WalletClient
+  get contractPermissionlessGate(): BindedContract<
+    typeof PermissionlessGateAbi
   > {
     return this.getContract(
       CONTRACT_NAMES.permissionlessGate,
@@ -224,27 +197,20 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractVettedGate(): GetContractReturnType<
-    typeof VettedGateAbi,
-    WalletClient
-  > {
+  get contractVettedGate(): BindedContract<typeof VettedGateAbi> {
     return this.getContract(CONTRACT_NAMES.vettedGate, VettedGateAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractStakingRouter(): GetContractReturnType<
-    typeof StakingRouterAbi,
-    WalletClient
-  > {
+  get contractStakingRouter(): BindedContract<typeof StakingRouterAbi> {
     return this.getContract(CONTRACT_NAMES.stakingRouter, StakingRouterAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractValidatorsExitBusOracle(): GetContractReturnType<
-    typeof ValidatorsExitBusOracleAbi,
-    WalletClient
+  get contractValidatorsExitBusOracle(): BindedContract<
+    typeof ValidatorsExitBusOracleAbi
   > {
     return this.getContract(
       CONTRACT_NAMES.validatorsExitBusOracle,
@@ -254,47 +220,57 @@ export class CoreSDK extends CsmSDKCacheable {
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractWithdrawalVault(): GetContractReturnType<
-    typeof WithdrawalVaultAbi,
-    WalletClient
-  > {
+  get contractWithdrawalVault(): BindedContract<typeof WithdrawalVaultAbi> {
     return this.getContract(CONTRACT_NAMES.withdrawalVault, WithdrawalVaultAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCSMSatellite(): GetContractReturnType<
-    typeof CSMSatelliteAbi,
-    WalletClient
-  > {
+  get contractCSMSatellite(): BindedContract<typeof CSMSatelliteAbi> {
     return this.getContract(CONTRACT_NAMES.CSMSatellite, CSMSatelliteAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCuratedModule(): GetContractReturnType<
-    typeof CuratedModuleAbi,
-    WalletClient
-  > {
+  get contractSMDiscovery(): BindedContract<typeof SMDiscoveryAbi> {
+    return this.getContract(CONTRACT_NAMES.SMDiscovery, SMDiscoveryAbi);
+  }
+
+  @Logger('Contracts:')
+  @Cache(CACHE_LONG)
+  get contractCuratedModule(): BindedContract<typeof CuratedModuleAbi> {
     return this.getContract(CONTRACT_NAMES.curatedModule, CuratedModuleAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractCuratedGate(): GetContractReturnType<
-    typeof CuratedGateAbi,
-    WalletClient
-  > {
-    return this.getContract(CONTRACT_NAMES.curatedGate, CuratedGateAbi);
+  get contractOperatorsData(): BindedContract<typeof OperatorsDataAbi> {
+    return this.getContract(CONTRACT_NAMES.operatorsData, OperatorsDataAbi);
   }
 
   @Logger('Contracts:')
   @Cache(CACHE_LONG)
-  get contractOperatorsData(): GetContractReturnType<
-    typeof OperatorsDataAbi,
-    WalletClient
-  > {
-    return this.getContract(CONTRACT_NAMES.operatorsData, OperatorsDataAbi);
+  get contractCuratedGate1(): BindedContract<typeof CuratedGateAbi> {
+    return this.getContract(CONTRACT_NAMES.curatedGate1, CuratedGateAbi);
+  }
+
+  @Logger('Contracts:')
+  @Cache(CACHE_LONG)
+  get contractCuratedGate2(): BindedContract<typeof CuratedGateAbi> {
+    return this.getContract(CONTRACT_NAMES.curatedGate2, CuratedGateAbi);
+  }
+
+  @Logger('Contracts:')
+  @Cache(CACHE_LONG)
+  get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
+    return getContract({
+      address: this.getContractAddress(this.moduleName),
+      abi: BaseModuleAbi,
+      client: {
+        public: this.publicClient,
+        wallet: this.core.web3Provider as WalletClient,
+      },
+    });
   }
 
   public get externalLinks() {
@@ -315,6 +291,10 @@ export class CoreSDK extends CsmSDKCacheable {
 
   public get icsTreeLink() {
     return this.getExternalLink(LINK_TYPE.icsTree);
+  }
+
+  public get curatedGateTreeLink() {
+    return this.getExternalLink(LINK_TYPE.curatedGateTree);
   }
 
   public get feesMonitoringApiLink() {

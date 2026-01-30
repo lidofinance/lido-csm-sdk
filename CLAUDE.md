@@ -31,11 +31,12 @@ After implementing changes: `yarn build && yalc push` (from csm-sdk directory) t
 
 ### Core Structure
 
-The SDK follows a modular architecture centered around the `LidoSDKCsm` class, which aggregates specialized modules for different aspects of the Lido Community Staking Module (CSM) ecosystem.
+The SDK follows a modular architecture centered around the `LidoSDKCsm` and `LidoSDKCm` classes, which aggregate specialized modules for different aspects of the Lido Community Staking Module (CSM) and Curated Module (CM) ecosystems.
 
 ### Main Entry Point
 
-- `packages/csm-sdk/src/lido-sdk-csm.ts` - Main SDK class that instantiates and manages all sub-modules
+- `packages/csm-sdk/src/lido-sdk-csm.ts` - CSM SDK class that instantiates and manages CSM-specific modules
+- `packages/csm-sdk/src/lido-sdk-cm.ts` - CM SDK class that instantiates and manages CM-specific modules
 - `packages/csm-sdk/src/index.ts` - Primary export file with re-exports from all modules
 
 ### Module Organization
@@ -48,28 +49,37 @@ Each module follows a consistent pattern:
 
 Key modules include:
 
+**Shared modules** (available in both CSM and CM):
 - **core-sdk** - Shared logic, configuration, and core utilities
-- **module-sdk** - CSM status and share limit queries
+- **module-sdk** - Module status and share limit queries
 - **operator-sdk** - Operator data management
 - **keys-sdk** - Validator key management
 - **keys-with-status-sdk** - Key tracking with status information
 - **keys-cache-sdk** - Pubkey caching to prevent double-submission with 2-week TTL and manual key management
 - **bond-sdk** - Operator bond balance management
 - **rewards-sdk** - Reward distribution queries
-- **strikes-sdk** - Operator penalty tracking
 - **events-sdk** - Protocol event queries
 - **accounting-sdk** - Balance and supply data
 - **parameters-sdk** - Curve parameters access
 - **frame-sdk** - Protocol frame configuration
-- **roles-sdk** - Operator role management
 - **tx-sdk** - Unified transaction handling layer with Abstract Account (AA) support (replaces deprecated spending-sdk)
-- **permissionless-gate-sdk** - Permissionless operator creation
-- **ics-gate-sdk** - ICS (Independent Community Staker) entry points
 - **deposit-queue-sdk** - Deposit queue pointers and batches
 - **deposit-data-sdk** - Parse and validate deposit data JSON, check for duplicates and previously submitted keys
-- **stealing-sdk** - EL rewards stealing penalty management
 - **fees-monitoring-sdk** - Validator fee recipient monitoring and issue detection
-- **satellite-sdk** - Helper for querying operator IDs by address and reading deposit queue batches
+- **discovery-sdk** - Operator discovery and pagination using SMDiscovery contract (renamed from satellite-sdk)
+
+**CSM-specific modules**:
+- **strikes-sdk** - Operator penalty tracking
+- **stealing-sdk** - EL rewards stealing penalty management
+- **permissionless-gate-sdk** - Permissionless operator creation
+- **ics-gate-sdk** - ICS (Independent Community Staker) entry points
+- **roles-sdk** - Standard role management for CSM operators
+
+**CM-specific modules**:
+- **curated-gate-sdk** - Single gate operator creation with merkle proofs
+- **curated-gates-collection-sdk** - Multi-gate management and aggregation
+- **curated-roles-sdk** - CM-specific role management (extends RolesSDK)
+- **operators-data-sdk** - Module-agnostic operator metadata management
 
 ### Common Infrastructure
 
@@ -176,6 +186,42 @@ All modules accept `CsmCoreProps` which includes:
 - `overridedAddresses?: CSM_ADDRESSES` - Custom contract addresses
 - `maxEventBlocksRange?: number` - Event query range limits
 - `clApiUrl?: string` - Consensus layer API URL
+
+### Dual SDK Architecture
+
+The SDK now supports two distinct module types through separate SDK classes:
+
+#### LidoSDKCsm (Community Staking Module)
+- **Purpose**: Permissionless and ICS (Independent Community Staker) operator entry
+- **Contract**: `csModule` (Mainnet Module ID: 3, Hoodi: 4)
+- **Unique Modules**: strikes, stealing, permissionlessGate, icsGate, standard roles
+- **Use When**: Building applications for permissionless staking or ICS integration
+
+#### LidoSDKCm (Curated Module)
+- **Purpose**: Gate-based allowlist operator entry using merkle proofs
+- **Contract**: `curatedModule` (Mainnet Module ID: 4, Hoodi: 5)
+- **Unique Modules**: curatedGates, operatorsData, CuratedRolesSDK
+- **Use When**: Building applications for curated operator management with allowlists
+
+#### Module Composition Differences
+
+| Module Category | CSM | CM | Notes |
+|----------------|-----|----|----|
+| Core & Infrastructure | ✅ | ✅ | tx, core, module, accounting, parameters, frame |
+| Operator Management | ✅ | ✅ | operator, keys, keysWithStatus, keysCache, bond |
+| Data & Events | ✅ | ✅ | events, depositQueue, depositData, discovery, feesMonitoring |
+| Rewards | ✅ | ✅ | rewards |
+| Roles | RolesSDK | CuratedRolesSDK | CM uses extended variant |
+| Strikes & Penalties | ✅ | ❌ | CSM-only: strikes, stealing |
+| Entry Gates | permissionlessGate, icsGate | curatedGates | Different entry mechanisms |
+| Metadata | ❌ | ✅ | CM-only: operatorsData |
+
+#### Contract Addresses
+
+Contract addresses are automatically selected based on the SDK class and network:
+- **CSM Addresses**: Used by `LidoSDKCsm` (from `CSM_CONTRACT_ADDRESSES`)
+- **CM Addresses**: Used by `LidoSDKCm` (from `CM_CONTRACT_ADDRESSES`)
+- **Common Addresses**: Shared contracts like SMDiscovery, FeeDistributor (from `COMMON_CONTRACT_ADDRESSES`)
 
 ### Transaction System (tx-sdk)
 

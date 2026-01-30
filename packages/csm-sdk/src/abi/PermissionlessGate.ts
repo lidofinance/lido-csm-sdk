@@ -5,15 +5,15 @@ export const PermissionlessGateAbi = [
       {
         name: 'module',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -23,10 +23,10 @@ export const PermissionlessGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -36,10 +36,10 @@ export const PermissionlessGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -49,10 +49,10 @@ export const PermissionlessGateAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IBaseModule',
-      },
+        internalType: 'contract IBaseModule'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -62,10 +62,10 @@ export const PermissionlessGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -74,17 +74,17 @@ export const PermissionlessGateAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'managementProperties',
@@ -94,34 +94,34 @@ export const PermissionlessGateAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool',
-          },
-        ],
+            internalType: 'bool'
+          }
+        ]
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'payable',
+    stateMutability: 'payable'
   },
   {
     type: 'function',
@@ -130,17 +130,17 @@ export const PermissionlessGateAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'managementProperties',
@@ -150,19 +150,19 @@ export const PermissionlessGateAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool',
-          },
-        ],
+            internalType: 'bool'
+          }
+        ]
       },
       {
         name: 'permit',
@@ -172,44 +172,44 @@ export const PermissionlessGateAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8',
+            internalType: 'uint8'
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32',
+            internalType: 'bytes32'
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32',
-          },
-        ],
+            internalType: 'bytes32'
+          }
+        ]
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -218,17 +218,17 @@ export const PermissionlessGateAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'managementProperties',
@@ -238,19 +238,19 @@ export const PermissionlessGateAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool',
-          },
-        ],
+            internalType: 'bool'
+          }
+        ]
       },
       {
         name: 'permit',
@@ -260,44 +260,44 @@ export const PermissionlessGateAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8',
+            internalType: 'uint8'
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32',
+            internalType: 'bytes32'
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32',
-          },
-        ],
+            internalType: 'bytes32'
+          }
+        ]
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -306,17 +306,17 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -325,22 +325,22 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -349,17 +349,17 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -368,16 +368,16 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -386,22 +386,22 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -410,16 +410,16 @@ export const PermissionlessGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -428,16 +428,16 @@ export const PermissionlessGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -446,23 +446,23 @@ export const PermissionlessGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -471,16 +471,16 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -489,16 +489,16 @@ export const PermissionlessGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -507,17 +507,17 @@ export const PermissionlessGateAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4',
-      },
+        internalType: 'bytes4'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'event',
@@ -527,22 +527,22 @@ export const PermissionlessGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -552,22 +552,22 @@ export const PermissionlessGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -577,27 +577,27 @@ export const PermissionlessGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
@@ -606,23 +606,23 @@ export const PermissionlessGateAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
+        internalType: 'bytes32'
+      }
+    ]
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: [],
+    inputs: []
   },
 ] as const;

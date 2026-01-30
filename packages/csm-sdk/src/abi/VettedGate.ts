@@ -5,10 +5,10 @@ export const VettedGateAbi = [
       {
         name: 'module',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -18,10 +18,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IAccounting',
-      },
+        internalType: 'contract IAccounting'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -31,10 +31,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -44,10 +44,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -57,10 +57,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IBaseModule',
-      },
+        internalType: 'contract IBaseModule'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -70,10 +70,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -83,10 +83,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -96,10 +96,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -109,10 +109,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -122,10 +122,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -135,10 +135,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -147,17 +147,17 @@ export const VettedGateAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'managementProperties',
@@ -167,39 +167,39 @@ export const VettedGateAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool',
-          },
-        ],
+            internalType: 'bool'
+          }
+        ]
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
+        internalType: 'bytes32[]'
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'payable',
+    stateMutability: 'payable'
   },
   {
     type: 'function',
@@ -208,17 +208,17 @@ export const VettedGateAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'managementProperties',
@@ -228,19 +228,19 @@ export const VettedGateAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool',
-          },
-        ],
+            internalType: 'bool'
+          }
+        ]
       },
       {
         name: 'permit',
@@ -250,49 +250,49 @@ export const VettedGateAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8',
+            internalType: 'uint8'
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32',
+            internalType: 'bytes32'
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32',
-          },
-        ],
+            internalType: 'bytes32'
+          }
+        ]
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
+        internalType: 'bytes32[]'
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -301,17 +301,17 @@ export const VettedGateAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'managementProperties',
@@ -321,19 +321,19 @@ export const VettedGateAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address',
+            internalType: 'address'
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool',
-          },
-        ],
+            internalType: 'bool'
+          }
+        ]
       },
       {
         name: 'permit',
@@ -343,49 +343,49 @@ export const VettedGateAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8',
+            internalType: 'uint8'
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32',
+            internalType: 'bytes32'
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32',
-          },
-        ],
+            internalType: 'bytes32'
+          }
+        ]
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
+        internalType: 'bytes32[]'
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -394,16 +394,16 @@ export const VettedGateAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -412,16 +412,16 @@ export const VettedGateAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -431,17 +431,17 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
     name: 'endCurrentReferralProgramSeason',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -451,10 +451,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64',
-      },
+        internalType: 'uint64'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -463,17 +463,17 @@ export const VettedGateAbi = [
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -482,22 +482,22 @@ export const VettedGateAbi = [
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'season',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -507,10 +507,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -519,17 +519,17 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -538,22 +538,22 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -562,17 +562,17 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -581,16 +581,16 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -599,22 +599,22 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -623,17 +623,17 @@ export const VettedGateAbi = [
       {
         name: 'member',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'pure',
+    stateMutability: 'pure'
   },
   {
     type: 'function',
@@ -642,26 +642,26 @@ export const VettedGateAbi = [
       {
         name: '_curveId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: '_treeRoot',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: '_treeCid',
         type: 'string',
-        internalType: 'string',
+        internalType: 'string'
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -670,17 +670,17 @@ export const VettedGateAbi = [
       {
         name: 'member',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -690,10 +690,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -703,10 +703,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -715,17 +715,17 @@ export const VettedGateAbi = [
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -734,11 +734,11 @@ export const VettedGateAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -747,16 +747,16 @@ export const VettedGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -765,16 +765,16 @@ export const VettedGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -783,23 +783,23 @@ export const VettedGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -809,10 +809,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -822,10 +822,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -835,10 +835,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -847,23 +847,23 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -872,16 +872,16 @@ export const VettedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -890,16 +890,16 @@ export const VettedGateAbi = [
       {
         name: '_treeRoot',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: '_treeCid',
         type: 'string',
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -908,22 +908,22 @@ export const VettedGateAbi = [
       {
         name: '_referralCurveId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: '_referralsThreshold',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: 'season',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -932,17 +932,17 @@ export const VettedGateAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4',
-      },
+        internalType: 'bytes4'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -952,10 +952,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'string',
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -965,10 +965,10 @@ export const VettedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -977,22 +977,22 @@ export const VettedGateAbi = [
       {
         name: 'member',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'event',
@@ -1002,10 +1002,10 @@ export const VettedGateAbi = [
         name: 'member',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1015,10 +1015,10 @@ export const VettedGateAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64',
-      },
+        internalType: 'uint64'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1028,10 +1028,10 @@ export const VettedGateAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1041,10 +1041,10 @@ export const VettedGateAbi = [
         name: 'season',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1054,22 +1054,22 @@ export const VettedGateAbi = [
         name: 'season',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'referralCurveId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'referralsThreshold',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1079,22 +1079,22 @@ export const VettedGateAbi = [
         name: 'referrer',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'season',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'referralNodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1104,22 +1104,22 @@ export const VettedGateAbi = [
         name: 'referrer',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'season',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1129,22 +1129,22 @@ export const VettedGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1154,22 +1154,22 @@ export const VettedGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1179,22 +1179,22 @@ export const VettedGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -1204,21 +1204,21 @@ export const VettedGateAbi = [
         name: 'treeRoot',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'treeCid',
         type: 'string',
         indexed: false,
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
@@ -1227,108 +1227,108 @@ export const VettedGateAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
+        internalType: 'bytes32'
+      }
+    ]
   },
   {
     type: 'error',
     name: 'AlreadyConsumed',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidCurveId',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidProof',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidReferralsThreshold',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidTreeCid',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidTreeRoot',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NodeOperatorDoesNotExist',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotAllowedToClaim',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotEnoughReferrals',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ReferralProgramIsActive',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ReferralProgramIsNotActive',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: [],
+    inputs: []
   },
 ] as const;

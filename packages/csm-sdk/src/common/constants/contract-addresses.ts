@@ -1,0 +1,142 @@
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { Address } from 'viem';
+
+import { CONTRACT_NAMES } from './contract-names.js';
+import { PerSupportedChain } from './supported-chains.js';
+
+export const COMMON_CONTRACT_ADDRESSES: PerSupportedChain<{
+  [key2 in CONTRACT_NAMES]?: Address;
+}> = {
+  [CHAINS.Mainnet]: {
+    [CONTRACT_NAMES.stakingRouter]:
+      '0xFdDf38947aFB03C621C71b06C9C70bce73f12999',
+    [CONTRACT_NAMES.validatorsExitBusOracle]:
+      '0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e',
+    [CONTRACT_NAMES.withdrawalVault]:
+      '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
+    [CONTRACT_NAMES.lidoRewardsVault]:
+      '0x388C818CA8B9251b393131C08a736A67ccB19297',
+    [CONTRACT_NAMES.stETH]: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+    [CONTRACT_NAMES.wstETH]: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0',
+    [CONTRACT_NAMES.CSMSatellite]: '0xf1199B61429E16e5c9F1a3f73A1190b52Bc81ddc',
+  },
+  [CHAINS.Hoodi]: {
+    [CONTRACT_NAMES.stakingRouter]:
+      '0xCc820558B39ee15C7C45B59390B503b83fb499A8',
+    [CONTRACT_NAMES.validatorsExitBusOracle]:
+      '0x8664d394C2B3278F26A1B44B967aEf99707eeAB2',
+    [CONTRACT_NAMES.withdrawalVault]:
+      '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
+    [CONTRACT_NAMES.lidoRewardsVault]:
+      '0x9b108015fe433F173696Af3Aa0CF7CDb3E104258',
+    [CONTRACT_NAMES.stETH]: '0x3508A952176b3c15387C97BE809eaffB1982176a',
+    [CONTRACT_NAMES.wstETH]: '0x7E99eE3C66636DE415D2d7C880938F2f40f94De4',
+    [CONTRACT_NAMES.CSMSatellite]: '0x3A981c53C16C03D6d58A9b1199C77752dE7BC956',
+    [CONTRACT_NAMES.SMDiscovery]: '0xd038A2EE73b64F30d65802Ad188F27921656f28F', // FIXME: replace to real
+  },
+};
+
+// CSM addresses
+
+export const CSM_CONTRACT_ADDRESSES: PerSupportedChain<{
+  [key2 in CONTRACT_NAMES]?: Address;
+}> = {
+  [CHAINS.Mainnet]: {
+    ...COMMON_CONTRACT_ADDRESSES[CHAINS.Mainnet],
+    [CONTRACT_NAMES.csModule]: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
+    [CONTRACT_NAMES.accounting]: '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
+    [CONTRACT_NAMES.ejector]: '0xc72b58aa02E0e98cF8A4a0E9Dce75e763800802C',
+    [CONTRACT_NAMES.exitPenalties]:
+      '0x06cd61045f958A209a0f8D746e103eCc625f4193',
+    [CONTRACT_NAMES.feeDistributor]:
+      '0xD99CC66fEC647E68294C6477B40fC7E0F6F618D0',
+    [CONTRACT_NAMES.feeOracle]: '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
+    [CONTRACT_NAMES.parametersRegistry]:
+      '0x9D28ad303C90DF524BA960d7a2DAC56DcC31e428',
+    [CONTRACT_NAMES.validatorStrikes]:
+      '0xaa328816027F2D32B9F56d190BC9Fa4A5C07637f',
+    [CONTRACT_NAMES.verifier]: '0xdC5FE1782B6943f318E05230d688713a560063DC',
+    [CONTRACT_NAMES.hashConsensus]:
+      '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
+    [CONTRACT_NAMES.permissionlessGate]:
+      '0xcF33a38111d0B1246A3F38a838fb41D626B454f0',
+    [CONTRACT_NAMES.vettedGate]: '0xB314D4A76C457c93150d308787939063F4Cc67E0',
+  },
+  [CHAINS.Hoodi]: {
+    ...COMMON_CONTRACT_ADDRESSES[CHAINS.Hoodi],
+    [CONTRACT_NAMES.csModule]: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
+    [CONTRACT_NAMES.accounting]: '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
+    [CONTRACT_NAMES.ejector]: '0x777bd76326E4aDcD353b03AD45b33BAF41048476',
+    [CONTRACT_NAMES.exitPenalties]:
+      '0xD259b31083Be841E5C85b2D481Cfc17C14276800',
+    [CONTRACT_NAMES.feeDistributor]:
+      '0xaCd9820b0A2229a82dc1A0770307ce5522FF3582',
+    [CONTRACT_NAMES.feeOracle]: '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
+    [CONTRACT_NAMES.parametersRegistry]:
+      '0xA4aD5236963f9Fe4229864712269D8d79B65C5Ad',
+    [CONTRACT_NAMES.validatorStrikes]:
+      '0x8fBA385C3c334D251eE413e79d4D3890db98693c',
+    [CONTRACT_NAMES.verifier]: '0x1773b2Ff99A030F6000554Cb8A5Ec93145650cbA',
+    [CONTRACT_NAMES.hashConsensus]:
+      '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
+    [CONTRACT_NAMES.permissionlessGate]:
+      '0x5553077102322689876A6AdFd48D75014c28acfb',
+    [CONTRACT_NAMES.vettedGate]: '0x10a254E724fe2b7f305F76f3F116a3969c53845f',
+  },
+};
+
+export const CSM_MODULE_IDS: PerSupportedChain<number> = {
+  [CHAINS.Mainnet]: 3,
+  [CHAINS.Hoodi]: 4,
+};
+
+export const CSM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<bigint> = {
+  [CHAINS.Mainnet]: BigInt('0x13f7326'),
+  [CHAINS.Hoodi]: BigInt('0x1374'),
+};
+
+// CM addresses
+
+// TODO: Add CM contract addresses when deployed
+export const CM_CONTRACT_ADDRESSES: PerSupportedChain<{
+  [key2 in CONTRACT_NAMES]?: Address;
+}> = {
+  [CHAINS.Mainnet]: {
+    ...COMMON_CONTRACT_ADDRESSES[CHAINS.Mainnet],
+  },
+  [CHAINS.Hoodi]: {
+    ...COMMON_CONTRACT_ADDRESSES[CHAINS.Hoodi],
+    [CONTRACT_NAMES.accounting]: '0x547382C0D1b23f707918D3c83A77317B71Aa8470',
+    [CONTRACT_NAMES.curatedModule]:
+      '0x22a9B82A6c3D2BFB68F324B2e8367f346Dd6f32a',
+    [CONTRACT_NAMES.ejector]: '0x1E3b98102e19D3a164d239BdD190913C2F02E756',
+    [CONTRACT_NAMES.exitPenalties]:
+      '0x94fFA1C7330845646CE9128450F8e6c3B5e44F86',
+    [CONTRACT_NAMES.feeDistributor]:
+      '0x5e6CB7E728E1C320855587E1D9C6F7972ebdD6D5',
+    [CONTRACT_NAMES.feeOracle]: '0x7C8BaafA542c57fF9B2B90612bf8aB9E86e22C09',
+    [CONTRACT_NAMES.hashConsensus]:
+      '0x9849832a1d8274aaeDb1112ad9686413461e7101',
+    [CONTRACT_NAMES.operatorsData]:
+      '0xb868Cc77A95a65F42611724AF05Aa2d3B6Ec05F2',
+    [CONTRACT_NAMES.parametersRegistry]:
+      '0x3C1Cb427D20F15563aDa8C249E71db76d7183B6c',
+    [CONTRACT_NAMES.validatorStrikes]:
+      '0x666D0c3da3dBc946D5128D06115bb4eed4595580',
+    [CONTRACT_NAMES.verifier]: '0x79E8AB29Ff79805025c9462a2f2F12e9A496f81d',
+    [CONTRACT_NAMES.curatedGate1]: '0x02F0DaB81A9a423308049579926C54eaC80c4018',
+  },
+};
+
+export const CM_MODULE_IDS: PerSupportedChain<number> = {
+  [CHAINS.Mainnet]: 4,
+  [CHAINS.Hoodi]: 5,
+};
+
+// TODO: Add CM deployment block numbers when deployed
+export const CM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<
+  bigint | undefined
+> = {
+  [CHAINS.Mainnet]: undefined,
+  [CHAINS.Hoodi]: undefined,
+};

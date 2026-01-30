@@ -5,6 +5,7 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CACHE_LONG, Proof, TOKENS, WithToken } from '../common/index.js';
 import {
   fetchTree,
+  findAddressProof,
   isDefined,
   onError,
   parseNodeOperatorAddedEvents,
@@ -12,7 +13,6 @@ import {
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { ReceiptLike } from '../tx-sdk/types.js';
-import { findProof } from './find-proof.js';
 import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props.js';
 import {
   AddressesTreeLeaf,
@@ -193,7 +193,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   public async getProof(address: Address): Promise<Proof | null> {
     const proofTree = await this.getProofTree();
     if (!proofTree) return null;
-    return findProof(proofTree, address);
+    return findAddressProof(proofTree, address);
   }
 
   @Logger('Utils:')

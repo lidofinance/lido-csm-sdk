@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-identical-functions */
-import { Address, GetContractReturnType, Hex, WalletClient } from 'viem';
+import { Address, Hex } from 'viem';
 import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -16,23 +16,18 @@ import {
   requestWithBlockStep,
   sortEventsByBlockNumber,
 } from '../common/utils/index.js';
+import { BindedContract } from '../core-sdk/types.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
 import { EventRangeProps, OperatorCurveIdChange } from './types.js';
 
 export class EventsSDK extends CsmSDKModule {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
-  private get moduleContractV1(): GetContractReturnType<
-    typeof CSModulev1EventsAbi,
-    WalletClient
-  > {
-    return this.core.getContract(
-      CONTRACT_NAMES.csModule,
-      CSModulev1EventsAbi,
-    );
+  private get moduleContractV1(): BindedContract<typeof CSModulev1EventsAbi> {
+    return this.core.getContract(CONTRACT_NAMES.csModule, CSModulev1EventsAbi);
   }
 
   private get oracleContract() {

@@ -19,7 +19,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
   }
 
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Views:')

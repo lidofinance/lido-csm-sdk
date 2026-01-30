@@ -5,20 +5,20 @@ export const ExitPenaltiesAbi = [
       {
         name: 'module',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'parametersRegistry',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'strikes',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -28,10 +28,10 @@ export const ExitPenaltiesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IAccounting',
-      },
+        internalType: 'contract IAccounting'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -41,10 +41,10 @@ export const ExitPenaltiesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IBaseModule',
-      },
+        internalType: 'contract IBaseModule'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -54,10 +54,10 @@ export const ExitPenaltiesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IParametersRegistry',
-      },
+        internalType: 'contract IParametersRegistry'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -67,10 +67,10 @@ export const ExitPenaltiesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -80,10 +80,10 @@ export const ExitPenaltiesAbi = [
       {
         name: '',
         type: 'uint8',
-        internalType: 'uint8',
-      },
+        internalType: 'uint8'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -93,10 +93,10 @@ export const ExitPenaltiesAbi = [
       {
         name: '',
         type: 'uint8',
-        internalType: 'uint8',
-      },
+        internalType: 'uint8'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -105,13 +105,13 @@ export const ExitPenaltiesAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes',
-      },
+        internalType: 'bytes'
+      }
     ],
     outputs: [
       {
@@ -127,14 +127,14 @@ export const ExitPenaltiesAbi = [
               {
                 name: 'value',
                 type: 'uint248',
-                internalType: 'uint248',
+                internalType: 'uint248'
               },
               {
                 name: 'isValue',
                 type: 'bool',
-                internalType: 'bool',
-              },
-            ],
+                internalType: 'bool'
+              }
+            ]
           },
           {
             name: 'strikesPenalty',
@@ -144,14 +144,14 @@ export const ExitPenaltiesAbi = [
               {
                 name: 'value',
                 type: 'uint248',
-                internalType: 'uint248',
+                internalType: 'uint248'
               },
               {
                 name: 'isValue',
                 type: 'bool',
-                internalType: 'bool',
-              },
-            ],
+                internalType: 'bool'
+              }
+            ]
           },
           {
             name: 'withdrawalRequestFee',
@@ -161,19 +161,19 @@ export const ExitPenaltiesAbi = [
               {
                 name: 'value',
                 type: 'uint248',
-                internalType: 'uint248',
+                internalType: 'uint248'
               },
               {
                 name: 'isValue',
                 type: 'bool',
-                internalType: 'bool',
-              },
-            ],
-          },
-        ],
-      },
+                internalType: 'bool'
+              }
+            ]
+          }
+        ]
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -182,27 +182,27 @@ export const ExitPenaltiesAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'eligibleToExitInSec',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -211,21 +211,21 @@ export const ExitPenaltiesAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'eligibleToExitInSec',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -234,16 +234,16 @@ export const ExitPenaltiesAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes',
-      },
+        internalType: 'bytes'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -252,26 +252,26 @@ export const ExitPenaltiesAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'withdrawalRequestPaidFee',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'exitType',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'event',
@@ -281,22 +281,22 @@ export const ExitPenaltiesAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'strikesPenalty',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -306,34 +306,34 @@ export const ExitPenaltiesAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'exitType',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'withdrawalRequestPaidFee',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'withdrawalRequestRecordedFee',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -343,22 +343,22 @@ export const ExitPenaltiesAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes',
+        internalType: 'bytes'
       },
       {
         name: 'delayFee',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'error',
@@ -367,43 +367,43 @@ export const ExitPenaltiesAbi = [
       {
         name: 'bits',
         type: 'uint8',
-        internalType: 'uint8',
+        internalType: 'uint8'
       },
       {
         name: 'value',
         type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
+        internalType: 'uint256'
+      }
+    ]
   },
   {
     type: 'error',
     name: 'SenderIsNotModule',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'SenderIsNotStrikes',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ValidatorExitDelayNotApplicable',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroParametersRegistryAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroStrikesAddress',
-    inputs: [],
+    inputs: []
   },
 ] as const;

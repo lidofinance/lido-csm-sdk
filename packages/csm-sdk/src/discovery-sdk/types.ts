@@ -4,11 +4,6 @@ export enum SearchMode {
   ALL_ADDRESSES = 2,
 }
 
-export type QueueBatchesPagination = {
-  cursorIndex: bigint;
-  limit: bigint;
-};
-
 export type Pagination = {
   offset: bigint;
   limit: bigint;
