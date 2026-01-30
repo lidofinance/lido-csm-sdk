@@ -10,11 +10,11 @@ import {
 import { byTotalCount, iteratePages, onePage } from './iterate-pages.js';
 import { packRoles } from '../events-sdk/merge.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { QueueBatchesPagination, SearchMode, Pagination } from './types.js';
+import { SearchMode, Pagination } from './types.js';
 
-export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
-  private get satelliteContract() {
-    return this.core.contractCSMSatellite;
+export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
+  private get discoveryContract() {
+    return this.core.contractSMDiscovery;
   }
 
   /**
@@ -48,7 +48,8 @@ export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorId[]> {
     return this.paginateOperators(
       (p) =>
-        this.satelliteContract.read.findNodeOperatorsByAddress([
+        this.discoveryContract.read.findNodeOperatorsByAddress([
+          BigInt(this.core.moduleId),
           address,
           p.offset,
           p.limit,
@@ -66,7 +67,8 @@ export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperator[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.satelliteContract.read.getNodeOperatorsByAddress([
+        this.discoveryContract.read.getNodeOperatorsByAddress([
+          BigInt(this.core.moduleId),
           address,
           p.offset,
           p.limit,
@@ -74,6 +76,7 @@ export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
     );
 
+    // FIXME: return extendedMode and curveId
     return operators.map((operator) => ({
       id: operator.id,
       roles: packRoles({
@@ -91,7 +94,8 @@ export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorInvite[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.satelliteContract.read.getNodeOperatorsByProposedAddress([
+        this.discoveryContract.read.getNodeOperatorsByProposedAddress([
+          BigInt(this.core.moduleId),
           address,
           p.offset,
           p.limit,
@@ -99,6 +103,7 @@ export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
     );
 
+    // FIXME: return extendedMode and curveId
     return operators.flatMap((operator) =>
       [
         { address: operator.proposedManagerAddress, role: ROLES.MANAGER },
@@ -107,35 +112,5 @@ export class SatelliteSDK extends CsmSDKModule<{ module: ModuleSDK }> {
         .filter((item) => isAddressEqual(item.address, address))
         .map((item) => ({ id: operator.id, role: item.role })),
     );
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getNodeOperatorsDepositableKeysCount(
-    pagination?: Pagination,
-  ): Promise<number[]> {
-    return this.paginateOperators(
-      (p) =>
-        this.satelliteContract.read.getNodeOperatorsDepositableValidatorsCount([
-          p.offset,
-          p.limit,
-        ]),
-      pagination,
-    );
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getQueueBatchesPage(
-    queuePriority: number,
-    pagination?: QueueBatchesPagination,
-  ): Promise<bigint[]> {
-    const result = await this.satelliteContract.read.getDepositQueueBatches([
-      BigInt(queuePriority),
-      pagination?.cursorIndex ?? 0n,
-      pagination?.limit ?? 1000n,
-    ]);
-
-    return result as bigint[];
   }
 }

@@ -11,17 +11,16 @@ import {
 } from '../common/index.js';
 import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
 import { splitKeys } from '../common/utils/split-keys.js';
-import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
 import { calcBondBalance } from './calc-bond-balance.js';
 import { NodeOperatorInfo } from './types.js';
 
-export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
+export class OperatorSDK extends CsmSDKModule {
   private get accountingContract() {
     return this.core.contractAccounting;
   }
 
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Views:')

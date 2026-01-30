@@ -5,20 +5,20 @@ export const CuratedGateAbi = [
       {
         name: 'module',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'operatorsData',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -28,10 +28,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IAccounting',
-      },
+        internalType: 'contract IAccounting'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -41,10 +41,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -54,10 +54,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ICuratedModule',
-      },
+        internalType: 'contract ICuratedModule'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -67,10 +67,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -80,10 +80,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IOperatorsData',
-      },
+        internalType: 'contract IOperatorsData'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -93,10 +93,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -106,10 +106,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -119,10 +119,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -132,10 +132,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -145,10 +145,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -157,37 +157,37 @@ export const CuratedGateAbi = [
       {
         name: 'name',
         type: 'string',
-        internalType: 'string',
+        internalType: 'string'
       },
       {
         name: 'description',
         type: 'string',
-        internalType: 'string',
+        internalType: 'string'
       },
       {
         name: 'managerAddress',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'rewardAddress',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -197,10 +197,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -210,10 +210,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64',
-      },
+        internalType: 'uint64'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -223,10 +223,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -235,17 +235,17 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -254,22 +254,22 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -278,17 +278,17 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -297,16 +297,16 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -315,22 +315,22 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -339,17 +339,17 @@ export const CuratedGateAbi = [
       {
         name: 'member',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'pure',
+    stateMutability: 'pure'
   },
   {
     type: 'function',
@@ -358,26 +358,26 @@ export const CuratedGateAbi = [
       {
         name: '_curveId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: '_treeRoot',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: '_treeCid',
         type: 'string',
-        internalType: 'string',
+        internalType: 'string'
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -386,17 +386,17 @@ export const CuratedGateAbi = [
       {
         name: 'member',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -406,10 +406,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -418,11 +418,11 @@ export const CuratedGateAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -431,16 +431,16 @@ export const CuratedGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -449,16 +449,16 @@ export const CuratedGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -467,23 +467,23 @@ export const CuratedGateAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -492,23 +492,23 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -517,16 +517,16 @@ export const CuratedGateAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -535,16 +535,16 @@ export const CuratedGateAbi = [
       {
         name: '_treeRoot',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: '_treeCid',
         type: 'string',
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -553,17 +553,17 @@ export const CuratedGateAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4',
-      },
+        internalType: 'bytes4'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -573,10 +573,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'string',
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -586,10 +586,10 @@ export const CuratedGateAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -598,22 +598,22 @@ export const CuratedGateAbi = [
       {
         name: 'member',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'event',
@@ -623,10 +623,10 @@ export const CuratedGateAbi = [
         name: 'member',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -636,10 +636,10 @@ export const CuratedGateAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64',
-      },
+        internalType: 'uint64'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -649,16 +649,16 @@ export const CuratedGateAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -668,22 +668,22 @@ export const CuratedGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -693,22 +693,22 @@ export const CuratedGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -718,22 +718,22 @@ export const CuratedGateAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -743,21 +743,21 @@ export const CuratedGateAbi = [
         name: 'treeRoot',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'treeCid',
         type: 'string',
         indexed: false,
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
@@ -766,88 +766,88 @@ export const CuratedGateAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
+        internalType: 'bytes32'
+      }
+    ]
   },
   {
     type: 'error',
     name: 'AlreadyConsumed',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidCurveId',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidProof',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidTreeCid',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidTreeRoot',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroModuleId',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroOperatorsDataAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: [],
+    inputs: []
   },
 ] as const;

@@ -1,11 +1,12 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { Address, isAddressEqual } from 'viem';
-import { Proof } from '../common/types.js';
-import { findIndexAndLeaf } from '../common/utils/find-index-and-leaf.js';
-import { AddressesTreeLeaf } from './types.js';
+import { Proof } from '../types.js';
+import { findIndexAndLeaf } from './find-index-and-leaf.js';
 
-export const findProof = (
-  tree: StandardMerkleTree<AddressesTreeLeaf>,
+export type AddressTreeLeaf = [Address];
+
+export const findAddressProof = (
+  tree: StandardMerkleTree<AddressTreeLeaf>,
   address: Address,
 ): Proof | null => {
   const [index, leaf] = findIndexAndLeaf(tree, (leaf) =>
@@ -14,6 +15,5 @@ export const findProof = (
   if (index !== undefined && leaf) {
     return tree.getProof(index) as Proof;
   }
-
   return null;
 };

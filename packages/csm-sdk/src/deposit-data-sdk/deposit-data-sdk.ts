@@ -2,7 +2,7 @@ import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
-import { compareLowercase } from '../common/utils/index.js';
+import { compareLowercase, toHexString } from '../common/utils/index.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
 import { parseDepositData, removeKey } from './parser.js';

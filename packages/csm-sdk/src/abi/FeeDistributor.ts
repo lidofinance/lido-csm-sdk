@@ -5,20 +5,20 @@ export const FeeDistributorAbi = [
       {
         name: 'stETH',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'accounting',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'oracle',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -28,10 +28,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -41,10 +41,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -54,10 +54,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -67,10 +67,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -80,10 +80,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IStETH',
-      },
+        internalType: 'contract IStETH'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -92,27 +92,27 @@ export const FeeDistributorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [
       {
         name: 'sharesToDistribute',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -121,17 +121,17 @@ export const FeeDistributorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: 'distributed',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -141,17 +141,17 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
     name: 'finalizeUpgradeV3',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -160,27 +160,27 @@ export const FeeDistributorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
+        internalType: 'bytes32[]'
+      }
     ],
     outputs: [
       {
         name: 'sharesToDistribute',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -189,8 +189,8 @@ export const FeeDistributorAbi = [
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
@@ -201,37 +201,37 @@ export const FeeDistributorAbi = [
           {
             name: 'refSlot',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'treeRoot',
             type: 'bytes32',
-            internalType: 'bytes32',
+            internalType: 'bytes32'
           },
           {
             name: 'treeCid',
             type: 'string',
-            internalType: 'string',
+            internalType: 'string'
           },
           {
             name: 'logCid',
             type: 'string',
-            internalType: 'string',
+            internalType: 'string'
           },
           {
             name: 'distributed',
             type: 'uint256',
-            internalType: 'uint256',
+            internalType: 'uint256'
           },
           {
             name: 'rebate',
             type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
-      },
+            internalType: 'uint256'
+          }
+        ]
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -241,10 +241,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64',
-      },
+        internalType: 'uint64'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -253,17 +253,17 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -272,22 +272,22 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -296,17 +296,17 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -315,16 +315,16 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -333,22 +333,22 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -357,22 +357,22 @@ export const FeeDistributorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'shares',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'pure',
+    stateMutability: 'pure'
   },
   {
     type: 'function',
@@ -381,16 +381,16 @@ export const FeeDistributorAbi = [
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: '_rebateRecipient',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -400,10 +400,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'string',
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -413,10 +413,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -425,36 +425,36 @@ export const FeeDistributorAbi = [
       {
         name: '_treeRoot',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: '_treeCid',
         type: 'string',
-        internalType: 'string',
+        internalType: 'string'
       },
       {
         name: '_logCid',
         type: 'string',
-        internalType: 'string',
+        internalType: 'string'
       },
       {
         name: 'distributed',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'rebate',
         type: 'uint256',
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -464,10 +464,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -476,16 +476,16 @@ export const FeeDistributorAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -494,16 +494,16 @@ export const FeeDistributorAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -512,23 +512,23 @@ export const FeeDistributorAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -537,16 +537,16 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -555,16 +555,16 @@ export const FeeDistributorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -573,11 +573,11 @@ export const FeeDistributorAbi = [
       {
         name: '_rebateRecipient',
         type: 'address',
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'nonpayable'
   },
   {
     type: 'function',
@@ -586,17 +586,17 @@ export const FeeDistributorAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4',
-      },
+        internalType: 'bytes4'
+      }
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool',
-      },
+        internalType: 'bool'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -606,10 +606,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -619,10 +619,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'string',
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'function',
@@ -632,10 +632,10 @@ export const FeeDistributorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    stateMutability: 'view',
+    stateMutability: 'view'
   },
   {
     type: 'event',
@@ -645,22 +645,22 @@ export const FeeDistributorAbi = [
         name: 'totalClaimableShares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'treeRoot',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'treeCid',
         type: 'string',
         indexed: false,
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -670,10 +670,10 @@ export const FeeDistributorAbi = [
         name: 'logCid',
         type: 'string',
         indexed: false,
-        internalType: 'string',
-      },
+        internalType: 'string'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -683,28 +683,28 @@ export const FeeDistributorAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -714,22 +714,22 @@ export const FeeDistributorAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -739,22 +739,22 @@ export const FeeDistributorAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -764,16 +764,16 @@ export const FeeDistributorAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -783,10 +783,10 @@ export const FeeDistributorAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64',
-      },
+        internalType: 'uint64'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -796,10 +796,10 @@ export const FeeDistributorAbi = [
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -809,16 +809,16 @@ export const FeeDistributorAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256',
+        internalType: 'uint256'
       },
       {
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -828,10 +828,10 @@ export const FeeDistributorAbi = [
         name: 'recipient',
         type: 'address',
         indexed: false,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -841,10 +841,10 @@ export const FeeDistributorAbi = [
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -854,22 +854,22 @@ export const FeeDistributorAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
-      },
+        internalType: 'bytes32'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -879,22 +879,22 @@ export const FeeDistributorAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -904,22 +904,22 @@ export const FeeDistributorAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32',
+        internalType: 'bytes32'
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address',
-      },
+        internalType: 'address'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'event',
@@ -929,21 +929,21 @@ export const FeeDistributorAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
+        internalType: 'uint256'
+      }
     ],
-    anonymous: false,
+    anonymous: false
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
@@ -952,108 +952,108 @@ export const FeeDistributorAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address',
+        internalType: 'address'
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
+        internalType: 'bytes32'
+      }
+    ]
   },
   {
     type: 'error',
     name: 'FailedToSendEther',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'FeeSharesDecrease',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidLogCID',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidProof',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidReportData',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidShares',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidTreeCid',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'InvalidTreeRoot',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotAllowedToRecover',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotEnoughShares',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'SenderIsNotAccounting',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'SenderIsNotOracle',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroAccountingAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroOracleAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroRebateRecipientAddress',
-    inputs: [],
+    inputs: []
   },
   {
     type: 'error',
     name: 'ZeroStEthAddress',
-    inputs: [],
+    inputs: []
   },
 ] as const;

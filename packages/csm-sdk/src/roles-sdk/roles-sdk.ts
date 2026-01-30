@@ -16,12 +16,12 @@ export class RolesSDK extends CsmSDKModule<{
   operator: OperatorSDK;
 }> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Call:')
   @ErrorHandler()
-  public async changeRewardsRole(props: ChangeRoleProps) {
+  public async changeRewardsAddress(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -37,7 +37,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async proposeManagerRole(props: ChangeRoleProps) {
+  public async proposeManagerAddress(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -54,7 +54,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async proposeRewardsRole(props: ChangeRoleProps) {
+  public async proposeRewardsAddress(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -71,7 +71,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async resetManagerRole(props: ResetRoleProps) {
+  public async resetManagerAddress(props: ResetRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -86,7 +86,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async confirmRewardsRole(props: ConfirmRoleProps) {
+  public async confirmRewardsAddress(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -103,7 +103,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   @Logger('Call:')
   @ErrorHandler()
-  public async confirmManagerRole(props: ConfirmRoleProps) {
+  public async confirmManagerAddress(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -118,14 +118,14 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
-  public async confirmRole(props: WithRole<ConfirmRoleProps>) {
+  public async confirmAddress(props: WithRole<ConfirmRoleProps>) {
     const { role } = props;
 
     switch (role) {
       case ROLES.MANAGER:
-        return this.confirmManagerRole(props);
+        return this.confirmManagerAddress(props);
       case ROLES.REWARDS:
-        return this.confirmRewardsRole(props);
+        return this.confirmRewardsAddress(props);
       default:
         throw new SDKError({
           message: 'unsupported role',
@@ -134,7 +134,7 @@ export class RolesSDK extends CsmSDKModule<{
     }
   }
 
-  private prepareRoleResult(nodeOperatorId: bigint) {
+  protected prepareRoleResult(nodeOperatorId: bigint) {
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 }

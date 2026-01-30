@@ -3,6 +3,7 @@ import { PerSupportedChain } from './supported-chains.js';
 
 export enum LINK_TYPE {
   icsTree = 'icsTree',
+  curatedGateTree = 'curatedGateTree',
   rewardsTree = 'rewardsTree',
   keysApi = 'keysApi',
   feesMonitoringApi = 'feesMonitoringApi',

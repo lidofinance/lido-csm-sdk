@@ -7,14 +7,7 @@ import {
   TransactionResult,
   withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
-import {
-  Address,
-  Call,
-  erc20Abi,
-  GetContractReturnType,
-  WalletCallReceipt,
-  WalletClient,
-} from 'viem';
+import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
@@ -25,6 +18,7 @@ import {
   PermitSignatureShort,
 } from '../common/index.js';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
+import { BindedContract } from '../core-sdk/types.js';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts.js';
 import {
   PerformCallOptions,
@@ -55,7 +49,7 @@ export class TxSDK extends CsmSDKModule {
 
   private getTokenContract(
     token: Erc20Tokens,
-  ): GetContractReturnType<typeof erc20Abi, WalletClient> {
+  ): BindedContract<typeof erc20Abi> {
     return this.core.getContract(token, erc20Abi);
   }
 

@@ -3,7 +3,6 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
-  CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index.js';
@@ -24,9 +23,9 @@ import {
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
-  strikes: StrikesSDK;
   frame: FrameSDK;
   events: EventsSDK;
+  strikes?: StrikesSDK;
 }> {
   @Logger('API:')
   @ErrorHandler()
@@ -64,9 +63,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     const keys = await this.getApiKeys(pubkeys);
     if (!keys) return null;
 
-    const csmAddress = this.core.getContractAddress(
-      CONTRACT_NAMES.csModule,
-    );
+    const moduleAddress = this.core.getContractAddress(this.core.moduleName);
 
     const duplicates = [
       ...keys.map(({ key }) => key).filter(isNotUnique),
@@ -74,7 +71,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         .filter(
           (key) =>
             key.operatorIndex !== Number(nodeOperatorId) ||
-            !isAddressEqual(key.moduleAddress, csmAddress),
+            !isAddressEqual(key.moduleAddress, moduleAddress),
         )
         .map(({ key }) => key),
     ].filter(isUnique);
@@ -132,7 +129,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       }),
       this.getApiKeysDuplicates(id),
       this.getClKeysStatus(id),
-      this.bus.strikes.getKeysWithStrikes(id),
+      this.bus.strikes?.getKeysWithStrikes(id) ?? Promise.resolve([]),
     ]);
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
