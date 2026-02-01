@@ -2,6 +2,7 @@ export * from './base.js';
 export * from './cache-durations.js';
 export * from './contract-names.js';
 export * from './contract-addresses.js';
+export * from './contract-abi.js';
 export * from './keys.js';
 export * from './links.js';
 export * from './operator-types.js';

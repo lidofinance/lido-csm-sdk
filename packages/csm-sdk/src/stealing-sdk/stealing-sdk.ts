@@ -13,7 +13,7 @@ export class StealingSDK extends CsmSDKModule<{
   operator: OperatorSDK;
 }> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Call:')

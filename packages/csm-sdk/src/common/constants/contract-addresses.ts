@@ -18,7 +18,7 @@ export const COMMON_CONTRACT_ADDRESSES: PerSupportedChain<{
       '0x388C818CA8B9251b393131C08a736A67ccB19297',
     [CONTRACT_NAMES.stETH]: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     [CONTRACT_NAMES.wstETH]: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0',
-    [CONTRACT_NAMES.CSMSatellite]: '0xf1199B61429E16e5c9F1a3f73A1190b52Bc81ddc',
+    [CONTRACT_NAMES.SMDiscovery]: undefined,
   },
   [CHAINS.Hoodi]: {
     [CONTRACT_NAMES.stakingRouter]:
@@ -31,8 +31,7 @@ export const COMMON_CONTRACT_ADDRESSES: PerSupportedChain<{
       '0x9b108015fe433F173696Af3Aa0CF7CDb3E104258',
     [CONTRACT_NAMES.stETH]: '0x3508A952176b3c15387C97BE809eaffB1982176a',
     [CONTRACT_NAMES.wstETH]: '0x7E99eE3C66636DE415D2d7C880938F2f40f94De4',
-    [CONTRACT_NAMES.CSMSatellite]: '0x3A981c53C16C03D6d58A9b1199C77752dE7BC956',
-    [CONTRACT_NAMES.SMDiscovery]: '0xd038A2EE73b64F30d65802Ad188F27921656f28F', // FIXME: replace to real
+    [CONTRACT_NAMES.SMDiscovery]: '0x43f1c35392418aeeDA48dC136caa7DE43544AbFF',
   },
 };
 
@@ -95,9 +94,18 @@ export const CSM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<bigint> = {
   [CHAINS.Hoodi]: BigInt('0x1374'),
 };
 
+// contracts should support getInitializedVersion method
+export const SUPPORTED_CSM_VERSIONS: Partial<Record<CONTRACT_NAMES, readonly [bigint, bigint]>> = {
+  [CONTRACT_NAMES.accounting]: [3n, 3n],
+  [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
+  [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
+  [CONTRACT_NAMES.validatorStrikes]: [1n, 1n],
+  [CONTRACT_NAMES.csModule]: [3n, 3n],
+  [CONTRACT_NAMES.vettedGate]: [1n, 1n],
+};
+
 // CM addresses
 
-// TODO: Add CM contract addresses when deployed
 export const CM_CONTRACT_ADDRESSES: PerSupportedChain<{
   [key2 in CONTRACT_NAMES]?: Address;
 }> = {
@@ -106,25 +114,6 @@ export const CM_CONTRACT_ADDRESSES: PerSupportedChain<{
   },
   [CHAINS.Hoodi]: {
     ...COMMON_CONTRACT_ADDRESSES[CHAINS.Hoodi],
-    [CONTRACT_NAMES.accounting]: '0x547382C0D1b23f707918D3c83A77317B71Aa8470',
-    [CONTRACT_NAMES.curatedModule]:
-      '0x22a9B82A6c3D2BFB68F324B2e8367f346Dd6f32a',
-    [CONTRACT_NAMES.ejector]: '0x1E3b98102e19D3a164d239BdD190913C2F02E756',
-    [CONTRACT_NAMES.exitPenalties]:
-      '0x94fFA1C7330845646CE9128450F8e6c3B5e44F86',
-    [CONTRACT_NAMES.feeDistributor]:
-      '0x5e6CB7E728E1C320855587E1D9C6F7972ebdD6D5',
-    [CONTRACT_NAMES.feeOracle]: '0x7C8BaafA542c57fF9B2B90612bf8aB9E86e22C09',
-    [CONTRACT_NAMES.hashConsensus]:
-      '0x9849832a1d8274aaeDb1112ad9686413461e7101',
-    [CONTRACT_NAMES.operatorsData]:
-      '0xb868Cc77A95a65F42611724AF05Aa2d3B6Ec05F2',
-    [CONTRACT_NAMES.parametersRegistry]:
-      '0x3C1Cb427D20F15563aDa8C249E71db76d7183B6c',
-    [CONTRACT_NAMES.validatorStrikes]:
-      '0x666D0c3da3dBc946D5128D06115bb4eed4595580',
-    [CONTRACT_NAMES.verifier]: '0x79E8AB29Ff79805025c9462a2f2F12e9A496f81d',
-    [CONTRACT_NAMES.curatedGate1]: '0x02F0DaB81A9a423308049579926C54eaC80c4018',
   },
 };
 
@@ -133,10 +122,18 @@ export const CM_MODULE_IDS: PerSupportedChain<number> = {
   [CHAINS.Hoodi]: 5,
 };
 
-// TODO: Add CM deployment block numbers when deployed
 export const CM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<
   bigint | undefined
 > = {
   [CHAINS.Mainnet]: undefined,
   [CHAINS.Hoodi]: undefined,
+};
+
+// contracts should support getInitializedVersion method
+export const SUPPORTED_CM_VERSIONS: Partial<Record<CONTRACT_NAMES, readonly [bigint, bigint]>> = {
+  [CONTRACT_NAMES.accounting]: [3n, 3n],
+  [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
+  [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
+  [CONTRACT_NAMES.curatedModule]: [1n, 1n],
+  [CONTRACT_NAMES.curatedGate1]: [1n, 1n],
 };

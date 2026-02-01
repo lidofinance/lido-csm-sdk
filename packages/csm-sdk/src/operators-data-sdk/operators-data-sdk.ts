@@ -1,6 +1,6 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { NodeOperatorId } from '../common/index.js';
+import { CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   OperatorData,
@@ -10,7 +10,7 @@ import {
 
 export class OperatorsDataSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get operatorsDataContract() {
-    return this.core.contractOperatorsData;
+    return this.core.getContract(CONTRACT_NAMES.operatorsData);
   }
 
   @Logger('Call:')

@@ -1,7 +1,7 @@
 import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { TOKENS, WithToken } from '../common/index.js';
+import { CONTRACT_NAMES, TOKENS, WithToken } from '../common/index.js';
 import { parseNodeOperatorAddedEvents } from '../common/utils/index.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
@@ -14,7 +14,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
   operator: OperatorSDK;
 }> {
   private get permissionlessContract() {
-    return this.core.contractPermissionlessGate;
+    return this.core.getContract(CONTRACT_NAMES.permissionlessGate);
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {

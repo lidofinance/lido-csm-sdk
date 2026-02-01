@@ -2,7 +2,13 @@ import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_LONG, Proof, TOKENS, WithToken } from '../common/index.js';
+import {
+  CACHE_LONG,
+  CONTRACT_NAMES,
+  Proof,
+  TOKENS,
+  WithToken,
+} from '../common/index.js';
 import {
   fetchTree,
   findAddressProof,
@@ -26,7 +32,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   operator: OperatorSDK;
 }> {
   private get icsContract() {
-    return this.core.contractVettedGate;
+    return this.core.getContract(CONTRACT_NAMES.vettedGate);
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {

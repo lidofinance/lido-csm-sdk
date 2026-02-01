@@ -1,7 +1,12 @@
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_LONG, NodeOperatorId, Proof } from '../common/index.js';
+import {
+  CACHE_LONG,
+  CONTRACT_NAMES,
+  NodeOperatorId,
+  Proof,
+} from '../common/index.js';
 import { fetchTree, isDefined, onError } from '../common/utils/index.js';
 import {
   filterLeafsByNodeOperator,
@@ -13,7 +18,7 @@ import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
 
 export class StrikesSDK extends CsmSDKModule {
   private get strikesContract() {
-    return this.core.contractValidatorStrikes;
+    return this.core.getContract(CONTRACT_NAMES.validatorStrikes);
   }
 
   @Logger('Views:')

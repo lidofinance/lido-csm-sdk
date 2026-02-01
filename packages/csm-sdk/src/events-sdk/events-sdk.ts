@@ -27,7 +27,10 @@ export class EventsSDK extends CsmSDKModule {
   }
 
   private get moduleContractV1(): BindedContract<typeof CSModulev1EventsAbi> {
-    return this.core.getContract(CONTRACT_NAMES.csModule, CSModulev1EventsAbi);
+    return this.core.getContractWithAbi(
+      CONTRACT_NAMES.csModule,
+      CSModulev1EventsAbi,
+    );
   }
 
   private get oracleContract() {

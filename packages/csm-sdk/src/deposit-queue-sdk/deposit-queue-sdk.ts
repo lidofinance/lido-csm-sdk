@@ -1,6 +1,7 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import {
   CACHE_LONG,
+  CONTRACT_NAMES,
   DEFAULT_CLEAN_MAX_ITEMS,
 } from '../common/constants/index.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -31,7 +32,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   module: ModuleSDK;
 }> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.getContract(CONTRACT_NAMES.csModule);
   }
 
   @Logger('Views:')

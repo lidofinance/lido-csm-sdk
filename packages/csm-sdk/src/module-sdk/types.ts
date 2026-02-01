@@ -1,14 +1,9 @@
-import { SUPPORTED_CONTRACT_VERSIONS } from '../common/index.js';
 import { Address } from 'viem';
 
 export type CsmStatus = {
   isPausedModule: boolean;
   isPausedAccounting: boolean;
 };
-
-export type CsmContractsWithVersion = keyof typeof SUPPORTED_CONTRACT_VERSIONS;
-
-export type CsmVersions = Record<CsmContractsWithVersion, bigint>;
 
 export const ShareLimitStatus = {
   FAR: 'FAR',

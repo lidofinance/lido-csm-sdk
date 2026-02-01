@@ -1,4 +1,3 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 import { CuratedGateAbi } from '../abi/CuratedGate.js';
 import {
@@ -8,8 +7,8 @@ import {
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_LONG,
-  CONTRACT_NAMES,
-  CuratedGates,
+  CURATED_GATES,
+  NodeOperatorShortInfo,
   Proof,
 } from '../common/index.js';
 import { findAddressProof } from '../common/utils/find-address-proof.js';
@@ -17,38 +16,31 @@ import {
   fetchTree,
   isDefined,
   onError,
-  parseCuratedModuleNodeOperatorAddedEvents,
+  parseNodeOperatorAddedEvents,
 } from '../common/utils/index.js';
 import { BindedContract } from '../core-sdk/types.js';
 import type { AddressesTreeLeaf, AddressProof } from '../ics-gate-sdk/types.js';
+import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { ReceiptLike } from '../tx-sdk/types.js';
 import { parseCreateOperatorProps } from './parse-create-operator-props.js';
-import { CreateNodeOperatorProps, NodeOperatorCreated } from './types.js';
+import { CreateNodeOperatorProps, GateEligibility } from './types.js';
 
 export class CuratedGateSDK extends CsmSDKModule<{
   tx: TxSDK;
+  operator: OperatorSDK;
 }> {
-  private gateContract: BindedContract<typeof CuratedGateAbi>;
+  private contract: BindedContract<typeof CuratedGateAbi>;
 
-  constructor(props: CsmSDKProps, gateName: CONTRACT_NAMES, name?: string) {
+  constructor(props: CsmSDKProps, gateName: CURATED_GATES, name?: string) {
     super(props, name);
 
-    invariant(
-      CuratedGates.includes(gateName),
-      `Unsupported gate name: ${gateName}`,
-      ERROR_CODE.NOT_SUPPORTED,
-    );
-
-    this.gateContract = this.core.getContract(gateName, CuratedGateAbi);
+    this.contract = this.core.getContract(gateName);
   }
 
-  private async parseOperatorFromReceipt(
-    receipt: ReceiptLike,
-  ): Promise<NodeOperatorCreated> {
-    const nodeOperatorId =
-      await parseCuratedModuleNodeOperatorAddedEvents(receipt);
-    return { nodeOperatorId };
+  private async parseOperatorFromReceipt(receipt: ReceiptLike) {
+    const nodeOperatorId = await parseNodeOperatorAddedEvents(receipt);
+    return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
   // Transaction Method
@@ -58,10 +50,10 @@ export class CuratedGateSDK extends CsmSDKModule<{
     const { name, description, managerAddress, rewardAddress, proof, ...rest } =
       await parseCreateOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorCreated>({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
       call: () =>
-        prepCall(this.gateContract, 'createNodeOperator', [
+        prepCall(this.contract, 'createNodeOperator', [
           name,
           description,
           managerAddress,
@@ -76,15 +68,15 @@ export class CuratedGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getCurveId(): Promise<bigint> {
-    return this.gateContract.read.curveId();
+    return this.contract.read.curveId();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getTreeConfig() {
     const [root, cid] = await Promise.all([
-      this.gateContract.read.treeRoot(),
-      this.gateContract.read.treeCid(),
+      this.contract.read.treeRoot(),
+      this.contract.read.treeCid(),
     ]).catch(onError);
     return { root, cid };
   }
@@ -92,19 +84,19 @@ export class CuratedGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async isConsumed(address: Address): Promise<boolean> {
-    return this.gateContract.read.isConsumed([address]);
+    return this.contract.read.isConsumed([address]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async isPaused(): Promise<boolean> {
-    return this.gateContract.read.isPaused();
+    return this.contract.read.isPaused();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async verifyProof(address: Address, proof: Proof): Promise<boolean> {
-    return this.gateContract.read.verifyProof([address, proof]);
+    return this.contract.read.verifyProof([address, proof]);
   }
 
   // Tree & Proof Utilities
@@ -140,5 +132,25 @@ export class CuratedGateSDK extends CsmSDKModule<{
       this.isConsumed(address),
     ]);
     return { proof, isConsumed };
+  }
+
+  @Logger('Views:')
+  public async getEligibility(address: Address): Promise<GateEligibility> {
+    const [curveId, isPaused, proof, isConsumed] = await Promise.all([
+      this.getCurveId(),
+      this.isPaused(),
+      this.getProof(address),
+      this.isConsumed(address),
+    ]);
+
+    const isEligible = !!proof && !isConsumed && !isPaused;
+
+    return {
+      isPaused,
+      curveId,
+      proof,
+      isConsumed,
+      isEligible,
+    };
   }
 }

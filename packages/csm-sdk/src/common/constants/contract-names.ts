@@ -19,33 +19,19 @@ export enum CONTRACT_NAMES {
   validatorStrikes = 'validatorStrikes',
   verifier = 'verifier',
   hashConsensus = 'hashConsensus',
+  SMDiscovery = 'SMDiscovery',
 
   // CSM-specific
   csModule = 'csModule',
   permissionlessGate = 'permissionlessGate',
   vettedGate = 'vettedGate',
-  CSMSatellite = 'CSMSatellite',
-  SMDiscovery = 'SMDiscovery',
 
   // CM-specific
   curatedModule = 'curatedModule',
   operatorsData = 'operatorsData',
   curatedGate1 = 'curatedGate1',
-  curatedGate2 = 'curatedGate2',
 }
 
-export const SUPPORTED_CONTRACT_VERSIONS = {
-  [CONTRACT_NAMES.accounting]: [3n, 3n],
-  [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
-  [CONTRACT_NAMES.feeOracle]: [3n, 3n],
-  [CONTRACT_NAMES.csModule]: [3n, 3n],
-  [CONTRACT_NAMES.curatedModule]: [1n, 1n],
-  [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
-  [CONTRACT_NAMES.validatorStrikes]: [1n, 1n],
-  [CONTRACT_NAMES.vettedGate]: [1n, 1n],
-} as const;
+export const CURATED_GATES = [CONTRACT_NAMES.curatedGate1] as const;
 
-export const CuratedGates = [
-  CONTRACT_NAMES.curatedGate1,
-  CONTRACT_NAMES.curatedGate2,
-];
+export type CURATED_GATES = (typeof CURATED_GATES)[number];

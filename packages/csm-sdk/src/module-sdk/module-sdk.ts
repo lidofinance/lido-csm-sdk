@@ -1,19 +1,14 @@
 import { Address, isAddressEqual } from 'viem';
+import { VersionCheckAbi } from '../abi/VersionCheck.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import {
-  CACHE_MID,
-  CONTRACT_NAMES,
-  SUPPORTED_CONTRACT_VERSIONS,
-} from '../common/index.js';
+import { CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { onVersionError } from '../common/utils/on-error.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
 import { findModuleDigest } from './find-module-digest.js';
 import {
-  CsmContractsWithVersion,
   CsmStatus,
-  CsmVersions,
   ModuleDigest,
   ModuleOperatorsResponse,
   ModulesResponse,
@@ -44,60 +39,31 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getVersions(): Promise<CsmVersions> {
-    const [
-      csModule,
-      curatedModule,
-      accounting,
-      feeDistributor,
-      feeOracle,
-      parametersRegistry,
-      validatorStrikes,
-      vettedGate,
-    ] = await Promise.all([
-      this.moduleContract.read.getInitializedVersion().catch(onVersionError),
-      this.core.contractCuratedModule.read
-        .getInitializedVersion()
-        .catch(onVersionError),
-      this.core.contractAccounting.read
-        .getInitializedVersion()
-        .catch(onVersionError),
-      this.core.contractFeeDistributor.read
-        .getInitializedVersion()
-        .catch(onVersionError),
-      this.core.contractFeeOracle.read
-        .getContractVersion()
-        .catch(onVersionError),
-      this.core.contractParametersRegistry.read
-        .getInitializedVersion()
-        .catch(onVersionError),
-      this.core.contractValidatorStrikes.read
-        .getInitializedVersion()
-        .catch(onVersionError),
-      this.core.contractVettedGate.read
-        .getInitializedVersion()
-        .catch(onVersionError),
-    ]);
+  public async getVersions(): Promise<Record<CONTRACT_NAMES, bigint>> {
+    const contractNames = Object.keys(this.core.supportedVersions) as CONTRACT_NAMES[];
 
-    return {
-      [CONTRACT_NAMES.csModule]: csModule,
-      [CONTRACT_NAMES.curatedModule]: curatedModule,
-      [CONTRACT_NAMES.accounting]: accounting,
-      [CONTRACT_NAMES.feeDistributor]: feeDistributor,
-      [CONTRACT_NAMES.feeOracle]: feeOracle,
-      [CONTRACT_NAMES.parametersRegistry]: parametersRegistry,
-      [CONTRACT_NAMES.validatorStrikes]: validatorStrikes,
-      [CONTRACT_NAMES.vettedGate]: vettedGate,
-    };
+    const versionPromises = contractNames.map((contractName) =>
+      this.core
+        .getContractWithAbi(contractName, VersionCheckAbi)
+        .read.getInitializedVersion()
+        .catch(onVersionError)
+        .then((v) => [contractName, v] as const),
+    );
+
+    const versions = await Promise.all(versionPromises);
+
+    return Object.fromEntries(
+      versions.filter(([, version]) => version !== 0n),
+    ) as Record<CONTRACT_NAMES, bigint>;
   }
 
   public async isVersionsSupported(): Promise<boolean> {
     const versions = await this.getVersions();
 
-    return Object.entries(SUPPORTED_CONTRACT_VERSIONS)
+    return Object.entries(this.core.supportedVersions)
       .map(([key, [min, max]]) => {
-        const current = versions[key as CsmContractsWithVersion];
-        return current >= min && current <= max;
+        const current = versions[key as CONTRACT_NAMES];
+        return current !== undefined && current >= min && current <= max;
       })
       .every(Boolean);
   }

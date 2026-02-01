@@ -46,7 +46,7 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   @Cache(CACHE_MID)
   @ErrorHandler()
   public async getMaxWithdrawalRequestFee(curveId: bigint): Promise<bigint> {
-    return this.parametersContract.read.getMaxWithdrawalRequestFee([curveId]);
+    return this.parametersContract.read.getMaxElWithdrawalRequestFee([curveId]);
   }
 
   @Logger('Views:')
