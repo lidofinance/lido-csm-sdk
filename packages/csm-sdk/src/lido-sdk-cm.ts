@@ -25,6 +25,7 @@ import { OperatorSDK } from './operator-sdk/operator-sdk.js';
 import { OperatorsDataSDK } from './operators-data-sdk/operators-data-sdk.js';
 import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
+import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
 import { TxSDK } from './tx-sdk/tx-sdk.js';
 export class LidoSDKCm {
   readonly core: CoreSDK;
@@ -46,6 +47,7 @@ export class LidoSDKCm {
   readonly curatedGates: CuratedGatesCollectionSDK;
   readonly operatorsData: OperatorsDataSDK;
   readonly discovery: DiscoverySDK;
+  readonly stealing: StealingSDK;
 
   constructor(props: SdkProps) {
     const coreProps = prepareCoreProps(props);
@@ -74,6 +76,7 @@ export class LidoSDKCm {
       'curatedGates',
     );
     this.operatorsData = new OperatorsDataSDK(commonProps, 'operatorsData');
+    this.stealing = new StealingSDK(commonProps);
     this.discovery = new DiscoverySDK(commonProps, 'discovery');
   }
 }

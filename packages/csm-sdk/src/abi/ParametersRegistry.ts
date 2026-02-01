@@ -25,6 +25,19 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'MANAGE_ALLOCATION_WEIGHTS_ROLE',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32'
+      }
+    ],
+    stateMutability: 'view'
+  },
+  {
+    type: 'function',
     name: 'MANAGE_GENERAL_PENALTIES_AND_CHARGES_ROLE',
     inputs: [],
     outputs: [
@@ -142,6 +155,19 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'defaultDepositAllocationWeight',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256'
+      }
+    ],
+    stateMutability: 'view'
+  },
+  {
+    type: 'function',
     name: 'defaultExitDelayFee',
     inputs: [],
     outputs: [
@@ -194,7 +220,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'defaultMaxWithdrawalRequestFee',
+    name: 'defaultMaxElWithdrawalRequestFee',
     inputs: [],
     outputs: [
       {
@@ -330,6 +356,25 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'getDepositAllocationWeight',
+    inputs: [
+      {
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256'
+      }
+    ],
+    outputs: [
+      {
+        name: 'weight',
+        type: 'uint256',
+        internalType: 'uint256'
+      }
+    ],
+    stateMutability: 'view'
+  },
+  {
+    type: 'function',
     name: 'getExitDelayFee',
     inputs: [
       {
@@ -419,7 +464,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'getMaxWithdrawalRequestFee',
+    name: 'getMaxElWithdrawalRequestFee',
     inputs: [
       {
         name: 'curveId',
@@ -769,7 +814,12 @@ export const ParametersRegistryAbi = [
             internalType: 'uint256'
           },
           {
-            name: 'defaultMaxWithdrawalRequestFee',
+            name: 'defaultMaxElWithdrawalRequestFee',
+            type: 'uint256',
+            internalType: 'uint256'
+          },
+          {
+            name: 'defaultDepositAllocationWeight',
             type: 'uint256',
             internalType: 'uint256'
           }
@@ -879,6 +929,19 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'setDefaultDepositAllocationWeight',
+    inputs: [
+      {
+        name: 'weight',
+        type: 'uint256',
+        internalType: 'uint256'
+      }
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable'
+  },
+  {
+    type: 'function',
     name: 'setDefaultExitDelayFee',
     inputs: [
       {
@@ -931,7 +994,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'setDefaultMaxWithdrawalRequestFee',
+    name: 'setDefaultMaxElWithdrawalRequestFee',
     inputs: [
       {
         name: 'fee',
@@ -1029,6 +1092,24 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'setDepositAllocationWeight',
+    inputs: [
+      {
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256'
+      },
+      {
+        name: 'weight',
+        type: 'uint256',
+        internalType: 'uint256'
+      }
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable'
+  },
+  {
+    type: 'function',
     name: 'setExitDelayFee',
     inputs: [
       {
@@ -1101,7 +1182,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'setMaxWithdrawalRequestFee',
+    name: 'setMaxElWithdrawalRequestFee',
     inputs: [
       {
         name: 'curveId',
@@ -1298,6 +1379,19 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'unsetDepositAllocationWeight',
+    inputs: [
+      {
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256'
+      }
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable'
+  },
+  {
+    type: 'function',
     name: 'unsetExitDelayFee',
     inputs: [
       {
@@ -1350,7 +1444,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'unsetMaxWithdrawalRequestFee',
+    name: 'unsetMaxElWithdrawalRequestFee',
     inputs: [
       {
         name: 'curveId',
@@ -1518,6 +1612,19 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'event',
+    name: 'DefaultDepositAllocationWeightSet',
+    inputs: [
+      {
+        name: 'weight',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256'
+      }
+    ],
+    anonymous: false
+  },
+  {
+    type: 'event',
     name: 'DefaultExitDelayFeeSet',
     inputs: [
       {
@@ -1570,7 +1677,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'event',
-    name: 'DefaultMaxWithdrawalRequestFeeSet',
+    name: 'DefaultMaxElWithdrawalRequestFeeSet',
     inputs: [
       {
         name: 'fee',
@@ -1665,6 +1772,38 @@ export const ParametersRegistryAbi = [
         name: 'threshold',
         type: 'uint256',
         indexed: false,
+        internalType: 'uint256'
+      }
+    ],
+    anonymous: false
+  },
+  {
+    type: 'event',
+    name: 'DepositAllocationWeightSet',
+    inputs: [
+      {
+        name: 'curveId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256'
+      },
+      {
+        name: 'weight',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256'
+      }
+    ],
+    anonymous: false
+  },
+  {
+    type: 'event',
+    name: 'DepositAllocationWeightUnset',
+    inputs: [
+      {
+        name: 'curveId',
+        type: 'uint256',
+        indexed: true,
         internalType: 'uint256'
       }
     ],
@@ -1813,7 +1952,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'event',
-    name: 'MaxWithdrawalRequestFeeSet',
+    name: 'MaxElWithdrawalRequestFeeSet',
     inputs: [
       {
         name: 'curveId',
@@ -1832,7 +1971,7 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'event',
-    name: 'MaxWithdrawalRequestFeeUnset',
+    name: 'MaxElWithdrawalRequestFeeUnset',
     inputs: [
       {
         name: 'curveId',

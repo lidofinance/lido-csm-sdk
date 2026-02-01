@@ -25,7 +25,7 @@ export class AccountingSDK extends CsmSDKModule {
 
   @Cache(CACHE_LONG)
   private get stethContract() {
-    return this.core.getContract(CONTRACT_NAMES.stETH, stethSharesAbi);
+    return this.core.getContractWithAbi(CONTRACT_NAMES.stETH, stethSharesAbi);
   }
 
   @Logger('Views:')

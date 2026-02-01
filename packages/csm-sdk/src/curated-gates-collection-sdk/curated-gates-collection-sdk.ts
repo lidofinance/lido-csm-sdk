@@ -4,13 +4,14 @@ import {
   CsmSDKModule,
   CsmSDKProps,
 } from '../common/class-primitives/csm-sdk-module.js';
-import { CuratedGates } from '../common/constants/contract-names.js';
+import { CURATED_GATES } from '../common/constants/contract-names.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { Proof } from '../common/types.js';
 import { CuratedGateSDK } from '../curated-gate-sdk/curated-gate-sdk.js';
-import { AddressProof } from '../ics-gate-sdk/types.js';
 import { TxSDK } from '../tx-sdk/index.js';
-import type { CreateNodeOperatorInGateProps } from './types.js';
+import type {
+  CreateNodeOperatorInGateProps,
+  GateItemEligibility,
+} from './types.js';
 
 export class CuratedGatesCollectionSDK extends CsmSDKModule<{
   tx: TxSDK;
@@ -21,7 +22,7 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
     super(props, name);
 
     // Initialize gate instances for each gate name
-    for (const gateName of CuratedGates) {
+    for (const gateName of CURATED_GATES) {
       try {
         const gateSdk = new CuratedGateSDK(props, gateName);
         this.gates.push(gateSdk);
@@ -61,34 +62,19 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
     return gate;
   }
 
-  public async getAllCurveIds(): Promise<bigint[]> {
-    return Promise.all(this.gates.map(async (gate) => await gate.getCurveId()));
-  }
-
   @Logger('Utils:')
   @ErrorHandler()
-  public async getProofs(address: Address): Promise<(Proof | null)[]> {
-    return Promise.all(
-      this.gates.map(async (gate) => {
-        const proof = await gate.getProof(address);
-        if (!proof) return null;
-
-        return proof;
-      }),
-    );
-  }
-
-  @Logger('Utils:')
-  @ErrorHandler()
-  public async getProofAndConsumed(
+  public async getEligibility(
     address: Address,
-  ): Promise<(AddressProof | null)[]> {
+  ): Promise<GateItemEligibility[]> {
     return Promise.all(
-      this.gates.map(async (gate) => {
-        const result = await gate.getProofAndConsumed(address);
-        if (!result.proof) return null;
+      this.gates.map(async (gate, gateIndex) => {
+        const eligibility = await gate.getEligibility(address);
 
-        return result;
+        return {
+          ...eligibility,
+          gateIndex,
+        };
       }),
     );
   }

@@ -8,6 +8,7 @@ import {
   withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
+import { VersionCheckAbi } from '../abi/VersionCheck.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
@@ -18,6 +19,7 @@ import {
   PermitSignatureShort,
 } from '../common/index.js';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
+import { onVersionError } from '../common/utils/on-error.js';
 import { BindedContract } from '../core-sdk/types.js';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts.js';
 import {
@@ -50,7 +52,9 @@ export class TxSDK extends CsmSDKModule {
   private getTokenContract(
     token: Erc20Tokens,
   ): BindedContract<typeof erc20Abi> {
-    return this.core.getContract(token, erc20Abi);
+    return this.core.getContract(
+      token as unknown as CONTRACT_NAMES.stETH | CONTRACT_NAMES.wstETH,
+    );
   }
 
   @Logger('Views:')
@@ -69,6 +73,34 @@ export class TxSDK extends CsmSDKModule {
   public async isMultisig(_account?: AccountValue): Promise<boolean> {
     const account = await this.core.core.useAccount(_account);
     return this.core.core.isContract(account.address);
+  }
+
+  @Logger('Utils:')
+  private async checkContractVersion(callResult: CallResult): Promise<void> {
+    const contractName = this.core.getContractNameByAddress(callResult.to);
+    if (!contractName) return;
+
+    const versionRange = this.core.supportedVersions[contractName];
+    if (!versionRange) return;
+
+    let actualVersion: bigint;
+    try {
+      actualVersion = await this.core
+        .getContractWithAbi(contractName, VersionCheckAbi)
+        .read.getInitializedVersion();
+    } catch (error) {
+      actualVersion = onVersionError(error);
+      if (actualVersion === 0n) return;
+      throw error;
+    }
+
+    const [minVersion, maxVersion] = versionRange;
+    if (actualVersion < minVersion || actualVersion > maxVersion) {
+      throw this.core.core.error({
+        code: ERROR_CODE.NOT_SUPPORTED,
+        message: `Contract ${contractName} version ${actualVersion} not supported. Required: ${minVersion}-${maxVersion}`,
+      });
+    }
   }
 
   private async internalTransaction<TDecodedResult = undefined>(
@@ -311,6 +343,7 @@ export class TxSDK extends CsmSDKModule {
     }
 
     const call = await this.prepareCall(props);
+    await this.checkContractVersion(call);
     calls.push(call);
 
     return this.internalCall({
@@ -326,7 +359,7 @@ export class TxSDK extends CsmSDKModule {
     if (hash) return { hash };
 
     const call = await this.prepareCall(props, { permit });
-
+    await this.checkContractVersion(call);
     return this.internalTransaction({
       ...props,
       ...this.callToInternalTransaction(call),

@@ -76,12 +76,12 @@ export class LidoSDKCsm {
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.rewards = new RewardsSDK(commonProps);
     this.frame = new FrameSDK(commonProps, 'frame');
-    this.discovery = new DiscoverySDK(commonProps, 'discovery');
     this.events = new EventsSDK(commonProps, 'events');
     this.depositQueue = new DepositQueueSDK(commonProps);
     this.depositData = new DepositDataSDK(commonProps);
     this.stealing = new StealingSDK(commonProps);
     this.feesMonitoring = new FeesMonitoringSDK(commonProps);
+    this.discovery = new DiscoverySDK(commonProps, 'discovery');
   }
 }
 

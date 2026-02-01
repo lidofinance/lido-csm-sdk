@@ -1,9 +1,14 @@
+import { CONTRACT_NAMES } from '../common/constants/index.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import { RolesSDK } from '../roles-sdk/roles-sdk.js';
 import { prepCall } from '../tx-sdk/index.js';
 import { ChangeAddressesProps, ChangeRoleProps } from './types.js';
 
 export class CuratedRolesSDK extends RolesSDK {
+  private get curatedModuleContract() {
+    return this.core.getContract(CONTRACT_NAMES.curatedModule);
+  }
+
   @Logger('Call:')
   @ErrorHandler()
   public async changeNodeOperatorAddresses(props: ChangeAddressesProps) {
@@ -14,7 +19,7 @@ export class CuratedRolesSDK extends RolesSDK {
       ...rest,
       call: () =>
         prepCall(
-          this.core.contractCuratedModule,
+          this.curatedModuleContract,
           'changeNodeOperatorAddresses',
           [nodeOperatorId, newManagerAddress, newRewardAddress],
         ),

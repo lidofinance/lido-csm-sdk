@@ -187,6 +187,59 @@ All modules accept `CsmCoreProps` which includes:
 - `maxEventBlocksRange?: number` - Event query range limits
 - `clApiUrl?: string` - Consensus layer API URL
 
+### Contract Ownership & Management
+
+#### CoreSDK Contract Helpers
+
+**CoreSDK provides centralized contract helpers for high-reuse infrastructure contracts:**
+
+Shared infrastructure (kept in CoreSDK):
+- `contractBaseModule` - Dynamic module contract (CSM or CM based on moduleName)
+- `contractAccounting` - Bond curve and accounting operations
+- `contractEjector` - Validator ejection
+- `contractFeeDistributor` - Fee distribution
+- `contractFeeOracle` - Fee oracle
+- `contractParametersRegistry` - Curve parameters
+- `contractHashConsensus` - Beacon consensus
+- `contractStakingRouter` - Module registry
+- `contractValidatorsExitBusOracle` - Exit bus events
+- `contractWithdrawalVault` - Withdrawal vault
+- `contractSMDiscovery` - Operator discovery
+
+**Individual modules own their module-specific and single-use contracts:**
+
+Modules manage their own specialized contracts using `this.core.getContract()`:
+
+- **StrikesSDK** - Manages `ValidatorStrikesAbi` contract (single-use)
+- **PermissionlessGateSDK** - Manages `PermissionlessGateAbi` contract (single-use)
+- **IcsGateSDK** - Manages `VettedGateAbi` contract (single-use)
+- **OperatorsDataSDK** - Manages `OperatorsDataAbi` contract (single-use)
+- **StealingSDK** - Manages `CSModuleAbi` contract (CSM-specific)
+- **DepositQueueSDK** - Manages `CSModuleAbi` contract (CSM-specific)
+- **CuratedRolesSDK** - Manages `CuratedModuleAbi` contract (CM-specific)
+
+#### Pattern for Module-Owned Contracts
+
+Modules that manage their own contracts follow this pattern:
+
+```typescript
+import { CONTRACT_NAMES } from '../common/index.js';
+
+export class ModuleSDK extends CsmSDKModule {
+  private get moduleContract() {
+    return this.core.getContract(
+      CONTRACT_NAMES.contractName,
+    );
+  }
+}
+```
+
+**Benefits:**
+- Explicit dependencies visible in module code
+- Better cohesion (modules own what they use)
+- Smaller CoreSDK focused on infrastructure
+- No indirection for single-use contracts
+
 ### Dual SDK Architecture
 
 The SDK now supports two distinct module types through separate SDK classes:
