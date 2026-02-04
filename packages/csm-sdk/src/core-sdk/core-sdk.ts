@@ -31,6 +31,7 @@ import {
   SUPPORTED_CM_VERSIONS,
   SUPPORTED_CSM_VERSIONS,
 } from '../common/index.js';
+import { isValidIpfsCid } from '../common/utils/index.js';
 import {
   BindedContract,
   ContractAddresses,
@@ -223,6 +224,8 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public getIpfsUrls(cid: string): string[] {
+    if (!isValidIpfsCid(cid)) return [];
+
     return [
       `https://ipfs.io/ipfs/${cid}`,
       `https://gateway.pinata.cloud/ipfs/${cid}`,
