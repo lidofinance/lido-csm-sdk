@@ -17,3 +17,4 @@ export * from './parse-node-operator-added-events.js';
 export * from './parse-curated-module-node-operator-added-events.js';
 export * from './find-address-proof.js';
 export * from './create-merkle-tree-schema.js';
+export * from './is-valid-ipfs-cid.js';
