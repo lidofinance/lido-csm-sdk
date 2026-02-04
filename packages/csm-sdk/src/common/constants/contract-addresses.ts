@@ -130,10 +130,20 @@ export const CM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<
 };
 
 // contracts should support getInitializedVersion method
-export const SUPPORTED_CM_VERSIONS: Partial<Record<CONTRACT_NAMES, readonly [bigint, bigint]>> = {
+export const SUPPORTED_CM_VERSIONS: Partial<
+  Record<CONTRACT_NAMES, readonly [bigint, bigint]>
+> = {
   [CONTRACT_NAMES.accounting]: [3n, 3n],
   [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
   [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
   [CONTRACT_NAMES.curatedModule]: [1n, 1n],
-  [CONTRACT_NAMES.curatedGate1]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate1]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate2]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate3]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate4]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate5]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate6]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate7]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate8]: [1n, 1n],
+  // [CONTRACT_NAMES.curatedGate9]: [1n, 1n],
 };

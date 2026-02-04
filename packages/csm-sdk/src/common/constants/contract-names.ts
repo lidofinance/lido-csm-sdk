@@ -30,8 +30,26 @@ export enum CONTRACT_NAMES {
   curatedModule = 'curatedModule',
   operatorsData = 'operatorsData',
   curatedGate1 = 'curatedGate1',
+  curatedGate2 = 'curatedGate2',
+  curatedGate3 = 'curatedGate3',
+  curatedGate4 = 'curatedGate4',
+  curatedGate5 = 'curatedGate5',
+  curatedGate6 = 'curatedGate6',
+  curatedGate7 = 'curatedGate7',
+  curatedGate8 = 'curatedGate8',
+  curatedGate9 = 'curatedGate9',
 }
 
-export const CURATED_GATES = [CONTRACT_NAMES.curatedGate1] as const;
+export const CURATED_GATES = [
+  CONTRACT_NAMES.curatedGate1,
+  CONTRACT_NAMES.curatedGate2,
+  CONTRACT_NAMES.curatedGate3,
+  CONTRACT_NAMES.curatedGate4,
+  CONTRACT_NAMES.curatedGate5,
+  CONTRACT_NAMES.curatedGate6,
+  CONTRACT_NAMES.curatedGate7,
+  CONTRACT_NAMES.curatedGate8,
+  CONTRACT_NAMES.curatedGate9,
+] as const;
 
 export type CURATED_GATES = (typeof CURATED_GATES)[number];

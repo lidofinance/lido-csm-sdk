@@ -24,6 +24,7 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
     // Initialize gate instances for each gate name
     for (const gateName of CURATED_GATES) {
       try {
+        if (!this.core.contractAddresses[gateName]) continue;
         const gateSdk = new CuratedGateSDK(props, gateName);
         this.gates.push(gateSdk);
       } catch (error) {
