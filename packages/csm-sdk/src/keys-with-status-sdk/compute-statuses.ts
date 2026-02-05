@@ -3,9 +3,6 @@ import { compareLowercase } from '../common/utils/index.js';
 import { StatusContext } from './types.js';
 
 // Range predicates
-const isWithdrawn = (ctx: StatusContext) =>
-  ctx.keyIndex < ctx.info.totalWithdrawnKeys;
-
 const isDeposited = (ctx: StatusContext) =>
   ctx.keyIndex < ctx.info.totalDepositedKeys;
 
@@ -31,7 +28,7 @@ const getVettedStatus = (ctx: StatusContext): KEY_STATUS | null => {
 };
 
 const getDepositedStatus = (ctx: StatusContext): KEY_STATUS => {
-  if (isWithdrawn(ctx) || ctx.withdrawalSubmitted?.includes(ctx.pubkey)) {
+  if (ctx.withdrawalSubmitted?.includes(ctx.pubkey)) {
     return KEY_STATUS.WITHDRAWN;
   }
   if (ctx.prefilled?.status) return ctx.prefilled.status;
