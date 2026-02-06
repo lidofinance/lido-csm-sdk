@@ -45,6 +45,7 @@ Key modules include:
 - **tx-sdk** - Unified transaction handling with Abstract Account support (replaces deprecated spending-sdk)
 - **module-sdk** - Module status and share limit queries
 - **operator-sdk** - Operator data management
+- **roles-sdk** - Standard role management
 - **keys-sdk** - Validator key management
 - **keys-with-status-sdk** - Key tracking with status information
 - **keys-cache-sdk** - Pubkey caching to prevent double-submission with 2-week TTL
@@ -64,12 +65,10 @@ Key modules include:
 - **stealing-sdk** - EL rewards stealing penalty management
 - **permissionless-gate-sdk** - Permissionless operator creation
 - **ics-gate-sdk** - ICS (Independent Community Staker) entry points
-- **roles-sdk** - Standard role management for CSM operators
 
 **CM-specific modules**:
 - **curated-gate-sdk** - Single curated gate interface with merkle proofs
 - **curated-gates-collection-sdk** - Multi-gate manager for operator creation
-- **curated-roles-sdk** - CM-specific role management (extends RolesSDK)
 - **operators-data-sdk** - Module-agnostic operator metadata management
 
 ### Common Infrastructure
