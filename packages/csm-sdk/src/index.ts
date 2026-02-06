@@ -11,7 +11,6 @@ export * from './keys-with-status-sdk/index.js';
 export * from './keys-cache-sdk/index.js';
 export * from './bond-sdk/index.js';
 export * from './roles-sdk/index.js';
-export * from './curated-roles-sdk/index.js';
 export * from './curated-gate-sdk/index.js';
 export * from './curated-gates-collection-sdk/index.js';
 export * from './operators-data-sdk/index.js';

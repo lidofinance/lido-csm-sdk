@@ -53,6 +53,7 @@ Key modules include:
 - **core-sdk** - Shared logic, configuration, and core utilities
 - **module-sdk** - Module status and share limit queries
 - **operator-sdk** - Operator data management
+- **roles-sdk** - Standard role management
 - **keys-sdk** - Validator key management
 - **keys-with-status-sdk** - Key tracking with status information
 - **keys-cache-sdk** - Pubkey caching to prevent double-submission with 2-week TTL and manual key management
@@ -73,12 +74,10 @@ Key modules include:
 - **stealing-sdk** - EL rewards stealing penalty management
 - **permissionless-gate-sdk** - Permissionless operator creation
 - **ics-gate-sdk** - ICS (Independent Community Staker) entry points
-- **roles-sdk** - Standard role management for CSM operators
 
 **CM-specific modules**:
 - **curated-gate-sdk** - Single gate operator creation with merkle proofs
 - **curated-gates-collection-sdk** - Multi-gate management and aggregation
-- **curated-roles-sdk** - CM-specific role management (extends RolesSDK)
 - **operators-data-sdk** - Module-agnostic operator metadata management
 
 ### Common Infrastructure

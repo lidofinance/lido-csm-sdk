@@ -11,7 +11,6 @@ import {
 import { CoreSDK } from './core-sdk/core-sdk.js';
 import { CoreProps, SdkProps } from './core-sdk/types.js';
 import { CuratedGatesCollectionSDK } from './curated-gates-collection-sdk/curated-gates-collection-sdk.js';
-import { CuratedRolesSDK } from './curated-roles-sdk/curated-roles-sdk.js';
 import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { DiscoverySDK } from './discovery-sdk/discovery-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
@@ -25,6 +24,7 @@ import { OperatorSDK } from './operator-sdk/operator-sdk.js';
 import { OperatorsDataSDK } from './operators-data-sdk/operators-data-sdk.js';
 import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
+import { RolesSDK } from './roles-sdk/roles-sdk.js';
 import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
 import { TxSDK } from './tx-sdk/tx-sdk.js';
 export class LidoSDKCm {
@@ -39,7 +39,7 @@ export class LidoSDKCm {
   readonly keysWithStatus: KeysWithStatusSDK;
   readonly keysCache: KeysCacheSDK;
   readonly bond: BondSDK;
-  readonly roles: CuratedRolesSDK;
+  readonly roles: RolesSDK;
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
   readonly depositData: DepositDataSDK;
@@ -65,7 +65,7 @@ export class LidoSDKCm {
     this.keysWithStatus = new KeysWithStatusSDK(commonProps, 'keysWithStatus');
     this.keysCache = new KeysCacheSDK(commonProps, 'keysCache');
     this.bond = new BondSDK(commonProps);
-    this.roles = new CuratedRolesSDK(commonProps);
+    this.roles = new RolesSDK(commonProps);
     this.rewards = new RewardsSDK(commonProps);
     this.frame = new FrameSDK(commonProps, 'frame');
     this.events = new EventsSDK(commonProps, 'events');
