@@ -2195,6 +2195,37 @@ export const AccountingAbi = [
   },
   {
     type: 'event',
+    name: 'FeeSplitsSet',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256'
+      },
+      {
+        name: 'feeSplits',
+        type: 'tuple[]',
+        indexed: false,
+        internalType: 'struct IAccounting.FeeSplit[]',
+        components: [
+          {
+            name: 'recipient',
+            type: 'address',
+            internalType: 'address'
+          },
+          {
+            name: 'share',
+            type: 'uint256',
+            internalType: 'uint256'
+          }
+        ]
+      }
+    ],
+    anonymous: false
+  },
+  {
+    type: 'event',
     name: 'ERC1155Recovered',
     inputs: [
       {
