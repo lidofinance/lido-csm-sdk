@@ -2,12 +2,15 @@ import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import { ROLES } from '../common/index.js';
+import { parseClaimProps } from '../common/utils/parse-claim-props.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
   ResetRoleProps,
+  SetCustomClaimerProps,
+  SetFeeSplitsProps,
   WithRole,
 } from './types.js';
 
@@ -17,6 +20,10 @@ export class RolesSDK extends CsmSDKModule<{
 }> {
   private get moduleContract() {
     return this.core.contractBaseModule;
+  }
+
+  private get accountingContract() {
+    return this.core.contractAccounting;
   }
 
   @Logger('Call:')
@@ -136,5 +143,42 @@ export class RolesSDK extends CsmSDKModule<{
 
   protected prepareRoleResult(nodeOperatorId: bigint) {
     return this.bus.operator.getManagementProperties(nodeOperatorId);
+  }
+
+  // Custom Claimer
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async setCustomRewardsClaimer(props: SetCustomClaimerProps) {
+    const { nodeOperatorId, claimerAddress, ...rest } = props;
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        prepCall(this.accountingContract, 'setCustomRewardsClaimer', [
+          nodeOperatorId,
+          claimerAddress,
+        ]),
+    });
+  }
+
+  // Fee Splits
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async setFeeSplits(props: SetFeeSplitsProps) {
+    const { nodeOperatorId, feeSplits, shares, proof, ...rest } =
+      parseClaimProps(props);
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        prepCall(this.accountingContract, 'setFeeSplits', [
+          nodeOperatorId,
+          shares,
+          proof,
+          feeSplits,
+        ]),
+    });
   }
 }

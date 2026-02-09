@@ -1,5 +1,10 @@
 import { Address } from 'viem';
 
+export type FeeSplit = {
+  recipient: Address;
+  share: bigint;
+};
+
 export type NodeOperatorInfo = {
   totalAddedKeys: number;
   totalWithdrawnKeys: number;

@@ -1,5 +1,11 @@
 import type { Address } from 'viem';
-import { NodeOperatorId, NodeOperatorShortInfo, ROLES } from '../common/index.js';
+import {
+  NodeOperatorId,
+  NodeOperatorShortInfo,
+  RewardProof,
+  ROLES,
+} from '../common/index.js';
+import { FeeSplit } from '../operator-sdk/types.js';
 import { CommonTransactionProps } from '../tx-sdk/types.js';
 
 export type ChangeRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
@@ -18,3 +24,14 @@ export type ConfirmRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
 export type WithRole<T> = T & {
   role: ROLES;
 };
+
+export type SetCustomClaimerProps = CommonTransactionProps & {
+  nodeOperatorId: NodeOperatorId;
+  claimerAddress: Address;
+};
+
+export type SetFeeSplitsProps = CommonTransactionProps &
+  Partial<RewardProof> & {
+    nodeOperatorId: NodeOperatorId;
+    feeSplits: FeeSplit[];
+  };

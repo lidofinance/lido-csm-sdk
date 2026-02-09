@@ -12,7 +12,7 @@ import {
 import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
 import { splitKeys } from '../common/utils/split-keys.js';
 import { calcBondBalance } from './calc-bond-balance.js';
-import { NodeOperatorInfo } from './types.js';
+import { FeeSplit, NodeOperatorInfo } from './types.js';
 
 export class OperatorSDK extends CsmSDKModule {
   private get accountingContract() {
@@ -100,6 +100,12 @@ export class OperatorSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  public async getPendingSharesToSplit(id: NodeOperatorId): Promise<bigint> {
+    return this.accountingContract.read.getPendingSharesToSplit([id]); // steth shares (wsteth)
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getManagementProperties(
     id: NodeOperatorId,
   ): Promise<NodeOperatorShortInfo> {
@@ -113,5 +119,25 @@ export class OperatorSDK extends CsmSDKModule {
       rewardsAddress: properties.rewardAddress,
       extendedManagerPermissions: properties.extendedManagerPermissions,
     };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getCustomRewardsClaimer(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<Address> {
+    return this.accountingContract.read.getCustomRewardsClaimer([
+      nodeOperatorId,
+    ]);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getFeeSplits(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<FeeSplit[]> {
+    return this.accountingContract.read.getFeeSplits([
+      nodeOperatorId,
+    ]) as Promise<FeeSplit[]>;
   }
 }
