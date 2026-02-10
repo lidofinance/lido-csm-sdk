@@ -5,10 +5,10 @@ export const OperatorsDataAbi = [
       {
         name: 'stakingRouter',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -18,10 +18,10 @@ export const OperatorsDataAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -31,10 +31,10 @@ export const OperatorsDataAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -44,10 +44,10 @@ export const OperatorsDataAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IStakingRouter'
-      }
+        internalType: 'contract IStakingRouter',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -56,13 +56,13 @@ export const OperatorsDataAbi = [
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -73,22 +73,22 @@ export const OperatorsDataAbi = [
           {
             name: 'name',
             type: 'string',
-            internalType: 'string'
+            internalType: 'string',
           },
           {
             name: 'description',
             type: 'string',
-            internalType: 'string'
+            internalType: 'string',
           },
           {
             name: 'ownerEditsRestricted',
             type: 'bool',
-            internalType: 'bool'
-          }
-        ]
-      }
+            internalType: 'bool',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -97,17 +97,17 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -116,22 +116,22 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -140,17 +140,17 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -159,16 +159,16 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -177,22 +177,22 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -201,11 +201,11 @@ export const OperatorsDataAbi = [
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -214,22 +214,22 @@ export const OperatorsDataAbi = [
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -238,16 +238,16 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -256,16 +256,16 @@ export const OperatorsDataAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -274,12 +274,12 @@ export const OperatorsDataAbi = [
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'info',
@@ -289,23 +289,23 @@ export const OperatorsDataAbi = [
           {
             name: 'name',
             type: 'string',
-            internalType: 'string'
+            internalType: 'string',
           },
           {
             name: 'description',
             type: 'string',
-            internalType: 'string'
+            internalType: 'string',
           },
           {
             name: 'ownerEditsRestricted',
             type: 'bool',
-            internalType: 'bool'
-          }
-        ]
-      }
+            internalType: 'bool',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -314,26 +314,26 @@ export const OperatorsDataAbi = [
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'name',
         type: 'string',
-        internalType: 'string'
+        internalType: 'string',
       },
       {
         name: 'description',
         type: 'string',
-        internalType: 'string'
-      }
+        internalType: 'string',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -342,17 +342,17 @@ export const OperatorsDataAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'event',
@@ -362,10 +362,10 @@ export const OperatorsDataAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -375,16 +375,16 @@ export const OperatorsDataAbi = [
         name: 'moduleId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'moduleAddress',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -394,40 +394,40 @@ export const OperatorsDataAbi = [
         name: 'moduleId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'module',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'name',
         type: 'string',
         indexed: false,
-        internalType: 'string'
+        internalType: 'string',
       },
       {
         name: 'description',
         type: 'string',
         indexed: false,
-        internalType: 'string'
+        internalType: 'string',
       },
       {
         name: 'ownerEditsRestricted',
         type: 'bool',
         indexed: false,
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -437,22 +437,22 @@ export const OperatorsDataAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -462,22 +462,22 @@ export const OperatorsDataAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -487,27 +487,27 @@ export const OperatorsDataAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -516,63 +516,63 @@ export const OperatorsDataAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ModuleDoesNotSupportNodeOperatorOwnerInterface',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NodeOperatorDoesNotExist',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'OwnerEditsRestricted',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotEligible',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'UnknownModule',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroModuleId',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroStakingRouterAddress',
-    inputs: []
+    inputs: [],
   },
 ] as const;

@@ -5,30 +5,30 @@ export const CuratedModuleAbi = [
       {
         name: 'moduleType',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'lidoLocator',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'parametersRegistry',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'accounting',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'exitPenalties',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -38,10 +38,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IAccounting'
-      }
+        internalType: 'contract IAccounting',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -51,10 +51,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -64,10 +64,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -77,10 +77,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IExitPenalties'
-      }
+        internalType: 'contract IExitPenalties',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -90,10 +90,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -103,10 +103,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ILidoLocator'
-      }
+        internalType: 'contract ILidoLocator',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -116,10 +116,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -129,10 +129,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IParametersRegistry'
-      }
+        internalType: 'contract IParametersRegistry',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -142,10 +142,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -155,10 +155,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -168,10 +168,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -181,10 +181,36 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'REPORT_REGULAR_WITHDRAWN_VALIDATORS_ROLE',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'REPORT_SLASHED_WITHDRAWN_VALIDATORS_ROLE',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -194,10 +220,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -207,10 +233,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -220,10 +246,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -233,23 +259,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IStETH'
-      }
+        internalType: 'contract IStETH',
+      },
     ],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'SUBMIT_WITHDRAWALS_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -259,10 +272,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -271,31 +284,31 @@ export const CuratedModuleAbi = [
       {
         name: 'from',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -304,27 +317,27 @@ export const CuratedModuleAbi = [
       {
         name: 'from',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'permit',
@@ -334,33 +347,33 @@ export const CuratedModuleAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8'
+            internalType: 'uint8',
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -369,27 +382,27 @@ export const CuratedModuleAbi = [
       {
         name: 'from',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'permit',
@@ -399,33 +412,72 @@ export const CuratedModuleAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8'
+            internalType: 'uint8',
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'allocateDeposits',
+    inputs: [
+      {
+        name: 'maxDepositAmount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'pubkeys',
+        type: 'bytes[]',
+        internalType: 'bytes[]',
+      },
+      {
+        name: 'keyIndices',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'operatorIds',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'topUpLimits',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    outputs: [
+      {
+        name: 'allocations',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -434,16 +486,16 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -452,21 +504,21 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'newManagerAddress',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newRewardAddress',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -475,16 +527,16 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'newAddress',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -493,11 +545,11 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -506,11 +558,11 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -519,11 +571,11 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -532,7 +584,7 @@ export const CuratedModuleAbi = [
       {
         name: 'from',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'managementProperties',
@@ -542,34 +594,34 @@ export const CuratedModuleAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool'
-          }
-        ]
+            internalType: 'bool',
+          },
+        ],
       },
       {
         name: 'referrer',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -578,16 +630,16 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorIds',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'vettedSigningKeysCounts',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -596,17 +648,17 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -616,39 +668,39 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
     name: 'getDepositsAllocation',
     inputs: [
       {
-        name: '',
+        name: 'depositAmount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'allocated',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'operatorIds',
         type: 'uint256[]',
-        internalType: 'uint256[]'
+        internalType: 'uint256[]',
       },
       {
         name: 'allocations',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -658,10 +710,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -670,8 +722,8 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -682,87 +734,106 @@ export const CuratedModuleAbi = [
           {
             name: 'totalAddedKeys',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'totalWithdrawnKeys',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'totalDepositedKeys',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'totalVettedKeys',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'stuckValidatorsCount',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'depositableValidatorsCount',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'targetLimit',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'targetLimitMode',
             type: 'uint8',
-            internalType: 'uint8'
+            internalType: 'uint8',
           },
           {
             name: 'totalExitedKeys',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'enqueuedCount',
             type: 'uint32',
-            internalType: 'uint32'
+            internalType: 'uint32',
           },
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'proposedManagerAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'proposedRewardAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool'
+            internalType: 'bool',
           },
           {
             name: 'usedPriorityQueue',
             type: 'bool',
-            internalType: 'bool'
-          }
-        ]
-      }
+            internalType: 'bool',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getNodeOperatorBalance',
+    inputs: [
+      {
+        name: 'operatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -771,22 +842,22 @@ export const CuratedModuleAbi = [
       {
         name: 'offset',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'nodeOperatorIds',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -795,17 +866,17 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -814,8 +885,8 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -826,22 +897,22 @@ export const CuratedModuleAbi = [
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool'
-          }
-        ]
-      }
+            internalType: 'bool',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -850,17 +921,17 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -869,17 +940,17 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -888,71 +959,52 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'targetLimitMode',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'targetValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'stuckValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'refundedValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'stuckPenaltyEndTimestamp',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'totalExitedValidators',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'totalDepositedValidators',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'depositableValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'getNodeOperatorTotalDepositedKeys',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256'
-      }
-    ],
-    outputs: [
-      {
-        name: 'totalDepositedKeys',
-        type: 'uint256',
-        internalType: 'uint256'
-      }
-    ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -962,10 +1014,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -975,10 +1027,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -988,10 +1040,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1000,17 +1052,17 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1019,22 +1071,22 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1043,17 +1095,17 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1062,27 +1114,27 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'startIndex',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1091,32 +1143,32 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'startIndex',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'keys',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1126,20 +1178,20 @@ export const CuratedModuleAbi = [
       {
         name: 'totalExitedValidators',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'totalDepositedValidators',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'depositableValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1149,10 +1201,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1161,16 +1213,16 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1179,22 +1231,22 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1203,11 +1255,11 @@ export const CuratedModuleAbi = [
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1217,10 +1269,10 @@ export const CuratedModuleAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1229,32 +1281,32 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'eligibleToExitInSec',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1263,22 +1315,22 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndex',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1287,102 +1339,58 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndex',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
     name: 'obtainDepositData',
     inputs: [
       {
-        name: '',
+        name: 'depositsCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
-      {
-        name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]'
-      },
-      {
-        name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]'
-      },
-      {
-        name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
-    ],
-    outputs: [
-      {
-        name: 'publicKeys',
-        type: 'bytes[]',
-        internalType: 'bytes[]'
-      },
-      {
-        name: 'allocations',
-        type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
-    ],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'obtainDepositData',
-    inputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: '',
-        type: 'bytes',
-        internalType: 'bytes'
-      }
     ],
     outputs: [
       {
         name: 'publicKeys',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'signatures',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'onExitedAndStuckValidatorsCountsUpdated',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1391,11 +1399,11 @@ export const CuratedModuleAbi = [
       {
         name: 'totalShares',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1404,26 +1412,26 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'publicKey',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
-        name: 'withdrawalRequestPaidFee',
+        name: 'elWithdrawalRequestFeePaid',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'exitType',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1432,23 +1440,23 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndex',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'onWithdrawalCredentialsChanged',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1457,11 +1465,11 @@ export const CuratedModuleAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1470,16 +1478,16 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'proposedAddress',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1488,16 +1496,16 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'proposedAddress',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1506,16 +1514,16 @@ export const CuratedModuleAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1524,16 +1532,16 @@ export const CuratedModuleAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1542,23 +1550,23 @@ export const CuratedModuleAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1567,21 +1575,21 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'startIndex',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1590,16 +1598,16 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1608,58 +1616,30 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'penaltyType',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'details',
         type: 'string',
-        internalType: 'string'
-      }
+        internalType: 'string',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
-    name: 'reportValidatorExitDelay',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: 'publicKey',
-        type: 'bytes',
-        internalType: 'bytes'
-      },
-      {
-        name: 'eligibleToExitInSec',
-        type: 'uint256',
-        internalType: 'uint256'
-      }
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'reportWithdrawnValidators',
+    name: 'reportRegularWithdrawnValidators',
     inputs: [
       {
         name: 'validatorInfos',
@@ -1669,33 +1649,101 @@ export const CuratedModuleAbi = [
           {
             name: 'nodeOperatorId',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'keyIndex',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'exitBalance',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'slashingPenalty',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'isSlashed',
             type: 'bool',
-            internalType: 'bool'
-          }
-        ]
-      }
+            internalType: 'bool',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'reportSlashedWithdrawnValidators',
+    inputs: [
+      {
+        name: 'validatorInfos',
+        type: 'tuple[]',
+        internalType: 'struct WithdrawnValidatorInfo[]',
+        components: [
+          {
+            name: 'nodeOperatorId',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'keyIndex',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'exitBalance',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'slashingPenalty',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'isSlashed',
+            type: 'bool',
+            internalType: 'bool',
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'reportValidatorExitDelay',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'publicKey',
+        type: 'bytes',
+        internalType: 'bytes',
+      },
+      {
+        name: 'eligibleToExitInSec',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1704,18 +1752,18 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1724,16 +1772,16 @@ export const CuratedModuleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1742,16 +1790,16 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorIds',
         type: 'uint256[]',
-        internalType: 'uint256[]'
+        internalType: 'uint256[]',
       },
       {
         name: 'maxAmounts',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1760,35 +1808,35 @@ export const CuratedModuleAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
     name: 'unsafeUpdateValidatorsCount',
     inputs: [
       {
-        name: 'nodeOperatorId',
+        name: '',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
-        name: 'exitedValidatorsKeysCount',
+        name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1797,11 +1845,11 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1810,44 +1858,44 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorIds',
         type: 'bytes',
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'exitedValidatorsCounts',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'updateOperatorBalances',
     inputs: [
       {
-        name: '',
+        name: 'operatorIds',
         type: 'uint256[]',
-        internalType: 'uint256[]'
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'validatorsBalancesGwei',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'pendingBalancesGwei',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
       },
       {
         name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]'
-      },
-      {
-        name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]'
-      },
-      {
-        name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1856,21 +1904,21 @@ export const CuratedModuleAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'targetLimitMode',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'targetLimit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -1880,16 +1928,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'depositableKeysCount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1899,16 +1947,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'depositedKeysCount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1918,28 +1966,28 @@ export const CuratedModuleAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1949,22 +1997,22 @@ export const CuratedModuleAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1974,22 +2022,22 @@ export const CuratedModuleAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1999,16 +2047,16 @@ export const CuratedModuleAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2018,16 +2066,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'exitedKeysCount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2037,23 +2085,10 @@ export const CuratedModuleAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
-  },
-  {
-    type: 'event',
-    name: 'KeyRemovalChargeApplied',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256'
-      }
-    ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2063,28 +2098,47 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'managerAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'rewardAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'extendedManagerPermissions',
         type: 'bool',
         indexed: false,
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    anonymous: false
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'NodeOperatorBalanceUpdated',
+    inputs: [
+      {
+        name: 'operatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'balanceWei',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2094,22 +2148,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'oldProposedAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newProposedAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2119,22 +2173,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'oldAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2144,22 +2198,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'oldProposedAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newProposedAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2169,22 +2223,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'oldAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newAddress',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2194,10 +2248,10 @@ export const CuratedModuleAbi = [
         name: 'nonce',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2207,10 +2261,10 @@ export const CuratedModuleAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2220,22 +2274,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'referrer',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2245,22 +2299,22 @@ export const CuratedModuleAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2270,22 +2324,22 @@ export const CuratedModuleAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2295,22 +2349,22 @@ export const CuratedModuleAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2320,16 +2374,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2339,16 +2393,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2358,16 +2412,16 @@ export const CuratedModuleAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2377,22 +2431,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'targetLimitMode',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'targetValidatorsCount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2402,16 +2456,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'totalKeysCount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2421,22 +2475,22 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndex',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2446,34 +2500,34 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndex',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'exitBalance',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'slashingPenalty',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2483,16 +2537,16 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'vettedKeysCount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2502,15 +2556,15 @@ export const CuratedModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -2519,223 +2573,238 @@ export const CuratedModuleAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'AlreadyProposed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'CannotAddKeys',
-    inputs: []
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'DepositableKeysWithUnsupportedWithdrawalCredentials',
+    inputs: [],
   },
   {
     type: 'error',
     name: 'EmptyKey',
-    inputs: []
-  },
-  {
-    type: 'error',
-    name: 'ExitedKeysDecrease',
-    inputs: []
-  },
-  {
-    type: 'error',
-    name: 'ExitedKeysHigherThanTotalDeposited',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'FailedToSendEther',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidAmount',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInput',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidKeysCount',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidLength',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidReportData',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidVetKeysPointer',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidWithdrawnValidatorInfo',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'KeysLimitExceeded',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'MethodCallIsNotAllowed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NodeOperatorDoesNotExist',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotAllowedToRecover',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotEnoughKeys',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotImplemented',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: []
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'PubkeyMismatch',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'PublicKeyIsSlashed',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'PublicKeyIsWithdrawn',
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SameAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotEligible',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotManagerAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotProposedAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotRewardAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SigningKeysInvalidOffset',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SlashingPenaltyIsNotApplicable',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ValidatorSlashingAlreadyReported',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAccountingAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroExitBalance',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroExitPenaltiesAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroLocatorAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroManagerAddress',
-    inputs: []
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroModuleType',
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroParametersRegistryAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroRewardAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroSenderAddress',
-    inputs: []
+    inputs: [],
   },
 ] as const;

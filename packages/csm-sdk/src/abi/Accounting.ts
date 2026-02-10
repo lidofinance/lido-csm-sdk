@@ -5,30 +5,30 @@ export const AccountingAbi = [
       {
         name: 'lidoLocator',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'module',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'feeDistributor',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'minBondLockPeriod',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'maxBondLockPeriod',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -38,10 +38,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -51,10 +51,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -64,10 +64,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IFeeDistributor'
-      }
+        internalType: 'contract IFeeDistributor',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -77,10 +77,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint128',
-        internalType: 'uint128'
-      }
+        internalType: 'uint128',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -90,10 +90,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ILido'
-      }
+        internalType: 'contract ILido',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -103,10 +103,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ILidoLocator'
-      }
+        internalType: 'contract ILidoLocator',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -116,10 +116,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -129,10 +129,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -142,10 +142,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -155,10 +155,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IBaseModule'
-      }
+        internalType: 'contract IBaseModule',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -168,10 +168,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -181,10 +181,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -194,10 +194,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -207,10 +207,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -220,10 +220,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -233,10 +233,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IWithdrawalQueue'
-      }
+        internalType: 'contract IWithdrawalQueue',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -246,10 +246,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IWstETH'
-      }
+        internalType: 'contract IWstETH',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -263,24 +263,24 @@ export const AccountingAbi = [
           {
             name: 'minKeysCount',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'trend',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
     outputs: [
       {
         name: 'id',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -289,22 +289,22 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'fullyCharged',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -314,10 +314,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -326,32 +326,32 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'stETHAmount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsProof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
-      }
+        internalType: 'bytes32[]',
+      },
     ],
     outputs: [
       {
         name: 'claimedShares',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -360,32 +360,32 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'stETHAmount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsProof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
-      }
+        internalType: 'bytes32[]',
+      },
     ],
     outputs: [
       {
         name: 'requestId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -394,32 +394,32 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'wstETHAmount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsProof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
-      }
+        internalType: 'bytes32[]',
+      },
     ],
     outputs: [
       {
         name: 'claimedWstETH',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -428,29 +428,11 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ],
-    outputs: [],
-    stateMutability: 'payable'
-  },
-  {
-    type: 'function',
-    name: 'depositETH',
-    inputs: [
-      {
-        name: 'from',
-        type: 'address',
-        internalType: 'address'
+        internalType: 'uint256',
       },
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256'
-      }
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -459,66 +441,11 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
-  },
-  {
-    type: 'function',
-    name: 'depositStETH',
-    inputs: [
-      {
-        name: 'from',
-        type: 'address',
-        internalType: 'address'
-      },
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: 'stETHAmount',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: 'permit',
-        type: 'tuple',
-        internalType: 'struct IAccounting.PermitInput',
-        components: [
-          {
-            name: 'value',
-            type: 'uint256',
-            internalType: 'uint256'
-          },
-          {
-            name: 'deadline',
-            type: 'uint256',
-            internalType: 'uint256'
-          },
-          {
-            name: 'v',
-            type: 'uint8',
-            internalType: 'uint8'
-          },
-          {
-            name: 'r',
-            type: 'bytes32',
-            internalType: 'bytes32'
-          },
-          {
-            name: 's',
-            type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -527,12 +454,12 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'stETHAmount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'permit',
@@ -542,33 +469,33 @@ export const AccountingAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8'
+            internalType: 'uint8',
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -577,12 +504,12 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'wstETHAmount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'permit',
@@ -592,95 +519,40 @@ export const AccountingAbi = [
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'deadline',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'v',
             type: 'uint8',
-            internalType: 'uint8'
+            internalType: 'uint8',
           },
           {
             name: 'r',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 's',
             type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'depositWstETH',
-    inputs: [
-      {
-        name: 'from',
-        type: 'address',
-        internalType: 'address'
-      },
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: 'wstETHAmount',
-        type: 'uint256',
-        internalType: 'uint256'
-      },
-      {
-        name: 'permit',
-        type: 'tuple',
-        internalType: 'struct IAccounting.PermitInput',
-        components: [
-          {
-            name: 'value',
-            type: 'uint256',
-            internalType: 'uint256'
-          },
-          {
-            name: 'deadline',
-            type: 'uint256',
-            internalType: 'uint256'
-          },
-          {
-            name: 'v',
-            type: 'uint8',
-            internalType: 'uint8'
-          },
-          {
-            name: 'r',
-            type: 'bytes32',
-            internalType: 'bytes32'
-          },
-          {
-            name: 's',
-            type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'finalizeUpgradeV3',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -689,17 +561,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -708,17 +580,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -727,22 +599,22 @@ export const AccountingAbi = [
       {
         name: 'keys',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -751,22 +623,22 @@ export const AccountingAbi = [
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -775,8 +647,8 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -792,24 +664,24 @@ export const AccountingAbi = [
               {
                 name: 'minKeysCount',
                 type: 'uint256',
-                internalType: 'uint256'
+                internalType: 'uint256',
               },
               {
                 name: 'minBond',
                 type: 'uint256',
-                internalType: 'uint256'
+                internalType: 'uint256',
               },
               {
                 name: 'trend',
                 type: 'uint256',
-                internalType: 'uint256'
-              }
-            ]
-          }
-        ]
-      }
+                internalType: 'uint256',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -818,17 +690,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -838,10 +710,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -850,17 +722,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -869,22 +741,22 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'current',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'required',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -893,22 +765,22 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'current',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'required',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -917,17 +789,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -936,27 +808,27 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsProof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
-      }
+        internalType: 'bytes32[]',
+      },
     ],
     outputs: [
       {
         name: 'claimableShares',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -965,8 +837,8 @@ export const AccountingAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -982,24 +854,24 @@ export const AccountingAbi = [
               {
                 name: 'minKeysCount',
                 type: 'uint256',
-                internalType: 'uint256'
+                internalType: 'uint256',
               },
               {
                 name: 'minBond',
                 type: 'uint256',
-                internalType: 'uint256'
+                internalType: 'uint256',
               },
               {
                 name: 'trend',
                 type: 'uint256',
-                internalType: 'uint256'
-              }
-            ]
-          }
-        ]
-      }
+                internalType: 'uint256',
+              },
+            ],
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1009,10 +881,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1021,17 +893,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1040,8 +912,8 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -1052,17 +924,17 @@ export const AccountingAbi = [
           {
             name: 'recipient',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'share',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1072,10 +944,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1084,22 +956,22 @@ export const AccountingAbi = [
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1108,8 +980,8 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -1120,17 +992,17 @@ export const AccountingAbi = [
           {
             name: 'amount',
             type: 'uint128',
-            internalType: 'uint128'
+            internalType: 'uint128',
           },
           {
             name: 'until',
             type: 'uint128',
-            internalType: 'uint128'
-          }
-        ]
-      }
+            internalType: 'uint128',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1139,17 +1011,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1158,22 +1030,22 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'additionalKeys',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1182,22 +1054,22 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'additionalKeys',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1207,10 +1079,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1219,17 +1091,17 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1238,22 +1110,22 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1262,17 +1134,17 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1281,17 +1153,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1300,17 +1172,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1319,16 +1191,16 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1337,22 +1209,22 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1366,33 +1238,33 @@ export const AccountingAbi = [
           {
             name: 'minKeysCount',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'trend',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
+            internalType: 'uint256',
+          },
+        ],
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'bondLockPeriod',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_chargePenaltyRecipient',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1402,10 +1274,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1414,16 +1286,16 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1432,11 +1304,11 @@ export const AccountingAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1445,22 +1317,22 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'fullyBurned',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1469,21 +1341,21 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsProof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
-      }
+        internalType: 'bytes32[]',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1492,16 +1364,16 @@ export const AccountingAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1510,16 +1382,16 @@ export const AccountingAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1528,30 +1400,30 @@ export const AccountingAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'recoverStETHShares',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1560,23 +1432,23 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'renewBurnerAllowance',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1585,23 +1457,23 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1610,16 +1482,16 @@ export const AccountingAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1628,16 +1500,16 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1646,11 +1518,11 @@ export const AccountingAbi = [
       {
         name: 'period',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1659,11 +1531,11 @@ export const AccountingAbi = [
       {
         name: '_chargePenaltyRecipient',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1672,16 +1544,16 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsClaimer',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1690,17 +1562,17 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'cumulativeFeeShares',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsProof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
+        internalType: 'bytes32[]',
       },
       {
         name: 'feeSplits',
@@ -1710,18 +1582,18 @@ export const AccountingAbi = [
           {
             name: 'recipient',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'share',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1730,17 +1602,11 @@ export const AccountingAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    outputs: [
-      {
-        name: 'applied',
-        type: 'bool',
-        internalType: 'bool'
-      }
-    ],
-    stateMutability: 'nonpayable'
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1749,17 +1615,17 @@ export const AccountingAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1769,10 +1635,10 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1781,7 +1647,7 @@ export const AccountingAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'bondCurve',
@@ -1791,18 +1657,18 @@ export const AccountingAbi = [
           {
             name: 'minKeysCount',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'trend',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -1812,22 +1678,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amountToBurn',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'burnedAmount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1837,22 +1703,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'toChargeAmount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'chargedAmount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1862,22 +1728,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'to',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1887,28 +1753,28 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'to',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'requestId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1918,22 +1784,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'to',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1943,7 +1809,7 @@ export const AccountingAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'bondCurveIntervals',
@@ -1954,17 +1820,17 @@ export const AccountingAbi = [
           {
             name: 'minKeysCount',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'trend',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1974,16 +1840,16 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'curveId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1993,7 +1859,7 @@ export const AccountingAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'bondCurveIntervals',
@@ -2004,17 +1870,17 @@ export const AccountingAbi = [
           {
             name: 'minKeysCount',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'trend',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2024,22 +1890,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'from',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2049,22 +1915,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'from',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2074,22 +1940,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'from',
         type: 'address',
         indexed: false,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2099,22 +1965,22 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'newAmount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'until',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2124,16 +1990,16 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2143,10 +2009,10 @@ export const AccountingAbi = [
         name: 'period',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2156,10 +2022,10 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2169,10 +2035,10 @@ export const AccountingAbi = [
         name: 'chargePenaltyRecipient',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2182,47 +2048,16 @@ export const AccountingAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'rewardsClaimer',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: 'event',
-    name: 'FeeSplitsSet',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256'
+        internalType: 'address',
       },
-      {
-        name: 'feeSplits',
-        type: 'tuple[]',
-        indexed: false,
-        internalType: 'struct IAccounting.FeeSplit[]',
-        components: [
-          {
-            name: 'recipient',
-            type: 'address',
-            internalType: 'address'
-          },
-          {
-            name: 'share',
-            type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2232,28 +2067,28 @@ export const AccountingAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2263,22 +2098,22 @@ export const AccountingAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2288,22 +2123,22 @@ export const AccountingAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2313,16 +2148,16 @@ export const AccountingAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2332,10 +2167,10 @@ export const AccountingAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2345,16 +2180,16 @@ export const AccountingAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2364,22 +2199,22 @@ export const AccountingAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2389,22 +2224,22 @@ export const AccountingAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2414,22 +2249,22 @@ export const AccountingAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2439,21 +2274,21 @@ export const AccountingAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -2462,99 +2297,99 @@ export const AccountingAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'ElRewardsVaultReceiveFailed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'FailedToSendEther',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBondCurveId',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBondCurveLength',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBondCurveValues',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBondCurvesLength',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBondLockAmount',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBondLockPeriod',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitializationCurveId',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NodeOperatorDoesNotExist',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotAllowedToRecover',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NothingToClaim',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -2563,58 +2398,58 @@ export const AccountingAbi = [
       {
         name: 'bits',
         type: 'uint8',
-        internalType: 'uint8'
+        internalType: 'uint8',
       },
       {
         name: 'value',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'SameAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotEligible',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotModule',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroChargePenaltyRecipientAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroFeeDistributorAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroLocatorAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: []
+    inputs: [],
   },
 ] as const;

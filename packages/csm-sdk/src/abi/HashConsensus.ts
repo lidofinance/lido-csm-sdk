@@ -5,40 +5,40 @@ export const HashConsensusAbi = [
       {
         name: 'slotsPerEpoch',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'secondsPerSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'genesisTime',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'epochsPerFrame',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fastLaneLengthSlots',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'reportProcessor',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -48,10 +48,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -61,10 +61,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -74,10 +74,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -87,10 +87,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -100,10 +100,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -113,10 +113,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -125,23 +125,23 @@ export const HashConsensusAbi = [
       {
         name: 'addr',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'quorum',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'disableConsensus',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -151,20 +151,20 @@ export const HashConsensusAbi = [
       {
         name: 'slotsPerEpoch',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'secondsPerSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'genesisTime',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -174,20 +174,20 @@ export const HashConsensusAbi = [
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'consensusReport',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'isReportProcessing',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -196,8 +196,8 @@ export const HashConsensusAbi = [
       {
         name: 'addr',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
@@ -208,42 +208,42 @@ export const HashConsensusAbi = [
           {
             name: 'currentFrameRefSlot',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'currentFrameConsensusReport',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 'isMember',
             type: 'bool',
-            internalType: 'bool'
+            internalType: 'bool',
           },
           {
             name: 'isFastLane',
             type: 'bool',
-            internalType: 'bool'
+            internalType: 'bool',
           },
           {
             name: 'canReport',
             type: 'bool',
-            internalType: 'bool'
+            internalType: 'bool',
           },
           {
             name: 'lastMemberReportRefSlot',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'currentFrameMemberReport',
             type: 'bytes32',
-            internalType: 'bytes32'
-          }
-        ]
-      }
+            internalType: 'bytes32',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -253,15 +253,15 @@ export const HashConsensusAbi = [
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'reportProcessingDeadlineSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -271,15 +271,15 @@ export const HashConsensusAbi = [
       {
         name: 'addresses',
         type: 'address[]',
-        internalType: 'address[]'
+        internalType: 'address[]',
       },
       {
         name: 'lastReportedRefSlots',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -289,20 +289,20 @@ export const HashConsensusAbi = [
       {
         name: 'initialEpoch',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'epochsPerFrame',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fastLaneLengthSlots',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -312,10 +312,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -324,17 +324,17 @@ export const HashConsensusAbi = [
       {
         name: 'addr',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -343,17 +343,17 @@ export const HashConsensusAbi = [
       {
         name: 'addr',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -363,15 +363,15 @@ export const HashConsensusAbi = [
       {
         name: 'addresses',
         type: 'address[]',
-        internalType: 'address[]'
+        internalType: 'address[]',
       },
       {
         name: 'lastReportedRefSlots',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -381,10 +381,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -394,10 +394,10 @@ export const HashConsensusAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -407,15 +407,15 @@ export const HashConsensusAbi = [
       {
         name: 'variants',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
+        internalType: 'bytes32[]',
       },
       {
         name: 'support',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -424,17 +424,17 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -443,22 +443,22 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -467,17 +467,17 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -486,16 +486,16 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -504,22 +504,22 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -528,16 +528,16 @@ export const HashConsensusAbi = [
       {
         name: 'addr',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'quorum',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -546,16 +546,16 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -564,16 +564,16 @@ export const HashConsensusAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -582,11 +582,11 @@ export const HashConsensusAbi = [
       {
         name: 'fastLaneLengthSlots',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -595,16 +595,16 @@ export const HashConsensusAbi = [
       {
         name: 'epochsPerFrame',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fastLaneLengthSlots',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -613,11 +613,11 @@ export const HashConsensusAbi = [
       {
         name: 'quorum',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -626,11 +626,11 @@ export const HashConsensusAbi = [
       {
         name: 'newProcessor',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -639,21 +639,21 @@ export const HashConsensusAbi = [
       {
         name: 'slot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'report',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'consensusVersion',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -662,17 +662,17 @@ export const HashConsensusAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -681,11 +681,11 @@ export const HashConsensusAbi = [
       {
         name: 'initialEpoch',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -695,10 +695,10 @@ export const HashConsensusAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -708,22 +708,22 @@ export const HashConsensusAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'report',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'support',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -733,10 +733,10 @@ export const HashConsensusAbi = [
         name: 'fastLaneLengthSlots',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -746,16 +746,16 @@ export const HashConsensusAbi = [
         name: 'newInitialEpoch',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'newEpochsPerFrame',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -765,10 +765,10 @@ export const HashConsensusAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -778,22 +778,22 @@ export const HashConsensusAbi = [
         name: 'addr',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newTotalMembers',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'newQuorum',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -803,22 +803,22 @@ export const HashConsensusAbi = [
         name: 'addr',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'newTotalMembers',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'newQuorum',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -828,22 +828,22 @@ export const HashConsensusAbi = [
         name: 'newQuorum',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'totalMembers',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'prevQuorum',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -853,16 +853,16 @@ export const HashConsensusAbi = [
         name: 'processor',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'prevProcessor',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -872,22 +872,22 @@ export const HashConsensusAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'member',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'report',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -897,22 +897,22 @@ export const HashConsensusAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -922,22 +922,22 @@ export const HashConsensusAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -947,27 +947,27 @@ export const HashConsensusAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -976,109 +976,109 @@ export const HashConsensusAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'AddressCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'AdminCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ConsensusReportAlreadyProcessing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'DuplicateMember',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'DuplicateReport',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'EmptyReport',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'EpochsPerFrameCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'FastLanePeriodCannotBeLongerThanFrame',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InitialEpochAlreadyArrived',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InitialEpochIsYetToArrive',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InitialEpochRefSlotCannotBeEarlierThanProcessingSlot',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidChainConfig',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidSlot',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NewProcessorCannotBeTheSame',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NonFastLaneMemberCannotReportWithinFastLaneInterval',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NonMember',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NumericOverflow',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1087,19 +1087,19 @@ export const HashConsensusAbi = [
       {
         name: 'minQuorum',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'receivedQuorum',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'ReportProcessorCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1108,19 +1108,19 @@ export const HashConsensusAbi = [
       {
         name: 'bits',
         type: 'uint8',
-        internalType: 'uint8'
+        internalType: 'uint8',
       },
       {
         name: 'value',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'StaleReport',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1129,13 +1129,13 @@ export const HashConsensusAbi = [
       {
         name: 'expected',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'received',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
 ] as const;

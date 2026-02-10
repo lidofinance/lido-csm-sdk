@@ -5,22 +5,22 @@ export const VerifierAbi = [
       {
         name: 'withdrawalAddress',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'module',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'slotsPerEpoch',
         type: 'uint64',
-        internalType: 'uint64'
+        internalType: 'uint64',
       },
       {
         name: 'slotsPerHistoricalRoot',
         type: 'uint64',
-        internalType: 'uint64'
+        internalType: 'uint64',
       },
       {
         name: 'gindices',
@@ -30,87 +30,87 @@ export const VerifierAbi = [
           {
             name: 'gIFirstWithdrawalPrev',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstWithdrawalCurr',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstValidatorPrev',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstValidatorCurr',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstHistoricalSummaryPrev',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstHistoricalSummaryCurr',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstBlockRootInSummaryPrev',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstBlockRootInSummaryCurr',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstBalanceNodePrev',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstBalanceNodeCurr',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstPendingConsolidationPrev',
             type: 'bytes32',
-            internalType: 'GIndex'
+            internalType: 'GIndex',
           },
           {
             name: 'gIFirstPendingConsolidationCurr',
             type: 'bytes32',
-            internalType: 'GIndex'
-          }
-        ]
+            internalType: 'GIndex',
+          },
+        ],
       },
       {
         name: 'firstSupportedSlot',
         type: 'uint64',
-        internalType: 'Slot'
+        internalType: 'Slot',
       },
       {
         name: 'pivotSlot',
         type: 'uint64',
-        internalType: 'Slot'
+        internalType: 'Slot',
       },
       {
         name: 'capellaSlot',
         type: 'uint64',
-        internalType: 'Slot'
+        internalType: 'Slot',
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -120,10 +120,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -133,10 +133,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'Slot'
-      }
+        internalType: 'Slot',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -146,10 +146,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -159,10 +159,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'Slot'
-      }
+        internalType: 'Slot',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -172,10 +172,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -185,10 +185,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -198,10 +198,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -211,10 +211,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -224,10 +224,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -237,10 +237,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -250,10 +250,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -263,10 +263,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -276,10 +276,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -289,10 +289,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -302,10 +302,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -315,10 +315,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'GIndex'
-      }
+        internalType: 'GIndex',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -328,10 +328,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IBaseModule'
-      }
+        internalType: 'contract IBaseModule',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -341,10 +341,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -354,10 +354,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -367,10 +367,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'Slot'
-      }
+        internalType: 'Slot',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -380,10 +380,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -393,10 +393,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -406,10 +406,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -419,10 +419,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -432,10 +432,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -444,17 +444,17 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -463,22 +463,22 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -487,17 +487,17 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -506,16 +506,16 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -524,22 +524,22 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -549,10 +549,10 @@ export const VerifierAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -561,11 +561,11 @@ export const VerifierAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -589,26 +589,26 @@ export const VerifierAbi = [
                   {
                     name: 'sourceIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'targetIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'offset',
                 type: 'uint64',
-                internalType: 'uint64'
+                internalType: 'uint64',
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'validator',
@@ -618,17 +618,17 @@ export const VerifierAbi = [
               {
                 name: 'index',
                 type: 'uint64',
-                internalType: 'uint64'
+                internalType: 'uint64',
               },
               {
                 name: 'nodeOperatorId',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'keyIndex',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'object',
@@ -638,51 +638,51 @@ export const VerifierAbi = [
                   {
                     name: 'pubkey',
                     type: 'bytes',
-                    internalType: 'bytes'
+                    internalType: 'bytes',
                   },
                   {
                     name: 'withdrawalCredentials',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'effectiveBalance',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'slashed',
                     type: 'bool',
-                    internalType: 'bool'
+                    internalType: 'bool',
                   },
                   {
                     name: 'activationEligibilityEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'activationEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'exitEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'withdrawableEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'balance',
@@ -692,14 +692,14 @@ export const VerifierAbi = [
               {
                 name: 'node',
                 type: 'bytes32',
-                internalType: 'bytes32'
+                internalType: 'bytes32',
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'recentBlock',
@@ -714,36 +714,36 @@ export const VerifierAbi = [
                   {
                     name: 'slot',
                     type: 'uint64',
-                    internalType: 'Slot'
+                    internalType: 'Slot',
                   },
                   {
                     name: 'proposerIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'parentRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'stateRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'bodyRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
-                  }
-                ]
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
                 name: 'rootsTimestamp',
                 type: 'uint64',
-                internalType: 'uint64'
-              }
-            ]
+                internalType: 'uint64',
+              },
+            ],
           },
           {
             name: 'consolidationBlock',
@@ -758,42 +758,42 @@ export const VerifierAbi = [
                   {
                     name: 'slot',
                     type: 'uint64',
-                    internalType: 'Slot'
+                    internalType: 'Slot',
                   },
                   {
                     name: 'proposerIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'parentRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'stateRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'bodyRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
-                  }
-                ]
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
-          }
-        ]
-      }
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -812,7 +812,7 @@ export const VerifierAbi = [
               {
                 name: 'offset',
                 type: 'uint8',
-                internalType: 'uint8'
+                internalType: 'uint8',
               },
               {
                 name: 'object',
@@ -822,31 +822,31 @@ export const VerifierAbi = [
                   {
                     name: 'index',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'validatorIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'withdrawalAddress',
                     type: 'address',
-                    internalType: 'address'
+                    internalType: 'address',
                   },
                   {
                     name: 'amount',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'validator',
@@ -856,17 +856,17 @@ export const VerifierAbi = [
               {
                 name: 'index',
                 type: 'uint64',
-                internalType: 'uint64'
+                internalType: 'uint64',
               },
               {
                 name: 'nodeOperatorId',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'keyIndex',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'object',
@@ -876,51 +876,51 @@ export const VerifierAbi = [
                   {
                     name: 'pubkey',
                     type: 'bytes',
-                    internalType: 'bytes'
+                    internalType: 'bytes',
                   },
                   {
                     name: 'withdrawalCredentials',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'effectiveBalance',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'slashed',
                     type: 'bool',
-                    internalType: 'bool'
+                    internalType: 'bool',
                   },
                   {
                     name: 'activationEligibilityEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'activationEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'exitEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'withdrawableEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'recentBlock',
@@ -935,36 +935,36 @@ export const VerifierAbi = [
                   {
                     name: 'slot',
                     type: 'uint64',
-                    internalType: 'Slot'
+                    internalType: 'Slot',
                   },
                   {
                     name: 'proposerIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'parentRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'stateRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'bodyRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
-                  }
-                ]
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
                 name: 'rootsTimestamp',
                 type: 'uint64',
-                internalType: 'uint64'
-              }
-            ]
+                internalType: 'uint64',
+              },
+            ],
           },
           {
             name: 'withdrawalBlock',
@@ -979,42 +979,42 @@ export const VerifierAbi = [
                   {
                     name: 'slot',
                     type: 'uint64',
-                    internalType: 'Slot'
+                    internalType: 'Slot',
                   },
                   {
                     name: 'proposerIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'parentRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'stateRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'bodyRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
-                  }
-                ]
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
-          }
-        ]
-      }
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1033,17 +1033,17 @@ export const VerifierAbi = [
               {
                 name: 'index',
                 type: 'uint64',
-                internalType: 'uint64'
+                internalType: 'uint64',
               },
               {
                 name: 'nodeOperatorId',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'keyIndex',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'object',
@@ -1053,51 +1053,51 @@ export const VerifierAbi = [
                   {
                     name: 'pubkey',
                     type: 'bytes',
-                    internalType: 'bytes'
+                    internalType: 'bytes',
                   },
                   {
                     name: 'withdrawalCredentials',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'effectiveBalance',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'slashed',
                     type: 'bool',
-                    internalType: 'bool'
+                    internalType: 'bool',
                   },
                   {
                     name: 'activationEligibilityEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'activationEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'exitEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'withdrawableEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'recentBlock',
@@ -1112,42 +1112,42 @@ export const VerifierAbi = [
                   {
                     name: 'slot',
                     type: 'uint64',
-                    internalType: 'Slot'
+                    internalType: 'Slot',
                   },
                   {
                     name: 'proposerIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'parentRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'stateRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'bodyRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
-                  }
-                ]
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
                 name: 'rootsTimestamp',
                 type: 'uint64',
-                internalType: 'uint64'
-              }
-            ]
-          }
-        ]
-      }
+                internalType: 'uint64',
+              },
+            ],
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1166,7 +1166,7 @@ export const VerifierAbi = [
               {
                 name: 'offset',
                 type: 'uint8',
-                internalType: 'uint8'
+                internalType: 'uint8',
               },
               {
                 name: 'object',
@@ -1176,31 +1176,31 @@ export const VerifierAbi = [
                   {
                     name: 'index',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'validatorIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'withdrawalAddress',
                     type: 'address',
-                    internalType: 'address'
+                    internalType: 'address',
                   },
                   {
                     name: 'amount',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'validator',
@@ -1210,17 +1210,17 @@ export const VerifierAbi = [
               {
                 name: 'index',
                 type: 'uint64',
-                internalType: 'uint64'
+                internalType: 'uint64',
               },
               {
                 name: 'nodeOperatorId',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'keyIndex',
                 type: 'uint32',
-                internalType: 'uint32'
+                internalType: 'uint32',
               },
               {
                 name: 'object',
@@ -1230,51 +1230,51 @@ export const VerifierAbi = [
                   {
                     name: 'pubkey',
                     type: 'bytes',
-                    internalType: 'bytes'
+                    internalType: 'bytes',
                   },
                   {
                     name: 'withdrawalCredentials',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'effectiveBalance',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'slashed',
                     type: 'bool',
-                    internalType: 'bool'
+                    internalType: 'bool',
                   },
                   {
                     name: 'activationEligibilityEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'activationEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'exitEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'withdrawableEpoch',
                     type: 'uint64',
-                    internalType: 'uint64'
-                  }
-                ]
+                    internalType: 'uint64',
+                  },
+                ],
               },
               {
                 name: 'proof',
                 type: 'bytes32[]',
-                internalType: 'bytes32[]'
-              }
-            ]
+                internalType: 'bytes32[]',
+              },
+            ],
           },
           {
             name: 'withdrawalBlock',
@@ -1289,42 +1289,42 @@ export const VerifierAbi = [
                   {
                     name: 'slot',
                     type: 'uint64',
-                    internalType: 'Slot'
+                    internalType: 'Slot',
                   },
                   {
                     name: 'proposerIndex',
                     type: 'uint64',
-                    internalType: 'uint64'
+                    internalType: 'uint64',
                   },
                   {
                     name: 'parentRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'stateRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
+                    internalType: 'bytes32',
                   },
                   {
                     name: 'bodyRoot',
                     type: 'bytes32',
-                    internalType: 'bytes32'
-                  }
-                ]
+                    internalType: 'bytes32',
+                  },
+                ],
               },
               {
                 name: 'rootsTimestamp',
                 type: 'uint64',
-                internalType: 'uint64'
-              }
-            ]
-          }
-        ]
-      }
+                internalType: 'uint64',
+              },
+            ],
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1333,23 +1333,23 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1358,16 +1358,16 @@ export const VerifierAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1376,17 +1376,17 @@ export const VerifierAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'event',
@@ -1396,16 +1396,16 @@ export const VerifierAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1415,22 +1415,22 @@ export const VerifierAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1440,22 +1440,22 @@ export const VerifierAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1465,27 +1465,27 @@ export const VerifierAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1494,89 +1494,89 @@ export const VerifierAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'HistoricalSummaryDoesNotExist',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'IndexOutOfRange',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidBlockHeader',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidCapellaSlot',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidChainConfig',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidConsolidationSource',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidPivotSlot',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidPublicKey',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidValidatorIndex',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidWithdrawalAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PartialWithdrawal',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'RootNotFound',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1585,43 +1585,43 @@ export const VerifierAbi = [
       {
         name: 'slot',
         type: 'uint64',
-        internalType: 'Slot'
-      }
-    ]
+        internalType: 'Slot',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'ValidatorIsNotSlashed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ValidatorIsNotWithdrawable',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ValidatorIsSlashed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroWithdrawalAddress',
-    inputs: []
+    inputs: [],
   },
 ] as const;
