@@ -12,3 +12,5 @@ export const OPERATOR_TYPE_CURVE_ID = {
   [OPERATOR_TYPE.ICS]: 2n,
   [OPERATOR_TYPE.CC]: undefined,
 } as const;
+
+// TODO: CM and CSM operator types (same id, different names)

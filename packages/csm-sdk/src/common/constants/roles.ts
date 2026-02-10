@@ -9,3 +9,4 @@ export enum ROLE_CODE {
   MANAGER = 2,
   REWARDS_AND_MANAGER = 3,
 }
+// TODO: rework
