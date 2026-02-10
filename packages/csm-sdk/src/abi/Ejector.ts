@@ -5,25 +5,25 @@ export const EjectorAbi = [
       {
         name: 'module',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'strikes',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'stakingModuleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -33,10 +33,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -46,10 +46,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ICSModule'
-      }
+        internalType: 'contract ICSModule',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -59,10 +59,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -72,10 +72,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -85,10 +85,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -98,10 +98,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -111,10 +111,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -124,10 +124,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -137,10 +137,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'uint8',
-        internalType: 'uint8'
-      }
+        internalType: 'uint8',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -150,10 +150,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'uint8',
-        internalType: 'uint8'
-      }
+        internalType: 'uint8',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -162,21 +162,21 @@ export const EjectorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndex',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'refundRecipient',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -186,10 +186,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -198,17 +198,17 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -217,22 +217,22 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -241,17 +241,17 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -260,16 +260,16 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -278,22 +278,22 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -303,10 +303,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -315,11 +315,11 @@ export const EjectorAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -328,16 +328,16 @@ export const EjectorAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -346,16 +346,16 @@ export const EjectorAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -364,23 +364,23 @@ export const EjectorAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -389,23 +389,23 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -414,16 +414,16 @@ export const EjectorAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -432,17 +432,17 @@ export const EjectorAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -452,10 +452,10 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ITriggerableWithdrawalsGateway'
-      }
+        internalType: 'contract ITriggerableWithdrawalsGateway',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -464,26 +464,26 @@ export const EjectorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'startFrom',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keysCount',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'refundRecipient',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -492,21 +492,21 @@ export const EjectorAbi = [
       {
         name: 'nodeOperatorId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyIndices',
         type: 'uint256[]',
-        internalType: 'uint256[]'
+        internalType: 'uint256[]',
       },
       {
         name: 'refundRecipient',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'event',
@@ -516,22 +516,22 @@ export const EjectorAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'refundRecipient',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -541,16 +541,16 @@ export const EjectorAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -560,22 +560,22 @@ export const EjectorAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -585,22 +585,22 @@ export const EjectorAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -610,22 +610,22 @@ export const EjectorAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -635,27 +635,27 @@ export const EjectorAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'pubkey',
         type: 'bytes',
         indexed: false,
-        internalType: 'bytes'
+        internalType: 'bytes',
       },
       {
         name: 'refundRecipient',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -664,78 +664,78 @@ export const EjectorAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'AlreadyWithdrawn',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NodeOperatorDoesNotExist',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NothingToEject',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotEligible',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotStrikes',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SigningKeysInvalidOffset',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroStrikesAddress',
-    inputs: []
+    inputs: [],
   },
 ] as const;

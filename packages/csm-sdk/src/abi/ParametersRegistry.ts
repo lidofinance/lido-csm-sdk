@@ -5,10 +5,10 @@ export const ParametersRegistryAbi = [
       {
         name: 'queueLowestPriority',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -18,10 +18,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -31,10 +31,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -44,10 +44,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -57,10 +57,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -70,10 +70,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -83,10 +83,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -96,10 +96,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -109,10 +109,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -122,10 +122,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -135,10 +135,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -148,10 +148,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -161,10 +161,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -174,10 +174,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -187,10 +187,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -200,10 +200,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -213,10 +213,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -226,10 +226,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -239,20 +239,20 @@ export const ParametersRegistryAbi = [
       {
         name: 'attestationsWeight',
         type: 'uint32',
-        internalType: 'uint32'
+        internalType: 'uint32',
       },
       {
         name: 'blocksWeight',
         type: 'uint32',
-        internalType: 'uint32'
+        internalType: 'uint32',
       },
       {
         name: 'syncWeight',
         type: 'uint32',
-        internalType: 'uint32'
-      }
+        internalType: 'uint32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -262,10 +262,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -275,15 +275,15 @@ export const ParametersRegistryAbi = [
       {
         name: 'priority',
         type: 'uint32',
-        internalType: 'uint32'
+        internalType: 'uint32',
       },
       {
         name: 'maxDeposits',
         type: 'uint32',
-        internalType: 'uint32'
-      }
+        internalType: 'uint32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -293,10 +293,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -306,15 +306,15 @@ export const ParametersRegistryAbi = [
       {
         name: 'lifetime',
         type: 'uint32',
-        internalType: 'uint32'
+        internalType: 'uint32',
       },
       {
         name: 'threshold',
         type: 'uint32',
-        internalType: 'uint32'
-      }
+        internalType: 'uint32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -323,17 +323,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'delay',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -342,17 +342,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'penalty',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -361,17 +361,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'weight',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -380,17 +380,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'penalty',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -399,17 +399,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'fine',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -419,10 +419,10 @@ export const ParametersRegistryAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -431,17 +431,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'keyRemovalCharge',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -450,17 +450,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -469,17 +469,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'fee',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -488,27 +488,27 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'attestationsWeight',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'blocksWeight',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'syncWeight',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -517,8 +517,8 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -529,17 +529,17 @@ export const ParametersRegistryAbi = [
           {
             name: 'minKeyNumber',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -548,22 +548,22 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'queuePriority',
         type: 'uint32',
-        internalType: 'uint32'
+        internalType: 'uint32',
       },
       {
         name: 'maxDeposits',
         type: 'uint32',
-        internalType: 'uint32'
-      }
+        internalType: 'uint32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -572,8 +572,8 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -584,17 +584,17 @@ export const ParametersRegistryAbi = [
           {
             name: 'minKeyNumber',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -603,17 +603,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -622,22 +622,22 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -646,17 +646,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -665,22 +665,22 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'lifetime',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'threshold',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -689,16 +689,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -707,22 +707,22 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -731,7 +731,7 @@ export const ParametersRegistryAbi = [
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'data',
@@ -741,93 +741,93 @@ export const ParametersRegistryAbi = [
           {
             name: 'defaultKeyRemovalCharge',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultGeneralDelayedPenaltyAdditionalFine',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultKeysLimit',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultRewardShare',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultPerformanceLeeway',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultStrikesLifetime',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultStrikesThreshold',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultQueuePriority',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultQueueMaxDeposits',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultBadPerformancePenalty',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultAttestationsWeight',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultBlocksWeight',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultSyncWeight',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultAllowedExitDelay',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultExitDelayFee',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultMaxElWithdrawalRequestFee',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'defaultDepositAllocationWeight',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -836,16 +836,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -854,16 +854,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -872,16 +872,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'delay',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -890,16 +890,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'penalty',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -908,11 +908,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'delay',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -921,11 +921,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'penalty',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -934,11 +934,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'weight',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -947,11 +947,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'penalty',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -960,11 +960,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'fine',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -973,11 +973,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'keyRemovalCharge',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -986,11 +986,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -999,11 +999,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'fee',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1012,21 +1012,21 @@ export const ParametersRegistryAbi = [
       {
         name: 'attestationsWeight',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'blocksWeight',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'syncWeight',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1035,11 +1035,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'leeway',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1048,16 +1048,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'priority',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'maxDeposits',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1066,11 +1066,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'share',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1079,16 +1079,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'lifetime',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'threshold',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1097,16 +1097,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'weight',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1115,16 +1115,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'penalty',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1133,16 +1133,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fine',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1151,16 +1151,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyRemovalCharge',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1169,16 +1169,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1187,16 +1187,16 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fee',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1205,26 +1205,26 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'attestationsWeight',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'blocksWeight',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'syncWeight',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1233,7 +1233,7 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'data',
@@ -1243,18 +1243,18 @@ export const ParametersRegistryAbi = [
           {
             name: 'minKeyNumber',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1263,21 +1263,21 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'priority',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'maxDeposits',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1286,7 +1286,7 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'data',
@@ -1296,18 +1296,18 @@ export const ParametersRegistryAbi = [
           {
             name: 'minKeyNumber',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1316,21 +1316,21 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'lifetime',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'threshold',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1339,17 +1339,17 @@ export const ParametersRegistryAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1358,11 +1358,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1371,11 +1371,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1384,11 +1384,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1397,11 +1397,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1410,11 +1410,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1423,11 +1423,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1436,11 +1436,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1449,11 +1449,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1462,11 +1462,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1475,11 +1475,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1488,11 +1488,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1501,11 +1501,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1514,11 +1514,11 @@ export const ParametersRegistryAbi = [
       {
         name: 'curveId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -1528,16 +1528,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'delay',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1547,10 +1547,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1560,16 +1560,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'penalty',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1579,10 +1579,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1592,10 +1592,10 @@ export const ParametersRegistryAbi = [
         name: 'delay',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1605,10 +1605,10 @@ export const ParametersRegistryAbi = [
         name: 'value',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1618,10 +1618,10 @@ export const ParametersRegistryAbi = [
         name: 'weight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1631,10 +1631,10 @@ export const ParametersRegistryAbi = [
         name: 'penalty',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1644,10 +1644,10 @@ export const ParametersRegistryAbi = [
         name: 'value',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1657,10 +1657,10 @@ export const ParametersRegistryAbi = [
         name: 'value',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1670,10 +1670,10 @@ export const ParametersRegistryAbi = [
         name: 'value',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1683,10 +1683,10 @@ export const ParametersRegistryAbi = [
         name: 'fee',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1696,22 +1696,22 @@ export const ParametersRegistryAbi = [
         name: 'attestationsWeight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'blocksWeight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'syncWeight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1721,10 +1721,10 @@ export const ParametersRegistryAbi = [
         name: 'value',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1734,16 +1734,16 @@ export const ParametersRegistryAbi = [
         name: 'priority',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'maxDeposits',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1753,10 +1753,10 @@ export const ParametersRegistryAbi = [
         name: 'value',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1766,16 +1766,16 @@ export const ParametersRegistryAbi = [
         name: 'lifetime',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'threshold',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1785,16 +1785,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'weight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1804,10 +1804,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1817,16 +1817,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'penalty',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1836,10 +1836,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1849,16 +1849,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fine',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1868,10 +1868,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1881,10 +1881,10 @@ export const ParametersRegistryAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1894,16 +1894,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'keyRemovalCharge',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1913,10 +1913,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1926,16 +1926,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'limit',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1945,10 +1945,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1958,16 +1958,16 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'fee',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1977,10 +1977,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1990,28 +1990,28 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'attestationsWeight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'blocksWeight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'syncWeight',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2021,10 +2021,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2034,7 +2034,7 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'data',
@@ -2045,17 +2045,17 @@ export const ParametersRegistryAbi = [
           {
             name: 'minKeyNumber',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2065,10 +2065,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2078,22 +2078,22 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'priority',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'maxDeposits',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2103,10 +2103,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2116,7 +2116,7 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'data',
@@ -2127,17 +2127,17 @@ export const ParametersRegistryAbi = [
           {
             name: 'minKeyNumber',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'value',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2147,10 +2147,10 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2160,22 +2160,22 @@ export const ParametersRegistryAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2185,22 +2185,22 @@ export const ParametersRegistryAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2210,22 +2210,22 @@ export const ParametersRegistryAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2235,22 +2235,22 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'lifetime',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'threshold',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -2260,15 +2260,15 @@ export const ParametersRegistryAbi = [
         name: 'curveId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -2277,59 +2277,59 @@ export const ParametersRegistryAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'InvalidAllowedExitDelay',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidKeyNumberValueIntervals',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidPerformanceCoefficients',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidPerformanceLeewayData',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidRewardShareData',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidStrikesParams',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'QueueCannotBeUsed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -2338,28 +2338,28 @@ export const ParametersRegistryAbi = [
       {
         name: 'bits',
         type: 'uint8',
-        internalType: 'uint8'
+        internalType: 'uint8',
       },
       {
         name: 'value',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroMaxDeposits',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroQueueLowestPriority',
-    inputs: []
+    inputs: [],
   },
 ] as const;

@@ -5,25 +5,25 @@ export const ValidatorStrikesAbi = [
       {
         name: 'module',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'oracle',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'exitPenalties',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'parametersRegistry',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -33,10 +33,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IAccounting'
-      }
+        internalType: 'contract IAccounting',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -46,10 +46,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -59,10 +59,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IExitPenalties'
-      }
+        internalType: 'contract IExitPenalties',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -72,10 +72,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ICSModule'
-      }
+        internalType: 'contract ICSModule',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -85,10 +85,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -98,10 +98,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IParametersRegistry'
-      }
+        internalType: 'contract IParametersRegistry',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -111,10 +111,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IEjector'
-      }
+        internalType: 'contract IEjector',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -124,10 +124,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'uint64',
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -136,17 +136,17 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -155,22 +155,22 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -179,17 +179,17 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -198,16 +198,16 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -216,22 +216,22 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -245,34 +245,34 @@ export const ValidatorStrikesAbi = [
           {
             name: 'nodeOperatorId',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'keyIndex',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'data',
             type: 'uint256[]',
-            internalType: 'uint256[]'
-          }
-        ]
+            internalType: 'uint256[]',
+          },
+        ],
       },
       {
         name: 'pubkey',
         type: 'bytes',
-        internalType: 'bytes'
-      }
+        internalType: 'bytes',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'pure'
+    stateMutability: 'pure',
   },
   {
     type: 'function',
@@ -281,16 +281,16 @@ export const ValidatorStrikesAbi = [
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: '_ejector',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -304,38 +304,38 @@ export const ValidatorStrikesAbi = [
           {
             name: 'nodeOperatorId',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'keyIndex',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'data',
             type: 'uint256[]',
-            internalType: 'uint256[]'
-          }
-        ]
+            internalType: 'uint256[]',
+          },
+        ],
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
+        internalType: 'bytes32[]',
       },
       {
         name: 'proofFlags',
         type: 'bool[]',
-        internalType: 'bool[]'
+        internalType: 'bool[]',
       },
       {
         name: 'refundRecipient',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'payable'
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -344,16 +344,16 @@ export const ValidatorStrikesAbi = [
       {
         name: '_treeRoot',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: '_treeCid',
         type: 'string',
-        internalType: 'string'
-      }
+        internalType: 'string',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -362,16 +362,16 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -380,16 +380,16 @@ export const ValidatorStrikesAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -398,11 +398,11 @@ export const ValidatorStrikesAbi = [
       {
         name: '_ejector',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -411,17 +411,17 @@ export const ValidatorStrikesAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -431,10 +431,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'string',
-        internalType: 'string'
-      }
+        internalType: 'string',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -444,10 +444,10 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -461,44 +461,44 @@ export const ValidatorStrikesAbi = [
           {
             name: 'nodeOperatorId',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'keyIndex',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'data',
             type: 'uint256[]',
-            internalType: 'uint256[]'
-          }
-        ]
+            internalType: 'uint256[]',
+          },
+        ],
       },
       {
         name: 'pubkeys',
         type: 'bytes[]',
-        internalType: 'bytes[]'
+        internalType: 'bytes[]',
       },
       {
         name: 'proof',
         type: 'bytes32[]',
-        internalType: 'bytes32[]'
+        internalType: 'bytes32[]',
       },
       {
         name: 'proofFlags',
         type: 'bool[]',
-        internalType: 'bool[]'
-      }
+        internalType: 'bool[]',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'event',
@@ -508,10 +508,10 @@ export const ValidatorStrikesAbi = [
         name: 'ejector',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -521,10 +521,10 @@ export const ValidatorStrikesAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -534,22 +534,22 @@ export const ValidatorStrikesAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -559,22 +559,22 @@ export const ValidatorStrikesAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -584,22 +584,22 @@ export const ValidatorStrikesAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -609,27 +609,27 @@ export const ValidatorStrikesAbi = [
         name: 'treeRoot',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'treeCid',
         type: 'string',
         indexed: false,
-        internalType: 'string'
-      }
+        internalType: 'string',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
     name: 'StrikesDataWiped',
     inputs: [],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -638,93 +638,93 @@ export const ValidatorStrikesAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'EmptyKeyStrikesList',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidProof',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidReportData',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'MerkleProofInvalidMultiproof',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotEnoughStrikesToEject',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotOracle',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ValueNotEvenlyDivisible',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroEjectorAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroExitPenaltiesAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroMsgValue',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroOracleAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroParametersRegistryAddress',
-    inputs: []
+    inputs: [],
   },
 ] as const;

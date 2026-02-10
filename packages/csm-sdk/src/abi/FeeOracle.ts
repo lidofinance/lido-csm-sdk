@@ -5,25 +5,25 @@ export const FeeOracleAbi = [
       {
         name: 'feeDistributor',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'strikes',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'secondsPerSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'genesisTime',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -33,10 +33,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -46,10 +46,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IFeeDistributor'
-      }
+        internalType: 'contract IFeeDistributor',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -59,10 +59,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -72,10 +72,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -85,10 +85,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -98,10 +98,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -111,10 +111,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -124,10 +124,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -137,10 +137,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -150,10 +150,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -163,10 +163,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IValidatorStrikes'
-      }
+        internalType: 'contract IValidatorStrikes',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -176,10 +176,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -188,18 +188,24 @@ export const FeeOracleAbi = [
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'finalizeUpgradeV3',
-    inputs: [],
+    inputs: [
+      {
+        name: 'consensusVersion',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -209,10 +215,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -222,25 +228,25 @@ export const FeeOracleAbi = [
       {
         name: 'hash',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'processingDeadlineTime',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'processingStarted',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -250,10 +256,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -263,10 +269,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -276,10 +282,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -289,10 +295,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -301,17 +307,17 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -320,22 +326,22 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'index',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -344,17 +350,17 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -363,16 +369,16 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -381,22 +387,22 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -405,21 +411,21 @@ export const FeeOracleAbi = [
       {
         name: 'admin',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'consensusContract',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'consensusVersion',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -429,10 +435,10 @@ export const FeeOracleAbi = [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -441,11 +447,11 @@ export const FeeOracleAbi = [
       {
         name: 'duration',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -454,16 +460,16 @@ export const FeeOracleAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -472,16 +478,16 @@ export const FeeOracleAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -490,23 +496,23 @@ export const FeeOracleAbi = [
       {
         name: 'token',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'recoverEther',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -515,23 +521,23 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'callerConfirmation',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     name: 'resume',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -540,16 +546,16 @@ export const FeeOracleAbi = [
       {
         name: 'role',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -558,11 +564,11 @@ export const FeeOracleAbi = [
       {
         name: 'addr',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -571,11 +577,11 @@ export const FeeOracleAbi = [
       {
         name: 'version',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -584,21 +590,21 @@ export const FeeOracleAbi = [
       {
         name: 'reportHash',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'deadline',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -612,58 +618,58 @@ export const FeeOracleAbi = [
           {
             name: 'consensusVersion',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'refSlot',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'treeRoot',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 'treeCid',
             type: 'string',
-            internalType: 'string'
+            internalType: 'string',
           },
           {
             name: 'logCid',
             type: 'string',
-            internalType: 'string'
+            internalType: 'string',
           },
           {
             name: 'distributed',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'rebate',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'strikesTreeRoot',
             type: 'bytes32',
-            internalType: 'bytes32'
+            internalType: 'bytes32',
           },
           {
             name: 'strikesTreeCid',
             type: 'string',
-            internalType: 'string'
-          }
-        ]
+            internalType: 'string',
+          },
+        ],
       },
       {
         name: 'contractVersion',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -672,17 +678,17 @@ export const FeeOracleAbi = [
       {
         name: 'interfaceId',
         type: 'bytes4',
-        internalType: 'bytes4'
-      }
+        internalType: 'bytes4',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'bool',
-        internalType: 'bool'
-      }
+        internalType: 'bool',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'event',
@@ -692,16 +698,16 @@ export const FeeOracleAbi = [
         name: 'addr',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'prevAddr',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -711,16 +717,16 @@ export const FeeOracleAbi = [
         name: 'version',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'prevVersion',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -730,10 +736,10 @@ export const FeeOracleAbi = [
         name: 'version',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -743,28 +749,28 @@ export const FeeOracleAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -774,22 +780,22 @@ export const FeeOracleAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -799,22 +805,22 @@ export const FeeOracleAbi = [
         name: 'token',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'tokenId',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -824,16 +830,16 @@ export const FeeOracleAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -843,10 +849,10 @@ export const FeeOracleAbi = [
         name: 'version',
         type: 'uint64',
         indexed: false,
-        internalType: 'uint64'
-      }
+        internalType: 'uint64',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -856,10 +862,10 @@ export const FeeOracleAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -869,16 +875,16 @@ export const FeeOracleAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'hash',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -888,16 +894,16 @@ export const FeeOracleAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'hash',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -907,28 +913,28 @@ export const FeeOracleAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'hash',
         type: 'bytes32',
         indexed: false,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'processingDeadlineTime',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
     name: 'Resumed',
     inputs: [],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -938,22 +944,22 @@ export const FeeOracleAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'previousAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'newAdminRole',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
-      }
+        internalType: 'bytes32',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -963,22 +969,22 @@ export const FeeOracleAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -988,22 +994,22 @@ export const FeeOracleAbi = [
         name: 'role',
         type: 'bytes32',
         indexed: true,
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'account',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'sender',
         type: 'address',
         indexed: true,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1013,16 +1019,16 @@ export const FeeOracleAbi = [
         name: 'recipient',
         type: 'address',
         indexed: true,
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'shares',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'event',
@@ -1032,15 +1038,15 @@ export const FeeOracleAbi = [
         name: 'refSlot',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AccessControlBadConfirmation',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1049,34 +1055,34 @@ export const FeeOracleAbi = [
       {
         name: 'account',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'neededRole',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'AddressCannotBeSame',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'AddressCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'FailedToSendEther',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'HashCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1085,59 +1091,59 @@ export const FeeOracleAbi = [
       {
         name: 'initialRefSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'processingRefSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'InvalidContractVersion',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidContractVersionIncrement',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NoConsensusReportToProcess',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NonZeroContractVersionOnInit',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotAllowedToRecover',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PauseUntilMustBeInFuture',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1146,14 +1152,14 @@ export const FeeOracleAbi = [
       {
         name: 'deadline',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'RefSlotAlreadyProcessing',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1162,14 +1168,14 @@ export const FeeOracleAbi = [
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'prevRefSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
@@ -1178,19 +1184,19 @@ export const FeeOracleAbi = [
       {
         name: 'refSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'processingRefSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'ResumedExpected',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1199,34 +1205,34 @@ export const FeeOracleAbi = [
       {
         name: 'bits',
         type: 'uint8',
-        internalType: 'uint8'
+        internalType: 'uint8',
       },
       {
         name: 'value',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'SecondsPerSlotCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotTheConsensusContract',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'SenderNotAllowed',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'UnexpectedChainConfig',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -1235,14 +1241,14 @@ export const FeeOracleAbi = [
       {
         name: 'expectedVersion',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'receivedVersion',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
@@ -1251,14 +1257,14 @@ export const FeeOracleAbi = [
       {
         name: 'expected',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'received',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
@@ -1267,14 +1273,14 @@ export const FeeOracleAbi = [
       {
         name: 'consensusHash',
         type: 'bytes32',
-        internalType: 'bytes32'
+        internalType: 'bytes32',
       },
       {
         name: 'receivedHash',
         type: 'bytes32',
-        internalType: 'bytes32'
-      }
-    ]
+        internalType: 'bytes32',
+      },
+    ],
   },
   {
     type: 'error',
@@ -1283,43 +1289,43 @@ export const FeeOracleAbi = [
       {
         name: 'consensusRefSlot',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'dataRefSlot',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'VersionCannotBeSame',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'VersionCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroFeeDistributorAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroPauseDuration',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroStrikesAddress',
-    inputs: []
+    inputs: [],
   },
 ] as const;
