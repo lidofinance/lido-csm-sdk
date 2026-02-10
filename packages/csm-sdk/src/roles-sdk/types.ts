@@ -31,7 +31,7 @@ export type SetCustomClaimerProps = CommonTransactionProps & {
 };
 
 export type SetFeeSplitsProps = CommonTransactionProps &
-  Partial<RewardProof> & {
+  RewardProof & {
     nodeOperatorId: NodeOperatorId;
     feeSplits: FeeSplit[];
   };
