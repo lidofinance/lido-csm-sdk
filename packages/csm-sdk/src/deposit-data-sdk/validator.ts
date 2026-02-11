@@ -1,16 +1,10 @@
 import { Hex } from 'viem';
 import { compareLowercase } from '../common/utils/compare-lowercase.js';
-import { isHexadecimalString, trimHexPrefix } from '../common/utils/index.js';
 import {
-  DepositData,
-  DepositDataV1,
-  DepositDataV2,
-  DuplicateProcessingConfig,
-  ValidationProps,
-  ValidationError,
-  ValidationErrorCode,
-  ValidationExtendedProps,
-} from './types.js';
+  isHexadecimalString,
+  toHexString,
+  trimHexPrefix,
+} from '../common/utils/index.js';
 import {
   DEPOSIT_ROOT_LENGTH,
   FIXED_AMOUNT,
@@ -22,6 +16,16 @@ import {
   WITHDRAWAL_CREDENTIALS_LENGTH,
 } from './constants.js';
 import { verifyDepositSignature } from './signature.js';
+import {
+  DepositData,
+  DepositDataV1,
+  DepositDataV2,
+  DuplicateProcessingConfig,
+  ValidationError,
+  ValidationErrorCode,
+  ValidationExtendedProps,
+  ValidationProps,
+} from './types.js';
 
 const validateBasicFields = (
   data: DepositData,
@@ -128,7 +132,10 @@ const validateBasicFields = (
 
   // Validate fork version
   const forkVersion = FIXED_FORK_VERSION[config.chainId];
-  if (data.fork_version !== forkVersion) {
+  if (
+    data.fork_version !== forkVersion &&
+    data.fork_version !== toHexString(forkVersion)
+  ) {
     errors.push({
       index,
       field: 'fork_version',
