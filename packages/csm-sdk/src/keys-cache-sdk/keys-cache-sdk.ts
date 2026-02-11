@@ -15,8 +15,7 @@ import { KeysRecord } from './types.js';
 
 export class KeysCacheSDK extends CsmSDKModule {
   private get storageKey() {
-    // FIXME: other value for CM? may be use module id?
-    return `lido-csm-keys-cache-${this.core.chainId}`;
+    return `lido-keys-cache-${this.core.chainId}`;
   }
 
   /**

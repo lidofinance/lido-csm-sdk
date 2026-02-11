@@ -10,7 +10,6 @@ import {
   FIXED_AMOUNT,
   FIXED_FORK_VERSION,
   FIXED_NETWORK,
-  FIXED_WC_PREFIX,
   PUBKEY_LENGTH,
   SIGNATURE_LENGTH,
   WITHDRAWAL_CREDENTIALS_LENGTH,
@@ -87,22 +86,28 @@ const validateBasicFields = (
       message: 'withdrawal_credentials is not a valid string',
       code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
     });
-  } else if (
-    !compareLowercase(
-      trimHexPrefix(data.withdrawal_credentials),
-      `${FIXED_WC_PREFIX}${trimHexPrefix(config.withdrawalCredentials)}`,
-    ) &&
-    !compareLowercase(
-      trimHexPrefix(data.withdrawal_credentials),
-      trimHexPrefix(config.withdrawalCredentials),
-    )
-  ) {
-    errors.push({
-      index,
-      field: 'withdrawal_credentials',
-      message: `withdrawal_credentials is not the Lido Withdrawal Vault`,
-      code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
-    });
+  } else {
+    const wcHex = trimHexPrefix(data.withdrawal_credentials);
+    const expectedAddress = trimHexPrefix(config.withdrawalCredentials);
+
+    const wcTypeHex = toHexString(config.wcPrefix.replace(/0+$/, ''));
+    if (!wcHex.toLowerCase().startsWith(config.wcPrefix.toLowerCase())) {
+      errors.push({
+        index,
+        field: 'withdrawal_credentials',
+        message: `wrong key type: only ${wcTypeHex} withdrawal credentials are supported`,
+        code: ValidationErrorCode.UNSUPPORTED_WC_TYPE,
+      });
+    } else if (
+      !compareLowercase(wcHex, `${config.wcPrefix}${expectedAddress}`)
+    ) {
+      errors.push({
+        index,
+        field: 'withdrawal_credentials',
+        message: 'withdrawal_credentials is not the Lido Withdrawal Vault',
+        code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
+      });
+    }
   }
 
   // Validate amount
@@ -218,6 +223,7 @@ export const validateDepositData = async (
   const errors = performBasicValidation(depositData, {
     chainId: options.chainId,
     withdrawalCredentials: options.withdrawalCredentials,
+    wcPrefix: options.wcPrefix,
   });
 
   // Parallel signature verification for valid items only

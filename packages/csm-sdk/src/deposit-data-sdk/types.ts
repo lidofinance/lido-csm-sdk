@@ -26,6 +26,7 @@ export enum ValidationErrorCode {
   INVALID_PUBKEY = 'INVALID_PUBKEY',
   INVALID_SIGNATURE = 'INVALID_SIGNATURE',
   INVALID_WITHDRAWAL_CREDENTIALS = 'INVALID_WITHDRAWAL_CREDENTIALS',
+  UNSUPPORTED_WC_TYPE = 'UNSUPPORTED_WC_TYPE',
   INVALID_AMOUNT = 'INVALID_AMOUNT',
   INVALID_NETWORK = 'INVALID_NETWORK',
   INVALID_FORK_VERSION = 'INVALID_FORK_VERSION',
@@ -61,6 +62,7 @@ export type ParseResult = {
 export type ValidationProps = {
   chainId: SUPPORTED_CHAINS;
   withdrawalCredentials: string;
+  wcPrefix: string;
 };
 
 export type ValidationExtendedProps = ValidationProps & {

@@ -9,7 +9,7 @@ import {
 } from '../common/utils/index.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { PUBKEY_LENGTH } from './constants.js';
+import { PUBKEY_LENGTH, WC_PREFIX_BY_MODULE } from './constants.js';
 import { parseDepositData, removeKey } from './parser.js';
 import {
   DepositData,
@@ -24,6 +24,10 @@ export class DepositDataSDK extends CsmSDKModule<{
   keysWithStatus?: KeysWithStatusSDK;
   keysCache?: KeysCacheSDK;
 }> {
+  private get wcPrefix(): string {
+    return WC_PREFIX_BY_MODULE[this.core.moduleName];
+  }
+
   /**
    * Parse deposit data JSON with enhanced error handling
    */
@@ -54,6 +58,7 @@ export class DepositDataSDK extends CsmSDKModule<{
     const errors = await validateDepositData(depositData, {
       chainId,
       withdrawalCredentials: wc,
+      wcPrefix: this.wcPrefix,
       currentBlockNumber: Number(blockNumber),
     });
 
@@ -91,6 +96,7 @@ export class DepositDataSDK extends CsmSDKModule<{
     return validateDepositDataSync(depositData, {
       chainId,
       withdrawalCredentials: wc,
+      wcPrefix: this.wcPrefix,
     });
   }
 

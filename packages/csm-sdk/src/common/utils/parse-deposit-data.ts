@@ -1,15 +1,13 @@
-import { Hex } from 'viem';
 import { DepositDataKey } from '../types.js';
-
-const formatHex = (keys: string[]): Hex => `0x${keys.join('')}`;
+import { toHexString, trimHexPrefix } from './index.js';
 
 export const parseDepositData = (keys: DepositDataKey[]) => {
-  const publicKeys = keys.map((key) => key.pubkey);
-  const signatures = keys.map((key) => key.signature);
+  const publicKeys = keys.map((key) => trimHexPrefix(key.pubkey));
+  const signatures = keys.map((key) => trimHexPrefix(key.signature));
 
   return {
     keysCount: BigInt(keys.length),
-    publicKeys: formatHex(publicKeys),
-    signatures: formatHex(signatures),
+    publicKeys: toHexString(publicKeys.join('')),
+    signatures: toHexString(signatures.join('')),
   };
 };
