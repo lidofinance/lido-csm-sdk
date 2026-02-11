@@ -1,5 +1,6 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { SUPPORTED_CHAINS } from '../common/index.js';
+import { CONTRACT_NAMES, SUPPORTED_CHAINS } from '../common/index.js';
+import { ModuleName } from '../core-sdk/types.js';
 
 export const TRIM_LENGTH = 6;
 
@@ -10,7 +11,13 @@ export const WITHDRAWAL_CREDENTIALS_LENGTH = 64;
 
 export const FIXED_AMOUNT = 32000000000;
 
-export const FIXED_WC_PREFIX = '010000000000000000000000';
+export const WC_PREFIX_01 = '010000000000000000000000';
+export const WC_PREFIX_02 = '020000000000000000000000';
+
+export const WC_PREFIX_BY_MODULE: Record<ModuleName, string> = {
+  [CONTRACT_NAMES.csModule]: WC_PREFIX_01,
+  [CONTRACT_NAMES.curatedModule]: WC_PREFIX_02,
+};
 
 export const FIXED_NETWORK: Record<SUPPORTED_CHAINS, string> = {
   [CHAINS.Mainnet]: 'mainnet',
