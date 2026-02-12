@@ -11,7 +11,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
 
   @Logger('Call:')
   @ErrorHandler()
-  public async setMetadata(props: SetOperatorDataProps) {
+  public async setOperatorInfo(props: SetOperatorDataProps) {
     const { nodeOperatorId, name, description, ...rest } = props;
 
     return this.bus.tx.perform({
@@ -27,7 +27,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getMetadata(
+  public async getOperatorInfo(
     nodeOperatorId: NodeOperatorId,
   ): Promise<OperatorMetadata> {
     return this.contract.read.getOperatorMetadata([nodeOperatorId]);
