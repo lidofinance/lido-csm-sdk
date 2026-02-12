@@ -5,10 +5,10 @@ export const SMDiscoveryAbi = [
       {
         name: '_stakingRouter',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -18,10 +18,10 @@ export const SMDiscoveryAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract IStakingRouter'
-      }
+        internalType: 'contract IStakingRouter',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -30,17 +30,17 @@ export const SMDiscoveryAbi = [
       {
         name: '_module',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -49,37 +49,37 @@ export const SMDiscoveryAbi = [
       {
         name: '_moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_addressToSearch',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: '_offset',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_limit',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_searchMode',
         type: 'uint8',
-        internalType: 'enum SearchMode'
-      }
+        internalType: 'enum SearchMode',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256[]',
-        internalType: 'uint256[]'
-      }
+        internalType: 'uint256[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -88,32 +88,32 @@ export const SMDiscoveryAbi = [
       {
         name: '_moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_queuePriority',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_cursorIndex',
         type: 'uint128',
-        internalType: 'uint128'
+        internalType: 'uint128',
       },
       {
         name: '_limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint256[]',
-        internalType: 'Batch[]'
-      }
+        internalType: 'Batch[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -122,23 +122,23 @@ export const SMDiscoveryAbi = [
       {
         name: '_moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_addressToSearch',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: '_offset',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -149,32 +149,32 @@ export const SMDiscoveryAbi = [
           {
             name: 'id',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'managerAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'rewardAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'extendedManagerPermissions',
             type: 'bool',
-            internalType: 'bool'
+            internalType: 'bool',
           },
           {
             name: 'curveId',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -183,23 +183,23 @@ export const SMDiscoveryAbi = [
       {
         name: '_moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_addressToSearch',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: '_offset',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
@@ -210,27 +210,27 @@ export const SMDiscoveryAbi = [
           {
             name: 'id',
             type: 'uint256',
-            internalType: 'uint256'
+            internalType: 'uint256',
           },
           {
             name: 'proposedManagerAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'proposedRewardAddress',
             type: 'address',
-            internalType: 'address'
+            internalType: 'address',
           },
           {
             name: 'curveId',
             type: 'uint256',
-            internalType: 'uint256'
-          }
-        ]
-      }
+            internalType: 'uint256',
+          },
+        ],
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -239,27 +239,27 @@ export const SMDiscoveryAbi = [
       {
         name: '_moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_offset',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: '_limit',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: '',
         type: 'uint32[]',
-        internalType: 'uint32[]'
-      }
+        internalType: 'uint32[]',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -268,22 +268,22 @@ export const SMDiscoveryAbi = [
       {
         name: '',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [
       {
         name: 'moduleAddress',
         type: 'address',
-        internalType: 'address'
+        internalType: 'address',
       },
       {
         name: 'accountingAddress',
         type: 'address',
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    stateMutability: 'view'
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -292,11 +292,11 @@ export const SMDiscoveryAbi = [
       {
         name: '_moduleId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
-    stateMutability: 'nonpayable'
+    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -306,21 +306,21 @@ export const SMDiscoveryAbi = [
         name: 'moduleId',
         type: 'uint256',
         indexed: true,
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'moduleAddress',
         type: 'address',
         indexed: false,
-        internalType: 'address'
-      }
+        internalType: 'address',
+      },
     ],
-    anonymous: false
+    anonymous: false,
   },
   {
     type: 'error',
     name: 'AddressCannotBeZero',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -329,14 +329,14 @@ export const SMDiscoveryAbi = [
       {
         name: 'cursor',
         type: 'uint128',
-        internalType: 'uint128'
+        internalType: 'uint128',
       },
       {
         name: 'head',
         type: 'uint128',
-        internalType: 'uint128'
-      }
-    ]
+        internalType: 'uint128',
+      },
+    ],
   },
   {
     type: 'error',
@@ -345,14 +345,14 @@ export const SMDiscoveryAbi = [
       {
         name: 'provided',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'max',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
@@ -361,19 +361,19 @@ export const SMDiscoveryAbi = [
       {
         name: 'provided',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'max',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'InvalidStakingRouterAddress',
-    inputs: []
+    inputs: [],
   },
   {
     type: 'error',
@@ -382,14 +382,14 @@ export const SMDiscoveryAbi = [
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256'
+        internalType: 'uint256',
       },
       {
         name: 'moduleAddress',
         type: 'address',
-        internalType: 'address'
-      }
-    ]
+        internalType: 'address',
+      },
+    ],
   },
   {
     type: 'error',
@@ -398,9 +398,9 @@ export const SMDiscoveryAbi = [
       {
         name: 'moduleId',
         type: 'uint256',
-        internalType: 'uint256'
-      }
-    ]
+        internalType: 'uint256',
+      },
+    ],
   },
   {
     type: 'error',
@@ -409,13 +409,13 @@ export const SMDiscoveryAbi = [
       {
         name: 'moduleAddress',
         type: 'address',
-        internalType: 'address'
-      }
-    ]
+        internalType: 'address',
+      },
+    ],
   },
   {
     type: 'error',
     name: 'ZeroModuleId',
-    inputs: []
+    inputs: [],
   },
 ] as const;

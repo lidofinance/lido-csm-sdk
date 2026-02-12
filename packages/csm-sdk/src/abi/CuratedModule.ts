@@ -27,6 +27,11 @@ export const CuratedModuleAbi = [
         type: 'address',
         internalType: 'address',
       },
+      {
+        name: 'metaRegistry',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
     stateMutability: 'nonpayable',
   },
@@ -104,6 +109,19 @@ export const CuratedModuleAbi = [
         name: '',
         type: 'address',
         internalType: 'contract ILidoLocator',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'META_REGISTRY',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'contract IMetaRegistry',
       },
     ],
     stateMutability: 'view',
@@ -481,6 +499,25 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
+    name: 'batchUpdateNodeOperatorWeights',
+    inputs: [
+      {
+        name: 'maxCount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'operatorsLeft',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'cancelGeneralDelayedPenalty',
     inputs: [
       {
@@ -616,7 +653,7 @@ export const CuratedModuleAbi = [
     ],
     outputs: [
       {
-        name: 'nodeOperatorId',
+        name: '',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -678,7 +715,7 @@ export const CuratedModuleAbi = [
     name: 'getDepositsAllocation',
     inputs: [
       {
-        name: 'depositAmount',
+        name: 'maxDepositAmount',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -711,6 +748,30 @@ export const CuratedModuleAbi = [
         name: '',
         type: 'uint64',
         internalType: 'uint64',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1008,6 +1069,19 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
+    name: 'getNodeOperatorWeightsToUpdateCount',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getNodeOperatorsCount',
     inputs: [],
     outputs: [
@@ -1028,6 +1102,25 @@ export const CuratedModuleAbi = [
         name: '',
         type: 'uint256',
         internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getOperatorWeights',
+    inputs: [
+      {
+        name: 'operatorIds',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    outputs: [
+      {
+        name: 'operatorWeights',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
       },
     ],
     stateMutability: 'view',
@@ -1129,7 +1222,7 @@ export const CuratedModuleAbi = [
     ],
     outputs: [
       {
-        name: '',
+        name: 'keys',
         type: 'bytes',
         internalType: 'bytes',
       },
@@ -1247,6 +1340,29 @@ export const CuratedModuleAbi = [
       },
     ],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'increaseKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1389,6 +1505,37 @@ export const CuratedModuleAbi = [
     type: 'function',
     name: 'onExitedAndStuckValidatorsCountsUpdated',
     inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'onNodeOperatorBondCurveUpdated',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'onNodeOperatorWeightChange',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'newWeight',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -1747,6 +1894,13 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
+    name: 'requestFullOperatorWeightsUpdate',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'resetNodeOperatorManagerAddress',
     inputs: [
       {
@@ -1879,12 +2033,7 @@ export const CuratedModuleAbi = [
         internalType: 'uint256[]',
       },
       {
-        name: 'validatorsBalancesGwei',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: 'pendingBalancesGwei',
+        name: 'totalBalancesGwei',
         type: 'uint256[]',
         internalType: 'uint256[]',
       },
@@ -2092,6 +2241,44 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'event',
+    name: 'KeyAddedBalanceChanged',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'newTotal',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'KeyRemovalChargeApplied',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'NodeOperatorAdded',
     inputs: [
       {
@@ -2238,6 +2425,12 @@ export const CuratedModuleAbi = [
         internalType: 'address',
       },
     ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'NodeOperatorWeightsUpToDate',
+    inputs: [],
     anonymous: false,
   },
   {
@@ -2634,7 +2827,7 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidReportData',
+    name: 'InvalidMaxCount',
     inputs: [],
   },
   {
@@ -2664,17 +2857,17 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'error',
+    name: 'NodeOperatorWeightsUpdateInProgress',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'NotAllowedToRecover',
     inputs: [],
   },
   {
     type: 'error',
     name: 'NotEnoughKeys',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'NotImplemented',
     inputs: [],
   },
   {
@@ -2699,16 +2892,6 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'error',
-    name: 'PublicKeyIsSlashed',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'PublicKeyIsWithdrawn',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'ResumedExpected',
     inputs: [],
   },
@@ -2725,6 +2908,11 @@ export const CuratedModuleAbi = [
   {
     type: 'error',
     name: 'SenderIsNotManagerAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'SenderIsNotMetaRegistry',
     inputs: [],
   },
   {
@@ -2780,6 +2968,11 @@ export const CuratedModuleAbi = [
   {
     type: 'error',
     name: 'ZeroManagerAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroMetaRegistryAddress',
     inputs: [],
   },
   {

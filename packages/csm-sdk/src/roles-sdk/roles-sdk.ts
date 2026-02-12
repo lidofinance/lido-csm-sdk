@@ -175,9 +175,9 @@ export class RolesSDK extends CsmSDKModule<{
       call: () =>
         prepCall(this.accountingContract, 'setFeeSplits', [
           nodeOperatorId,
+          feeSplits,
           shares,
           proof,
-          feeSplits,
         ]),
     });
   }

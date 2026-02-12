@@ -680,6 +680,11 @@ export const EjectorAbi = [
   },
   {
     type: 'error',
+    name: 'DuplicateKeyIndex',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'NodeOperatorDoesNotExist',
     inputs: [],
   },
@@ -731,6 +736,11 @@ export const EjectorAbi = [
   {
     type: 'error',
     name: 'ZeroPauseDuration',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroRefundRecipient',
     inputs: [],
   },
   {

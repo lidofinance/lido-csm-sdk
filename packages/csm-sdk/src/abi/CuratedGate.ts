@@ -7,16 +7,6 @@ export const CuratedGateAbi = [
         type: 'address',
         internalType: 'address',
       },
-      {
-        name: 'moduleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'operatorsData',
-        type: 'address',
-        internalType: 'address',
-      },
     ],
     stateMutability: 'nonpayable',
   },
@@ -48,6 +38,19 @@ export const CuratedGateAbi = [
   },
   {
     type: 'function',
+    name: 'META_REGISTRY',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'contract IMetaRegistry',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'MODULE',
     inputs: [],
     outputs: [
@@ -55,32 +58,6 @@ export const CuratedGateAbi = [
         name: '',
         type: 'address',
         internalType: 'contract ICuratedModule',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'MODULE_ID',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'OPERATORS_DATA',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-        internalType: 'contract IOperatorsData',
       },
     ],
     stateMutability: 'view',
@@ -832,17 +809,12 @@ export const CuratedGateAbi = [
   },
   {
     type: 'error',
+    name: 'ZeroMetaRegistryAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroModuleId',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroOperatorsDataAddress',
     inputs: [],
   },
   {

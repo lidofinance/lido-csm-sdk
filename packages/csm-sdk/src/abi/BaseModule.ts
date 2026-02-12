@@ -582,6 +582,30 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'getKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getNodeOperator',
     inputs: [
       {
@@ -975,7 +999,7 @@ export const BaseModuleAbi = [
     ],
     outputs: [
       {
-        name: '',
+        name: 'keys',
         type: 'bytes',
         internalType: 'bytes',
       },
@@ -1093,6 +1117,29 @@ export const BaseModuleAbi = [
       },
     ],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'increaseKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1222,6 +1269,19 @@ export const BaseModuleAbi = [
     type: 'function',
     name: 'onExitedAndStuckValidatorsCountsUpdated',
     inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'onNodeOperatorBondCurveUpdated',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -1897,6 +1957,44 @@ export const BaseModuleAbi = [
   },
   {
     type: 'event',
+    name: 'KeyAddedBalanceChanged',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'newTotal',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'KeyRemovalChargeApplied',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'NodeOperatorAdded',
     inputs: [
       {
@@ -2420,11 +2518,6 @@ export const BaseModuleAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidReportData',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidVetKeysPointer',
     inputs: [],
   },
@@ -2471,6 +2564,11 @@ export const BaseModuleAbi = [
   {
     type: 'error',
     name: 'PausedExpected',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'PubkeyMismatch',
     inputs: [],
   },
   {

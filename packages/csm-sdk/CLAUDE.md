@@ -69,7 +69,7 @@ Key modules include:
 **CM-specific modules**:
 - **curated-gate-sdk** - Single curated gate interface with merkle proofs
 - **curated-gates-collection-sdk** - Multi-gate manager for operator creation
-- **operators-data-sdk** - Module-agnostic operator metadata management
+- **meta-registry-sdk** - Operator metadata management via MetaRegistry contract
 
 ### Common Infrastructure
 
@@ -93,7 +93,7 @@ The SDK provides two separate classes for different module types:
 - **File**: `src/lido-sdk-cm.ts`
 - **Purpose**: Gate-based allowlist operator entry
 - **Module Count**: 17 modules
-- **Unique Features**: curatedGates, operatorsData, CuratedRolesSDK
+- **Unique Features**: curatedGates, metaRegistry, CuratedRolesSDK
 
 #### Module Availability
 
@@ -104,7 +104,7 @@ The SDK provides two separate classes for different module types:
 | Strikes, Stealing | ✅ | ❌ | CSM-only penalties |
 | PermissionlessGate, IcsGate | ✅ | ❌ | CSM-only entry |
 | CuratedGates | ❌ | ✅ | CM-only allowlist |
-| OperatorsData | ❌ | ✅ | CM-only metadata |
+| MetaRegistry | ❌ | ✅ | CM-only metadata |
 | Roles | Standard | Curated | Different implementations |
 
 **Initialization:**
