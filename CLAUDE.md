@@ -78,7 +78,7 @@ Key modules include:
 **CM-specific modules**:
 - **curated-gate-sdk** - Single gate operator creation with merkle proofs
 - **curated-gates-collection-sdk** - Multi-gate management and aggregation
-- **operators-data-sdk** - Module-agnostic operator metadata management
+- **meta-registry-sdk** - Operator metadata management (name, description) via MetaRegistry contract
 
 ### Common Infrastructure
 
@@ -212,7 +212,7 @@ Modules manage their own specialized contracts using `this.core.getContract()`:
 - **StrikesSDK** - Manages `ValidatorStrikesAbi` contract (single-use)
 - **PermissionlessGateSDK** - Manages `PermissionlessGateAbi` contract (single-use)
 - **IcsGateSDK** - Manages `VettedGateAbi` contract (single-use)
-- **OperatorsDataSDK** - Manages `OperatorsDataAbi` contract (single-use)
+- **MetaRegistrySDK** - Manages `MetaRegistryAbi` contract (single-use)
 - **StealingSDK** - Manages `CSModuleAbi` contract (CSM-specific)
 - **DepositQueueSDK** - Manages `CSModuleAbi` contract (CSM-specific)
 - **CuratedRolesSDK** - Manages `CuratedModuleAbi` contract (CM-specific)
@@ -252,7 +252,7 @@ The SDK now supports two distinct module types through separate SDK classes:
 #### LidoSDKCm (Curated Module)
 - **Purpose**: Gate-based allowlist operator entry using merkle proofs
 - **Contract**: `curatedModule` (Mainnet Module ID: 4, Hoodi: 5)
-- **Unique Modules**: curatedGates, operatorsData, CuratedRolesSDK
+- **Unique Modules**: curatedGates, metaRegistry, CuratedRolesSDK
 - **Use When**: Building applications for curated operator management with allowlists
 
 #### Module Composition Differences
@@ -266,7 +266,7 @@ The SDK now supports two distinct module types through separate SDK classes:
 | Roles | RolesSDK | CuratedRolesSDK | CM uses extended variant |
 | Strikes & Penalties | ✅ | ❌ | CSM-only: strikes, stealing |
 | Entry Gates | permissionlessGate, icsGate | curatedGates | Different entry mechanisms |
-| Metadata | ❌ | ✅ | CM-only: operatorsData |
+| Metadata | ❌ | ✅ | CM-only: metaRegistry |
 
 #### Contract Addresses
 

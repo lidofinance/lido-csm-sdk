@@ -770,10 +770,34 @@ export const CSModuleAbi = [
   },
   {
     type: 'function',
+    name: 'getKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getKeysForTopUp',
     inputs: [
       {
-        name: 'keyCount',
+        name: 'maxKeyCount',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1182,7 +1206,7 @@ export const CSModuleAbi = [
     ],
     outputs: [
       {
-        name: '',
+        name: 'keys',
         type: 'bytes',
         internalType: 'bytes',
       },
@@ -1355,6 +1379,29 @@ export const CSModuleAbi = [
   },
   {
     type: 'function',
+    name: 'increaseKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'initialize',
     inputs: [
       {
@@ -1499,6 +1546,19 @@ export const CSModuleAbi = [
     type: 'function',
     name: 'onExitedAndStuckValidatorsCountsUpdated',
     inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'onNodeOperatorBondCurveUpdated',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -2021,11 +2081,6 @@ export const CSModuleAbi = [
       },
       {
         name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: '',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -2247,6 +2302,31 @@ export const CSModuleAbi = [
         type: 'uint64',
         indexed: false,
         internalType: 'uint64',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'KeyAddedBalanceChanged',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'newTotal',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
     ],
     anonymous: false,
@@ -2825,11 +2905,6 @@ export const CSModuleAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidReportData',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidSigningKey',
     inputs: [],
   },
@@ -2910,6 +2985,11 @@ export const CSModuleAbi = [
   },
   {
     type: 'error',
+    name: 'PubkeyMismatch',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'ResumedExpected',
     inputs: [],
   },
@@ -2937,6 +3017,11 @@ export const CSModuleAbi = [
   {
     type: 'error',
     name: 'SameAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'SameTopUpQueueLimit',
     inputs: [],
   },
   {
@@ -3047,6 +3132,11 @@ export const CSModuleAbi = [
   {
     type: 'error',
     name: 'ZeroSenderAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroTopUpQueueLimit',
     inputs: [],
   },
 ] as const;

@@ -25,19 +25,6 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'MANAGE_ALLOCATION_WEIGHTS_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     name: 'MANAGE_GENERAL_PENALTIES_AND_CHARGES_ROLE',
     inputs: [],
     outputs: [
@@ -143,19 +130,6 @@ export const ParametersRegistryAbi = [
   {
     type: 'function',
     name: 'defaultBadPerformancePenalty',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'defaultDepositAllocationWeight',
     inputs: [],
     outputs: [
       {
@@ -348,25 +322,6 @@ export const ParametersRegistryAbi = [
     outputs: [
       {
         name: 'penalty',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getDepositAllocationWeight',
-    inputs: [
-      {
-        name: 'curveId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'weight',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -818,11 +773,6 @@ export const ParametersRegistryAbi = [
             type: 'uint256',
             internalType: 'uint256',
           },
-          {
-            name: 'defaultDepositAllocationWeight',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
         ],
       },
     ],
@@ -920,19 +870,6 @@ export const ParametersRegistryAbi = [
     inputs: [
       {
         name: 'penalty',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'setDefaultDepositAllocationWeight',
-    inputs: [
-      {
-        name: 'weight',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1083,24 +1020,6 @@ export const ParametersRegistryAbi = [
       },
       {
         name: 'threshold',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'setDepositAllocationWeight',
-    inputs: [
-      {
-        name: 'curveId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'weight',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1379,19 +1298,6 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
-    name: 'unsetDepositAllocationWeight',
-    inputs: [
-      {
-        name: 'curveId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'unsetExitDelayFee',
     inputs: [
       {
@@ -1612,19 +1518,6 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'event',
-    name: 'DefaultDepositAllocationWeightSet',
-    inputs: [
-      {
-        name: 'weight',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
     name: 'DefaultExitDelayFeeSet',
     inputs: [
       {
@@ -1772,38 +1665,6 @@ export const ParametersRegistryAbi = [
         name: 'threshold',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'DepositAllocationWeightSet',
-    inputs: [
-      {
-        name: 'curveId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'weight',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'DepositAllocationWeightUnset',
-    inputs: [
-      {
-        name: 'curveId',
-        type: 'uint256',
-        indexed: true,
         internalType: 'uint256',
       },
     ],

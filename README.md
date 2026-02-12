@@ -107,7 +107,7 @@ const operator = await cmSdk.operator.getInfo(69n);
 await cmSdk.curatedGates.createNodeOperator(gateIndex, proof, ...);
 
 // CM-specific: Manage operator metadata
-await cmSdk.operatorsData.set(operatorId, { name, description });
+await cmSdk.metaRegistry.setMetadata({ nodeOperatorId, name, description, account });
 ```
 
 ## SDK Modules
@@ -151,7 +151,7 @@ Only available in `LidoSDKCsm`:
 Only available in `LidoSDKCm`:
 
 - **curatedGates**: Collection of curated gates for allowlist-based operator creation
-- **operatorsData**: Operator metadata management (name, description)
+- **metaRegistry**: Operator metadata management (name, description)
 - **roles**: Curated-specific role management (CuratedRolesSDK)
 
 For detailed documentation, see [packages/csm-sdk/README.md](packages/csm-sdk/README.md).

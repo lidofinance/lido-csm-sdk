@@ -21,7 +21,7 @@ import { KeysSDK } from './keys-sdk/keys-sdk.js';
 import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk.js';
 import { ModuleSDK } from './module-sdk/module-sdk.js';
 import { OperatorSDK } from './operator-sdk/operator-sdk.js';
-import { OperatorsDataSDK } from './operators-data-sdk/operators-data-sdk.js';
+import { MetaRegistrySDK } from './meta-registry-sdk/meta-registry-sdk.js';
 import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
 import { RolesSDK } from './roles-sdk/roles-sdk.js';
@@ -45,7 +45,7 @@ export class LidoSDKCm {
   readonly depositData: DepositDataSDK;
   readonly feesMonitoring: FeesMonitoringSDK;
   readonly curatedGates: CuratedGatesCollectionSDK;
-  readonly operatorsData: OperatorsDataSDK;
+  readonly metaRegistry: MetaRegistrySDK;
   readonly discovery: DiscoverySDK;
   readonly stealing: StealingSDK;
 
@@ -71,11 +71,8 @@ export class LidoSDKCm {
     this.events = new EventsSDK(commonProps, 'events');
     this.depositData = new DepositDataSDK(commonProps);
     this.feesMonitoring = new FeesMonitoringSDK(commonProps);
-    this.curatedGates = new CuratedGatesCollectionSDK(
-      commonProps,
-      'curatedGates',
-    );
-    this.operatorsData = new OperatorsDataSDK(commonProps, 'operatorsData');
+    this.curatedGates = new CuratedGatesCollectionSDK(commonProps);
+    this.metaRegistry = new MetaRegistrySDK(commonProps);
     this.stealing = new StealingSDK(commonProps);
     this.discovery = new DiscoverySDK(commonProps, 'discovery');
   }

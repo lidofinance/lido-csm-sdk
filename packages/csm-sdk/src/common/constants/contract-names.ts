@@ -28,7 +28,7 @@ export enum CONTRACT_NAMES {
 
   // CM-specific
   curatedModule = 'curatedModule',
-  operatorsData = 'operatorsData',
+  metaRegistry = 'metaRegistry',
   curatedGate1 = 'curatedGate1',
   curatedGate2 = 'curatedGate2',
   curatedGate3 = 'curatedGate3',

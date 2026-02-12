@@ -71,19 +71,6 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'INFINITE_BOND_LOCK_UNTIL',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint128',
-        internalType: 'uint128',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     name: 'LIDO',
     inputs: [],
     outputs: [
@@ -297,13 +284,7 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
     ],
-    outputs: [
-      {
-        name: 'fullyCharged',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
+    outputs: [],
     stateMutability: 'nonpayable',
   },
   {
@@ -686,6 +667,25 @@ export const AccountingAbi = [
   {
     type: 'function',
     name: 'getBondCurveId',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getBondDebt',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -1565,16 +1565,6 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'cumulativeFeeShares',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'rewardsProof',
-        type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
-      {
         name: 'feeSplits',
         type: 'tuple[]',
         internalType: 'struct IAccounting.FeeSplit[]',
@@ -1590,6 +1580,16 @@ export const AccountingAbi = [
             internalType: 'uint256',
           },
         ],
+      },
+      {
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
       },
     ],
     outputs: [],
@@ -1878,6 +1878,44 @@ export const AccountingAbi = [
             internalType: 'uint256',
           },
         ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'BondDebtCovered',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'BondDebtIncreased',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
     ],
     anonymous: false,

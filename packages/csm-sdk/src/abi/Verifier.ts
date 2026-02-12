@@ -1018,6 +1018,29 @@ export const VerifierAbi = [
   },
   {
     type: 'function',
+    name: 'processIncomingConsolidation',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'addedBalanceWei',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'processSlashedProof',
     inputs: [
       {

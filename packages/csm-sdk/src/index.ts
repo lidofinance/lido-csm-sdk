@@ -13,7 +13,7 @@ export * from './bond-sdk/index.js';
 export * from './roles-sdk/index.js';
 export * from './curated-gate-sdk/index.js';
 export * from './curated-gates-collection-sdk/index.js';
-export * from './operators-data-sdk/index.js';
+export * from './meta-registry-sdk/index.js';
 export * from './operator-sdk/index.js';
 export * from './rewards-sdk/index.js';
 export * from './events-sdk/index.js';
