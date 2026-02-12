@@ -1,6 +1,9 @@
 name: Publish Beta version to registry
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'develop'
 
 permissions:
   contents: write # to be able to publish a GitHub release

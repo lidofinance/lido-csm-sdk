@@ -1,0 +1,40 @@
+🚀 Testing CSM SDK Methods
+==========================
+
+🔧 Initializing SDK...
+LIDO SDK undefined  
+✅ SDK initialized successfully
+
+📊 Calling SDK methods...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Results:
+{
+  "versions": {
+    "csm": {
+      "accounting": "3",
+      "feeDistributor": "3",
+      "parametersRegistry": "1",
+      "validatorStrikes": "1",
+      "csModule": "3",
+      "vettedGate": "1"
+    },
+    "cm": {
+      "accounting": "3",
+      "feeDistributor": "3",
+      "parametersRegistry": "1",
+      "curatedModule": "1",
+      "curatedGate1": "1"
+    }
+  },
+  "isSupported": {
+    "csm": true,
+    "cm": true
+  }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎉 Test completed successfully!
+
+🏁 All done!
