@@ -92,7 +92,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       urls.map((url) => fetchJson<ClValidatorsResponse>(url)),
     );
 
-    return results.flatMap(({ data }) => data.map(prepareKey));
+    return results.flatMap(({ data }) => data?.map(prepareKey));
   }
 
   @Logger('API:')
