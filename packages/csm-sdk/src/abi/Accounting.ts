@@ -32,6 +32,19 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'BURNER',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'contract IBurner',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'DEFAULT_ADMIN_ROLE',
     inputs: [],
     outputs: [
@@ -111,6 +124,19 @@ export const AccountingAbi = [
   {
     type: 'function',
     name: 'MAX_BOND_LOCK_PERIOD',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'MAX_FEE_SPLITS',
     inputs: [],
     outputs: [
       {
@@ -907,6 +933,47 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'getFeeSplitTransfers',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'claimableShares',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'transfers',
+        type: 'tuple[]',
+        internalType: 'struct IFeeSplits.SplitTransfer[]',
+        components: [
+          {
+            name: 'recipient',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
+            name: 'shares',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+      {
+        name: 'sharesToSplit',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getFeeSplits',
     inputs: [
       {
@@ -919,7 +986,7 @@ export const AccountingAbi = [
       {
         name: '',
         type: 'tuple[]',
-        internalType: 'struct IAccounting.FeeSplit[]',
+        internalType: 'struct IFeeSplits.FeeSplit[]',
         components: [
           {
             name: 'recipient',
@@ -1228,6 +1295,25 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'hasSplits',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'initialize',
     inputs: [
       {
@@ -1445,13 +1531,6 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'renewBurnerAllowance',
-    inputs: [],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'renounceRole',
     inputs: [
       {
@@ -1557,46 +1636,6 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'setFeeSplits',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'feeSplits',
-        type: 'tuple[]',
-        internalType: 'struct IAccounting.FeeSplit[]',
-        components: [
-          {
-            name: 'recipient',
-            type: 'address',
-            internalType: 'address',
-          },
-          {
-            name: 'share',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
-      },
-      {
-        name: 'cumulativeFeeShares',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'rewardsProof',
-        type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'settleLockedBondETH',
     inputs: [
       {
@@ -1665,6 +1704,46 @@ export const AccountingAbi = [
             internalType: 'uint256',
           },
         ],
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'updateFeeSplits',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'feeSplits',
+        type: 'tuple[]',
+        internalType: 'struct IFeeSplits.FeeSplit[]',
+        components: [
+          {
+            name: 'recipient',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
+            name: 'share',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+      {
+        name: 'cumulativeFeeShares',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'rewardsProof',
+        type: 'bytes32[]',
+        internalType: 'bytes32[]',
       },
     ],
     outputs: [],
@@ -2199,6 +2278,37 @@ export const AccountingAbi = [
   },
   {
     type: 'event',
+    name: 'FeeSplitsSet',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'feeSplits',
+        type: 'tuple[]',
+        indexed: false,
+        internalType: 'struct IFeeSplits.FeeSplit[]',
+        components: [
+          {
+            name: 'recipient',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
+            name: 'share',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'Initialized',
     inputs: [
       {
@@ -2216,6 +2326,25 @@ export const AccountingAbi = [
     inputs: [
       {
         name: 'duration',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'PendingSharesToSplitChanged',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'pendingSharesToSplit',
         type: 'uint256',
         indexed: false,
         internalType: 'uint256',
@@ -2356,6 +2485,11 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
+    name: 'FeeSplitsChangeWithUndistributedRewards',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'InvalidBondCurveId',
     inputs: [],
   },
@@ -2426,6 +2560,11 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
+    name: 'PendingSharesExist',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'ResumedExpected',
     inputs: [],
   },
@@ -2452,12 +2591,27 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
+    name: 'SameBondCurveId',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'SenderIsNotEligible',
     inputs: [],
   },
   {
     type: 'error',
     name: 'SenderIsNotModule',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'TooManySplitShares',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'TooManySplits',
     inputs: [],
   },
   {
@@ -2488,6 +2642,16 @@ export const AccountingAbi = [
   {
     type: 'error',
     name: 'ZeroPauseDuration',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroSplitRecipient',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroSplitShare',
     inputs: [],
   },
 ] as const;

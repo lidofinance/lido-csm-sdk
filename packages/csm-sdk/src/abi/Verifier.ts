@@ -1578,6 +1578,11 @@ export const VerifierAbi = [
   },
   {
     type: 'error',
+    name: 'NotImplemented',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'PartialWithdrawal',
     inputs: [],
   },
