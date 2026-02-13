@@ -1547,11 +1547,11 @@ export const CSModuleAbi = [
     name: 'onExitedAndStuckValidatorsCountsUpdated',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
-    name: 'onNodeOperatorBondCurveUpdated',
+    name: 'onNodeOperatorBondCurveChange',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -1626,7 +1626,7 @@ export const CSModuleAbi = [
     name: 'onWithdrawalCredentialsChanged',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -2032,7 +2032,7 @@ export const CSModuleAbi = [
       },
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -2071,22 +2071,17 @@ export const CSModuleAbi = [
     inputs: [
       {
         name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
         name: '',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
+        type: 'bytes',
+        internalType: 'bytes',
       },
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',

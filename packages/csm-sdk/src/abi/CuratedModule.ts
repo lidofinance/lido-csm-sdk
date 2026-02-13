@@ -499,25 +499,6 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
-    name: 'batchUpdateNodeOperatorWeights',
-    inputs: [
-      {
-        name: 'maxCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'operatorsLeft',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'cancelGeneralDelayedPenalty',
     inputs: [
       {
@@ -653,7 +634,7 @@ export const CuratedModuleAbi = [
     ],
     outputs: [
       {
-        name: '',
+        name: 'nodeOperatorId',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1069,19 +1050,6 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
-    name: 'getNodeOperatorWeightsToUpdateCount',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     name: 'getNodeOperatorsCount',
     inputs: [],
     outputs: [
@@ -1474,6 +1442,24 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
+    name: 'notifyNodeOperatorWeightChange',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'newWeight',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'obtainDepositData',
     inputs: [
       {
@@ -1506,32 +1492,14 @@ export const CuratedModuleAbi = [
     name: 'onExitedAndStuckValidatorsCountsUpdated',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
-    name: 'onNodeOperatorBondCurveUpdated',
+    name: 'onNodeOperatorBondCurveChange',
     inputs: [
       {
         name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'onNodeOperatorWeightChange',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'newWeight',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1603,7 +1571,7 @@ export const CuratedModuleAbi = [
     name: 'onWithdrawalCredentialsChanged',
     inputs: [],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1894,13 +1862,6 @@ export const CuratedModuleAbi = [
   },
   {
     type: 'function',
-    name: 'requestFullOperatorWeightsUpdate',
-    inputs: [],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'resetNodeOperatorManagerAddress',
     inputs: [
       {
@@ -1990,7 +1951,7 @@ export const CuratedModuleAbi = [
       },
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -2029,18 +1990,13 @@ export const CuratedModuleAbi = [
     inputs: [
       {
         name: 'operatorIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
+        type: 'bytes',
+        internalType: 'bytes',
       },
       {
         name: 'totalBalancesGwei',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
+        type: 'bytes',
+        internalType: 'bytes',
       },
     ],
     outputs: [],
@@ -2828,6 +2784,11 @@ export const CuratedModuleAbi = [
   {
     type: 'error',
     name: 'InvalidMaxCount',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'InvalidSigningKey',
     inputs: [],
   },
   {

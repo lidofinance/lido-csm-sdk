@@ -173,7 +173,7 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'setFeeSplits', [
+        prepCall(this.accountingContract, 'updateFeeSplits', [
           nodeOperatorId,
           feeSplits,
           shares,
