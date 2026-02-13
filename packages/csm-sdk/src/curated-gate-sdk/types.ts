@@ -6,13 +6,14 @@ import { CommonTransactionProps } from '../tx-sdk/types.js';
 // TODO: common types
 export type { AddressesTreeLeaf, AddressProof } from '../ics-gate-sdk/types.js';
 
-export type CreateNodeOperatorProps = CommonTransactionProps<NodeOperatorShortInfo> & {
-  name: string;
-  description: string;
-  managerAddress: Address;
-  rewardAddress: Address;
-  proof: Proof;
-};
+export type CreateNodeOperatorProps =
+  CommonTransactionProps<NodeOperatorShortInfo> & {
+    name: string;
+    description: string;
+    managerAddress: Address;
+    rewardAddress: Address;
+    proof: Proof;
+  };
 
 export type GateEligibility = {
   isPaused: boolean;

@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["plugin:jsx-a11y/recommended", "@lidofinance", "prettier"],
+  "extends": ["plugin:jsx-a11y/recommended", "@lidofinance", "plugin:prettier/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module"

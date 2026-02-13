@@ -199,7 +199,11 @@ export const verifyDepositSignature = async (
     const amount = BigInt(data.amount);
 
     // Validate input sizes
-    if (pubkey.length !== 48 || signature.length !== 96 || withdrawalCredentials.length !== 32) {
+    if (
+      pubkey.length !== 48 ||
+      signature.length !== 96 ||
+      withdrawalCredentials.length !== 32
+    ) {
       return false;
     }
 
@@ -214,7 +218,10 @@ export const verifyDepositSignature = async (
     const messageRoot = computeDepositMessageRoot(depositMessage);
 
     // Verify deposit_message_root matches
-    if (toHex(messageRoot).toLowerCase() !== data.deposit_message_root.toLowerCase()) {
+    if (
+      toHex(messageRoot).toLowerCase() !==
+      data.deposit_message_root.toLowerCase()
+    ) {
       return false;
     }
 

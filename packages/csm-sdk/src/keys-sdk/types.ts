@@ -43,4 +43,3 @@ export type EjectKeysByArrayProps = CommonTransactionProps & {
   keyIndices: bigint[];
   refundRecipient?: Address;
 };
-

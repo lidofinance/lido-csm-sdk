@@ -22,4 +22,3 @@ export const parseSpendingProps = <T extends SpendOptions>(
 
   return { ...props, amount, deadline };
 };
-
