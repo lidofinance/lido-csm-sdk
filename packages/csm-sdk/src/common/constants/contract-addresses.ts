@@ -95,7 +95,9 @@ export const CSM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<bigint> = {
 };
 
 // contracts should support getInitializedVersion method
-export const SUPPORTED_CSM_VERSIONS: Partial<Record<CONTRACT_NAMES, readonly [bigint, bigint]>> = {
+export const SUPPORTED_CSM_VERSIONS: Partial<
+  Record<CONTRACT_NAMES, readonly [bigint, bigint]>
+> = {
   [CONTRACT_NAMES.accounting]: [3n, 3n],
   [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
   [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],

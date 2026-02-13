@@ -40,7 +40,9 @@ export class ModuleSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   public async getVersions(): Promise<Record<CONTRACT_NAMES, bigint>> {
-    const contractNames = Object.keys(this.core.supportedVersions) as CONTRACT_NAMES[];
+    const contractNames = Object.keys(
+      this.core.supportedVersions,
+    ) as CONTRACT_NAMES[];
 
     const versionPromises = contractNames.map((contractName) =>
       this.core

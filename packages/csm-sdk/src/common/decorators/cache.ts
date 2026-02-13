@@ -26,12 +26,13 @@ const getDecoratorArgsString = function <This>(this: This, args?: string[]) {
 };
 
 export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
-  return function CacheDecorator<
-    This extends CsmSDKCacheable,
-    Value,
-  >(
-    target: (This extends object ? This[keyof This] : never) | ((this: This, ...args: any[]) => Value),
-    context: ClassMethodDecoratorContext<This, any> | ClassGetterDecoratorContext<This, Value>,
+  return function CacheDecorator<This extends CsmSDKCacheable, Value>(
+    target:
+      | (This extends object ? This[keyof This] : never)
+      | ((this: This, ...args: any[]) => Value),
+    context:
+      | ClassMethodDecoratorContext<This, any>
+      | ClassGetterDecoratorContext<This, Value>,
   ) {
     const methodName = String(context.name);
 
@@ -45,7 +46,11 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
           const cachedEntry = cache.get(cacheKey);
           const currentTime = Date.now();
 
-          if (cachedEntry && (cachedEntry.isPromise || currentTime - cachedEntry.timestamp <= timeMs)) {
+          if (
+            cachedEntry &&
+            (cachedEntry.isPromise ||
+              currentTime - cachedEntry.timestamp <= timeMs)
+          ) {
             callConsoleMessage.call(
               this,
               'Cache:',
@@ -69,10 +74,18 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         );
         const result = (target as () => Value).call(this);
         if (result instanceof Promise) {
-          cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: true });
+          cache.set(cacheKey, {
+            data: result,
+            timestamp: Date.now(),
+            isPromise: true,
+          });
           return result
             .then((resolvedResult) => {
-              cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now(), isPromise: false });
+              cache.set(cacheKey, {
+                data: resolvedResult,
+                timestamp: Date.now(),
+                isPromise: false,
+              });
               return resolvedResult;
             })
             .catch((error) => {
@@ -80,7 +93,11 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
               throw error;
             }) as Value;
         } else {
-          cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: false });
+          cache.set(cacheKey, {
+            data: result,
+            timestamp: Date.now(),
+            isPromise: false,
+          });
         }
 
         return result;
@@ -99,7 +116,11 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         const cachedEntry = cache.get(cacheKey);
         const currentTime = Date.now();
 
-        if (cachedEntry && (cachedEntry.isPromise || currentTime - cachedEntry.timestamp <= timeMs)) {
+        if (
+          cachedEntry &&
+          (cachedEntry.isPromise ||
+            currentTime - cachedEntry.timestamp <= timeMs)
+        ) {
           callConsoleMessage.call(
             this,
             'Cache:',
@@ -123,10 +144,18 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
       );
       const result = (target as (...args: any[]) => any).call(this, ...args);
       if (result instanceof Promise) {
-        cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: true });
+        cache.set(cacheKey, {
+          data: result,
+          timestamp: Date.now(),
+          isPromise: true,
+        });
         return result
           .then((resolvedResult) => {
-            cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now(), isPromise: false });
+            cache.set(cacheKey, {
+              data: resolvedResult,
+              timestamp: Date.now(),
+              isPromise: false,
+            });
             return resolvedResult;
           })
           .catch((error) => {
@@ -134,7 +163,11 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
             throw error;
           });
       } else {
-        cache.set(cacheKey, { data: result, timestamp: Date.now(), isPromise: false });
+        cache.set(cacheKey, {
+          data: result,
+          timestamp: Date.now(),
+          isPromise: false,
+        });
       }
 
       return result;

@@ -4,7 +4,7 @@ import {
   type Abi,
   type Address,
   type ContractFunctionArgs,
-  type ContractFunctionName
+  type ContractFunctionName,
 } from 'viem';
 import { CallResult } from './types.js';
 
