@@ -100,6 +100,12 @@ export class OperatorSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  public async getBondDebt(id: NodeOperatorId): Promise<bigint> {
+    return this.accountingContract.read.getBondDebt([id]);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getPendingSharesToSplit(id: NodeOperatorId): Promise<bigint> {
     return this.accountingContract.read.getPendingSharesToSplit([id]); // steth shares (wsteth)
   }
