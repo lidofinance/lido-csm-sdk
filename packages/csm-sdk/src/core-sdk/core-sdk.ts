@@ -3,7 +3,7 @@ import {
   invariant,
   LidoSDKCore,
 } from '@lidofinance/lido-ethereum-sdk';
-import { Abi, Address, Chain, getContract, WalletClient } from 'viem';
+import { Abi, Address, Chain, getContract, Hex, WalletClient } from 'viem';
 import {
   AccountingAbi,
   BaseModuleAbi,
@@ -50,6 +50,7 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly maxEventBlocksRange?: number;
   readonly skipHistoricalCalls: boolean;
   readonly moduleName: ModuleName;
+  readonly wcPrefix: Hex;
 
   constructor(props: CoreProps) {
     super();
@@ -63,6 +64,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.maxEventBlocksRange = props.maxEventBlocksRange;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
     this.moduleName = props.moduleName ?? CONTRACT_NAMES.csModule;
+    this.wcPrefix = props.wcPrefix ?? '0x01';
   }
 
   public get chainId(): SUPPORTED_CHAINS {
@@ -232,4 +234,3 @@ export class CoreSDK extends CsmSDKCacheable {
     ];
   }
 }
-

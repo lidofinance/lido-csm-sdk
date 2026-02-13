@@ -6,10 +6,11 @@ import {
   compareLowercase,
   isHexadecimalString,
   toHexString,
+  trimHexPrefix,
 } from '../common/utils/index.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { PUBKEY_LENGTH, WC_PREFIX_BY_MODULE } from './constants.js';
+import { PUBKEY_LENGTH } from './constants.js';
 import { parseDepositData, removeKey } from './parser.js';
 import {
   DepositData,
@@ -25,7 +26,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   keysCache?: KeysCacheSDK;
 }> {
   private get wcPrefix(): string {
-    return WC_PREFIX_BY_MODULE[this.core.moduleName];
+    return trimHexPrefix(this.core.wcPrefix).padEnd(24, '0');
   }
 
   /**
