@@ -31,6 +31,7 @@ export const prepareKey = (key: ClKey): ClPreparedKey => ({
   slashed: key.validator.slashed,
   status: StatusMap[key.status],
   activationEpoch: BigInt(key.validator.activation_epoch),
+  effectiveBalance: BigInt(key.validator.effective_balance),
 });
 
 const StatusMap: Record<CLStatus, KEY_STATUS> = {

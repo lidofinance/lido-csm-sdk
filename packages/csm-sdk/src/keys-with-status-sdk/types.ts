@@ -9,6 +9,7 @@ export type KeyWithStatus = {
   validatorIndex?: `${number}`;
   statuses: KEY_STATUS[];
   strikes?: KeyStrikes;
+  effectiveBalance?: bigint;
 };
 
 type NetworkKey = {
@@ -64,6 +65,7 @@ export type ClPreparedKey = {
   status: KEY_STATUS;
   slashed: boolean;
   activationEpoch: bigint;
+  effectiveBalance: bigint;
 };
 
 export type StatusContext = {
@@ -79,4 +81,3 @@ export type StatusContext = {
   hasCLStatuses: boolean;
   hasStrikes: boolean;
 };
-

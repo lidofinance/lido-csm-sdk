@@ -157,6 +157,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         index,
         statuses,
         validatorIndex: prefilled?.validatorIndex,
+        effectiveBalance: prefilled?.effectiveBalance,
         strikes: keyStrikes?.strikes,
       };
     });
