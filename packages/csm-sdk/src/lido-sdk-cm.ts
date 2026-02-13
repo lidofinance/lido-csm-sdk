@@ -87,6 +87,7 @@ const prepareCoreProps = (props: SdkProps): CoreProps => {
       ...props.overridedAddresses,
     },
     moduleName: CONTRACT_NAMES.curatedModule,
+    wcPrefix: '0x02',
     moduleId: CM_MODULE_IDS[chainId],
     deploymentBlockNumber: CM_DEPLOYMENT_BLOCK_NUMBERS[chainId],
   };

@@ -1,5 +1,11 @@
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
-import type { Abi, Address, GetContractReturnType, WalletClient } from 'viem';
+import type {
+  Abi,
+  Address,
+  GetContractReturnType,
+  Hex,
+  WalletClient,
+} from 'viem';
 import { CONTRACT_NAMES } from '../common/index.js';
 
 export type ContractAddresses = {
@@ -19,6 +25,7 @@ export type CoreProps = {
   keysApiUrl?: string;
   feesMonitoringApiUrl?: string;
   skipHistoricalCalls?: boolean;
+  wcPrefix?: Hex;
 };
 
 export type SdkProps = Omit<
