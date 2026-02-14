@@ -22,11 +22,7 @@ import {
 } from '../common/utils/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { FrameSDK } from '../frame-sdk/frame-sdk.js';
-import {
-  epochToTimestamp,
-  ESTIMATED_BLOCK_GAP,
-  slotToApproximateBlockNumber,
-} from '../frame-sdk/utils.js';
+import { epochToTimestamp } from '../frame-sdk/utils.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { ParametersSDK } from '../parameters-sdk/index.js';
@@ -178,23 +174,30 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public async getLastReportTransactionHash() {
-    const [config, lastRefSlot, currentBlock] = await Promise.all([
+    const report = await this.getLastReport();
+    if (!report) return undefined;
+
+    const logs = await this.bus.events.getRewardsReports({
+      fromBlock: report.blockstamp.block_number,
+    });
+
+    return logs.at(-1)?.transactionHash;
+  }
+
+  @Logger('Utils:')
+  public async getLastReportTimestamps() {
+    const [report, config] = await Promise.all([
+      this.getLastReport(),
       this.bus.frame.getConfig(),
-      this.bus.frame.getLastProcessedRefSlot(),
-      this.bus.frame.getLatestBlock(),
     ]);
+    if (!report) return undefined;
 
-    const estimatedBlock = slotToApproximateBlockNumber(
-      lastRefSlot,
-      config,
-      currentBlock,
-    );
-    const fromBlock = estimatedBlock - ESTIMATED_BLOCK_GAP;
+    const [startEpoch, endEpoch] = report.frame;
 
-    const logs = await this.bus.events.getRewardsReports({ fromBlock });
-    const lastLog = logs.at(-1);
-
-    return lastLog?.transactionHash;
+    return {
+      start: epochToTimestamp(startEpoch, config),
+      end: epochToTimestamp(endEpoch, config),
+    };
   }
 
   public async getAllReports() {
