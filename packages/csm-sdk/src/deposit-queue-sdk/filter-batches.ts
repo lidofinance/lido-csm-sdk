@@ -12,10 +12,10 @@ export const filterEmptyBatches = (
     const filteredBatches: DepositQueueBatch[] = [];
 
     for (const batch of queueBatches) {
-      const { nodeOperatorId } = batch;
+      const { nodeOperatorId, keysCount } = batch;
       const operatorRemainingKeys = remainingKeys.get(nodeOperatorId) ?? 0;
 
-      const actualKeysCount = Math.min(batch.keysCount, operatorRemainingKeys);
+      const actualKeysCount = Math.min(keysCount, operatorRemainingKeys);
 
       if (actualKeysCount <= 0) {
         continue;

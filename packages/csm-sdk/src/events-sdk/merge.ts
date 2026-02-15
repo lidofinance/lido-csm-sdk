@@ -22,7 +22,7 @@ export const mergeRoles = (
   id: NodeOperatorId,
   patch: RoleModifier,
 ) => {
-  const list = Array.from(_list);
+  const list = [..._list];
   const index = list.findIndex((item) => item.id === id);
   const item = applyPatch(list[index] ?? { id, roles: [] }, patch);
   list.splice(index >= 0 ? index : list.length, 1, item);

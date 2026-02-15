@@ -111,13 +111,12 @@ export class ModuleSDK extends CsmSDKModule {
   ): Promise<ShareLimitStatus> {
     const info = await this.getShareLimit();
 
-    return info.activeLeft <= 0
-      ? ShareLimitStatus.REACHED
-      : info.activeLeft - info.queue < 0
-        ? ShareLimitStatus.EXHAUSTED
-        : info.activeLeft - info.queue < shareLimitThreshold
-          ? ShareLimitStatus.APPROACHING
-          : ShareLimitStatus.FAR;
+    const margin = info.activeLeft - info.queue;
+
+    if (info.activeLeft <= 0) return ShareLimitStatus.REACHED;
+    if (margin < 0) return ShareLimitStatus.EXHAUSTED;
+    if (margin < shareLimitThreshold) return ShareLimitStatus.APPROACHING;
+    return ShareLimitStatus.FAR;
   }
 
   @Logger('API:')

@@ -128,7 +128,7 @@ export class TxSDK extends CsmSDKModule {
       // passing these stub params prevent unnecessary possibly errorish RPC calls
       overrides = {
         ...overrides,
-        gas: 21000n,
+        gas: 21_000n,
         maxFeePerGas: 1n,
         maxPriorityFeePerGas: 1n,
         nonce: 1,
@@ -276,7 +276,7 @@ export class TxSDK extends CsmSDKModule {
     }
 
     // extract last receipt if there was no atomic batch
-    const receipt = callStatus.receipts?.[callStatus.receipts.length - 1] as
+    const receipt = callStatus.receipts?.at(-1) as
       | WalletCallReceipt<bigint, 'success'>
       | undefined;
     const txHash = receipt?.transactionHash;

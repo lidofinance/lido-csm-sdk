@@ -6,7 +6,7 @@ import { MAX_JSON_LENGTH } from './constants.js';
  * Normalizes hex values in JSON by removing '0x' prefixes
  */
 const normalizeHexInJson = (text: string): string => {
-  return text.replace(/"0x/gm, '"');
+  return text.replaceAll(/"0x/gm, '"');
 };
 
 /**
@@ -39,7 +39,7 @@ const parseAndValidateJson = (
   let parsed: any;
   try {
     parsed = JSON.parse(data);
-  } catch (error) {
+  } catch {
     return {
       depositData: [],
       error: 'Invalid JSON format',
@@ -162,7 +162,7 @@ export const removeKey = (
   }
 
   // Remove the item
-  const updatedData = Array.from(depositData);
+  const updatedData = [...depositData];
   updatedData.splice(index, 1);
 
   // Return result

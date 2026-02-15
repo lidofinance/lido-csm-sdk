@@ -15,7 +15,7 @@ export const iteratePages = async <T>(
 
   while (offset !== undefined) {
     const items = await fetchPage({ offset, limit });
-    allResults.push(...Array.from(items));
+    allResults.push(...items);
 
     offset = getNextOffset?.({ items: items as T[], offset, limit });
   }

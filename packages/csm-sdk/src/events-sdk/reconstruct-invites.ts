@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { ROLES } from '../common/index.js';
@@ -106,7 +105,7 @@ const mergeInvites = (
   invite: NodeOperatorInvite,
   add = true,
 ) => {
-  const list = Array.from(_list);
+  const list = [..._list];
   const index = list.findIndex(
     (item) => item.id === invite.id && item.role === invite.role,
   );

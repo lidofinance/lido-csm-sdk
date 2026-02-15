@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-identical-functions */
 import { Address, Hex } from 'viem';
 import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';

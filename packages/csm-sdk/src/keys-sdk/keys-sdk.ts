@@ -108,9 +108,9 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   }
 
   public async addKeys(props: WithToken<AddKeysProps>) {
-    const { token } = props;
+    const { token, amount } = props;
 
-    if (props.amount === 0n) {
+    if (amount === 0n) {
       return this.addKeysStETH(props);
     }
 

@@ -22,21 +22,19 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
         try {
           const result = (target as () => Value).call(this);
 
-          if (result instanceof Promise) {
-            return result.catch((error) => {
-              callConsoleMessage.call(
-                this,
-                headMessage,
-                `Error in getter '${methodName}'.`,
-                'Error:',
-              );
+          return result instanceof Promise
+            ? (result.catch((error) => {
+                callConsoleMessage.call(
+                  this,
+                  headMessage,
+                  `Error in getter '${methodName}'.`,
+                  'Error:',
+                );
 
-              const txError = SDKError.from(error);
-              throw txError;
-            }) as Value;
-          } else {
-            return result;
-          }
+                const txError = SDKError.from(error);
+                throw txError;
+              }) as Value)
+            : result;
         } catch (error) {
           callConsoleMessage.call(
             this,
@@ -59,26 +57,25 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
       try {
         const result = (target as (...args: any[]) => any).call(this, ...args);
 
-        if (result instanceof Promise) {
-          return result.catch((error) => {
-            callConsoleMessage.call(
-              this,
-              headMessage,
-              `Error in method '${methodName}'.`,
-              'Error:',
-            );
+        return result instanceof Promise
+          ? (result.catch((error) => {
+              callConsoleMessage.call(
+                this,
+                headMessage,
+                `Error in method '${methodName}'.`,
+                'Error:',
+              );
 
-            const txError = SDKError.from(error);
-            void callback?.({
-              stage: TransactionCallbackStage.ERROR,
-              payload: { error: txError },
-            });
+              const txError = SDKError.from(error);
+              // eslint-disable-next-line promise/no-callback-in-promise
+              void callback?.({
+                stage: TransactionCallbackStage.ERROR,
+                payload: { error: txError },
+              });
 
-            throw txError;
-          }) as any;
-        } else {
-          return result;
-        }
+              throw txError;
+            }) as any)
+          : result;
       } catch (error) {
         callConsoleMessage.call(
           this,

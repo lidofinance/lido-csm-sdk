@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
 import { CSModuleAbi } from '../abi/CSModule.js';
 import { ROLES } from '../common/index.js';

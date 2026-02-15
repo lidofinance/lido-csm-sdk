@@ -14,7 +14,8 @@ export const parseSpendingProps = <T extends SpendOptions>(
   props: T,
 ): T & { amount: bigint; deadline: bigint } => {
   let { amount } = props;
-  if (props.token === TOKENS.steth && amount > 0) {
+  const { token } = props;
+  if (token === TOKENS.steth && amount > 0) {
     amount += STETH_ROUNDING_THRESHOLD;
   }
 
