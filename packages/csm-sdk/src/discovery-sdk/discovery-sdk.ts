@@ -10,7 +10,7 @@ import {
 import { byTotalCount, iteratePages, onePage } from './iterate-pages.js';
 import { packRoles } from '../events-sdk/merge.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { SearchMode, Pagination } from './types.js';
+import { SearchMode, Pagination, NodeOperatorDiscoveryInfo } from './types.js';
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
@@ -26,17 +26,22 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
    *
    * @param fetchPage - Function to fetch a page of operators
    * @param pagination - Optional pagination parameters (offset, limit)
+   * @param defaultLimit - Optional default limit when pagination is not provided (defaults to 1000)
    * @returns Array of all fetched operators
    */
   private async paginateOperators<T>(
     fetchPage: (p: Pagination) => Promise<readonly T[] | T[]>,
     pagination?: Pagination,
+    defaultLimit = 1000n,
   ): Promise<T[]> {
+    const limit = pagination?.limit ?? defaultLimit;
+    const offset = pagination?.offset ?? 0n;
+
     const getNextOffset = pagination
       ? onePage
       : byTotalCount(await this.bus.module.getOperatorsCount());
 
-    return iteratePages(fetchPage, pagination, getNextOffset);
+    return iteratePages(fetchPage, { offset, limit }, getNextOffset);
   }
 
   @Logger('Views:')
@@ -112,5 +117,22 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
         .filter((item) => isAddressEqual(item.address, address))
         .map((item) => ({ id: operator.id, role: item.role })),
     );
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getAllNodeOperators(
+    pagination?: Pagination,
+  ): Promise<NodeOperatorDiscoveryInfo[]> {
+    return this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getAllNodeOperators([
+          BigInt(this.core.moduleId),
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+      500n, // Custom default limit for bulk fetching
+    ) as Promise<NodeOperatorDiscoveryInfo[]>;
   }
 }
