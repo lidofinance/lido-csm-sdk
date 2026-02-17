@@ -249,8 +249,8 @@
     "clean": "rimraf dist"
   },
   "peerDependencies": {
-    "@lidofinance/lido-ethereum-sdk": "^4.4.0",
-    "viem": "^2.26.0"
+    "@lidofinance/lido-ethereum-sdk": "^4.7.0",
+    "viem": "^2.46.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
