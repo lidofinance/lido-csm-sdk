@@ -27,17 +27,13 @@ import {
   CONTRACT_NAMES,
   EXTERNAL_LINKS,
   LINK_TYPE,
+  MODULE_CONTRACT,
+  MODULE_NAME,
   SUPPORTED_CHAINS,
-  SUPPORTED_CM_VERSIONS,
-  SUPPORTED_CSM_VERSIONS,
+  SUPPORTED_VERSIONS,
 } from '../common/index.js';
 import { isValidIpfsCid } from '../common/utils/index.js';
-import {
-  BindedContract,
-  ContractAddresses,
-  CoreProps,
-  ModuleName,
-} from './types.js';
+import { BindedContract, ContractAddresses, CoreProps } from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
@@ -49,7 +45,7 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly feesMonitoringApiUrl?: string;
   readonly maxEventBlocksRange?: number;
   readonly skipHistoricalCalls: boolean;
-  readonly moduleName: ModuleName;
+  readonly moduleName: MODULE_NAME;
   readonly wcPrefix: Hex;
 
   constructor(props: CoreProps) {
@@ -63,7 +59,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
-    this.moduleName = props.moduleName ?? CONTRACT_NAMES.csModule;
+    this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
     this.wcPrefix = props.wcPrefix ?? '0x01';
   }
 
@@ -133,7 +129,8 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
-    return this.getContractWithAbi(this.moduleName, BaseModuleAbi);
+    const contractName = MODULE_CONTRACT[this.moduleName];
+    return this.getContractWithAbi(contractName, BaseModuleAbi);
   }
 
   get contractAccounting(): BindedContract<typeof AccountingAbi> {
@@ -189,9 +186,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   get supportedVersions() {
-    return this.moduleName === CONTRACT_NAMES.curatedModule
-      ? SUPPORTED_CM_VERSIONS
-      : SUPPORTED_CSM_VERSIONS;
+    return SUPPORTED_VERSIONS[this.moduleName];
   }
 
   public get externalLinks() {

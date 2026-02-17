@@ -2,16 +2,17 @@ import { AccountingSDK } from './accounting-sdk/accounting-sdk.js';
 import { BondSDK } from './bond-sdk/bond-sdk.js';
 import { BusRegistry } from './common/class-primitives/bus-registry.js';
 import {
-  CONTRACT_NAMES,
   CSM_CONTRACT_ADDRESSES,
   CSM_DEPLOYMENT_BLOCK_NUMBERS,
   CSM_MODULE_IDS,
+  MODULE_NAME,
   SUPPORTED_CHAINS,
 } from './common/index.js';
 import { CoreSDK } from './core-sdk/core-sdk.js';
 import { CoreProps, SdkProps } from './core-sdk/types.js';
 import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
+import { DiscoverySDK } from './discovery-sdk/discovery-sdk.js';
 import { EventsSDK } from './events-sdk/events-sdk.js';
 import { FeesMonitoringSDK } from './fees-monitoring-sdk/fees-monitoring-sdk.js';
 import { FrameSDK } from './frame-sdk/frame-sdk.js';
@@ -25,7 +26,6 @@ import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { PermissionlessGateSDK } from './permissionless-gate-sdk/permissionless-gate-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
 import { RolesSDK } from './roles-sdk/roles-sdk.js';
-import { DiscoverySDK } from './discovery-sdk/discovery-sdk.js';
 import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
 import { TxSDK } from './tx-sdk/tx-sdk.js';
@@ -93,7 +93,7 @@ const prepareCoreProps = (props: SdkProps): CoreProps => {
       ...CSM_CONTRACT_ADDRESSES[chainId],
       ...props.overridedAddresses,
     },
-    moduleName: CONTRACT_NAMES.csModule,
+    moduleName: MODULE_NAME.CSM,
     moduleId: CSM_MODULE_IDS[chainId],
     deploymentBlockNumber: CSM_DEPLOYMENT_BLOCK_NUMBERS[chainId],
   };

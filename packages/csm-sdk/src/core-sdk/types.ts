@@ -6,19 +6,17 @@ import type {
   Hex,
   WalletClient,
 } from 'viem';
-import { CONTRACT_NAMES } from '../common/index.js';
+import { CONTRACT_NAMES, MODULE_NAME } from '../common/index.js';
 
 export type ContractAddresses = {
   [contract in CONTRACT_NAMES]?: Address;
 };
 
-export type ModuleName = CONTRACT_NAMES.csModule | CONTRACT_NAMES.curatedModule;
-
 export type CoreProps = {
   core: LidoSDKCore;
   contractAddresses: ContractAddresses;
   moduleId: number;
-  moduleName?: ModuleName;
+  moduleName?: MODULE_NAME;
   deploymentBlockNumber?: bigint;
   maxEventBlocksRange?: number;
   clApiUrl?: string;

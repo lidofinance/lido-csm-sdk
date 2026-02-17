@@ -3,6 +3,11 @@ import { Address } from 'viem';
 
 import { CONTRACT_NAMES } from './contract-names.js';
 import { PerSupportedChain } from './supported-chains.js';
+import { MODULE_NAME, PerModule } from './module-name.js';
+
+type SupportedVersions = Partial<
+  Record<CONTRACT_NAMES, readonly [bigint, bigint]>
+>;
 
 export const COMMON_CONTRACT_ADDRESSES: PerSupportedChain<{
   [key2 in CONTRACT_NAMES]?: Address;
@@ -95,9 +100,7 @@ export const CSM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<bigint> = {
 };
 
 // contracts should support getInitializedVersion method
-export const SUPPORTED_CSM_VERSIONS: Partial<
-  Record<CONTRACT_NAMES, readonly [bigint, bigint]>
-> = {
+export const SUPPORTED_CSM_VERSIONS: SupportedVersions = {
   [CONTRACT_NAMES.accounting]: [3n, 3n],
   [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
   [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
@@ -132,9 +135,7 @@ export const CM_DEPLOYMENT_BLOCK_NUMBERS: PerSupportedChain<
 };
 
 // contracts should support getInitializedVersion method
-export const SUPPORTED_CM_VERSIONS: Partial<
-  Record<CONTRACT_NAMES, readonly [bigint, bigint]>
-> = {
+export const SUPPORTED_CM_VERSIONS: SupportedVersions = {
   [CONTRACT_NAMES.accounting]: [3n, 3n],
   [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
   [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
@@ -148,4 +149,9 @@ export const SUPPORTED_CM_VERSIONS: Partial<
   // [CONTRACT_NAMES.curatedGate7]: [1n, 1n],
   // [CONTRACT_NAMES.curatedGate8]: [1n, 1n],
   // [CONTRACT_NAMES.curatedGate9]: [1n, 1n],
+};
+
+export const SUPPORTED_VERSIONS: PerModule<SupportedVersions> = {
+  [MODULE_NAME.CSM]: SUPPORTED_CSM_VERSIONS,
+  [MODULE_NAME.CM]: SUPPORTED_CM_VERSIONS,
 };

@@ -5,8 +5,8 @@ import {
   CM_CONTRACT_ADDRESSES,
   CM_DEPLOYMENT_BLOCK_NUMBERS,
   CM_MODULE_IDS,
-  CONTRACT_NAMES,
-  SUPPORTED_CHAINS,
+  MODULE_NAME,
+  SUPPORTED_CHAINS
 } from './common/index.js';
 import { CoreSDK } from './core-sdk/core-sdk.js';
 import { CoreProps, SdkProps } from './core-sdk/types.js';
@@ -19,9 +19,9 @@ import { FrameSDK } from './frame-sdk/frame-sdk.js';
 import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk.js';
 import { KeysSDK } from './keys-sdk/keys-sdk.js';
 import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk.js';
+import { MetaRegistrySDK } from './meta-registry-sdk/meta-registry-sdk.js';
 import { ModuleSDK } from './module-sdk/module-sdk.js';
 import { OperatorSDK } from './operator-sdk/operator-sdk.js';
-import { MetaRegistrySDK } from './meta-registry-sdk/meta-registry-sdk.js';
 import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
 import { RolesSDK } from './roles-sdk/roles-sdk.js';
@@ -86,7 +86,7 @@ const prepareCoreProps = (props: SdkProps): CoreProps => {
       ...CM_CONTRACT_ADDRESSES[chainId],
       ...props.overridedAddresses,
     },
-    moduleName: CONTRACT_NAMES.curatedModule,
+    moduleName: MODULE_NAME.CM,
     wcPrefix: '0x02',
     moduleId: CM_MODULE_IDS[chainId],
     deploymentBlockNumber: CM_DEPLOYMENT_BLOCK_NUMBERS[chainId],
