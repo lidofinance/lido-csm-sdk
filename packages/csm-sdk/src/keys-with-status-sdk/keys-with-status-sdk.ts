@@ -5,6 +5,7 @@ import {
   CACHE_MID,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
+  MODULE_CONTRACT,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
 import { fetchJson, isNotUnique, isUnique } from '../common/utils/index.js';
@@ -63,7 +64,9 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     const keys = await this.getApiKeys(pubkeys);
     if (!keys) return null;
 
-    const moduleAddress = this.core.getContractAddress(this.core.moduleName);
+    const moduleAddress = this.core.getContractAddress(
+      MODULE_CONTRACT[this.core.moduleName],
+    );
 
     const duplicates = [
       ...keys.map(({ key }) => key).filter(isNotUnique),
