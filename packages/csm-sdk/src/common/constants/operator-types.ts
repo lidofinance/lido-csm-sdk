@@ -1,37 +1,27 @@
-export enum CSM_OPERATOR_TYPE {
-  DEF = 'DEF',
-  LEA = 'LEA',
-  ICS = 'ICS',
+export enum OPERATOR_TYPE {
+  CSM_DEF = 'CSM_DEF',
+  CSM_LEA = 'CSM_LEA',
+  CSM_ICS = 'CSM_ICS',
+  CM_PO = 'CM_PO',
+  CM_PTO = 'CM_PTO',
+  CM_PGO = 'CM_PGO',
+  CM_DO = 'CM_DO',
+  CM_EEO = 'CM_EEO',
+  CM_MODC = 'CM_MODC',
+  CM_IODC = 'CM_IODC',
   CC = 'CC',
 }
 
-export const CSM_OPERATOR_TYPE_CURVE_ID = {
-  [CSM_OPERATOR_TYPE.DEF]: 0n,
-  [CSM_OPERATOR_TYPE.LEA]: 1n,
-  [CSM_OPERATOR_TYPE.ICS]: 2n,
-  [CSM_OPERATOR_TYPE.CC]: undefined,
+export const OPERATOR_CURVE_ID = {
+  [OPERATOR_TYPE.CSM_DEF]: 0n,
+  [OPERATOR_TYPE.CSM_LEA]: 1n,
+  [OPERATOR_TYPE.CSM_ICS]: 2n,
+  [OPERATOR_TYPE.CM_PTO]: 1n,
+  [OPERATOR_TYPE.CM_PO]: 2n,
+  [OPERATOR_TYPE.CM_PGO]: 3n,
+  [OPERATOR_TYPE.CM_DO]: 4n,
+  [OPERATOR_TYPE.CM_EEO]: 5n,
+  [OPERATOR_TYPE.CM_MODC]: 6n,
+  [OPERATOR_TYPE.CM_IODC]: 7n,
+  [OPERATOR_TYPE.CC]: undefined,
 } as const;
-
-export enum CM_OPERATOR_TYPE {
-  PTO = 'PTO',
-  PO = 'PO',
-  PGO = 'PGO',
-  DO = 'DO',
-  EEO = 'EEO',
-  MODC = 'MODC',
-  IODC = 'IODC',
-  CC = 'CC',
-}
-
-export const CM_OPERATOR_TYPE_CURVE_ID = {
-  [CM_OPERATOR_TYPE.PTO]: 1n,
-  [CM_OPERATOR_TYPE.PO]: 2n,
-  [CM_OPERATOR_TYPE.PGO]: 3n,
-  [CM_OPERATOR_TYPE.DO]: 4n,
-  [CM_OPERATOR_TYPE.EEO]: 5n,
-  [CM_OPERATOR_TYPE.MODC]: 6n,
-  [CM_OPERATOR_TYPE.IODC]: 7n,
-  [CM_OPERATOR_TYPE.CC]: undefined,
-} as const;
-
-export type OperatorType = CSM_OPERATOR_TYPE | CM_OPERATOR_TYPE;
