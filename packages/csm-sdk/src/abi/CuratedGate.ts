@@ -38,6 +38,19 @@ export const CuratedGateAbi = [
   },
   {
     type: 'function',
+    name: 'DEFAULT_BOND_CURVE_ID',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'META_REGISTRY',
     inputs: [],
     outputs: [
@@ -333,17 +346,17 @@ export const CuratedGateAbi = [
     name: 'initialize',
     inputs: [
       {
-        name: '_curveId',
+        name: 'curveId',
         type: 'uint256',
         internalType: 'uint256',
       },
       {
-        name: '_treeRoot',
+        name: 'treeRoot',
         type: 'bytes32',
         internalType: 'bytes32',
       },
       {
-        name: '_treeCid',
+        name: 'treeCid',
         type: 'string',
         internalType: 'string',
       },
@@ -510,12 +523,12 @@ export const CuratedGateAbi = [
     name: 'setTreeParams',
     inputs: [
       {
-        name: '_treeRoot',
+        name: 'treeRoot_',
         type: 'bytes32',
         internalType: 'bytes32',
       },
       {
-        name: '_treeCid',
+        name: 'treeCid_',
         type: 'string',
         internalType: 'string',
       },
@@ -805,11 +818,6 @@ export const CuratedGateAbi = [
   {
     type: 'error',
     name: 'ZeroAdminAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroMetaRegistryAddress',
     inputs: [],
   },
   {

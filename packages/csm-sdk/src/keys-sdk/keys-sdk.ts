@@ -145,6 +145,9 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  /**
+   * @deprecated Use {@link ejectKeysByArray} instead. Will be removed in the next major release.
+   */
   @Logger('Call:')
   @ErrorHandler()
   public async ejectKeys(props: EjectKeysProps) {
@@ -157,13 +160,18 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
       ...rest
     } = props;
 
+    const keyIndices = Array.from(
+      { length: Number(keysCount) },
+      (_, i) => startIndex + BigInt(i),
+    );
+
     return this.bus.tx.perform({
       ...rest,
       call: () =>
         prepCall(
           this.ejectorContract,
           'voluntaryEject',
-          [nodeOperatorId, startIndex, keysCount, refundRecipient],
+          [nodeOperatorId, keyIndices, refundRecipient],
           amount,
         ),
     });
@@ -185,7 +193,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
       call: () =>
         prepCall(
           this.ejectorContract,
-          'voluntaryEjectByArray',
+          'voluntaryEject',
           [nodeOperatorId, keyIndices, refundRecipient],
           amount,
         ),

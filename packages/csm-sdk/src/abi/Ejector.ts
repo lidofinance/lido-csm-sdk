@@ -13,11 +13,6 @@ export const EjectorAbi = [
         internalType: 'address',
       },
       {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
         name: 'admin',
         type: 'address',
         internalType: 'address',
@@ -46,7 +41,7 @@ export const EjectorAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ICSModule',
+        internalType: 'contract IBaseModule',
       },
     ],
     stateMutability: 'view',
@@ -99,19 +94,6 @@ export const EjectorAbi = [
         name: '',
         type: 'bytes32',
         internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'STAKING_MODULE_ID',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -427,6 +409,19 @@ export const EjectorAbi = [
   },
   {
     type: 'function',
+    name: 'stakingModuleId',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'supportsInterface',
     inputs: [
       {
@@ -460,34 +455,6 @@ export const EjectorAbi = [
   {
     type: 'function',
     name: 'voluntaryEject',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'startFrom',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'keysCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'refundRecipient',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'function',
-    name: 'voluntaryEjectByArray',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -629,6 +596,19 @@ export const EjectorAbi = [
   },
   {
     type: 'event',
+    name: 'StakingModuleIdCached',
+    inputs: [
+      {
+        name: 'stakingModuleId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'VoluntaryEjectionRequested',
     inputs: [
       {
@@ -721,6 +701,11 @@ export const EjectorAbi = [
   {
     type: 'error',
     name: 'SigningKeysInvalidOffset',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'StakingModuleIdNotFound',
     inputs: [],
   },
   {

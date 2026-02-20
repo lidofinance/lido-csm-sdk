@@ -430,7 +430,7 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'compensateLockedBondETH',
+    name: 'compensateLockedBond',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -438,8 +438,14 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
     ],
-    outputs: [],
-    stateMutability: 'payable',
+    outputs: [
+      {
+        name: 'compensatedAmount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -965,7 +971,7 @@ export const AccountingAbi = [
         ],
       },
       {
-        name: 'sharesToSplit',
+        name: 'splittableShares',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1367,7 +1373,7 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'lockBondETH',
+    name: 'lockBond',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -1413,7 +1419,7 @@ export const AccountingAbi = [
     ],
     outputs: [
       {
-        name: 'fullyBurned',
+        name: 'penaltyCovered',
         type: 'bool',
         internalType: 'bool',
       },
@@ -1513,7 +1519,7 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'releaseLockedBondETH',
+    name: 'releaseLockedBond',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -1636,7 +1642,7 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'settleLockedBondETH',
+    name: 'settleLockedBond',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -1785,7 +1791,7 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'toChargeAmount',
+        name: 'amountToCharge',
         type: 'uint256',
         indexed: false,
         internalType: 'uint256',

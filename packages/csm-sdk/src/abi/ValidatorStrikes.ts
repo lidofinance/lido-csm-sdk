@@ -12,16 +12,6 @@ export const ValidatorStrikesAbi = [
         type: 'address',
         internalType: 'address',
       },
-      {
-        name: 'exitPenalties',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: 'parametersRegistry',
-        type: 'address',
-        internalType: 'address',
-      },
     ],
     stateMutability: 'nonpayable',
   },
@@ -72,7 +62,7 @@ export const ValidatorStrikesAbi = [
       {
         name: '',
         type: 'address',
-        internalType: 'contract ICSModule',
+        internalType: 'contract IBaseModule',
       },
     ],
     stateMutability: 'view',
@@ -680,6 +670,11 @@ export const ValidatorStrikesAbi = [
   {
     type: 'error',
     name: 'NotInitializing',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'SameEjectorAddress',
     inputs: [],
   },
   {

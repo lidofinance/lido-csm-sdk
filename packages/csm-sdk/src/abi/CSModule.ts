@@ -507,6 +507,25 @@ export const CSModuleAbi = [
   },
   {
     type: 'function',
+    name: 'batchDepositInfoUpdate',
+    inputs: [
+      {
+        name: 'maxCount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'operatorsLeft',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'cancelGeneralDelayedPenalty',
     inputs: [
       {
@@ -576,7 +595,7 @@ export const CSModuleAbi = [
       },
     ],
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -908,6 +927,19 @@ export const CSModuleAbi = [
             internalType: 'bool',
           },
         ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getNodeOperatorDepositInfoToUpdateCount',
+    inputs: [],
+    outputs: [
+      {
+        name: 'count',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1917,6 +1949,13 @@ export const CSModuleAbi = [
   },
   {
     type: 'function',
+    name: 'requestFullDepositInfoUpdate',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'resetNodeOperatorManagerAddress',
     inputs: [
       {
@@ -2290,6 +2329,94 @@ export const CSModuleAbi = [
   },
   {
     type: 'event',
+    name: 'GeneralDelayedPenaltyCancelled',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'GeneralDelayedPenaltyCompensated',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'GeneralDelayedPenaltyReported',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'penaltyType',
+        type: 'bytes32',
+        indexed: true,
+        internalType: 'bytes32',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'additionalFine',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'details',
+        type: 'string',
+        indexed: false,
+        internalType: 'string',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'GeneralDelayedPenaltySettled',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'Initialized',
     inputs: [
       {
@@ -2368,6 +2495,12 @@ export const CSModuleAbi = [
         internalType: 'bool',
       },
     ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'NodeOperatorDepositInfoFullyUpdated',
+    inputs: [],
     anonymous: false,
   },
   {
@@ -2850,6 +2983,11 @@ export const CSModuleAbi = [
   },
   {
     type: 'error',
+    name: 'DepositInfoIsNotUpToDate',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'DepositQueueIsEmpty',
     inputs: [],
   },
@@ -2861,11 +2999,6 @@ export const CSModuleAbi = [
   {
     type: 'error',
     name: 'DepositableKeysWithUnsupportedWithdrawalCredentials',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'EmptyKey',
     inputs: [],
   },
   {
@@ -2886,16 +3019,6 @@ export const CSModuleAbi = [
   {
     type: 'error',
     name: 'InvalidInput',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'InvalidKeysCount',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'InvalidLength',
     inputs: [],
   },
   {
@@ -2956,6 +3079,11 @@ export const CSModuleAbi = [
   {
     type: 'error',
     name: 'NotInitializing',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'NothingCompensated',
     inputs: [],
   },
   {
@@ -3117,6 +3245,11 @@ export const CSModuleAbi = [
   {
     type: 'error',
     name: 'ZeroPauseDuration',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ZeroPenaltyType',
     inputs: [],
   },
   {

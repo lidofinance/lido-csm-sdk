@@ -8,11 +8,6 @@ export const ExitPenaltiesAbi = [
         internalType: 'address',
       },
       {
-        name: 'parametersRegistry',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
         name: 'strikes',
         type: 'address',
         internalType: 'address',

@@ -292,6 +292,13 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'finalizeUpgradeV3',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'getAllowedExitDelay',
     inputs: [
       {
@@ -2216,11 +2223,6 @@ export const ParametersRegistryAbi = [
   {
     type: 'error',
     name: 'ZeroMaxDeposits',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroQueueLowestPriority',
     inputs: [],
   },
 ] as const;

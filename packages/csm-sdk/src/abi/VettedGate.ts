@@ -38,19 +38,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'function',
-    name: 'END_REFERRAL_SEASON_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     name: 'MODULE',
     inputs: [],
     outputs: [
@@ -117,19 +104,6 @@ export const VettedGateAbi = [
   {
     type: 'function',
     name: 'SET_TREE_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'START_REFERRAL_SEASON_ROLE',
     inputs: [],
     outputs: [
       {
@@ -407,24 +381,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'function',
-    name: 'claimReferrerBondCurve',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'proof',
-        type: 'bytes32[]',
-        internalType: 'bytes32[]',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'curveId',
     inputs: [],
     outputs: [
@@ -438,13 +394,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'function',
-    name: 'endCurrentReferralProgramSeason',
-    inputs: [],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'getInitializedVersion',
     inputs: [],
     outputs: [
@@ -452,49 +401,6 @@ export const VettedGateAbi = [
         name: '',
         type: 'uint64',
         internalType: 'uint64',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getReferralsCount',
-    inputs: [
-      {
-        name: 'referrer',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getReferralsCount',
-    inputs: [
-      {
-        name: 'referrer',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: 'season',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -640,17 +546,17 @@ export const VettedGateAbi = [
     name: 'initialize',
     inputs: [
       {
-        name: '_curveId',
+        name: 'curveId',
         type: 'uint256',
         internalType: 'uint256',
       },
       {
-        name: '_treeRoot',
+        name: 'treeRoot',
         type: 'bytes32',
         internalType: 'bytes32',
       },
       {
-        name: '_treeCid',
+        name: 'treeCid',
         type: 'string',
         internalType: 'string',
       },
@@ -686,38 +592,6 @@ export const VettedGateAbi = [
     type: 'function',
     name: 'isPaused',
     inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'isReferralProgramSeasonActive',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'isReferrerConsumed',
-    inputs: [
-      {
-        name: 'referrer',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
     outputs: [
       {
         name: '',
@@ -803,45 +677,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'function',
-    name: 'referralCurveId',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'referralProgramSeasonNumber',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'referralsThreshold',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     name: 'renounceRole',
     inputs: [
       {
@@ -888,41 +723,17 @@ export const VettedGateAbi = [
     name: 'setTreeParams',
     inputs: [
       {
-        name: '_treeRoot',
+        name: 'treeRoot_',
         type: 'bytes32',
         internalType: 'bytes32',
       },
       {
-        name: '_treeCid',
+        name: 'treeCid_',
         type: 'string',
         internalType: 'string',
       },
     ],
     outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'startNewReferralProgramSeason',
-    inputs: [
-      {
-        name: '_referralCurveId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_referralsThreshold',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'season',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
     stateMutability: 'nonpayable',
   },
   {
@@ -1028,88 +839,6 @@ export const VettedGateAbi = [
         name: 'duration',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'ReferralProgramSeasonEnded',
-    inputs: [
-      {
-        name: 'season',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'ReferralProgramSeasonStarted',
-    inputs: [
-      {
-        name: 'season',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'referralCurveId',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'referralsThreshold',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'ReferralRecorded',
-    inputs: [
-      {
-        name: 'referrer',
-        type: 'address',
-        indexed: true,
-        internalType: 'address',
-      },
-      {
-        name: 'season',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'referralNodeOperatorId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'ReferrerConsumed',
-    inputs: [
-      {
-        name: 'referrer',
-        type: 'address',
-        indexed: true,
-        internalType: 'address',
-      },
-      {
-        name: 'season',
-        type: 'uint256',
-        indexed: true,
         internalType: 'uint256',
       },
     ],
@@ -1258,11 +987,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidReferralsThreshold',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidTreeCid',
     inputs: [],
   },
@@ -1283,11 +1007,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'error',
-    name: 'NotEnoughReferrals',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'NotInitializing',
     inputs: [],
   },
@@ -1299,16 +1018,6 @@ export const VettedGateAbi = [
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ReferralProgramIsActive',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ReferralProgramIsNotActive',
     inputs: [],
   },
   {

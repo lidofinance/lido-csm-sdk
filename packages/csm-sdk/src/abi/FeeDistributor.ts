@@ -1023,6 +1023,11 @@ export const FeeDistributorAbi = [
   },
   {
     type: 'error',
+    name: 'SameRebateRecipientAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'SenderIsNotAccounting',
     inputs: [],
   },
