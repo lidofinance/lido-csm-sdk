@@ -35,3 +35,8 @@ export type SdkProps = Omit<
 
 export type BindedContract<abi extends Abi | readonly unknown[] = Abi> =
   GetContractReturnType<abi, WalletClient>;
+
+export type VersionCheckResult = {
+  version: bigint;
+  supported: boolean;
+};

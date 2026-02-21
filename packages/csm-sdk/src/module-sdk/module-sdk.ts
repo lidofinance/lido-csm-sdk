@@ -1,10 +1,8 @@
 import { Address, isAddressEqual } from 'viem';
-import { VersionCheckAbi } from '../abi/VersionCheck.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
+import { CACHE_MID, CONTRACT_NAMES, MODULE_CONTRACT } from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
-import { onVersionError } from '../common/utils/on-error.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
 import { findModuleDigest } from './find-module-digest.js';
 import {
@@ -37,37 +35,12 @@ export class ModuleSDK extends CsmSDKModule {
     };
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getVersions(): Promise<Record<CONTRACT_NAMES, bigint>> {
-    const contractNames = Object.keys(
-      this.core.supportedVersions,
-    ) as CONTRACT_NAMES[];
-
-    const versionPromises = contractNames.map((contractName) =>
-      this.core
-        .getContractWithAbi(contractName, VersionCheckAbi)
-        .read.getInitializedVersion()
-        .catch(onVersionError)
-        .then((v) => [contractName, v] as const),
-    );
-
-    const versions = await Promise.all(versionPromises);
-
-    return Object.fromEntries(
-      versions.filter(([, version]) => version !== 0n),
-    ) as Record<CONTRACT_NAMES, bigint>;
-  }
-
   public async isVersionsSupported(): Promise<boolean> {
-    const versions = await this.getVersions();
-
-    return Object.entries(this.core.supportedVersions)
-      .map(([key, [min, max]]) => {
-        const current = versions[key as CONTRACT_NAMES];
-        return current !== undefined && current >= min && current <= max;
-      })
-      .every(Boolean);
+    const results = await Promise.all([
+      this.core.checkContractVersion(MODULE_CONTRACT[this.core.moduleName]),
+      this.core.checkContractVersion(CONTRACT_NAMES.accounting),
+    ]);
+    return results.every((r) => r.supported);
   }
 
   @Logger('Views:')

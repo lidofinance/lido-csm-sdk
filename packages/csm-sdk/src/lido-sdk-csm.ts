@@ -1,15 +1,9 @@
 import { AccountingSDK } from './accounting-sdk/accounting-sdk.js';
 import { BondSDK } from './bond-sdk/bond-sdk.js';
 import { BusRegistry } from './common/class-primitives/bus-registry.js';
-import {
-  CSM_CONTRACT_ADDRESSES,
-  CSM_DEPLOYMENT_BLOCK_NUMBERS,
-  CSM_MODULE_IDS,
-  MODULE_NAME,
-  SUPPORTED_CHAINS,
-} from './common/index.js';
+import { MODULE_NAME } from './common/index.js';
 import { CoreSDK } from './core-sdk/core-sdk.js';
-import { CoreProps, SdkProps } from './core-sdk/types.js';
+import { prepareCoreProps, SdkProps } from './core-sdk/index.js';
 import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
 import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
 import { DiscoverySDK } from './discovery-sdk/discovery-sdk.js';
@@ -55,7 +49,7 @@ export class LidoSDKCsm {
   readonly feesMonitoring: FeesMonitoringSDK;
 
   constructor(props: SdkProps) {
-    const coreProps = prepareCoreProps(props);
+    const coreProps = prepareCoreProps(props, MODULE_NAME.CSM);
 
     const bus = new BusRegistry();
     this.core = new CoreSDK(coreProps);
@@ -84,17 +78,3 @@ export class LidoSDKCsm {
     this.discovery = new DiscoverySDK(commonProps, 'discovery');
   }
 }
-
-const prepareCoreProps = (props: SdkProps): CoreProps => {
-  const chainId = props.core.chain.id as SUPPORTED_CHAINS;
-  return {
-    ...props,
-    contractAddresses: {
-      ...CSM_CONTRACT_ADDRESSES[chainId],
-      ...props.overridedAddresses,
-    },
-    moduleName: MODULE_NAME.CSM,
-    moduleId: CSM_MODULE_IDS[chainId],
-    deploymentBlockNumber: CSM_DEPLOYMENT_BLOCK_NUMBERS[chainId],
-  };
-};

@@ -18,6 +18,7 @@ import {
   StakingRouterAbi,
   ValidatorsExitBusOracleAbi,
   WithdrawalVaultAbi,
+  VersionCheckAbi,
 } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
@@ -30,10 +31,16 @@ import {
   MODULE_CONTRACT,
   MODULE_NAME,
   SUPPORTED_CHAINS,
-  SUPPORTED_VERSIONS,
+  SUPPORTED_CONTRACT_VERSIONS,
 } from '../common/index.js';
 import { isValidIpfsCid } from '../common/utils/index.js';
-import { BindedContract, ContractAddresses, CoreProps } from './types.js';
+import { onVersionError } from '../common/utils/on-error.js';
+import {
+  BindedContract,
+  ContractAddresses,
+  CoreProps,
+  VersionCheckResult,
+} from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
@@ -185,10 +192,6 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getContract(CONTRACT_NAMES.curatedModule);
   }
 
-  get supportedVersions() {
-    return SUPPORTED_VERSIONS[this.moduleName];
-  }
-
   public get externalLinks() {
     return EXTERNAL_LINKS[this.chainId];
   }
@@ -218,6 +221,32 @@ export class CoreSDK extends CsmSDKCacheable {
       this.feesMonitoringApiUrl ??
       this.getExternalLink(LINK_TYPE.feesMonitoringApi)
     );
+  }
+
+  @Logger('Utils:')
+  public async checkContractVersion(
+    contractName: CONTRACT_NAMES,
+  ): Promise<VersionCheckResult> {
+    const versionRange = SUPPORTED_CONTRACT_VERSIONS[contractName];
+    if (!versionRange) {
+      return { version: 0n, supported: true };
+    }
+
+    let actualVersion: bigint;
+    try {
+      actualVersion = await this.getContractWithAbi(
+        contractName,
+        VersionCheckAbi,
+      ).read.getInitializedVersion();
+    } catch (error) {
+      actualVersion = onVersionError(error);
+    }
+
+    const [min, max] = versionRange;
+    return {
+      version: actualVersion,
+      supported: actualVersion >= min && actualVersion <= max,
+    };
   }
 
   public getIpfsUrls(cid: string): string[] {

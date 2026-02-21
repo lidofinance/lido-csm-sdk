@@ -8,7 +8,6 @@ import {
   withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
-import { VersionCheckAbi } from '../abi/VersionCheck.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
@@ -19,7 +18,6 @@ import {
   PermitSignatureShort,
 } from '../common/index.js';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
-import { onVersionError } from '../common/utils/on-error.js';
 import { BindedContract } from '../core-sdk/types.js';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts.js';
 import {
@@ -76,29 +74,15 @@ export class TxSDK extends CsmSDKModule {
   }
 
   @Logger('Utils:')
-  private async checkContractVersion(callResult: CallResult): Promise<void> {
+  private async checkVersion(callResult: CallResult): Promise<void> {
     const contractName = this.core.getContractNameByAddress(callResult.to);
     if (!contractName) return;
 
-    const versionRange = this.core.supportedVersions[contractName];
-    if (!versionRange) return;
-
-    let actualVersion: bigint;
-    try {
-      actualVersion = await this.core
-        .getContractWithAbi(contractName, VersionCheckAbi)
-        .read.getInitializedVersion();
-    } catch (error) {
-      actualVersion = onVersionError(error);
-      if (actualVersion === 0n) return;
-      throw error;
-    }
-
-    const [minVersion, maxVersion] = versionRange;
-    if (actualVersion < minVersion || actualVersion > maxVersion) {
+    const result = await this.core.checkContractVersion(contractName);
+    if (!result.supported) {
       throw this.core.core.error({
         code: ERROR_CODE.NOT_SUPPORTED,
-        message: `Contract ${contractName} version ${actualVersion} not supported. Required: ${minVersion}-${maxVersion}`,
+        message: `Contract ${contractName} version ${result.version} not supported`,
       });
     }
   }
@@ -343,7 +327,7 @@ export class TxSDK extends CsmSDKModule {
     }
 
     const call = await this.prepareCall(props);
-    await this.checkContractVersion(call);
+    await this.checkVersion(call);
     calls.push(call);
 
     return this.internalCall({
@@ -359,7 +343,7 @@ export class TxSDK extends CsmSDKModule {
     if (hash) return { hash };
 
     const call = await this.prepareCall(props, { permit });
-    await this.checkContractVersion(call);
+    await this.checkVersion(call);
     return this.internalTransaction({
       ...props,
       ...this.callToInternalTransaction(call),
