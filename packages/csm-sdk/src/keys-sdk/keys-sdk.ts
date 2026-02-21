@@ -13,7 +13,6 @@ import { parseAddKeysProps } from './parse-add-keys-props.js';
 import {
   AddKeysProps,
   EjectKeysByArrayProps,
-  EjectKeysProps,
   RemoveKeysProps,
 } from './types.js';
 
@@ -145,41 +144,9 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
-  /**
-   * @deprecated Use {@link ejectKeysByArray} instead. Will be removed in the next major release.
-   */
   @Logger('Call:')
   @ErrorHandler()
-  public async ejectKeys(props: EjectKeysProps) {
-    const {
-      nodeOperatorId,
-      startIndex,
-      keysCount,
-      amount,
-      refundRecipient = zeroAddress,
-      ...rest
-    } = props;
-
-    const keyIndices = Array.from(
-      { length: Number(keysCount) },
-      (_, i) => startIndex + BigInt(i),
-    );
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        prepCall(
-          this.ejectorContract,
-          'voluntaryEject',
-          [nodeOperatorId, keyIndices, refundRecipient],
-          amount,
-        ),
-    });
-  }
-
-  @Logger('Call:')
-  @ErrorHandler()
-  public async ejectKeysByArray(props: EjectKeysByArrayProps) {
+  public async ejectKeys(props: EjectKeysByArrayProps) {
     const {
       nodeOperatorId,
       keyIndices,

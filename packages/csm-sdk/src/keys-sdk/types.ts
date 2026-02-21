@@ -29,14 +29,6 @@ export type RemoveKeysProps = CommonTransactionProps & {
   keysCount: bigint;
 };
 
-export type EjectKeysProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
-  amount: bigint;
-  startIndex: bigint;
-  keysCount: bigint;
-  refundRecipient?: Address;
-};
-
 export type EjectKeysByArrayProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
   amount: bigint;
