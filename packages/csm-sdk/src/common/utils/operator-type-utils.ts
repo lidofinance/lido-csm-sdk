@@ -12,7 +12,7 @@ export const getCurveIdByOperatorType = (
 
 export const getOperatorTypeByCurveId = (
   moduleName: MODULE_NAME,
-  curveId: bigint,
+  curveId: bigint | undefined,
 ): OPERATOR_TYPE => {
   const entry = Object.entries(OPERATOR_CURVE_ID).find(
     ([operatorType, id]) =>

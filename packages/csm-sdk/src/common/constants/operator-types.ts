@@ -9,6 +9,7 @@ export enum OPERATOR_TYPE {
   CM_EEO = 'CM_EEO',
   CM_MODC = 'CM_MODC',
   CM_IODC = 'CM_IODC',
+  CSM0x02_DEF = 'CSM0x02_DEF',
   CC = 'CC',
 }
 
@@ -23,5 +24,6 @@ export const OPERATOR_CURVE_ID = {
   [OPERATOR_TYPE.CM_EEO]: 5n,
   [OPERATOR_TYPE.CM_MODC]: 6n,
   [OPERATOR_TYPE.CM_IODC]: 7n,
+  [OPERATOR_TYPE.CSM0x02_DEF]: 0n,
   [OPERATOR_TYPE.CC]: undefined,
 } as const;
