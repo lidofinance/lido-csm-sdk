@@ -49,10 +49,8 @@ export class LidoSDKCsm {
   readonly feesMonitoring: FeesMonitoringSDK;
 
   constructor(props: SdkProps) {
-    const coreProps = prepareCoreProps(props, MODULE_NAME.CSM);
-
     const bus = new BusRegistry();
-    this.core = new CoreSDK(coreProps);
+    this.core = new CoreSDK(prepareCoreProps(props, MODULE_NAME.CSM));
 
     const commonProps = { ...props, core: this.core, bus };
     this.tx = new TxSDK(commonProps, 'tx');

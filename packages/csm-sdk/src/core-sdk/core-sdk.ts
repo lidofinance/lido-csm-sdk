@@ -60,11 +60,11 @@ export class CoreSDK extends CsmSDKCacheable {
     this.core = props.core;
     this.contractAddresses = props.contractAddresses;
     this.moduleId = props.moduleId;
-    this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.clApiUrl = props.clApiUrl;
     this.keysApiUrl = props.keysApiUrl;
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
+    this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
     this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
     this.wcPrefix = props.wcPrefix ?? '0x01';
@@ -196,7 +196,7 @@ export class CoreSDK extends CsmSDKCacheable {
     return EXTERNAL_LINKS[this.chainId];
   }
 
-  public getExternalLink(type: LINK_TYPE) {
+  private getExternalLink(type: LINK_TYPE) {
     return this.externalLinks[type];
   }
 

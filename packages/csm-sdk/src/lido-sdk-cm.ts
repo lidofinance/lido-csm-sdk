@@ -45,10 +45,8 @@ export class LidoSDKCm {
   readonly stealing: StealingSDK;
 
   constructor(props: SdkProps) {
-    const coreProps = prepareCoreProps(props, MODULE_NAME.CM);
-
     const bus = new BusRegistry();
-    this.core = new CoreSDK(coreProps);
+    this.core = new CoreSDK(prepareCoreProps(props, MODULE_NAME.CM));
 
     const commonProps = { ...props, core: this.core, bus };
     this.tx = new TxSDK(commonProps, 'tx');

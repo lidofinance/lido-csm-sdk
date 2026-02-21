@@ -11,7 +11,7 @@ export const getCurveIdByOperatorType = (
 };
 
 export const getOperatorTypeByCurveId = (
-  moduleName: MODULE_NAME,
+  moduleName: keyof typeof MODULE_NAME,
   curveId: bigint | undefined,
 ): OPERATOR_TYPE => {
   const entry = Object.entries(OPERATOR_TYPE_CURVE_ID).find(
