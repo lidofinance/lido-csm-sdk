@@ -13,7 +13,7 @@ export enum OPERATOR_TYPE {
   CC = 'CC',
 }
 
-export const OPERATOR_CURVE_ID = {
+export const OPERATOR_TYPE_CURVE_ID = {
   [OPERATOR_TYPE.CSM_DEF]: 0n,
   [OPERATOR_TYPE.CSM_LEA]: 1n,
   [OPERATOR_TYPE.CSM_ICS]: 2n,

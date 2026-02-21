@@ -1,20 +1,20 @@
 import {
   MODULE_NAME,
-  OPERATOR_CURVE_ID,
+  OPERATOR_TYPE_CURVE_ID,
   OPERATOR_TYPE,
 } from '../constants/index.js';
 
 export const getCurveIdByOperatorType = (
   operatorType: OPERATOR_TYPE,
 ): bigint | undefined => {
-  return OPERATOR_CURVE_ID[operatorType];
+  return OPERATOR_TYPE_CURVE_ID[operatorType];
 };
 
 export const getOperatorTypeByCurveId = (
   moduleName: MODULE_NAME,
   curveId: bigint | undefined,
 ): OPERATOR_TYPE => {
-  const entry = Object.entries(OPERATOR_CURVE_ID).find(
+  const entry = Object.entries(OPERATOR_TYPE_CURVE_ID).find(
     ([operatorType, id]) =>
       id === curveId && operatorType.startsWith(`${moduleName}_`),
   );
