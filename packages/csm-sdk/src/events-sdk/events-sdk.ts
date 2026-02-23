@@ -18,7 +18,11 @@ import {
 import { BindedContract } from '../core-sdk/types.js';
 import { reconstructInvites } from './reconstruct-invites.js';
 import { reconstructOperators } from './reconstruct-operators.js';
-import { EventRangeProps, OperatorCurveIdChange } from './types.js';
+import {
+  EventRangeProps,
+  OperatorCurveIdChange,
+  PenaltyRecord,
+} from './types.js';
 
 export class EventsSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -34,10 +38,6 @@ export class EventsSDK extends CsmSDKModule {
 
   private get oracleContract() {
     return this.core.contractFeeOracle;
-  }
-
-  private get distributorContract() {
-    return this.core.contractFeeDistributor;
   }
 
   private get accountingContract() {
@@ -184,24 +184,6 @@ export class EventsSDK extends CsmSDKModule {
 
   @Logger('Events:')
   @ErrorHandler()
-  public async getDistributionLogUpdated(options?: EventRangeProps) {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.distributorContract.getEvents.DistributionLogUpdated(stepProps),
-      ),
-    );
-
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
-
-    return logs;
-  }
-
-  @Logger('Events:')
-  @ErrorHandler()
   public async getWithdrawalSubmittedKeys(
     nodeOperatorId: NodeOperatorId,
     options?: EventRangeProps,
@@ -294,6 +276,147 @@ export class EventsSDK extends CsmSDKModule {
       .map(({ args: { curveId }, blockNumber }) => ({ curveId, blockNumber }))
       .filter(isPropsDefined('curveId'))
       .sort(sortEventsByBlockNumber);
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getPenalties(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<PenaltyRecord[]> {
+    if (this.disabled) return [];
+
+    const stepConfig = await this.parseEventsProps(options);
+
+    const [
+      reported,
+      reportedV1,
+      cancelled,
+      cancelledV1,
+      compensated,
+      compensatedV1,
+      settled,
+      settledV1,
+    ] = await Promise.all([
+      // V2: GeneralDelayedPenalty* from contractBaseModule
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContract.getEvents.GeneralDelayedPenaltyReported(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      // V1: ELRewardsStealingPenalty* from moduleContractV1
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContractV1.getEvents.ELRewardsStealingPenaltyReported(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContract.getEvents.GeneralDelayedPenaltyCancelled(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContractV1.getEvents.ELRewardsStealingPenaltyCancelled(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContract.getEvents.GeneralDelayedPenaltyCompensated(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContractV1.getEvents.ELRewardsStealingPenaltyCompensated(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContract.getEvents.GeneralDelayedPenaltySettled(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+      Promise.all(
+        requestWithBlockStep(stepConfig, (stepProps) =>
+          this.moduleContractV1.getEvents.ELRewardsStealingPenaltySettled(
+            { nodeOperatorId },
+            stepProps,
+          ),
+        ),
+      ),
+    ]);
+
+    const records: PenaltyRecord[] = [
+      ...reported.flat().map(
+        ({ args, blockNumber, transactionHash }): PenaltyRecord => ({
+          type: 'reported',
+          nodeOperatorId: args.nodeOperatorId!,
+          amount: args.amount!,
+          penaltyType: args.penaltyType!,
+          additionalFine: args.additionalFine!,
+          details: args.details!,
+          blockNumber: blockNumber!,
+          transactionHash: transactionHash!,
+        }),
+      ),
+      ...reportedV1.flat().map(
+        ({ args, blockNumber, transactionHash }): PenaltyRecord => ({
+          type: 'reported',
+          nodeOperatorId: args.nodeOperatorId!,
+          amount: args.stolenAmount!,
+          blockNumber: blockNumber!,
+          transactionHash: transactionHash!,
+        }),
+      ),
+      ...[...cancelled.flat(), ...cancelledV1.flat()].map(
+        ({ args, blockNumber, transactionHash }): PenaltyRecord => ({
+          type: 'cancelled',
+          nodeOperatorId: args.nodeOperatorId!,
+          amount: args.amount!,
+          blockNumber: blockNumber!,
+          transactionHash: transactionHash!,
+        }),
+      ),
+      ...[...compensated.flat(), ...compensatedV1.flat()].map(
+        ({ args, blockNumber, transactionHash }): PenaltyRecord => ({
+          type: 'compensated',
+          nodeOperatorId: args.nodeOperatorId!,
+          amount: args.amount!,
+          blockNumber: blockNumber!,
+          transactionHash: transactionHash!,
+        }),
+      ),
+      ...[...settled.flat(), ...settledV1.flat()].map(
+        ({ args, blockNumber, transactionHash }): PenaltyRecord => ({
+          type: 'settled',
+          nodeOperatorId: args.nodeOperatorId!,
+          blockNumber: blockNumber!,
+          transactionHash: transactionHash!,
+        }),
+      ),
+    ];
+
+    return records.sort(sortEventsByBlockNumber);
   }
 
   @Logger('Utils:')
