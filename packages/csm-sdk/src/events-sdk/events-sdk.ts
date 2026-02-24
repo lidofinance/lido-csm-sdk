@@ -237,7 +237,7 @@ export class EventsSDK extends CsmSDKModule {
       transactionHash,
     });
 
-    return this.queryEvents<PenaltyRecord>(
+    const records = await this.queryEvents<Omit<PenaltyRecord, 'timestamp'>>(
       options,
       async (s) => {
         const logs =
@@ -246,7 +246,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltyReported => ({
+          (e): Omit<PenaltyReported, 'timestamp'> => ({
             ...base(e),
             type: 'reported',
             amount: e.args.amount!,
@@ -263,7 +263,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltyReported => ({
+          (e): Omit<PenaltyReported, 'timestamp'> => ({
             ...base(e),
             type: 'reported',
             amount: e.args.stolenAmount!,
@@ -277,7 +277,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltyCancelled => ({
+          (e): Omit<PenaltyCancelled, 'timestamp'> => ({
             ...base(e),
             type: 'cancelled',
             amount: e.args.amount!,
@@ -291,7 +291,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltyCancelled => ({
+          (e): Omit<PenaltyCancelled, 'timestamp'> => ({
             ...base(e),
             type: 'cancelled',
             amount: e.args.amount!,
@@ -305,7 +305,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltyCompensated => ({
+          (e): Omit<PenaltyCompensated, 'timestamp'> => ({
             ...base(e),
             type: 'compensated',
             amount: e.args.amount!,
@@ -319,7 +319,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltyCompensated => ({
+          (e): Omit<PenaltyCompensated, 'timestamp'> => ({
             ...base(e),
             type: 'compensated',
             amount: e.args.amount!,
@@ -333,7 +333,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltySettled => ({
+          (e): Omit<PenaltySettled, 'timestamp'> => ({
             ...base(e),
             type: 'settled',
           }),
@@ -346,13 +346,32 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): PenaltySettled => ({
+          (e): Omit<PenaltySettled, 'timestamp'> => ({
             ...base(e),
             type: 'settled',
           }),
         );
       },
     );
+
+    return this.withTimestamps(records) as Promise<PenaltyRecord[]>;
+  }
+
+  private async withTimestamps<T extends { blockNumber: bigint }>(
+    records: T[],
+  ): Promise<(T & { timestamp: bigint })[]> {
+    const uniqueBlocks = [...new Set(records.map((r) => r.blockNumber))];
+    const blocks = await Promise.all(
+      uniqueBlocks.map(async (blockNumber) => {
+        const block = await this.core.publicClient.getBlock({ blockNumber });
+        return [blockNumber, block.timestamp] as const;
+      }),
+    );
+    const timestamps = new Map(blocks);
+    return records.map((r) => ({
+      ...r,
+      timestamp: timestamps.get(r.blockNumber)!,
+    }));
   }
 
   // -- Private helpers --

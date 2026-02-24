@@ -23,6 +23,7 @@ export type OperatorCurveIdChange = {
 type PenaltyBase = {
   nodeOperatorId: NodeOperatorId;
   blockNumber: bigint;
+  timestamp: bigint;
   transactionHash: Hex;
 };
 
