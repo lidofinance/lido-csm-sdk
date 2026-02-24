@@ -23,6 +23,7 @@ export class OperatorSDK extends CsmSDKModule {
     return this.core.contractBaseModule;
   }
 
+  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
   public async getCurveId(id: NodeOperatorId): Promise<bigint> {
@@ -115,15 +116,17 @@ export class OperatorSDK extends CsmSDKModule {
   public async getManagementProperties(
     id: NodeOperatorId,
   ): Promise<NodeOperatorShortInfo> {
-    const properties =
-      await this.moduleContract.read.getNodeOperatorManagementProperties([id]);
+    const [properties, curveId] = await Promise.all([
+      this.moduleContract.read.getNodeOperatorManagementProperties([id]),
+      this.getCurveId(id),
+    ]);
 
-    // TODO: review for CM
     return {
       nodeOperatorId: id,
       managerAddress: properties.managerAddress,
       rewardsAddress: properties.rewardAddress,
       extendedManagerPermissions: properties.extendedManagerPermissions,
+      curveId,
     };
   }
 

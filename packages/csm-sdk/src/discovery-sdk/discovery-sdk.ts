@@ -3,14 +3,13 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ROLES } from '../common/constants/roles.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
-  NodeOperator,
   NodeOperatorId,
   NodeOperatorInvite,
+  NodeOperatorShortInfo,
 } from '../common/types.js';
-import { byTotalCount, iteratePages, onePage } from './iterate-pages.js';
-import { packRoles } from '../events-sdk/merge.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { SearchMode, Pagination, NodeOperatorDiscoveryInfo } from './types.js';
+import { byTotalCount, iteratePages, onePage } from './iterate-pages.js';
+import { NodeOperatorDiscoveryInfo, Pagination, SearchMode } from './types.js';
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
@@ -69,7 +68,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   public async getNodeOperatorsByAddress(
     address: Address,
     pagination?: Pagination,
-  ): Promise<NodeOperator[]> {
+  ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
         this.discoveryContract.read.getNodeOperatorsByAddress([
@@ -81,13 +80,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
     );
 
-    // FIXME: return extendedMode and curveId
     return operators.map((operator) => ({
-      id: operator.id,
-      roles: packRoles({
-        [ROLES.MANAGER]: isAddressEqual(operator.managerAddress, address),
-        [ROLES.REWARDS]: isAddressEqual(operator.rewardAddress, address),
-      }),
+      ...operator,
+      rewardsAddress: operator.rewardAddress,
+      nodeOperatorId: operator.id,
     }));
   }
 
@@ -108,7 +104,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
     );
 
-    // FIXME: return extendedMode and curveId
+    // FIXME: return curveId
     return operators.flatMap((operator) =>
       [
         { address: operator.proposedManagerAddress, role: ROLES.MANAGER },

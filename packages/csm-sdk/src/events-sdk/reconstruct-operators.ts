@@ -1,40 +1,21 @@
-import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
+import { Address, isAddressEqual } from 'viem';
 import { ROLES } from '../common/index.js';
 import { NodeOperator } from '../common/types.js';
 import { isNotEmptyRoles, mergeRoles } from './merge.js';
 
-type NodeOperatorLogs =
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<typeof CSModuleAbi, 'NodeOperatorAdded'>,
-      false
-    >
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<
-        typeof CSModuleAbi,
-        'NodeOperatorManagerAddressChanged'
-      >,
-      false
-    >
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<
-        typeof CSModuleAbi,
-        'NodeOperatorRewardAddressChanged'
-      >,
-      false
-    >;
+export type NodeOperatorLog = {
+  blockNumber: bigint;
+  eventName: string;
+  args: {
+    nodeOperatorId?: bigint;
+    managerAddress?: Address;
+    rewardAddress?: Address;
+    newAddress?: Address;
+  };
+};
 
 export const reconstructOperators = (
-  logs: NodeOperatorLogs[],
+  logs: NodeOperatorLog[],
   address: Address,
 ): NodeOperator[] =>
   logs

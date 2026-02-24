@@ -30,8 +30,10 @@ export type NodeOperatorShortInfo = {
   managerAddress: Address;
   rewardsAddress: Address;
   extendedManagerPermissions: boolean;
+  curveId: bigint;
 };
 
+/** @deprecated */
 export type NodeOperator = {
   id: NodeOperatorId;
   roles: ROLES[];
