@@ -359,12 +359,12 @@ export class EventsSDK extends CsmSDKModule {
 
   private async withTimestamps<T extends { blockNumber: bigint }>(
     records: T[],
-  ): Promise<(T & { timestamp: bigint })[]> {
+  ): Promise<(T & { timestamp: number })[]> {
     const uniqueBlocks = [...new Set(records.map((r) => r.blockNumber))];
     const blocks = await Promise.all(
       uniqueBlocks.map(async (blockNumber) => {
         const block = await this.core.publicClient.getBlock({ blockNumber });
-        return [blockNumber, block.timestamp] as const;
+        return [blockNumber, Number(block.timestamp)] as const;
       }),
     );
     const timestamps = new Map(blocks);
