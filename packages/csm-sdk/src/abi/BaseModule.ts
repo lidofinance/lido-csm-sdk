@@ -1757,18 +1757,18 @@ export const BaseModuleAbi = [
     name: 'unsafeUpdateValidatorsCount',
     inputs: [
       {
-        name: '',
+        name: 'nodeOperatorId',
         type: 'uint256',
         internalType: 'uint256',
       },
       {
-        name: '',
+        name: 'exitedValidatorsCount',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
     outputs: [],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2064,6 +2064,12 @@ export const BaseModuleAbi = [
         name: 'nodeOperatorId',
         type: 'uint256',
         indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
         internalType: 'uint256',
       },
     ],

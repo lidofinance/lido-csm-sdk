@@ -310,7 +310,13 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
     ],
-    outputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
+    ],
     stateMutability: 'nonpayable',
   },
   {
@@ -1649,8 +1655,19 @@ export const AccountingAbi = [
         type: 'uint256',
         internalType: 'uint256',
       },
+      {
+        name: 'maxAmount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
-    outputs: [],
+    outputs: [
+      {
+        name: 'amountSettled',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
     stateMutability: 'nonpayable',
   },
   {

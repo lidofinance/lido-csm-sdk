@@ -39,7 +39,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   @ErrorHandler()
   @Cache(CACHE_LONG)
   public async getLowestPriorityQueue(): Promise<bigint> {
-    return this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
+    return this.core.contractParametersRegistry.read.QUEUE_LOWEST_PRIORITY();
   }
 
   @Logger('Views:')
