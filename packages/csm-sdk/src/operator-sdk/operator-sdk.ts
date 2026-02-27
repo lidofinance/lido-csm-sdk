@@ -6,6 +6,7 @@ import { Logger } from '../common/decorators/logger.js';
 import {
   BondBalance,
   CACHE_SHORT,
+  CONTRACT_NAMES,
   NodeOperatorId,
   NodeOperatorShortInfo,
 } from '../common/index.js';
@@ -16,7 +17,7 @@ import { FeeSplit, NodeOperatorInfo } from './types.js';
 
 export class OperatorSDK extends CsmSDKModule {
   private get accountingContract() {
-    return this.core.contractAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   private get moduleContract() {

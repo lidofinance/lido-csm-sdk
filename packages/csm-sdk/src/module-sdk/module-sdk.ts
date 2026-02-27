@@ -19,10 +19,18 @@ export class ModuleSDK extends CsmSDKModule {
     return this.core.contractBaseModule;
   }
 
+  private get stakingRouterContract() {
+    return this.core.getContract(CONTRACT_NAMES.stakingRouter);
+  }
+
+  private get accountingContract() {
+    return this.core.getContract(CONTRACT_NAMES.accounting);
+  }
+
   @Logger('Views:')
   @ErrorHandler()
   public async getStatus(): Promise<CsmStatus> {
-    const csAccounting = this.core.contractAccounting;
+    const csAccounting = this.accountingContract;
 
     const [isPausedModule, isPausedAccounting] = await Promise.all([
       this.moduleContract.read.isPaused(),
@@ -54,7 +62,7 @@ export class ModuleSDK extends CsmSDKModule {
   @Cache(CACHE_MID)
   private async getAllModulesDigests(): Promise<ModuleDigest[]> {
     const digests =
-      await this.core.contractStakingRouter.read.getAllStakingModuleDigests();
+      await this.stakingRouterContract.read.getAllStakingModuleDigests();
     return digests.map((digest) => ({
       ...digest,
       state: {

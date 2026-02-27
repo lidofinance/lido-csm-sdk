@@ -8,6 +8,7 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_LONG,
   CACHE_MID,
+  CONTRACT_NAMES,
   NodeOperatorId,
   PERCENT_BASIS,
   RewardProof,
@@ -47,7 +48,7 @@ export class RewardsSDK extends CsmSDKModule<{
   module: ModuleSDK;
 }> {
   private get distributorContract() {
-    return this.core.contractFeeDistributor;
+    return this.core.getContract(CONTRACT_NAMES.feeDistributor);
   }
 
   @Logger('Utils:')

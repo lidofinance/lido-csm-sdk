@@ -3,6 +3,7 @@ import { zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
+  CONTRACT_NAMES,
   EJECT_FEE_MIN_LIMIT,
   EJECT_FEE_MULTIPLIEER,
   TOKENS,
@@ -22,7 +23,11 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   }
 
   private get ejectorContract() {
-    return this.core.contractEjector;
+    return this.core.getContract(CONTRACT_NAMES.ejector);
+  }
+
+  private get withdrawalVaultContract() {
+    return this.core.getContract(CONTRACT_NAMES.withdrawalVault);
   }
 
   @Logger('Call:')
@@ -171,7 +176,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   @ErrorHandler()
   public async getEjectFeePerKey() {
     const fee =
-      await this.core.contractWithdrawalVault.read.getWithdrawalRequestFee();
+      await this.withdrawalVaultContract.read.getWithdrawalRequestFee();
     const correctedFee = fee * EJECT_FEE_MULTIPLIEER;
     return correctedFee < EJECT_FEE_MIN_LIMIT
       ? EJECT_FEE_MIN_LIMIT

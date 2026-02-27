@@ -19,7 +19,7 @@ export enum CONTRACT_NAMES {
   validatorStrikes = 'validatorStrikes',
   verifier = 'verifier',
   hashConsensus = 'hashConsensus',
-  SMDiscovery = 'SMDiscovery',
+  smDiscovery = 'smDiscovery',
 
   // CSM-specific
   csModule = 'csModule',

@@ -28,7 +28,7 @@ export const CONTRACT_BASE_ABI = {
   [CONTRACT_NAMES.withdrawalVault]: WithdrawalVaultAbi,
   [CONTRACT_NAMES.stETH]: erc20Abi,
   [CONTRACT_NAMES.wstETH]: erc20Abi,
-  [CONTRACT_NAMES.SMDiscovery]: SMDiscoveryAbi,
+  [CONTRACT_NAMES.smDiscovery]: SMDiscoveryAbi,
   [CONTRACT_NAMES.csModule]: CSModuleAbi,
   [CONTRACT_NAMES.curatedModule]: CuratedModuleAbi,
   [CONTRACT_NAMES.accounting]: AccountingAbi,

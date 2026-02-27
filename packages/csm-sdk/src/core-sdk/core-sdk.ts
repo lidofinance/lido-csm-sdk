@@ -4,22 +4,7 @@ import {
   LidoSDKCore,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Abi, Address, Chain, getContract, Hex, WalletClient } from 'viem';
-import {
-  AccountingAbi,
-  BaseModuleAbi,
-  CSModuleAbi,
-  CuratedModuleAbi,
-  EjectorAbi,
-  FeeDistributorAbi,
-  FeeOracleAbi,
-  HashConsensusAbi,
-  ParametersRegistryAbi,
-  SMDiscoveryAbi,
-  StakingRouterAbi,
-  ValidatorsExitBusOracleAbi,
-  WithdrawalVaultAbi,
-  VersionCheckAbi,
-} from '../abi/index.js';
+import { BaseModuleAbi, VersionCheckAbi } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
 import {
@@ -138,58 +123,6 @@ export class CoreSDK extends CsmSDKCacheable {
   get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
     const contractName = MODULE_CONTRACT[this.moduleName];
     return this.getContractWithAbi(contractName, BaseModuleAbi);
-  }
-
-  get contractAccounting(): BindedContract<typeof AccountingAbi> {
-    return this.getContract(CONTRACT_NAMES.accounting);
-  }
-
-  get contractEjector(): BindedContract<typeof EjectorAbi> {
-    return this.getContract(CONTRACT_NAMES.ejector);
-  }
-
-  get contractFeeDistributor(): BindedContract<typeof FeeDistributorAbi> {
-    return this.getContract(CONTRACT_NAMES.feeDistributor);
-  }
-
-  get contractFeeOracle(): BindedContract<typeof FeeOracleAbi> {
-    return this.getContract(CONTRACT_NAMES.feeOracle);
-  }
-
-  get contractCSModule(): BindedContract<typeof CSModuleAbi> {
-    return this.getContract(CONTRACT_NAMES.csModule);
-  }
-
-  get contractParametersRegistry(): BindedContract<
-    typeof ParametersRegistryAbi
-  > {
-    return this.getContract(CONTRACT_NAMES.parametersRegistry);
-  }
-
-  get contractHashConsensus(): BindedContract<typeof HashConsensusAbi> {
-    return this.getContract(CONTRACT_NAMES.hashConsensus);
-  }
-
-  get contractStakingRouter(): BindedContract<typeof StakingRouterAbi> {
-    return this.getContract(CONTRACT_NAMES.stakingRouter);
-  }
-
-  get contractValidatorsExitBusOracle(): BindedContract<
-    typeof ValidatorsExitBusOracleAbi
-  > {
-    return this.getContract(CONTRACT_NAMES.validatorsExitBusOracle);
-  }
-
-  get contractWithdrawalVault(): BindedContract<typeof WithdrawalVaultAbi> {
-    return this.getContract(CONTRACT_NAMES.withdrawalVault);
-  }
-
-  get contractSMDiscovery(): BindedContract<typeof SMDiscoveryAbi> {
-    return this.getContract(CONTRACT_NAMES.SMDiscovery);
-  }
-
-  get contractCuratedModule(): BindedContract<typeof CuratedModuleAbi> {
-    return this.getContract(CONTRACT_NAMES.curatedModule);
   }
 
   public get externalLinks() {

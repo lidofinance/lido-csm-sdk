@@ -35,11 +35,19 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return this.core.getContract(CONTRACT_NAMES.csModule);
   }
 
+  private get parametersRegistryContract() {
+    return this.core.getContract(CONTRACT_NAMES.parametersRegistry);
+  }
+
+  private get discoveryContract() {
+    return this.core.getContract(CONTRACT_NAMES.smDiscovery);
+  }
+
   @Logger('Views:')
   @ErrorHandler()
   @Cache(CACHE_LONG)
   public async getLowestPriorityQueue(): Promise<bigint> {
-    return this.core.contractParametersRegistry.read.QUEUE_LOWEST_PRIORITY();
+    return this.parametersRegistryContract.read.QUEUE_LOWEST_PRIORITY();
   }
 
   @Logger('Views:')
@@ -75,7 +83,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
     return iteratePages(
       (p) =>
-        this.core.contractSMDiscovery.read.getNodeOperatorsDepositableValidatorsCount(
+        this.discoveryContract.read.getNodeOperatorsDepositableValidatorsCount(
           [BigInt(this.core.moduleId), p.offset, p.limit],
         ),
       pagination,
@@ -90,7 +98,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     pagination?: QueueBatchesPagination,
   ): Promise<bigint[]> {
     const result =
-      await this.core.contractSMDiscovery.read.getDepositQueueBatches([
+      await this.discoveryContract.read.getDepositQueueBatches([
         BigInt(this.core.moduleId),
         BigInt(queuePriority),
         pagination?.cursorIndex ?? 0n,

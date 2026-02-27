@@ -2,7 +2,12 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
-import { CACHE_LONG, CACHE_MID, PERCENT_BASIS } from '../common/index.js';
+import {
+  CACHE_LONG,
+  CACHE_MID,
+  CONTRACT_NAMES,
+  PERCENT_BASIS,
+} from '../common/index.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import {
   CurveParameters,
@@ -14,11 +19,11 @@ import {
 
 export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get parametersContract() {
-    return this.core.contractParametersRegistry;
+    return this.core.getContract(CONTRACT_NAMES.parametersRegistry);
   }
 
   private get accountingContract() {
-    return this.core.contractAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   @Logger('Views:')

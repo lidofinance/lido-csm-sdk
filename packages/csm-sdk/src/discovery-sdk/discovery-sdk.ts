@@ -1,5 +1,6 @@
 import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CONTRACT_NAMES } from '../common/constants/index.js';
 import { ROLES } from '../common/constants/roles.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -13,7 +14,7 @@ import { NodeOperatorDiscoveryInfo, Pagination, SearchMode } from './types.js';
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
-    return this.core.contractSMDiscovery;
+    return this.core.getContract(CONTRACT_NAMES.smDiscovery);
   }
 
   /**

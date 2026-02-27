@@ -1,7 +1,7 @@
 import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { ROLES } from '../common/index.js';
+import { CONTRACT_NAMES, ROLES } from '../common/index.js';
 import { parseClaimProps } from '../common/utils/parse-claim-props.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
@@ -23,7 +23,7 @@ export class RolesSDK extends CsmSDKModule<{
   }
 
   private get accountingContract() {
-    return this.core.contractAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   @Logger('Call:')

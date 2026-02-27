@@ -1,6 +1,6 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger, Cache } from '../common/decorators/index.js';
-import { CACHE_LONG, CACHE_SHORT } from '../common/index.js';
+import { CACHE_LONG, CACHE_SHORT, CONTRACT_NAMES } from '../common/index.js';
 import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types.js';
 import {
   getFrameDuration,
@@ -12,11 +12,11 @@ import {
 
 export class FrameSDK extends CsmSDKModule {
   private get oracleContract() {
-    return this.core.contractFeeOracle;
+    return this.core.getContract(CONTRACT_NAMES.feeOracle);
   }
 
   private get consensusContract() {
-    return this.core.contractHashConsensus;
+    return this.core.getContract(CONTRACT_NAMES.hashConsensus);
   }
 
   @Logger('Views:')

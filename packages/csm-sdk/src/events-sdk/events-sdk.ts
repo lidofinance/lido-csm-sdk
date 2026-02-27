@@ -46,11 +46,15 @@ export class EventsSDK extends CsmSDKModule {
   }
 
   private get oracleContract() {
-    return this.core.contractFeeOracle;
+    return this.core.getContract(CONTRACT_NAMES.feeOracle);
+  }
+
+  private get exitBusOracleContract() {
+    return this.core.getContract(CONTRACT_NAMES.validatorsExitBusOracle);
   }
 
   private get accountingContract() {
-    return this.core.contractAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   @Logger('Events:')
@@ -177,7 +181,7 @@ export class EventsSDK extends CsmSDKModule {
     options?: EventRangeProps,
   ): Promise<Hex[]> {
     const logs = await this.queryEvents(options, (s) =>
-      this.core.contractValidatorsExitBusOracle.getEvents.ValidatorExitRequest(
+      this.exitBusOracleContract.getEvents.ValidatorExitRequest(
         { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
         s,
       ),
