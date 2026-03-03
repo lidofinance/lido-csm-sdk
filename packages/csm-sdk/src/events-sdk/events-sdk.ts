@@ -26,6 +26,7 @@ import {
   OperatorCurveIdChange,
   PenaltyCancelled,
   PenaltyCompensated,
+  PenaltyExpiredLockRemoved,
   PenaltyRecord,
   PenaltyReported,
   PenaltySettled,
@@ -353,6 +354,19 @@ export class EventsSDK extends CsmSDKModule {
           (e): Omit<PenaltySettled, 'timestamp'> => ({
             ...base(e),
             type: 'settled',
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.accountingContract.getEvents.ExpiredBondLockRemoved(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): Omit<PenaltyExpiredLockRemoved, 'timestamp'> => ({
+            ...base(e),
+            type: 'expired',
           }),
         );
       },

@@ -50,8 +50,13 @@ export type PenaltySettled = PenaltyBase & {
   type: 'settled';
 };
 
+export type PenaltyExpiredLockRemoved = PenaltyBase & {
+  type: 'expired';
+};
+
 export type PenaltyRecord =
   | PenaltyReported
   | PenaltyCancelled
   | PenaltyCompensated
-  | PenaltySettled;
+  | PenaltySettled
+  | PenaltyExpiredLockRemoved;
