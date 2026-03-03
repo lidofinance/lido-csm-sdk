@@ -50,6 +50,12 @@ export class OperatorSDK extends CsmSDKModule {
     return this.accountingContract.read.getLockedBond([id]);
   }
 
+  @Logger('Views:')
+  @ErrorHandler()
+  public async isLockExpired(id: NodeOperatorId): Promise<boolean> {
+    return this.accountingContract.read.isLockExpired([id]);
+  }
+
   @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()

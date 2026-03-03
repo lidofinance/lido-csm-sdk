@@ -28,3 +28,7 @@ export type ClaimBondProps = CommonTransactionProps &
   };
 
 export type PullRewardsProps = Omit<ClaimBondProps, 'amount'>;
+
+export type UnlockExpiredLockProps = CommonTransactionProps & {
+  nodeOperatorId: NodeOperatorId;
+};

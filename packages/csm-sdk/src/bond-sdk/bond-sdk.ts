@@ -16,6 +16,7 @@ import {
   ClaimBondProps,
   CoverLockedBondProps,
   PullRewardsProps,
+  UnlockExpiredLockProps,
 } from './types.js';
 
 export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
@@ -122,6 +123,20 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           amount,
         ),
       decodeResult: (receipt) => parseCoverReceiptEvents(receipt),
+    });
+  }
+
+  @Logger('Call:')
+  @ErrorHandler()
+  public async unlockExpiredLock(props: UnlockExpiredLockProps) {
+    const { nodeOperatorId, ...rest } = props;
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        prepCall(this.accountingContract, 'unlockExpiredLock', [
+          nodeOperatorId,
+        ]),
     });
   }
 
