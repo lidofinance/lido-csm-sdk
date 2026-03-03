@@ -1019,6 +1019,16 @@ export const MetaRegistryAbi = [
   },
   {
     type: 'error',
+    name: 'OperatorDescriptionTooLong',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'OperatorNameTooLong',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'OwnerEditsRestricted',
     inputs: [],
   },

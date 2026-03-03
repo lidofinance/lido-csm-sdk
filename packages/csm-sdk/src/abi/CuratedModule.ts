@@ -266,12 +266,6 @@ const CuratedModuleExtrasAbi = [
     anonymous: false,
   },
   {
-    type: 'event',
-    name: 'NodeOperatorWeightsUpToDate',
-    inputs: [],
-    anonymous: false,
-  },
-  {
     type: 'error',
     name: 'InvalidMaxCount',
     inputs: [],

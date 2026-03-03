@@ -575,25 +575,6 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
-    name: 'getActualLockedBond',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     name: 'getBond',
     inputs: [
       {
@@ -1054,6 +1035,25 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'getLockedBond',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getLockedBondInfo',
     inputs: [
       {
@@ -1366,6 +1366,25 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'isLockExpired',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'isPaused',
     inputs: [],
     outputs: [
@@ -1538,7 +1557,13 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
     ],
-    outputs: [],
+    outputs: [
+      {
+        name: 'released',
+        type: 'bool',
+        internalType: 'bool',
+      },
+    ],
     stateMutability: 'nonpayable',
   },
   {
@@ -1701,6 +1726,19 @@ export const AccountingAbi = [
       },
     ],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'unlockExpiredLock',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2301,6 +2339,19 @@ export const AccountingAbi = [
   },
   {
     type: 'event',
+    name: 'ExpiredBondLockRemoved',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'FeeSplitsSet',
     inputs: [
       {
@@ -2498,6 +2549,11 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
+    name: 'BondLockNotExpired',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'ElRewardsVaultReceiveFailed',
     inputs: [],
   },
@@ -2549,6 +2605,11 @@ export const AccountingAbi = [
   {
     type: 'error',
     name: 'InvalidInitializationCurveId',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'NoBondLocked',
     inputs: [],
   },
   {

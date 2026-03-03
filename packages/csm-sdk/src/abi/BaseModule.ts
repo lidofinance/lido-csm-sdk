@@ -1152,29 +1152,6 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
-    name: 'increaseKeyAddedBalance',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'keyIndex',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'amount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'isPaused',
     inputs: [],
     outputs: [
@@ -1754,6 +1731,29 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'syncKeyAddedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'currentBalanceWei',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'unsafeUpdateValidatorsCount',
     inputs: [
       {
@@ -1979,6 +1979,12 @@ export const BaseModuleAbi = [
         internalType: 'uint256',
       },
     ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'FullDepositInfoUpdateRequested',
+    inputs: [],
     anonymous: false,
   },
   {
@@ -2683,11 +2689,6 @@ export const BaseModuleAbi = [
   {
     type: 'error',
     name: 'NotInitializing',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'NothingCompensated',
     inputs: [],
   },
   {

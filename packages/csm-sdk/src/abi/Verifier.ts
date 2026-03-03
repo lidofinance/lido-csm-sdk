@@ -533,6 +533,350 @@ export const VerifierAbi = [
   },
   {
     type: 'function',
+    name: 'processBalanceProof',
+    inputs: [
+      {
+        name: 'data',
+        type: 'tuple',
+        internalType: 'struct IVerifier.ProcessBalanceProofInput',
+        components: [
+          {
+            name: 'recentBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.RecentHeaderWitness',
+            components: [
+              {
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
+                  {
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
+                  },
+                  {
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
+              },
+              {
+                name: 'rootsTimestamp',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+            ],
+          },
+          {
+            name: 'validator',
+            type: 'tuple',
+            internalType: 'struct IVerifier.ValidatorWitness',
+            components: [
+              {
+                name: 'index',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+              {
+                name: 'nodeOperatorId',
+                type: 'uint32',
+                internalType: 'uint32',
+              },
+              {
+                name: 'keyIndex',
+                type: 'uint32',
+                internalType: 'uint32',
+              },
+              {
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Validator',
+                components: [
+                  {
+                    name: 'pubkey',
+                    type: 'bytes',
+                    internalType: 'bytes',
+                  },
+                  {
+                    name: 'withdrawalCredentials',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'effectiveBalance',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'slashed',
+                    type: 'bool',
+                    internalType: 'bool',
+                  },
+                  {
+                    name: 'activationEligibilityEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'activationEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'exitEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'withdrawableEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
+              },
+              {
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+          {
+            name: 'balance',
+            type: 'tuple',
+            internalType: 'struct IVerifier.BalanceWitness',
+            components: [
+              {
+                name: 'node',
+                type: 'bytes32',
+                internalType: 'bytes32',
+              },
+              {
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'processHistoricalBalanceProof',
+    inputs: [
+      {
+        name: 'data',
+        type: 'tuple',
+        internalType: 'struct IVerifier.ProcessHistoricalBalanceProofInput',
+        components: [
+          {
+            name: 'recentBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.RecentHeaderWitness',
+            components: [
+              {
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
+                  {
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
+                  },
+                  {
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
+              },
+              {
+                name: 'rootsTimestamp',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+            ],
+          },
+          {
+            name: 'historicalBlock',
+            type: 'tuple',
+            internalType: 'struct IVerifier.HistoricalHeaderWitness',
+            components: [
+              {
+                name: 'header',
+                type: 'tuple',
+                internalType: 'struct BeaconBlockHeader',
+                components: [
+                  {
+                    name: 'slot',
+                    type: 'uint64',
+                    internalType: 'Slot',
+                  },
+                  {
+                    name: 'proposerIndex',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'parentRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'stateRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'bodyRoot',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                ],
+              },
+              {
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+          {
+            name: 'validator',
+            type: 'tuple',
+            internalType: 'struct IVerifier.ValidatorWitness',
+            components: [
+              {
+                name: 'index',
+                type: 'uint64',
+                internalType: 'uint64',
+              },
+              {
+                name: 'nodeOperatorId',
+                type: 'uint32',
+                internalType: 'uint32',
+              },
+              {
+                name: 'keyIndex',
+                type: 'uint32',
+                internalType: 'uint32',
+              },
+              {
+                name: 'object',
+                type: 'tuple',
+                internalType: 'struct Validator',
+                components: [
+                  {
+                    name: 'pubkey',
+                    type: 'bytes',
+                    internalType: 'bytes',
+                  },
+                  {
+                    name: 'withdrawalCredentials',
+                    type: 'bytes32',
+                    internalType: 'bytes32',
+                  },
+                  {
+                    name: 'effectiveBalance',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'slashed',
+                    type: 'bool',
+                    internalType: 'bool',
+                  },
+                  {
+                    name: 'activationEligibilityEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'activationEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'exitEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                  {
+                    name: 'withdrawableEpoch',
+                    type: 'uint64',
+                    internalType: 'uint64',
+                  },
+                ],
+              },
+              {
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+          {
+            name: 'balance',
+            type: 'tuple',
+            internalType: 'struct IVerifier.BalanceWitness',
+            components: [
+              {
+                name: 'node',
+                type: 'bytes32',
+                internalType: 'bytes32',
+              },
+              {
+                name: 'proof',
+                type: 'bytes32[]',
+                internalType: 'bytes32[]',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'processHistoricalWithdrawalProof',
     inputs: [
       {
@@ -747,29 +1091,6 @@ export const VerifierAbi = [
             ],
           },
         ],
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'processIncomingConsolidation',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'keyIndex',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'addedBalanceWei',
-        type: 'uint256',
-        internalType: 'uint256',
       },
     ],
     outputs: [],
@@ -1305,11 +1626,6 @@ export const VerifierAbi = [
   {
     type: 'error',
     name: 'InvalidWithdrawalAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'NotImplemented',
     inputs: [],
   },
   {

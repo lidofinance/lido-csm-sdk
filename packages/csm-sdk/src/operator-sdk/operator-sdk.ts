@@ -31,21 +31,23 @@ export class OperatorSDK extends CsmSDKModule {
     return this.accountingContract.read.getBondCurveId([id]);
   }
 
+  // TODO: add debt and pending shares to the result
   @Logger('Views:')
   @ErrorHandler()
   public async getBondBalance(id: NodeOperatorId): Promise<BondBalance> {
     const [[current, required], locked] = await Promise.all([
       this.accountingContract.read.getBondSummary([id]),
-      this.accountingContract.read.getActualLockedBond([id]),
+      this.getLockedBond(id),
     ]);
 
     return calcBondBalance({ current, required, locked });
   }
 
+  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
   public async getLockedBond(id: NodeOperatorId): Promise<bigint> {
-    return this.accountingContract.read.getActualLockedBond([id]);
+    return this.accountingContract.read.getLockedBond([id]);
   }
 
   @Cache(CACHE_SHORT)
