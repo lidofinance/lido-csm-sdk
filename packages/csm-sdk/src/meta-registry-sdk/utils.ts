@@ -25,7 +25,7 @@ export const decodeExternalOperatorNOR = (
     );
   }
 
-  const moduleId = hexToNumber(slice(op.data, 1, 2));
+  const moduleId = hexToBigInt(slice(op.data, 1, 2));
   const nodeOperatorId = hexToBigInt(slice(op.data, 2, 10));
 
   return { moduleId, nodeOperatorId };

@@ -5,6 +5,7 @@ import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   OperatorGroup,
   OperatorMetadata,
+  OperatorWeightAndExternalStake,
   SetOperatorDataProps,
 } from './types.js';
 import { decodeExternalOperator } from './utils.js';
@@ -12,6 +13,10 @@ import { decodeExternalOperator } from './utils.js';
 export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get contract() {
     return this.core.getContract(CONTRACT_NAMES.metaRegistry);
+  }
+
+  private get moduleContract() {
+    return this.core.getContract(CONTRACT_NAMES.curatedModule);
   }
 
   @Logger('Call:')
@@ -77,5 +82,25 @@ export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
     nodeOperatorIds: NodeOperatorId[],
   ): Promise<readonly bigint[]> {
     return this.contract.read.getOperatorWeights([nodeOperatorIds]);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorWeightAndExternalStake(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<OperatorWeightAndExternalStake> {
+    const [weight, externalStake] =
+      await this.contract.read.getNodeOperatorWeightAndExternalStake([
+        nodeOperatorId,
+      ]);
+    return { weight, externalStake };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorBalance(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<bigint> {
+    return this.moduleContract.read.getNodeOperatorBalance([nodeOperatorId]);
   }
 }

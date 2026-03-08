@@ -252,13 +252,3 @@ export const validateDepositData = async (
 
   return errors;
 };
-
-/**
- * Quick validation that only checks basic fields without async operations
- */
-export const validateDepositDataSync = (
-  depositData: DepositData[],
-  config: ValidationProps,
-): ValidationError[] => {
-  return performBasicValidation(depositData, config);
-};

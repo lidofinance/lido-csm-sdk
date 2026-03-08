@@ -23,7 +23,7 @@ export type RawExternalOperator = {
 };
 
 export type ExternalOperatorNOR = {
-  moduleId: number;
+  moduleId: bigint;
   nodeOperatorId: bigint;
 };
 
@@ -34,4 +34,9 @@ export type DecodedExternalOperator =
 export type OperatorGroup = {
   subNodeOperators: readonly SubNodeOperator[];
   externalOperators: readonly DecodedExternalOperator[];
+};
+
+export type OperatorWeightAndExternalStake = {
+  weight: bigint;
+  externalStake: bigint;
 };

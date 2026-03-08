@@ -67,6 +67,7 @@ export class ModuleSDK extends CsmSDKModule {
       ...digest,
       state: {
         ...digest.state,
+        id: BigInt(digest.state.id),
         stakingModuleFee: BigInt(digest.state.stakingModuleFee),
         stakeShareLimit: BigInt(digest.state.stakeShareLimit),
       },
@@ -78,6 +79,31 @@ export class ModuleSDK extends CsmSDKModule {
   public async getDigest() {
     const digests = await this.getAllModulesDigests();
     return findModuleDigest(digests, this.core.moduleId);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getWithdrawalCredentialsType(): Promise<number> {
+    const digest = await this.getDigest();
+    return digest.state.withdrawalCredentialsType;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getMaxEffectiveBalance(): Promise<bigint> {
+    const wcType = await this.getWithdrawalCredentialsType();
+    const method =
+      wcType === 1
+        ? 'MAX_EFFECTIVE_BALANCE_WC_TYPE_01'
+        : 'MAX_EFFECTIVE_BALANCE_WC_TYPE_02';
+    return this.stakingRouterContract.read[method]();
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getWcPrefix(): Promise<string> {
+    const wcType = await this.getWithdrawalCredentialsType();
+    return wcType.toString(16).padStart(2, '0').padEnd(24, '0');
   }
 
   @Logger('Utils:')
@@ -100,14 +126,20 @@ export class ModuleSDK extends CsmSDKModule {
     return ShareLimitStatus.FAR;
   }
 
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getBalance(): Promise<bigint> {
+    return this.stakingRouterContract.read.getStakingModuleBalance([
+      this.core.moduleId,
+    ]);
+  }
+
+  // TODO: review
   @Logger('API:')
   @ErrorHandler()
   public async getUsedOtherModule(address: Address): Promise<string | null> {
-    const keysApi = this.core.keysApiLink;
-    const csmId = this.core.moduleId;
-
     const { data: modules } = await fetchJson<ModulesResponse>(
-      `${keysApi}/v1/modules`,
+      `${this.core.keysApiLink}/v1/modules`,
       {
         headers: { 'Content-Type': 'application/json' },
       },
@@ -115,10 +147,10 @@ export class ModuleSDK extends CsmSDKModule {
 
     const results = await Promise.all(
       modules.map(({ id }) =>
-        id === csmId
+        BigInt(id) === this.core.moduleId
           ? undefined
           : fetchJson<ModuleOperatorsResponse>(
-              `${keysApi}/v1/modules/${id}/operators`,
+              `${this.core.keysApiLink}/v1/modules/${id}/operators`,
             ).catch(() => undefined),
       ),
     );

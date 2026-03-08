@@ -15,7 +15,7 @@ export type ValidatorInfoIssues = ValidatorInfo & {
 // API Request params
 
 export type CheckOperatorKeysProps = {
-  moduleId: number;
+  moduleId: bigint;
   nodeOperatorId?: NodeOperatorId;
   limit?: number;
   start?: number;

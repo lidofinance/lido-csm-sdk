@@ -6,10 +6,10 @@ import {
   compareLowercase,
   isHexadecimalString,
   toHexString,
-  trimHexPrefix,
 } from '../common/utils/index.js';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
+import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { PUBKEY_LENGTH } from './constants.js';
 import { parseDepositData, removeKey } from './parser.js';
 import {
@@ -19,16 +19,13 @@ import {
   ValidationError,
   ValidationErrorCode,
 } from './types.js';
-import { validateDepositData, validateDepositDataSync } from './validator.js';
+import { validateDepositData } from './validator.js';
 
 export class DepositDataSDK extends CsmSDKModule<{
+  module: ModuleSDK;
   keysWithStatus?: KeysWithStatusSDK;
   keysCache?: KeysCacheSDK;
 }> {
-  private get wcPrefix(): string {
-    return trimHexPrefix(this.core.wcPrefix).padEnd(24, '0');
-  }
-
   /**
    * Parse deposit data JSON with enhanced error handling
    */
@@ -54,12 +51,15 @@ export class DepositDataSDK extends CsmSDKModule<{
   ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
     const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
-    const blockNumber = await this.core.publicClient.getBlockNumber();
+    const [blockNumber, wcPrefix] = await Promise.all([
+      this.core.publicClient.getBlockNumber(),
+      this.bus.module.getWcPrefix(),
+    ]);
 
     const errors = await validateDepositData(depositData, {
       chainId,
       withdrawalCredentials: wc,
-      wcPrefix: this.wcPrefix,
+      wcPrefix,
       currentBlockNumber: Number(blockNumber),
     });
 
@@ -82,23 +82,6 @@ export class DepositDataSDK extends CsmSDKModule<{
       ...uploadedDuplicateErrors,
       ...clErrors,
     ];
-  }
-
-  /**
-   * Quick synchronous validation without signature verification
-   */
-  @Logger('Utils:')
-  public validateDepositDataSync(
-    depositData: DepositData[],
-  ): ValidationError[] {
-    const chainId = this.core.chainId;
-    const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
-
-    return validateDepositDataSync(depositData, {
-      chainId,
-      withdrawalCredentials: wc,
-      wcPrefix: this.wcPrefix,
-    });
   }
 
   @Logger('API:')

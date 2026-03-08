@@ -183,7 +183,7 @@ export class EventsSDK extends CsmSDKModule {
   ): Promise<Hex[]> {
     const logs = await this.queryEvents(options, (s) =>
       this.exitBusOracleContract.getEvents.ValidatorExitRequest(
-        { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
+        { nodeOperatorId, stakingModuleId: this.core.moduleId },
         s,
       ),
     );

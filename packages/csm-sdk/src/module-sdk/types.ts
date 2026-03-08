@@ -25,7 +25,7 @@ export type ModuleDigest = {
   nodeOperatorsCount: bigint;
   activeNodeOperatorsCount: bigint;
   state: {
-    id: number;
+    id: bigint;
     stakingModuleAddress: Address;
     stakingModuleFee: bigint;
     treasuryFee: number;
@@ -38,6 +38,7 @@ export type ModuleDigest = {
     priorityExitShareThreshold: number;
     maxDepositsPerBlock: bigint;
     minDepositBlockDistance: bigint;
+    withdrawalCredentialsType: number;
   };
   summary: {
     totalExitedValidators: bigint;

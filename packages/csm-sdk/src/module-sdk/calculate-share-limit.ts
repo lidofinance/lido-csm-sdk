@@ -4,7 +4,7 @@ import { ModuleDigest, ShareLimitInfo } from './types.js';
 
 export const calculateShareLimit = (
   digests: ModuleDigest[],
-  moduleId: number,
+  moduleId: bigint,
 ): ShareLimitInfo => {
   const moduleDigest = findModuleDigest(digests, moduleId);
   const shareLimit = moduleDigest.state.stakeShareLimit;

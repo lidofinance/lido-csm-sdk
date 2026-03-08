@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { Address, Hex } from 'viem';
+import { Address } from 'viem';
 
 import { CONTRACT_NAMES } from './contract-names.js';
 import { MODULE_NAME, PerModule } from './module-name.js';
@@ -9,8 +9,7 @@ type ContractAddressMap = { [key in CONTRACT_NAMES]?: Address };
 
 type ModuleChainConfig = {
   contractAddresses: ContractAddressMap;
-  moduleId: number;
-  wcPrefix: Hex;
+  moduleId: bigint;
   deploymentBlockNumber?: bigint;
 };
 
@@ -71,8 +70,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.vettedGate]:
           '0xB314D4A76C457c93150d308787939063F4Cc67E0',
       },
-      moduleId: 3,
-      wcPrefix: '0x01',
+      moduleId: 3n,
       deploymentBlockNumber: BigInt('0x13f7326'),
     },
     [CHAINS.Hoodi]: {
@@ -99,8 +97,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.vettedGate]:
           '0x10a254E724fe2b7f305F76f3F116a3969c53845f',
       },
-      moduleId: 4,
-      wcPrefix: '0x01',
+      moduleId: 4n,
       deploymentBlockNumber: BigInt('0x1374'),
     },
   },
@@ -108,26 +105,22 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
   [MODULE_NAME.CSM0x02]: {
     [CHAINS.Mainnet]: {
       contractAddresses: {},
-      moduleId: 5,
-      wcPrefix: '0x02',
+      moduleId: 5n,
     },
     [CHAINS.Hoodi]: {
       contractAddresses: {},
-      moduleId: 6,
-      wcPrefix: '0x02',
+      moduleId: 6n,
     },
   },
 
   [MODULE_NAME.CM]: {
     [CHAINS.Mainnet]: {
       contractAddresses: {},
-      moduleId: 4,
-      wcPrefix: '0x02',
+      moduleId: 4n,
     },
     [CHAINS.Hoodi]: {
       contractAddresses: {},
-      moduleId: 5,
-      wcPrefix: '0x02',
+      moduleId: 5n,
     },
   },
 };

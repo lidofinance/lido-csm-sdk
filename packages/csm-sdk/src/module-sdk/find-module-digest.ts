@@ -3,7 +3,7 @@ import { ModuleDigest } from './types.js';
 
 export const findModuleDigest = (
   digests: ModuleDigest[],
-  moduleId: number,
+  moduleId: bigint,
 ): ModuleDigest => {
   const moduleDigest = digests.find((digest) => digest.state.id === moduleId);
   invariant(

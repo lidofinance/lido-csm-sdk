@@ -83,9 +83,11 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
     return iteratePages(
       (p) =>
-        this.discoveryContract.read.getNodeOperatorsDepositableValidatorsCount(
-          [BigInt(this.core.moduleId), p.offset, p.limit],
-        ),
+        this.discoveryContract.read.getNodeOperatorsDepositableValidatorsCount([
+          this.core.moduleId,
+          p.offset,
+          p.limit,
+        ]),
       pagination,
       getNextOffset,
     );
@@ -97,13 +99,12 @@ export class DepositQueueSDK extends CsmSDKModule<{
     queuePriority: number,
     pagination?: QueueBatchesPagination,
   ): Promise<bigint[]> {
-    const result =
-      await this.discoveryContract.read.getDepositQueueBatches([
-        BigInt(this.core.moduleId),
-        BigInt(queuePriority),
-        pagination?.cursorIndex ?? 0n,
-        pagination?.limit ?? 1000n,
-      ]);
+    const result = await this.discoveryContract.read.getDepositQueueBatches([
+      this.core.moduleId,
+      BigInt(queuePriority),
+      pagination?.cursorIndex ?? 0n,
+      pagination?.limit ?? 1000n,
+    ]);
 
     return result as bigint[];
   }

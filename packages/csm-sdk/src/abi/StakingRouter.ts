@@ -1,2505 +1,2960 @@
 export const StakingRouterAbi = [
   {
-    type: 'receive',
-    stateMutability: 'payable',
-  },
-  {
-    type: 'function',
-    name: 'DEFAULT_ADMIN_ROLE',
     inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'DEPOSIT_CONTRACT',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'FEE_PRECISION_POINTS',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'MANAGE_WITHDRAWAL_CREDENTIALS_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'MAX_STAKING_MODULES_COUNT',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'MAX_STAKING_MODULE_NAME_LENGTH',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'REPORT_EXITED_VALIDATORS_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'REPORT_REWARDS_MINTED_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'STAKING_MODULE_MANAGE_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'STAKING_MODULE_UNVETTING_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'TOTAL_BASIS_POINTS',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'UNSAFE_SET_EXITED_VALIDATORS_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'addStakingModule',
-    inputs: [
-      {
-        name: '_name',
-        type: 'string',
-        internalType: 'string',
-      },
-      {
-        name: '_stakingModuleAddress',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: '_stakeShareLimit',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_priorityExitShareThreshold',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_stakingModuleFee',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_treasuryFee',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_maxDepositsPerBlock',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_minDepositBlockDistance',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'decreaseStakingModuleVettedKeysCountByNodeOperator',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorIds',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-      {
-        name: '_vettedSigningKeysCounts',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'deposit',
-    inputs: [
-      {
-        name: '_depositsCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_depositCalldata',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'function',
-    name: 'finalizeUpgrade_v2',
-    inputs: [
-      {
-        name: '_priorityExitShareThresholds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'getAllNodeOperatorDigests',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'tuple[]',
-        internalType: 'struct IStakingRouter.NodeOperatorDigest[]',
-        components: [
-          {
-            name: 'id',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'isActive',
-            type: 'bool',
-            internalType: 'bool',
-          },
-          {
-            name: 'summary',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.NodeOperatorSummary',
-            components: [
-              {
-                name: 'targetLimitMode',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'targetValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'stuckValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'refundedValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'stuckPenaltyEndTimestamp',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalExitedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalDepositedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'depositableValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getAllStakingModuleDigests',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'tuple[]',
-        internalType: 'struct IStakingRouter.StakingModuleDigest[]',
-        components: [
-          {
-            name: 'nodeOperatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'activeNodeOperatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'state',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.StakingModule',
-            components: [
-              {
-                name: 'id',
-                type: 'uint24',
-                internalType: 'uint24',
-              },
-              {
-                name: 'stakingModuleAddress',
-                type: 'address',
-                internalType: 'address',
-              },
-              {
-                name: 'stakingModuleFee',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'treasuryFee',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'stakeShareLimit',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'status',
-                type: 'uint8',
-                internalType: 'uint8',
-              },
-              {
-                name: 'name',
-                type: 'string',
-                internalType: 'string',
-              },
-              {
-                name: 'lastDepositAt',
-                type: 'uint64',
-                internalType: 'uint64',
-              },
-              {
-                name: 'lastDepositBlock',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'exitedValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'priorityExitShareThreshold',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'maxDepositsPerBlock',
-                type: 'uint64',
-                internalType: 'uint64',
-              },
-              {
-                name: 'minDepositBlockDistance',
-                type: 'uint64',
-                internalType: 'uint64',
-              },
-            ],
-          },
-          {
-            name: 'summary',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.StakingModuleSummary',
-            components: [
-              {
-                name: 'totalExitedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalDepositedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'depositableValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getContractVersion',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getDepositsAllocation',
-    inputs: [
-      {
-        name: '_depositsCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'allocated',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'allocations',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getLido',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getNodeOperatorDigests',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    outputs: [
-      {
-        name: 'digests',
-        type: 'tuple[]',
-        internalType: 'struct IStakingRouter.NodeOperatorDigest[]',
-        components: [
-          {
-            name: 'id',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'isActive',
-            type: 'bool',
-            internalType: 'bool',
-          },
-          {
-            name: 'summary',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.NodeOperatorSummary',
-            components: [
-              {
-                name: 'targetLimitMode',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'targetValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'stuckValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'refundedValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'stuckPenaltyEndTimestamp',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalExitedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalDepositedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'depositableValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getNodeOperatorDigests',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_offset',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_limit',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'tuple[]',
-        internalType: 'struct IStakingRouter.NodeOperatorDigest[]',
-        components: [
-          {
-            name: 'id',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'isActive',
-            type: 'bool',
-            internalType: 'bool',
-          },
-          {
-            name: 'summary',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.NodeOperatorSummary',
-            components: [
-              {
-                name: 'targetLimitMode',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'targetValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'stuckValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'refundedValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'stuckPenaltyEndTimestamp',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalExitedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalDepositedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'depositableValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getNodeOperatorSummary',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'summary',
-        type: 'tuple',
-        internalType: 'struct IStakingRouter.NodeOperatorSummary',
-        components: [
-          {
-            name: 'targetLimitMode',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'targetValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'stuckValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'refundedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'stuckPenaltyEndTimestamp',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'totalExitedValidators',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'totalDepositedValidators',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'depositableValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getRoleAdmin',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getRoleMember',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-      {
-        name: 'index',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getRoleMemberCount',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingFeeAggregateDistribution',
-    inputs: [],
-    outputs: [
-      {
-        name: 'modulesFee',
-        type: 'uint96',
-        internalType: 'uint96',
-      },
-      {
-        name: 'treasuryFee',
-        type: 'uint96',
-        internalType: 'uint96',
-      },
-      {
-        name: 'basePrecision',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingFeeAggregateDistributionE4Precision',
-    inputs: [],
-    outputs: [
-      {
-        name: 'modulesFee',
-        type: 'uint16',
-        internalType: 'uint16',
-      },
-      {
-        name: 'treasuryFee',
-        type: 'uint16',
-        internalType: 'uint16',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModule',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'tuple',
-        internalType: 'struct IStakingRouter.StakingModule',
-        components: [
-          {
-            name: 'id',
-            type: 'uint24',
-            internalType: 'uint24',
-          },
-          {
-            name: 'stakingModuleAddress',
-            type: 'address',
-            internalType: 'address',
-          },
-          {
-            name: 'stakingModuleFee',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'treasuryFee',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'stakeShareLimit',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'status',
-            type: 'uint8',
-            internalType: 'uint8',
-          },
-          {
-            name: 'name',
-            type: 'string',
-            internalType: 'string',
-          },
-          {
-            name: 'lastDepositAt',
-            type: 'uint64',
-            internalType: 'uint64',
-          },
-          {
-            name: 'lastDepositBlock',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'exitedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'priorityExitShareThreshold',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'maxDepositsPerBlock',
-            type: 'uint64',
-            internalType: 'uint64',
-          },
-          {
-            name: 'minDepositBlockDistance',
-            type: 'uint64',
-            internalType: 'uint64',
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleActiveValidatorsCount',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'activeValidatorsCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleDigests',
-    inputs: [
-      {
-        name: '_stakingModuleIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    outputs: [
-      {
-        name: 'digests',
-        type: 'tuple[]',
-        internalType: 'struct IStakingRouter.StakingModuleDigest[]',
-        components: [
-          {
-            name: 'nodeOperatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'activeNodeOperatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'state',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.StakingModule',
-            components: [
-              {
-                name: 'id',
-                type: 'uint24',
-                internalType: 'uint24',
-              },
-              {
-                name: 'stakingModuleAddress',
-                type: 'address',
-                internalType: 'address',
-              },
-              {
-                name: 'stakingModuleFee',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'treasuryFee',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'stakeShareLimit',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'status',
-                type: 'uint8',
-                internalType: 'uint8',
-              },
-              {
-                name: 'name',
-                type: 'string',
-                internalType: 'string',
-              },
-              {
-                name: 'lastDepositAt',
-                type: 'uint64',
-                internalType: 'uint64',
-              },
-              {
-                name: 'lastDepositBlock',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'exitedValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'priorityExitShareThreshold',
-                type: 'uint16',
-                internalType: 'uint16',
-              },
-              {
-                name: 'maxDepositsPerBlock',
-                type: 'uint64',
-                internalType: 'uint64',
-              },
-              {
-                name: 'minDepositBlockDistance',
-                type: 'uint64',
-                internalType: 'uint64',
-              },
-            ],
-          },
-          {
-            name: 'summary',
-            type: 'tuple',
-            internalType: 'struct IStakingRouter.StakingModuleSummary',
-            components: [
-              {
-                name: 'totalExitedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'totalDepositedValidators',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-              {
-                name: 'depositableValidatorsCount',
-                type: 'uint256',
-                internalType: 'uint256',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleIds',
-    inputs: [],
-    outputs: [
-      {
-        name: 'stakingModuleIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleIsActive',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleIsDepositsPaused',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleIsStopped',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleLastDepositBlock',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleMaxDepositsCount',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_maxDepositsValue',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleMaxDepositsPerBlock',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleMinDepositBlockDistance',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleNonce',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleStatus',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint8',
-        internalType: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModuleSummary',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'summary',
-        type: 'tuple',
-        internalType: 'struct IStakingRouter.StakingModuleSummary',
-        components: [
-          {
-            name: 'totalExitedValidators',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'totalDepositedValidators',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'depositableValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModules',
-    inputs: [],
-    outputs: [
-      {
-        name: 'res',
-        type: 'tuple[]',
-        internalType: 'struct IStakingRouter.StakingModule[]',
-        components: [
-          {
-            name: 'id',
-            type: 'uint24',
-            internalType: 'uint24',
-          },
-          {
-            name: 'stakingModuleAddress',
-            type: 'address',
-            internalType: 'address',
-          },
-          {
-            name: 'stakingModuleFee',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'treasuryFee',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'stakeShareLimit',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'status',
-            type: 'uint8',
-            internalType: 'uint8',
-          },
-          {
-            name: 'name',
-            type: 'string',
-            internalType: 'string',
-          },
-          {
-            name: 'lastDepositAt',
-            type: 'uint64',
-            internalType: 'uint64',
-          },
-          {
-            name: 'lastDepositBlock',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'exitedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'priorityExitShareThreshold',
-            type: 'uint16',
-            internalType: 'uint16',
-          },
-          {
-            name: 'maxDepositsPerBlock',
-            type: 'uint64',
-            internalType: 'uint64',
-          },
-          {
-            name: 'minDepositBlockDistance',
-            type: 'uint64',
-            internalType: 'uint64',
-          },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingModulesCount',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getStakingRewardsDistribution',
-    inputs: [],
-    outputs: [
-      {
-        name: 'recipients',
-        type: 'address[]',
-        internalType: 'address[]',
-      },
-      {
-        name: 'stakingModuleIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: 'stakingModuleFees',
-        type: 'uint96[]',
-        internalType: 'uint96[]',
-      },
-      {
-        name: 'totalFee',
-        type: 'uint96',
-        internalType: 'uint96',
-      },
-      {
-        name: 'precisionPoints',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getTotalFeeE4Precision',
-    inputs: [],
-    outputs: [
-      {
-        name: 'totalFee',
-        type: 'uint16',
-        internalType: 'uint16',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getWithdrawalCredentials',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'grantRole',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-      {
-        name: 'account',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'hasRole',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-      {
-        name: 'account',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'hasStakingModule',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'initialize',
-    inputs: [
-      {
-        name: '_admin',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: '_lido',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: '_withdrawalCredentials',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'onValidatorsCountsByNodeOperatorReportingFinished',
-    inputs: [],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'renounceRole',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-      {
-        name: 'account',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'reportRewardsMinted',
-    inputs: [
-      {
-        name: '_stakingModuleIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: '_totalShares',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'reportStakingModuleExitedValidatorsCountByNodeOperator',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorIds',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-      {
-        name: '_exitedValidatorsCounts',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'reportStakingModuleStuckValidatorsCountByNodeOperator',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorIds',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-      {
-        name: '_stuckValidatorsCounts',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'reportValidatorExitDelay',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_proofSlotTimestamp',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_publicKey',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-      {
-        name: '_eligibleToExitInSec',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'revokeRole',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-      {
-        name: 'account',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'setStakingModuleStatus',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_status',
-        type: 'uint8',
-        internalType: 'uint8',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'setWithdrawalCredentials',
-    inputs: [
-      {
-        name: '_withdrawalCredentials',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'supportsInterface',
-    inputs: [
-      {
-        name: 'interfaceId',
-        type: 'bytes4',
-        internalType: 'bytes4',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'unsafeSetExitedValidatorsCount',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_triggerUpdateFinish',
-        type: 'bool',
-        internalType: 'bool',
-      },
-      {
-        name: '_correction',
-        type: 'tuple',
-        internalType: 'struct IStakingRouter.ValidatorsCountsCorrection',
-        components: [
-          {
-            name: 'currentModuleExitedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'currentNodeOperatorExitedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'newModuleExitedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'newNodeOperatorExitedValidatorsCount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'updateExitedValidatorsCountByStakingModule',
-    inputs: [
-      {
-        name: '_stakingModuleIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: '_exitedValidatorsCounts',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'updateRefundedValidatorsCount',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_refundedValidatorsCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'updateStakingModule',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_stakeShareLimit',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_priorityExitShareThreshold',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_stakingModuleFee',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_treasuryFee',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_maxDepositsPerBlock',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_minDepositBlockDistance',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'updateTargetValidatorsLimits',
-    inputs: [
-      {
-        name: '_stakingModuleId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_targetLimitMode',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_targetLimit',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'event',
-    name: 'ContractVersionSet',
-    inputs: [
-      {
-        name: 'version',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'ExitedAndStuckValidatorsCountsUpdateFailed',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'lowLevelRevertData',
-        type: 'bytes',
-        indexed: false,
-        internalType: 'bytes',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'RewardsMintedReportFailed',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'lowLevelRevertData',
-        type: 'bytes',
-        indexed: false,
-        internalType: 'bytes',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'RoleAdminChanged',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        indexed: true,
-        internalType: 'bytes32',
-      },
-      {
-        name: 'previousAdminRole',
-        type: 'bytes32',
-        indexed: true,
-        internalType: 'bytes32',
-      },
-      {
-        name: 'newAdminRole',
-        type: 'bytes32',
-        indexed: true,
-        internalType: 'bytes32',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'RoleGranted',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        indexed: true,
-        internalType: 'bytes32',
-      },
-      {
-        name: 'account',
-        type: 'address',
-        indexed: true,
-        internalType: 'address',
-      },
-      {
-        name: 'sender',
-        type: 'address',
-        indexed: true,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'RoleRevoked',
-    inputs: [
-      {
-        name: 'role',
-        type: 'bytes32',
-        indexed: true,
-        internalType: 'bytes32',
-      },
-      {
-        name: 'account',
-        type: 'address',
-        indexed: true,
-        internalType: 'address',
-      },
-      {
-        name: 'sender',
-        type: 'address',
-        indexed: true,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleAdded',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'stakingModule',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        indexed: false,
-        internalType: 'string',
-      },
-      {
-        name: 'createdBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleExitedValidatorsIncompleteReporting',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'unreportedExitedValidatorsCount',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleFeesSet',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'stakingModuleFee',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'treasuryFee',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'setBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleMaxDepositsPerBlockSet',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'maxDepositsPerBlock',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'setBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleMinDepositBlockDistanceSet',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'minDepositBlockDistance',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'setBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleShareLimitSet',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'stakeShareLimit',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'priorityExitShareThreshold',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'setBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingModuleStatusSet',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'status',
-        type: 'uint8',
-        indexed: false,
-        internalType: 'uint8',
-      },
-      {
-        name: 'setBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'StakingRouterETHDeposited',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'amount',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'WithdrawalCredentialsSet',
-    inputs: [
-      {
-        name: 'withdrawalCredentials',
-        type: 'bytes32',
-        indexed: false,
-        internalType: 'bytes32',
-      },
-      {
-        name: 'setBy',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'WithdrawalsCredentialsChangeFailed',
-    inputs: [
-      {
-        name: 'stakingModuleId',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'lowLevelRevertData',
-        type: 'bytes',
-        indexed: false,
-        internalType: 'bytes',
-      },
-    ],
-    anonymous: false,
-  },
-  {
+    name: 'AccessControlBadConfirmation',
     type: 'error',
-    name: 'AppAuthLidoFailed',
-    inputs: [],
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        internalType: 'bytes32',
+        name: 'neededRole',
+        type: 'bytes32',
+      },
+    ],
+    name: 'AccessControlUnauthorizedAccount',
     type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'AllocationExceedsLimit',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'AmountNotAlignedToGwei',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'ArraysLengthMismatch',
-    inputs: [
-      {
-        name: 'firstArrayLength',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'secondArrayLength',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'DepositContractZeroAddress',
     inputs: [],
+    name: 'CannotDeposit',
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'DirectETHTransfer',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'EmptyWithdrawalsCredentials',
     inputs: [],
+    name: 'EmptyKeysList',
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'ExitedValidatorsCountCannotDecrease',
+    type: 'error',
+  },
+  {
     inputs: [],
+    name: 'InvalidAmountGwei',
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'InvalidContractVersionIncrement',
     inputs: [],
+    name: 'InvalidFeeSum',
+    type: 'error',
   },
   {
+    inputs: [],
+    name: 'InvalidInitialization',
     type: 'error',
-    name: 'InvalidDepositsValue',
-    inputs: [
-      {
-        name: 'etherValue',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'depositsCount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
   },
   {
+    inputs: [],
+    name: 'InvalidMaxDepositPerBlockValue',
     type: 'error',
+  },
+  {
+    inputs: [],
     name: 'InvalidMinDepositBlockDistance',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'InvalidPriorityExitShareThreshold',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'InvalidPublicKeysBatchLength',
     inputs: [
       {
-        name: 'actual',
-        type: 'uint256',
         internalType: 'uint256',
-      },
-      {
-        name: 'expected',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-  },
-  {
-    type: 'error',
-    name: 'InvalidReportData',
-    inputs: [
-      {
         name: 'code',
         type: 'uint256',
-        internalType: 'uint256',
       },
     ],
+    name: 'InvalidReportData',
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'InvalidSignaturesBatchLength',
-    inputs: [
-      {
-        name: 'actual',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'expected',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-  },
-  {
-    type: 'error',
-    name: 'NonZeroContractVersionOnInit',
     inputs: [],
+    name: 'InvalidStakeShareLimit',
+    type: 'error',
   },
   {
+    inputs: [],
+    name: 'InvalidTopUpPubkeyLength',
     type: 'error',
-    name: 'ReportedExitedValidatorsExceedDeposited',
+  },
+  {
+    inputs: [],
+    name: 'ModuleReturnExceedTarget',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'NotAuthorized',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'NotInitializing',
+    type: 'error',
+  },
+  {
     inputs: [
       {
+        internalType: 'uint256',
         name: 'reportedExitedValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256',
       },
       {
+        internalType: 'uint256',
         name: 'depositedValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256',
       },
     ],
+    name: 'ReportedExitedValidatorsExceedDeposited',
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'StakingModuleAddressExists',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'StakingModuleNotActive',
     inputs: [],
-  },
-  {
-    type: 'error',
     name: 'StakingModuleStatusTheSame',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'StakingModuleUnregistered',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'StakingModuleWrongName',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'StakingModulesLimitExceeded',
-    inputs: [],
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'UnexpectedContractVersion',
     inputs: [
       {
-        name: 'expected',
-        type: 'uint256',
         internalType: 'uint256',
-      },
-      {
-        name: 'received',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-  },
-  {
-    type: 'error',
-    name: 'UnexpectedCurrentValidatorsCount',
-    inputs: [
-      {
         name: 'currentModuleExitedValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256',
       },
       {
+        internalType: 'uint256',
         name: 'currentNodeOpExitedValidatorsCount',
         type: 'uint256',
-        internalType: 'uint256',
       },
+    ],
+    name: 'UnexpectedCurrentValidatorsCount',
+    type: 'error',
+  },
+  {
+    inputs: [
       {
-        name: 'currentNodeOpStuckValidatorsCount',
+        internalType: 'uint256',
+        name: 'newModuleTotalExitedValidatorsCount',
         type: 'uint256',
+      },
+      {
         internalType: 'uint256',
+        name: 'newModuleTotalExitedValidatorsCountInStakingRouter',
+        type: 'uint256',
       },
     ],
+    name: 'UnexpectedFinalExitedValidatorsCount',
+    type: 'error',
   },
   {
-    type: 'error',
-    name: 'UnrecoverableModuleError',
     inputs: [],
+    name: 'UnrecoverableModuleError',
+    type: 'error',
   },
   {
+    inputs: [],
+    name: 'WrongWithdrawalCredentialsType',
     type: 'error',
-    name: 'ValueOver100Percent',
-    inputs: [
-      {
-        name: 'field',
-        type: 'string',
-        internalType: 'string',
-      },
-    ],
   },
   {
-    type: 'error',
+    inputs: [],
     name: 'ZeroAddress',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'ZeroArgument',
+    type: 'error',
+  },
+  {
+    anonymous: false,
     inputs: [
       {
-        name: 'field',
-        type: 'string',
-        internalType: 'string',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
       },
     ],
+    name: 'DepositableEthReceived',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'bytes',
+        name: 'lowLevelRevertData',
+        type: 'bytes',
+      },
+    ],
+    name: 'ExitedAndStuckValidatorsCountsUpdateFailed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint64',
+        name: 'version',
+        type: 'uint64',
+      },
+    ],
+    name: 'Initialized',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'bytes',
+        name: 'lowLevelRevertData',
+        type: 'bytes',
+      },
+    ],
+    name: 'RewardsMintedReportFailed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'previousAdminRole',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'newAdminRole',
+        type: 'bytes32',
+      },
+    ],
+    name: 'RoleAdminChanged',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'RoleGranted',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'RoleRevoked',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'stakingModule',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'name',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'createdBy',
+        type: 'address',
+      },
+    ],
+    name: 'StakingModuleAdded',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'nodeOperatorId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'bytes',
+        name: '_publicKey',
+        type: 'bytes',
+      },
+    ],
+    name: 'StakingModuleExitNotificationFailed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'unreportedExitedValidatorsCount',
+        type: 'uint256',
+      },
+    ],
+    name: 'StakingModuleExitedValidatorsIncompleteReporting',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'stakingModuleFee',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'treasuryFee',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'setBy',
+        type: 'address',
+      },
+    ],
+    name: 'StakingModuleFeesSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'maxDepositsPerBlock',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'setBy',
+        type: 'address',
+      },
+    ],
+    name: 'StakingModuleMaxDepositsPerBlockSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'minDepositBlockDistance',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'setBy',
+        type: 'address',
+      },
+    ],
+    name: 'StakingModuleMinDepositBlockDistanceSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'stakeShareLimit',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'priorityExitShareThreshold',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'setBy',
+        type: 'address',
+      },
+    ],
+    name: 'StakingModuleShareLimitSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'enum StakingModuleStatus',
+        name: 'status',
+        type: 'uint8',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'setBy',
+        type: 'address',
+      },
+    ],
+    name: 'StakingModuleStatusSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'StakingRouterETHDeposited',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'bytes32',
+        name: 'withdrawalCredentials',
+        type: 'bytes32',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'setBy',
+        type: 'address',
+      },
+    ],
+    name: 'WithdrawalCredentialsSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'bytes',
+        name: 'lowLevelRevertData',
+        type: 'bytes',
+      },
+    ],
+    name: 'WithdrawalsCredentialsChangeFailed',
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'ACCOUNTING_REPORT_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'DEFAULT_ADMIN_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'DEPOSIT_CONTRACT',
+    outputs: [
+      {
+        internalType: 'contract IDepositContract',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'FEE_PRECISION_POINTS',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'INITIAL_DEPOSIT_SIZE',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'LIDO',
+    outputs: [
+      {
+        internalType: 'contract ILido',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'LIDO_LOCATOR',
+    outputs: [
+      {
+        internalType: 'contract ILidoLocator',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'MANAGE_WITHDRAWAL_CREDENTIALS_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'MAX_EFFECTIVE_BALANCE_WC_TYPE_01',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'MAX_EFFECTIVE_BALANCE_WC_TYPE_02',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'MAX_STAKING_MODULES_COUNT',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'MAX_STAKING_MODULE_NAME_LENGTH',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'REPORT_EXITED_VALIDATORS_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'REPORT_REWARDS_MINTED_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'REPORT_VALIDATOR_EXITING_STATUS_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'REPORT_VALIDATOR_EXIT_TRIGGERED_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'STAKING_MODULE_MANAGE_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'STAKING_MODULE_UNVETTING_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'TOTAL_BASIS_POINTS',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'UNSAFE_SET_EXITED_VALIDATORS_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_name',
+        type: 'string',
+      },
+      {
+        internalType: 'address',
+        name: '_stakingModuleAddress',
+        type: 'address',
+      },
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'stakeShareLimit',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'priorityExitShareThreshold',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'stakingModuleFee',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'treasuryFee',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'maxDepositsPerBlock',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'minDepositBlockDistance',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'withdrawalCredentialsType',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct StakingModuleConfig',
+        name: '_stakingModuleConfig',
+        type: 'tuple',
+      },
+    ],
+    name: 'addStakingModule',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'canDeposit',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '_nodeOperatorIds',
+        type: 'bytes',
+      },
+      {
+        internalType: 'bytes',
+        name: '_vettedSigningKeysCounts',
+        type: 'bytes',
+      },
+    ],
+    name: 'decreaseStakingModuleVettedKeysCountByNodeOperator',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '_depositCalldata',
+        type: 'bytes',
+      },
+    ],
+    name: 'deposit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_admin',
+        type: 'address',
+      },
+    ],
+    name: 'finalizeUpgrade_v4',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getAllNodeOperatorDigests',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'id',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'isActive',
+            type: 'bool',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint256',
+                name: 'targetLimitMode',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'targetValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'stuckValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'refundedValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'stuckPenaltyEndTimestamp',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalExitedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalDepositedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'depositableValidatorsCount',
+                type: 'uint256',
+              },
+            ],
+            internalType: 'struct NodeOperatorSummary',
+            name: 'summary',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct NodeOperatorDigest[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getAllStakingModuleDigests',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'nodeOperatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'activeNodeOperatorsCount',
+            type: 'uint256',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint24',
+                name: 'id',
+                type: 'uint24',
+              },
+              {
+                internalType: 'address',
+                name: 'stakingModuleAddress',
+                type: 'address',
+              },
+              {
+                internalType: 'uint16',
+                name: 'stakingModuleFee',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint16',
+                name: 'treasuryFee',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint16',
+                name: 'stakeShareLimit',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint8',
+                name: 'status',
+                type: 'uint8',
+              },
+              {
+                internalType: 'string',
+                name: 'name',
+                type: 'string',
+              },
+              {
+                internalType: 'uint64',
+                name: 'lastDepositAt',
+                type: 'uint64',
+              },
+              {
+                internalType: 'uint256',
+                name: 'lastDepositBlock',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'exitedValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint16',
+                name: 'priorityExitShareThreshold',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint64',
+                name: 'maxDepositsPerBlock',
+                type: 'uint64',
+              },
+              {
+                internalType: 'uint64',
+                name: 'minDepositBlockDistance',
+                type: 'uint64',
+              },
+              {
+                internalType: 'uint8',
+                name: 'withdrawalCredentialsType',
+                type: 'uint8',
+              },
+            ],
+            internalType: 'struct StakingModule',
+            name: 'state',
+            type: 'tuple',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint256',
+                name: 'totalExitedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalDepositedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'depositableValidatorsCount',
+                type: 'uint256',
+              },
+            ],
+            internalType: 'struct StakingModuleSummary',
+            name: 'summary',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct StakingModuleDigest[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getContractVersion',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_depositAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'getDepositsAllocation',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'allocated',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'allocations',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_nodeOperatorIds',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'getNodeOperatorDigests',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'id',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'isActive',
+            type: 'bool',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint256',
+                name: 'targetLimitMode',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'targetValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'stuckValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'refundedValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'stuckPenaltyEndTimestamp',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalExitedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalDepositedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'depositableValidatorsCount',
+                type: 'uint256',
+              },
+            ],
+            internalType: 'struct NodeOperatorSummary',
+            name: 'summary',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct NodeOperatorDigest[]',
+        name: 'digests',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_offset',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_limit',
+        type: 'uint256',
+      },
+    ],
+    name: 'getNodeOperatorDigests',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'id',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'isActive',
+            type: 'bool',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint256',
+                name: 'targetLimitMode',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'targetValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'stuckValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'refundedValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'stuckPenaltyEndTimestamp',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalExitedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalDepositedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'depositableValidatorsCount',
+                type: 'uint256',
+              },
+            ],
+            internalType: 'struct NodeOperatorSummary',
+            name: 'summary',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct NodeOperatorDigest[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_nodeOperatorId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getNodeOperatorSummary',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'targetLimitMode',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'targetValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'stuckValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'refundedValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'stuckPenaltyEndTimestamp',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalExitedValidators',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalDepositedValidators',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'depositableValidatorsCount',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct NodeOperatorSummary',
+        name: 'summary',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+    ],
+    name: 'getRoleAdmin',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'uint256',
+        name: 'index',
+        type: 'uint256',
+      },
+    ],
+    name: 'getRoleMember',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+    ],
+    name: 'getRoleMemberCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+    ],
+    name: 'getRoleMembers',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getStakingFeeAggregateDistribution',
+    outputs: [
+      {
+        internalType: 'uint96',
+        name: 'modulesFee',
+        type: 'uint96',
+      },
+      {
+        internalType: 'uint96',
+        name: 'treasuryFee',
+        type: 'uint96',
+      },
+      {
+        internalType: 'uint256',
+        name: 'basePrecision',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getStakingFeeAggregateDistributionE4Precision',
+    outputs: [
+      {
+        internalType: 'uint16',
+        name: 'modulesFee',
+        type: 'uint16',
+      },
+      {
+        internalType: 'uint16',
+        name: 'treasuryFee',
+        type: 'uint16',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModule',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint24',
+            name: 'id',
+            type: 'uint24',
+          },
+          {
+            internalType: 'address',
+            name: 'stakingModuleAddress',
+            type: 'address',
+          },
+          {
+            internalType: 'uint16',
+            name: 'stakingModuleFee',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'treasuryFee',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'stakeShareLimit',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint8',
+            name: 'status',
+            type: 'uint8',
+          },
+          {
+            internalType: 'string',
+            name: 'name',
+            type: 'string',
+          },
+          {
+            internalType: 'uint64',
+            name: 'lastDepositAt',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint256',
+            name: 'lastDepositBlock',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'exitedValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint16',
+            name: 'priorityExitShareThreshold',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint64',
+            name: 'maxDepositsPerBlock',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint64',
+            name: 'minDepositBlockDistance',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint8',
+            name: 'withdrawalCredentialsType',
+            type: 'uint8',
+          },
+        ],
+        internalType: 'struct StakingModule',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleActiveValidatorsCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'activeValidatorsCount',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'moduleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleBalance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: '_stakingModuleIds',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'getStakingModuleDigests',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'nodeOperatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'activeNodeOperatorsCount',
+            type: 'uint256',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint24',
+                name: 'id',
+                type: 'uint24',
+              },
+              {
+                internalType: 'address',
+                name: 'stakingModuleAddress',
+                type: 'address',
+              },
+              {
+                internalType: 'uint16',
+                name: 'stakingModuleFee',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint16',
+                name: 'treasuryFee',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint16',
+                name: 'stakeShareLimit',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint8',
+                name: 'status',
+                type: 'uint8',
+              },
+              {
+                internalType: 'string',
+                name: 'name',
+                type: 'string',
+              },
+              {
+                internalType: 'uint64',
+                name: 'lastDepositAt',
+                type: 'uint64',
+              },
+              {
+                internalType: 'uint256',
+                name: 'lastDepositBlock',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'exitedValidatorsCount',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint16',
+                name: 'priorityExitShareThreshold',
+                type: 'uint16',
+              },
+              {
+                internalType: 'uint64',
+                name: 'maxDepositsPerBlock',
+                type: 'uint64',
+              },
+              {
+                internalType: 'uint64',
+                name: 'minDepositBlockDistance',
+                type: 'uint64',
+              },
+              {
+                internalType: 'uint8',
+                name: 'withdrawalCredentialsType',
+                type: 'uint8',
+              },
+            ],
+            internalType: 'struct StakingModule',
+            name: 'state',
+            type: 'tuple',
+          },
+          {
+            components: [
+              {
+                internalType: 'uint256',
+                name: 'totalExitedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'totalDepositedValidators',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'depositableValidatorsCount',
+                type: 'uint256',
+              },
+            ],
+            internalType: 'struct StakingModuleSummary',
+            name: 'summary',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct StakingModuleDigest[]',
+        name: 'digests',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getStakingModuleIds',
+    outputs: [
+      {
+        internalType: 'uint256[]',
+        name: '',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleIsActive',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleIsDepositsPaused',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleIsStopped',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleLastDepositBlock',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxDepositsValue',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleMaxDepositsCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleMaxDepositsPerBlock',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleMinDepositBlockDistance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleNonce',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleStateAccounting',
+    outputs: [
+      {
+        internalType: 'uint64',
+        name: 'validatorsBalanceGwei',
+        type: 'uint64',
+      },
+      {
+        internalType: 'uint64',
+        name: 'pendingBalanceGwei',
+        type: 'uint64',
+      },
+      {
+        internalType: 'uint64',
+        name: 'exitedValidatorsCount',
+        type: 'uint64',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleStateConfig',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'moduleAddress',
+            type: 'address',
+          },
+          {
+            internalType: 'uint16',
+            name: 'moduleFee',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'treasuryFee',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'stakeShareLimit',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'priorityExitShareThreshold',
+            type: 'uint16',
+          },
+          {
+            internalType: 'enum StakingModuleStatus',
+            name: 'status',
+            type: 'uint8',
+          },
+          {
+            internalType: 'uint8',
+            name: 'withdrawalCredentialsType',
+            type: 'uint8',
+          },
+        ],
+        internalType: 'struct ModuleStateConfig',
+        name: 'stateConfig',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleStateDeposits',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint64',
+            name: 'lastDepositAt',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint64',
+            name: 'lastDepositBlock',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint64',
+            name: 'maxDepositsPerBlock',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint64',
+            name: 'minDepositBlockDistance',
+            type: 'uint64',
+          },
+        ],
+        internalType: 'struct ModuleStateDeposits',
+        name: 'stateDeposits',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleStatus',
+    outputs: [
+      {
+        internalType: 'enum StakingModuleStatus',
+        name: '',
+        type: 'uint8',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleSummary',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'totalExitedValidators',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalDepositedValidators',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'depositableValidatorsCount',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct StakingModuleSummary',
+        name: 'summary',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getStakingModuleWithdrawalCredentials',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getStakingModules',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint24',
+            name: 'id',
+            type: 'uint24',
+          },
+          {
+            internalType: 'address',
+            name: 'stakingModuleAddress',
+            type: 'address',
+          },
+          {
+            internalType: 'uint16',
+            name: 'stakingModuleFee',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'treasuryFee',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'stakeShareLimit',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint8',
+            name: 'status',
+            type: 'uint8',
+          },
+          {
+            internalType: 'string',
+            name: 'name',
+            type: 'string',
+          },
+          {
+            internalType: 'uint64',
+            name: 'lastDepositAt',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint256',
+            name: 'lastDepositBlock',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'exitedValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint16',
+            name: 'priorityExitShareThreshold',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint64',
+            name: 'maxDepositsPerBlock',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint64',
+            name: 'minDepositBlockDistance',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint8',
+            name: 'withdrawalCredentialsType',
+            type: 'uint8',
+          },
+        ],
+        internalType: 'struct StakingModule[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getStakingModulesCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getStakingRewardsDistribution',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: 'recipients',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'stakingModuleIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint96[]',
+        name: 'stakingModuleFees',
+        type: 'uint96[]',
+      },
+      {
+        internalType: 'uint96',
+        name: 'totalFee',
+        type: 'uint96',
+      },
+      {
+        internalType: 'uint256',
+        name: 'precisionPoints',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_depositAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'getTopUpAllocation',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'allocated',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'allocations',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTotalFeeE4Precision',
+    outputs: [
+      {
+        internalType: 'uint16',
+        name: 'totalFee',
+        type: 'uint16',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTotalStakingModulesBalance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getWithdrawalCredentials',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'grantRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'hasRole',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'hasStakingModule',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_admin',
+        type: 'address',
+      },
+      {
+        internalType: 'bytes32',
+        name: '_withdrawalCredentials',
+        type: 'bytes32',
+      },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'stakingModuleId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'nodeOperatorId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bytes',
+            name: 'pubkey',
+            type: 'bytes',
+          },
+        ],
+        internalType: 'struct ValidatorExitData[]',
+        name: 'validatorExitData',
+        type: 'tuple[]',
+      },
+      {
+        internalType: 'uint256',
+        name: '_withdrawalRequestPaidFee',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_exitType',
+        type: 'uint256',
+      },
+    ],
+    name: 'onValidatorExitTriggered',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'onValidatorsCountsByNodeOperatorReportingFinished',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'receiveDepositableEther',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'address',
+        name: 'callerConfirmation',
+        type: 'address',
+      },
+    ],
+    name: 'renounceRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: '_stakingModuleIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_totalShares',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'reportRewardsMinted',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '_nodeOperatorIds',
+        type: 'bytes',
+      },
+      {
+        internalType: 'bytes',
+        name: '_exitedValidatorsCounts',
+        type: 'bytes',
+      },
+    ],
+    name: 'reportStakingModuleExitedValidatorsCountByNodeOperator',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '_nodeOperatorIds',
+        type: 'bytes',
+      },
+      {
+        internalType: 'bytes',
+        name: '_totalBalancesGwei',
+        type: 'bytes',
+      },
+    ],
+    name: 'reportStakingModuleOperatorBalances',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: '_stakingModuleIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_validatorBalancesGwei',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_pendingBalancesGwei',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'reportValidatorBalancesByStakingModule',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_nodeOperatorId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_proofSlotTimestamp',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '_publicKey',
+        type: 'bytes',
+      },
+      {
+        internalType: 'uint256',
+        name: '_eligibleToExitInSec',
+        type: 'uint256',
+      },
+    ],
+    name: 'reportValidatorExitDelay',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'role',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'revokeRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'enum StakingModuleStatus',
+        name: '_status',
+        type: 'uint8',
+      },
+    ],
+    name: 'setStakingModuleStatus',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: '_withdrawalCredentials',
+        type: 'bytes32',
+      },
+    ],
+    name: 'setWithdrawalCredentials',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes4',
+        name: 'interfaceId',
+        type: 'bytes4',
+      },
+    ],
+    name: 'supportsInterface',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_keyIndices',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_operatorIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'bytes[]',
+        name: '_pubkeys',
+        type: 'bytes[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_topUpLimits',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'topUp',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_nodeOperatorId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '_triggerUpdateFinish',
+        type: 'bool',
+      },
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'currentModuleExitedValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'currentNodeOperatorExitedValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'newModuleExitedValidatorsCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'newNodeOperatorExitedValidatorsCount',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct ValidatorsCountsCorrection',
+        name: '_correction',
+        type: 'tuple',
+      },
+    ],
+    name: 'unsafeSetExitedValidatorsCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: '_stakingModuleIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_exitedValidatorsCounts',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'updateExitedValidatorsCountByStakingModule',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_stakeShareLimit',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_priorityExitShareThreshold',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleFee',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_treasuryFee',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxDepositsPerBlock',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_minDepositBlockDistance',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateStakingModule',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_nodeOperatorId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_targetLimitMode',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_targetLimit',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateTargetValidatorsLimits',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'receive',
   },
 ] as const;

@@ -3,7 +3,7 @@ import {
   invariant,
   LidoSDKCore,
 } from '@lidofinance/lido-ethereum-sdk';
-import { Abi, Address, Chain, getContract, Hex, WalletClient } from 'viem';
+import { Abi, Address, Chain, getContract, WalletClient } from 'viem';
 import { BaseModuleAbi, VersionCheckAbi } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
@@ -30,7 +30,7 @@ import {
 export class CoreSDK extends CsmSDKCacheable {
   readonly core: LidoSDKCore;
   readonly contractAddresses: ContractAddresses;
-  readonly moduleId: number;
+  readonly moduleId: bigint;
   readonly deploymentBlockNumber: bigint;
   readonly clApiUrl?: string;
   readonly keysApiUrl?: string;
@@ -38,7 +38,6 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly maxEventBlocksRange?: number;
   readonly skipHistoricalCalls: boolean;
   readonly moduleName: MODULE_NAME;
-  readonly wcPrefix: Hex;
 
   constructor(props: CoreProps) {
     super();
@@ -52,7 +51,6 @@ export class CoreSDK extends CsmSDKCacheable {
     this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
     this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
-    this.wcPrefix = props.wcPrefix ?? '0x01';
   }
 
   public get chainId(): SUPPORTED_CHAINS {

@@ -54,7 +54,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     return this.paginateOperators(
       (p) =>
         this.discoveryContract.read.findNodeOperatorsByAddress([
-          BigInt(this.core.moduleId),
+          this.core.moduleId,
           address,
           p.offset,
           p.limit,
@@ -73,7 +73,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     const operators = await this.paginateOperators(
       (p) =>
         this.discoveryContract.read.getNodeOperatorsByAddress([
-          BigInt(this.core.moduleId),
+          this.core.moduleId,
           address,
           p.offset,
           p.limit,
@@ -97,7 +97,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     const operators = await this.paginateOperators(
       (p) =>
         this.discoveryContract.read.getNodeOperatorsByProposedAddress([
-          BigInt(this.core.moduleId),
+          this.core.moduleId,
           address,
           p.offset,
           p.limit,
@@ -124,7 +124,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     return this.paginateOperators(
       (p) =>
         this.discoveryContract.read.getAllNodeOperators([
-          BigInt(this.core.moduleId),
+          this.core.moduleId,
           p.offset,
           p.limit,
         ]),
