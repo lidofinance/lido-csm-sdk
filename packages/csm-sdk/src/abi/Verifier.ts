@@ -465,6 +465,25 @@ export const VerifierAbi = [
   },
   {
     type: 'function',
+    name: 'getRoleMembers',
+    inputs: [
+      {
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'address[]',
+        internalType: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'grantRole',
     inputs: [
       {

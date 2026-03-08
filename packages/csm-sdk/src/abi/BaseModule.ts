@@ -522,7 +522,7 @@ export const BaseModuleAbi = [
         ],
       },
       {
-        name: 'referrer',
+        name: '',
         type: 'address',
         internalType: 'address',
       },
@@ -1011,6 +1011,25 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'getRoleMembers',
+    inputs: [
+      {
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'address[]',
+        internalType: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getSigningKeys',
     inputs: [
       {
@@ -1337,24 +1356,6 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
-    name: 'onValidatorSlashed',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'keyIndex',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'onWithdrawalCredentialsChanged',
     inputs: [],
     outputs: [],
@@ -1621,6 +1622,29 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'reportValidatorBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'currentBalanceWei',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'reportValidatorExitDelay',
     inputs: [
       {
@@ -1640,6 +1664,24 @@ export const BaseModuleAbi = [
       },
       {
         name: 'eligibleToExitInSec',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'reportValidatorSlashing',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1728,29 +1770,6 @@ export const BaseModuleAbi = [
       },
     ],
     stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'syncKeyAddedBalance',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'keyIndex',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'currentBalanceWei',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2744,6 +2763,11 @@ export const BaseModuleAbi = [
   {
     type: 'error',
     name: 'SlashingPenaltyIsNotApplicable',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'UnreportableBalance',
     inputs: [],
   },
   {

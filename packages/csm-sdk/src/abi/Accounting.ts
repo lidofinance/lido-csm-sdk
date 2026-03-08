@@ -934,7 +934,7 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'claimableShares',
+        name: 'splittableShares',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -956,11 +956,6 @@ export const AccountingAbi = [
             internalType: 'uint256',
           },
         ],
-      },
-      {
-        name: 'splittableShares',
-        type: 'uint256',
-        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1221,6 +1216,25 @@ export const AccountingAbi = [
         name: '',
         type: 'uint256',
         internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getRoleMembers',
+    inputs: [
+      {
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'address[]',
+        internalType: 'address[]',
       },
     ],
     stateMutability: 'view',

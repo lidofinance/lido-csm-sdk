@@ -25,6 +25,19 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'MANAGE_CURVE_PARAMETERS_ROLE',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'MANAGE_GENERAL_PENALTIES_AND_CHARGES_ROLE',
     inputs: [],
     outputs: [
@@ -616,6 +629,25 @@ export const ParametersRegistryAbi = [
         name: '',
         type: 'uint256',
         internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getRoleMembers',
+    inputs: [
+      {
+        name: 'role',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'address[]',
+        internalType: 'address[]',
       },
     ],
     stateMutability: 'view',

@@ -336,6 +336,25 @@ const CSModuleExtrasAbi = [
   },
   {
     type: 'event',
+    name: 'TopUpQueueItemProcessed',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'TopUpQueueLimitSet',
     inputs: [
       {
@@ -363,11 +382,6 @@ const CSModuleExtrasAbi = [
   {
     type: 'error',
     name: 'DepositQueueIsEmpty',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'DepositQueueLookupNoLimit',
     inputs: [],
   },
   {
