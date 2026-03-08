@@ -1,7 +1,12 @@
 import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, CONTRACT_NAMES, MODULE_CONTRACT } from '../common/index.js';
+import {
+  CACHE_LONG,
+  CACHE_MID,
+  CONTRACT_NAMES,
+  MODULE_CONTRACT,
+} from '../common/index.js';
 import { fetchJson } from '../common/utils/fetch-json.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
 import { findModuleDigest } from './find-module-digest.js';
@@ -81,6 +86,7 @@ export class ModuleSDK extends CsmSDKModule {
     return findModuleDigest(digests, this.core.moduleId);
   }
 
+  @Cache(CACHE_LONG)
   @Logger('Views:')
   @ErrorHandler()
   public async getWithdrawalCredentialsType(): Promise<number> {
@@ -88,6 +94,7 @@ export class ModuleSDK extends CsmSDKModule {
     return digest.state.withdrawalCredentialsType;
   }
 
+  @Cache(CACHE_LONG)
   @Logger('Views:')
   @ErrorHandler()
   public async getMaxEffectiveBalance(): Promise<bigint> {

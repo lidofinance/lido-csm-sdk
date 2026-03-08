@@ -1,16 +1,19 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import { CACHE_MID, CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
+import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   OperatorGroup,
   OperatorMetadata,
-  OperatorWeightAndExternalStake,
   SetOperatorDataProps,
 } from './types.js';
 import { decodeExternalOperator } from './utils.js';
 
-export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
+export class MetaRegistrySDK extends CsmSDKModule<{
+  tx: TxSDK;
+  module: ModuleSDK;
+}> {
   private get contract() {
     return this.core.getContract(CONTRACT_NAMES.metaRegistry);
   }
@@ -45,15 +48,12 @@ export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getOperatorGroupId(
+  public async getOperatorGroup(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<bigint> {
-    return this.contract.read.getNodeOperatorGroupId([nodeOperatorId]);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getGroup(groupId: bigint): Promise<OperatorGroup> {
+  ): Promise<OperatorGroup> {
+    const groupId = await this.contract.read.getNodeOperatorGroupId([
+      nodeOperatorId,
+    ]);
     const group = await this.contract.read.getOperatorGroup([groupId]);
 
     return {
@@ -62,12 +62,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
     };
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getOperatorGroupsCount(): Promise<bigint> {
-    return this.contract.read.getOperatorGroupsCount();
-  }
-
+  @Cache(CACHE_MID)
   @Logger('Views:')
   @ErrorHandler()
   public async getOperatorWeight(
@@ -78,29 +73,34 @@ export class MetaRegistrySDK extends CsmSDKModule<{ tx: TxSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getOperatorWeights(
-    nodeOperatorIds: NodeOperatorId[],
-  ): Promise<readonly bigint[]> {
-    return this.contract.read.getOperatorWeights([nodeOperatorIds]);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getOperatorWeightAndExternalStake(
-    nodeOperatorId: NodeOperatorId,
-  ): Promise<OperatorWeightAndExternalStake> {
-    const [weight, externalStake] =
-      await this.contract.read.getNodeOperatorWeightAndExternalStake([
-        nodeOperatorId,
-      ]);
-    return { weight, externalStake };
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
   public async getOperatorBalance(
     nodeOperatorId: NodeOperatorId,
   ): Promise<bigint> {
     return this.moduleContract.read.getNodeOperatorBalance([nodeOperatorId]);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorTargetStake(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<bigint> {
+    const [totalStake, totalWeight, operatorWeight] = await Promise.all([
+      this.bus.module.getBalance(),
+      this.getTotalOperatorsWeight(),
+      this.getOperatorWeight(nodeOperatorId),
+    ]);
+
+    if (totalWeight === 0n) return 0n;
+    return (totalStake * operatorWeight) / totalWeight;
+  }
+
+  @Cache(CACHE_MID)
+  @Logger('Views:')
+  @ErrorHandler()
+  private async getTotalOperatorsWeight(): Promise<bigint> {
+    const count = await this.bus.module.getOperatorsCount();
+    const ids = Array.from({ length: Number(count) }, (_, i) => BigInt(i));
+    const weights = await this.contract.read.getOperatorWeights([ids]);
+    return weights.reduce((sum, w) => sum + w, 0n);
   }
 }
