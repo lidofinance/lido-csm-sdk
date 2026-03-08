@@ -102,17 +102,6 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
     },
   },
 
-  [MODULE_NAME.CSM0x02]: {
-    [CHAINS.Mainnet]: {
-      contractAddresses: {},
-      moduleId: 5n,
-    },
-    [CHAINS.Hoodi]: {
-      contractAddresses: {},
-      moduleId: 6n,
-    },
-  },
-
   [MODULE_NAME.CM]: {
     [CHAINS.Mainnet]: {
       contractAddresses: {},
