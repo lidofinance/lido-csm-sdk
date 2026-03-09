@@ -103,4 +103,17 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     const weights = await this.contract.read.getOperatorWeights([ids]);
     return weights.reduce((sum, w) => sum + w, 0n);
   }
+
+  @Logger('Utils:')
+  public async getOperatorWeightAndBalance(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<{ weight: bigint; balance: bigint; targetStake: bigint }> {
+    const [weight, balance, targetStake] = await Promise.all([
+      this.getOperatorWeight(nodeOperatorId),
+      this.getOperatorBalance(nodeOperatorId),
+      this.getOperatorTargetStake(nodeOperatorId),
+    ]);
+
+    return { weight, balance, targetStake };
+  }
 }
