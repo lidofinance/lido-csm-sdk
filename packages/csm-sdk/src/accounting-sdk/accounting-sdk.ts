@@ -29,8 +29,8 @@ export class AccountingSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
-  @Cache(CACHE_MID)
   @ErrorHandler()
+  @Cache(CACHE_MID)
   public async getStethPoolData(blockNumber?: bigint): Promise<StethPoolData> {
     const effectiveBlockNumber = this.core.skipHistoricalCalls
       ? undefined

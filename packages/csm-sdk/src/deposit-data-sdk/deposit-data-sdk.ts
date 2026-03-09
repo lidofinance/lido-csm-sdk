@@ -26,25 +26,22 @@ export class DepositDataSDK extends CsmSDKModule<{
   keysWithStatus?: KeysWithStatusSDK;
   keysCache?: KeysCacheSDK;
 }> {
-  /**
-   * Parse deposit data JSON with enhanced error handling
-   */
   @Logger('Utils:')
   public parseDepositData(json: string): ParseResult {
     return parseDepositData(json);
   }
 
-  /**
-   * Remove key at specified index with comprehensive validation
-   */
   @Logger('Utils:')
   public removeKey(json: string, index: number): RemoveKeyResult {
     return removeKey(json, index);
   }
 
-  /**
-   * Validation of deposit data including signature verification
-   */
+  @Logger('Utils:')
+  private async getWcPrefix(): Promise<string> {
+    const wcType = await this.bus.module.getWithdrawalCredentialsType();
+    return wcType.toString(16).padStart(2, '0').padEnd(24, '0');
+  }
+
   @Logger('Utils:')
   public async validateDepositData(
     depositData: DepositData[],
@@ -53,7 +50,7 @@ export class DepositDataSDK extends CsmSDKModule<{
     const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
     const [blockNumber, wcPrefix] = await Promise.all([
       this.core.publicClient.getBlockNumber(),
-      this.bus.module.getWcPrefix(),
+      this.getWcPrefix(),
     ]);
 
     const errors = await validateDepositData(depositData, {
@@ -63,19 +60,12 @@ export class DepositDataSDK extends CsmSDKModule<{
       currentBlockNumber: Number(blockNumber),
     });
 
-    // Extract pubkeys for additional checks (already Hex type from parser)
     const pubkeys = depositData.map((data) => data.pubkey);
 
-    // Check for cached duplicates
     const duplicateErrors = this.checkCachedKeys(pubkeys);
-
-    // Check for previously uploaded keys
     const uploadedDuplicateErrors = await this.checkUploadedKeys(pubkeys);
-
-    // Check for keys already known on CL
     const clErrors = await this.checkClKeys(pubkeys.map(toHexString));
 
-    // Merge all errors
     return [
       ...errors,
       ...duplicateErrors,

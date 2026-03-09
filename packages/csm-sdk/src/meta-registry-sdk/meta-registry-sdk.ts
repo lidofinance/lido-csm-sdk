@@ -62,9 +62,9 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     };
   }
 
-  @Cache(CACHE_MID)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_MID)
   public async getOperatorWeight(
     nodeOperatorId: NodeOperatorId,
   ): Promise<bigint> {
@@ -94,9 +94,9 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     return (totalStake * operatorWeight) / totalWeight;
   }
 
-  @Cache(CACHE_MID)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_MID)
   private async getTotalOperatorsWeight(): Promise<bigint> {
     const count = await this.bus.module.getOperatorsCount();
     const ids = Array.from({ length: Number(count) }, (_, i) => BigInt(i));

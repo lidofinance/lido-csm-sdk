@@ -1,4 +1,4 @@
-import { Address, isAddressEqual } from 'viem';
+import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
@@ -7,17 +7,10 @@ import {
   CONTRACT_NAMES,
   MODULE_CONTRACT,
 } from '../common/index.js';
-import { fetchJson } from '../common/utils/fetch-json.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
 import { findModuleDigest } from './find-module-digest.js';
-import {
-  CsmStatus,
-  ModuleDigest,
-  ModuleOperatorsResponse,
-  ModulesResponse,
-  ShareLimitInfo,
-  ShareLimitStatus,
-} from './types.js';
+import { findUsedOtherModule } from './find-used-other-module.js';
+import { CsmStatus, ModuleDigest, ShareLimitInfo } from './types.js';
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -86,17 +79,17 @@ export class ModuleSDK extends CsmSDKModule {
     return findModuleDigest(digests, this.core.moduleId);
   }
 
-  @Cache(CACHE_LONG)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_LONG)
   public async getWithdrawalCredentialsType(): Promise<number> {
     const digest = await this.getDigest();
     return digest.state.withdrawalCredentialsType;
   }
 
-  @Cache(CACHE_LONG)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_LONG)
   public async getMaxEffectiveBalance(): Promise<bigint> {
     const wcType = await this.getWithdrawalCredentialsType();
     const method =
@@ -106,31 +99,10 @@ export class ModuleSDK extends CsmSDKModule {
     return this.stakingRouterContract.read[method]();
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getWcPrefix(): Promise<string> {
-    const wcType = await this.getWithdrawalCredentialsType();
-    return wcType.toString(16).padStart(2, '0').padEnd(24, '0');
-  }
-
   @Logger('Utils:')
   public async getShareLimit(): Promise<ShareLimitInfo> {
     const digests = await this.getAllModulesDigests();
     return calculateShareLimit(digests, this.core.moduleId);
-  }
-
-  @Logger('Utils:')
-  public async getShareLimitStatus(
-    shareLimitThreshold = 200n,
-  ): Promise<ShareLimitStatus> {
-    const info = await this.getShareLimit();
-
-    const margin = info.activeLeft - info.queue;
-
-    if (info.activeLeft <= 0) return ShareLimitStatus.REACHED;
-    if (margin < 0) return ShareLimitStatus.EXHAUSTED;
-    if (margin < shareLimitThreshold) return ShareLimitStatus.APPROACHING;
-    return ShareLimitStatus.FAR;
   }
 
   @Logger('Views:')
@@ -141,40 +113,14 @@ export class ModuleSDK extends CsmSDKModule {
     ]);
   }
 
-  // TODO: review
   @Logger('API:')
   @ErrorHandler()
+  @Cache(CACHE_MID)
   public async getUsedOtherModule(address: Address): Promise<string | null> {
-    const { data: modules } = await fetchJson<ModulesResponse>(
-      `${this.core.keysApiLink}/v1/modules`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
-    ).catch(() => ({ data: [] }));
-
-    const results = await Promise.all(
-      modules.map(({ id }) =>
-        BigInt(id) === this.core.moduleId
-          ? undefined
-          : fetchJson<ModuleOperatorsResponse>(
-              `${this.core.keysApiLink}/v1/modules/${id}/operators`,
-            ).catch(() => undefined),
-      ),
+    return findUsedOtherModule(
+      this.core.keysApiLink,
+      this.core.moduleId,
+      address,
     );
-    const operators = results.flatMap((r) => r?.data.operators || []);
-
-    const matchedOperator = operators.find((o) =>
-      isAddressEqual(o.rewardAddress as Address, address),
-    );
-    const matchedModule =
-      matchedOperator &&
-      modules.find((m) =>
-        isAddressEqual(
-          m.stakingModuleAddress as Address,
-          matchedOperator.moduleAddress as Address,
-        ),
-      );
-
-    return matchedModule?.name ?? null;
   }
 }

@@ -118,7 +118,7 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getContractWithAbi(contractName as any, abi as any) as any;
   }
 
-  get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
+  public get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
     const contractName = MODULE_CONTRACT[this.moduleName];
     return this.getContractWithAbi(contractName, BaseModuleAbi);
   }

@@ -24,9 +24,9 @@ export class OperatorSDK extends CsmSDKModule {
     return this.core.contractBaseModule;
   }
 
-  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_SHORT)
   public async getCurveId(id: NodeOperatorId): Promise<bigint> {
     return this.accountingContract.read.getBondCurveId([id]);
   }
@@ -43,9 +43,9 @@ export class OperatorSDK extends CsmSDKModule {
     return calcBondBalance({ current, required, locked });
   }
 
-  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_SHORT)
   public async getLockedBond(id: NodeOperatorId): Promise<bigint> {
     return this.accountingContract.read.getLockedBond([id]);
   }
@@ -56,9 +56,9 @@ export class OperatorSDK extends CsmSDKModule {
     return this.accountingContract.read.isLockExpired([id]);
   }
 
-  @Cache(CACHE_SHORT)
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_SHORT)
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
     const info = await this.moduleContract.read.getNodeOperator([id]);
 

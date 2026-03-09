@@ -68,18 +68,16 @@ export type ModulesResponse = {
 
 export type ModuleOperatorsResponse = {
   data: {
-    operators: [
-      {
-        index: number;
-        active: boolean;
-        name: string;
-        rewardAddress: string;
-        stakingLimit: number;
-        stoppedValidators: number;
-        totalSigningKeys: number;
-        usedSigningKeys: number;
-        moduleAddress: string;
-      },
-    ];
+    operators: {
+      index: number;
+      active: boolean;
+      name: string;
+      rewardAddress: string;
+      stakingLimit: number;
+      stoppedValidators: number;
+      totalSigningKeys: number;
+      usedSigningKeys: number;
+      moduleAddress: string;
+    }[];
   };
 };

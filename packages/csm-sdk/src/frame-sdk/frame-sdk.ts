@@ -20,22 +20,22 @@ export class FrameSDK extends CsmSDKModule {
   }
 
   @Logger('Views:')
-  @Cache(CACHE_SHORT)
   @ErrorHandler()
+  @Cache(CACHE_SHORT)
   public async getLastProcessedRefSlot(): Promise<bigint> {
     return this.oracleContract.read.getLastProcessingRefSlot();
   }
 
   @Logger('Views:')
-  @Cache(CACHE_SHORT)
   @ErrorHandler()
+  @Cache(CACHE_SHORT)
   public async getLatestBlock() {
     return this.core.publicClient.getBlock({ blockTag: 'latest' });
   }
 
   @Logger('Views:')
-  @Cache(CACHE_LONG)
   @ErrorHandler()
+  @Cache(CACHE_LONG)
   public async getConfig(): Promise<FrameConfig> {
     const [[slotsPerEpoch, secondsPerSlot, genesisTime], [, epochsPerFrame]] =
       await Promise.all([
