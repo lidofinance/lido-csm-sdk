@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn build:types` - Build TypeScript declaration files
 - `yarn clean` - Remove dist directory
 - `yarn types` - TypeScript type checking without emitting files
-- `yarn test` - Run Jest tests
+- `yarn test` - Run Vitest tests
 - `yarn lint` - Run ESLint with TypeScript support (max 0 warnings)
 
 ### Development Workflow
@@ -149,6 +149,25 @@ export class DepositDataSDK extends CsmSDKModule<{
 - **Clean syntax**: Natural property access instead of getter methods
 - **Dependency injection**: No circular dependencies between modules
 - **Optional dependencies**: Flexible module composition with `?` operator
+
+### Decorator Order Convention
+
+**Standard order (outermost to innermost):** `@Logger → @ErrorHandler → @Cache`
+
+```typescript
+@Logger('Views:')      // Outermost - logs all calls (including cache hits)
+@ErrorHandler()        // Middle - catches and transforms errors
+@Cache(CACHE_SHORT)    // Innermost - checks/stores cache
+public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo>
+```
+
+**Why this order:**
+
+- Decorators execute **bottom-to-top** (innermost first)
+- Logger tracks all calls for debugging/monitoring (executes first)
+- ErrorHandler catches errors from both cache and method execution
+- Cache only stores successful results (uses `.then()` without `.catch()`)
+- Errors are never cached regardless of decorator order
 
 ### Key Dependencies
 
@@ -406,5 +425,6 @@ const result = await sdk.depositData.validateDepositData(depositData);
 
 ### Testing
 
-- Jest configuration in `jest.config.ts`
+- Vitest configuration in `vitest.config.ts`
+- Tests located in `tests/unit/` (explicit imports from `vitest`, no globals)
 - Tests can be run with `yarn test`

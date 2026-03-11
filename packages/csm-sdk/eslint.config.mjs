@@ -5,12 +5,12 @@ import promise from 'eslint-plugin-promise';
 import importPlugin from 'eslint-plugin-import';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
-import jest from 'eslint-plugin-jest';
+import vitest from '@vitest/eslint-plugin';
 
 export default tseslint.config(
   // Global ignores
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'jest.config.ts', 'scripts/**'],
+    ignores: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'vitest.config.ts', 'scripts/**'],
   },
 
   // Base configs
@@ -133,26 +133,13 @@ export default tseslint.config(
   // Test file overrides
   {
     files: ['**/*.test.ts', '**/__test__/**/*.ts'],
-    ...jest.configs['flat/recommended'],
+    plugins: { vitest },
     rules: {
-      ...jest.configs['flat/recommended'].rules,
-      'jest/expect-expect': [
+      ...vitest.configs.recommended.rules,
+      'vitest/expect-expect': [
         'error',
         { assertFunctionNames: ['expect', 'expect*'] },
       ],
-      'jest/no-standalone-expect': [
-        'error',
-        {
-          additionalTestBlockFunctions: [
-            'testSpending',
-            'testSpending.concurrent',
-            'testSpending.skip',
-            'testSpending.only',
-            'testSpending.todo',
-          ],
-        },
-      ],
-      'jest/no-deprecated-functions': 'off',
       // Loosen rules for tests
       '@typescript-eslint/no-explicit-any': 'off',
     },
