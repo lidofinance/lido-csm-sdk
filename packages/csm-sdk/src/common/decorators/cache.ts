@@ -25,101 +25,125 @@ const getDecoratorArgsString = function <This>(this: This, args?: string[]) {
   return serializeArgs(argsStringArr);
 };
 
+const IN_FLIGHT_TIMEOUT_MS = 60_000;
+
 export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
-  return function CacheDecorator<
-    This extends CsmSDKCacheable,
-    Value,
-  >(
-    target: (This extends object ? This[keyof This] : never) | ((this: This, ...args: any[]) => Value),
-    context: ClassMethodDecoratorContext<This, any> | ClassGetterDecoratorContext<This, Value>,
+  return function CacheDecorator<This extends CsmSDKCacheable, Value>(
+    target:
+      | (This extends object ? This[keyof This] : never)
+      | ((this: This, ...args: any[]) => Value),
+    context:
+      | ClassMethodDecoratorContext<This, any>
+      | ClassGetterDecoratorContext<This, Value>,
   ) {
     const methodName = String(context.name);
+    const kind = context.kind;
 
-    if (context.kind === 'getter') {
-      const replacementGetter = function (this: This): Value {
-        const cache = this.cache;
-        const decoratorArgsKey = getDecoratorArgsString.call(this, cacheArgs);
-        const cacheKey = `${methodName}:${decoratorArgsKey}:`;
+    const isImmutable = timeMs === Infinity;
 
-        if (cache.has(cacheKey)) {
-          const cachedEntry = cache.get(cacheKey);
-          const currentTime = Date.now();
-
-          if (cachedEntry && currentTime - cachedEntry.timestamp <= timeMs) {
-            callConsoleMessage.call(
-              this,
-              'Cache:',
-              `Using cache for getter '${methodName}'.`,
-            );
-            return cachedEntry.data;
-          } else {
-            callConsoleMessage.call(
-              this,
-              'Cache:',
-              `Cache for getter '${methodName}' has expired.`,
-            );
-            cache.delete(cacheKey);
-          }
-        }
-
-        callConsoleMessage.call(
-          this,
-          'Cache:',
-          `Cache for getter '${methodName}' set.`,
-        );
-        const result = (target as () => Value).call(this);
-        if (result instanceof Promise) {
-          void result.then((resolvedResult) =>
-            cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now() }),
-          );
-        } else cache.set(cacheKey, { data: result, timestamp: Date.now() });
-
-        return result;
-      };
-
-      return replacementGetter as any;
-    }
-
-    const replacementMethod = function (this: This, ...args: any[]): any {
-      const cache = this.cache;
-      const decoratorArgsKey = getDecoratorArgsString.call(this, cacheArgs);
-      const argsKey = serializeArgs(args);
-      const cacheKey = `${methodName}:${decoratorArgsKey}:${argsKey}`;
+    const resolveCache = function (
+      instance: This,
+      cache: Map<string, { data: any; timestamp: number; version?: number }>,
+      cacheKey: string,
+      execute: () => any,
+    ): any {
+      const isEntryValid = (
+        entry: { data: any; timestamp: number; version?: number },
+        now: number,
+      ) =>
+        (isImmutable || entry.version === instance.cacheVersion) &&
+        (entry.data instanceof Promise
+          ? now - entry.timestamp <= IN_FLIGHT_TIMEOUT_MS
+          : isImmutable || now - entry.timestamp <= timeMs);
 
       if (cache.has(cacheKey)) {
         const cachedEntry = cache.get(cacheKey);
-        const currentTime = Date.now();
-
-        if (cachedEntry && currentTime - cachedEntry.timestamp <= timeMs) {
+        if (cachedEntry && isEntryValid(cachedEntry, Date.now())) {
           callConsoleMessage.call(
-            this,
+            instance,
             'Cache:',
-            `Using cache for method '${methodName}'.`,
+            `Using cache for ${kind} '${methodName}'.`,
           );
           return cachedEntry.data;
         } else {
           callConsoleMessage.call(
-            this,
+            instance,
             'Cache:',
-            `Cache for method '${methodName}' has expired.`,
+            `Cache for ${kind} '${methodName}' has expired.`,
           );
           cache.delete(cacheKey);
         }
       }
 
       callConsoleMessage.call(
-        this,
+        instance,
         'Cache:',
-        `Cache for method '${methodName}' set.`,
+        `Cache for ${kind} '${methodName}' set.`,
       );
-      const result = (target as (...args: any[]) => any).call(this, ...args);
+      const callVersion = isImmutable
+        ? undefined
+        : instance.cacheVersion;
+      const result = execute();
       if (result instanceof Promise) {
-        void result.then((resolvedResult) =>
-          cache.set(cacheKey, { data: resolvedResult, timestamp: Date.now() }),
-        );
-      } else cache.set(cacheKey, { data: result, timestamp: Date.now() });
+        const wrapped = result
+          .then((resolvedResult) => {
+            if (
+              isImmutable ||
+              cache.get(cacheKey)?.version === callVersion
+            ) {
+              cache.set(cacheKey, {
+                data: resolvedResult,
+                timestamp: Date.now(),
+                version: callVersion,
+              });
+            }
+            return resolvedResult;
+          })
+          .catch((error) => {
+            if (
+              isImmutable ||
+              cache.get(cacheKey)?.version === callVersion
+            ) {
+              cache.delete(cacheKey);
+            }
+            throw error;
+          });
+        cache.set(cacheKey, {
+          data: wrapped,
+          timestamp: Date.now(),
+          version: callVersion,
+        });
+        return wrapped;
+      } else {
+        cache.set(cacheKey, {
+          data: result,
+          timestamp: Date.now(),
+          version: callVersion,
+        });
+      }
 
       return result;
+    };
+
+    if (kind === 'getter') {
+      const replacementGetter = function (this: This): Value {
+        const decoratorArgsKey = getDecoratorArgsString.call(this, cacheArgs);
+        const cacheKey = `${methodName}:${decoratorArgsKey}:`;
+        return resolveCache(this, this.cache, cacheKey, () =>
+          (target as () => Value).call(this),
+        );
+      };
+
+      return replacementGetter as any;
+    }
+
+    const replacementMethod = function (this: This, ...args: any[]): any {
+      const decoratorArgsKey = getDecoratorArgsString.call(this, cacheArgs);
+      const argsKey = serializeArgs(args);
+      const cacheKey = `${methodName}:${decoratorArgsKey}:${argsKey}`;
+      return resolveCache(this, this.cache, cacheKey, () =>
+        (target as (...args: any[]) => any).call(this, ...args),
+      );
     };
     return replacementMethod;
   };
