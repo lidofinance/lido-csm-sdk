@@ -127,6 +127,24 @@ const CuratedModuleExtrasAbi = [
   },
   {
     type: 'function',
+    name: 'getDepositAllocationTargets',
+    inputs: [],
+    outputs: [
+      {
+        name: 'currentValidators',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'targetValidators',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getDepositsAllocation',
     inputs: [
       {
@@ -186,6 +204,24 @@ const CuratedModuleExtrasAbi = [
     outputs: [
       {
         name: 'operatorWeights',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getTopUpAllocationTargets',
+    inputs: [],
+    outputs: [
+      {
+        name: 'currentAllocations',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'targetAllocations',
         type: 'uint256[]',
         internalType: 'uint256[]',
       },

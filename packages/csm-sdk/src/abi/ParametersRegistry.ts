@@ -350,6 +350,131 @@ export const ParametersRegistryAbi = [
   },
   {
     type: 'function',
+    name: 'getCurveParameters',
+    inputs: [
+      {
+        name: 'curveId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'params',
+        type: 'tuple',
+        internalType: 'struct IParametersRegistry.CurveParameters',
+        components: [
+          {
+            name: 'keyRemovalCharge',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'generalDelayedPenaltyAdditionalFine',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'keysLimit',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'queuePriority',
+            type: 'uint32',
+            internalType: 'uint32',
+          },
+          {
+            name: 'queueMaxDeposits',
+            type: 'uint32',
+            internalType: 'uint32',
+          },
+          {
+            name: 'rewardShareData',
+            type: 'tuple[]',
+            internalType: 'struct IParametersRegistry.KeyNumberValueInterval[]',
+            components: [
+              {
+                name: 'minKeyNumber',
+                type: 'uint256',
+                internalType: 'uint256',
+              },
+              {
+                name: 'value',
+                type: 'uint256',
+                internalType: 'uint256',
+              },
+            ],
+          },
+          {
+            name: 'performanceLeewayData',
+            type: 'tuple[]',
+            internalType: 'struct IParametersRegistry.KeyNumberValueInterval[]',
+            components: [
+              {
+                name: 'minKeyNumber',
+                type: 'uint256',
+                internalType: 'uint256',
+              },
+              {
+                name: 'value',
+                type: 'uint256',
+                internalType: 'uint256',
+              },
+            ],
+          },
+          {
+            name: 'strikesLifetime',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'strikesThreshold',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'badPerformancePenalty',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'attestationsWeight',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'blocksWeight',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'syncWeight',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'allowedExitDelay',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'exitDelayFee',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'maxElWithdrawalRequestFee',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getExitDelayFee',
     inputs: [
       {

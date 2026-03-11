@@ -31,23 +31,20 @@ export class OperatorSDK extends CsmSDKModule {
     return this.accountingContract.read.getBondCurveId([id]);
   }
 
-  // TODO: add debt and pending shares to the result
   @Logger('Views:')
   @ErrorHandler()
   public async getBondBalance(id: NodeOperatorId): Promise<BondBalance> {
-    const [[current, required], locked] = await Promise.all([
-      this.accountingContract.read.getBondSummary([id]),
-      this.getLockedBond(id),
+    const info = await this.accountingContract.read.getNodeOperatorBondInfo([
+      id,
     ]);
 
-    return calcBondBalance({ current, required, locked });
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  @Cache(CACHE_SHORT)
-  public async getLockedBond(id: NodeOperatorId): Promise<bigint> {
-    return this.accountingContract.read.getLockedBond([id]);
+    return calcBondBalance({
+      current: info.currentBond,
+      required: info.requiredBond,
+      locked: info.lockedBond,
+      debt: info.bondDebt,
+      pendingSharesToSplit: info.pendingSharesToSplit,
+    });
   }
 
   @Logger('Views:')
@@ -106,18 +103,6 @@ export class OperatorSDK extends CsmSDKModule {
   public async isOwner(id: NodeOperatorId, address: Address): Promise<boolean> {
     const owner = await this.moduleContract.read.getNodeOperatorOwner([id]);
     return isAddressEqual(owner, address) && owner !== zeroAddress;
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getBondDebt(id: NodeOperatorId): Promise<bigint> {
-    return this.accountingContract.read.getBondDebt([id]);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getPendingSharesToSplit(id: NodeOperatorId): Promise<bigint> {
-    return this.accountingContract.read.getPendingSharesToSplit([id]); // steth shares (wsteth)
   }
 
   @Logger('Views:')

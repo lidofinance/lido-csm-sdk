@@ -36,7 +36,8 @@ export type OperatorGroup = {
   externalOperators: readonly DecodedExternalOperator[];
 };
 
-export type OperatorWeightAndExternalStake = {
+export type OperatorStakeInfo = {
   weight: bigint;
-  externalStake: bigint;
+  currentStake: bigint;
+  targetStake: bigint;
 };

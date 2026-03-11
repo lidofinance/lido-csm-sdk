@@ -29,27 +29,21 @@ export enum CONTRACT_NAMES {
   // CM-specific
   curatedModule = 'curatedModule',
   metaRegistry = 'metaRegistry',
-  curatedGate1 = 'curatedGate1',
-  curatedGate2 = 'curatedGate2',
-  curatedGate3 = 'curatedGate3',
-  curatedGate4 = 'curatedGate4',
-  curatedGate5 = 'curatedGate5',
-  curatedGate6 = 'curatedGate6',
-  curatedGate7 = 'curatedGate7',
-  curatedGate8 = 'curatedGate8',
-  curatedGate9 = 'curatedGate9',
+  curatedGatePTO = 'curatedGatePTO',
+  curatedGatePO = 'curatedGatePO',
+  curatedGatePGO = 'curatedGatePGO',
+  curatedGateDO = 'curatedGateDO',
+  curatedGateMODC = 'curatedGateMODC',
+  curatedGateIODC = 'curatedGateIODC',
 }
 
 export const CURATED_GATES = [
-  CONTRACT_NAMES.curatedGate1,
-  CONTRACT_NAMES.curatedGate2,
-  CONTRACT_NAMES.curatedGate3,
-  CONTRACT_NAMES.curatedGate4,
-  CONTRACT_NAMES.curatedGate5,
-  CONTRACT_NAMES.curatedGate6,
-  CONTRACT_NAMES.curatedGate7,
-  CONTRACT_NAMES.curatedGate8,
-  CONTRACT_NAMES.curatedGate9,
+  CONTRACT_NAMES.curatedGatePTO,
+  CONTRACT_NAMES.curatedGatePO,
+  CONTRACT_NAMES.curatedGatePGO,
+  CONTRACT_NAMES.curatedGateDO,
+  CONTRACT_NAMES.curatedGateMODC,
+  CONTRACT_NAMES.curatedGateIODC,
 ] as const;
 
 export type CURATED_GATES = (typeof CURATED_GATES)[number];

@@ -48,6 +48,8 @@ export type BondBalance = {
   required: bigint;
   current: bigint;
   locked: bigint;
+  debt: bigint;
+  pendingSharesToSplit: bigint;
   delta: bigint;
   isInsufficient: boolean;
 };

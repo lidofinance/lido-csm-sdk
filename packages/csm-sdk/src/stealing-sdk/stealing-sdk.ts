@@ -70,8 +70,8 @@ export class StealingSDK extends CsmSDKModule<{
     return await Promise.all(
       operators.map((nodeOperatorId) =>
         this.bus.operator
-          .getLockedBond(nodeOperatorId)
-          .then((locked) => ({ nodeOperatorId, locked })),
+          .getBondBalance(nodeOperatorId)
+          .then(({ locked }) => ({ nodeOperatorId, locked })),
       ),
     );
   }

@@ -6,6 +6,7 @@ import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   OperatorGroup,
   OperatorMetadata,
+  OperatorStakeInfo,
   SetOperatorDataProps,
 } from './types.js';
 import { decodeExternalOperator } from './utils.js';
@@ -81,39 +82,38 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getOperatorTargetStake(
-    nodeOperatorId: NodeOperatorId,
-  ): Promise<bigint> {
-    const [totalStake, totalWeight, operatorWeight] = await Promise.all([
-      this.bus.module.getBalance(),
-      this.getTotalOperatorsWeight(),
-      this.getOperatorWeight(nodeOperatorId),
-    ]);
-
-    if (totalWeight === 0n) return 0n;
-    return (totalStake * operatorWeight) / totalWeight;
+  @Cache(CACHE_MID)
+  public async getTopUpAllocations() {
+    return this.moduleContract.read.getTopUpAllocationTargets();
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
-  private async getTotalOperatorsWeight(): Promise<bigint> {
-    const count = await this.bus.module.getOperatorsCount();
-    const ids = Array.from({ length: Number(count) }, (_, i) => BigInt(i));
-    const weights = await this.contract.read.getOperatorWeights([ids]);
-    return weights.reduce((sum, w) => sum + w, 0n);
+  public async getOperatorTargetKeys(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<bigint> {
+    const [, target] =
+      await this.moduleContract.read.getDepositAllocationTargets();
+    return target[Number(nodeOperatorId)] ?? 0n;
   }
 
   @Logger('Utils:')
-  public async getOperatorWeightAndBalance(
+  public async getOperatorStakeInfo(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<{ weight: bigint; balance: bigint; targetStake: bigint }> {
-    const [weight, balance, targetStake] = await Promise.all([
-      this.getOperatorWeight(nodeOperatorId),
-      this.getOperatorBalance(nodeOperatorId),
-      this.getOperatorTargetStake(nodeOperatorId),
-    ]);
+  ): Promise<OperatorStakeInfo> {
+    const [weight, [currentAllocations, targetAllocations]] = await Promise.all(
+      [this.getOperatorWeight(nodeOperatorId), this.getTopUpAllocations()],
+    );
 
-    return { weight, balance, targetStake };
+    const idx = Number(nodeOperatorId);
+
+    const targetStake = targetAllocations[idx] ?? 0n;
+    const currentStake = currentAllocations[idx] ?? 0n;
+
+    return {
+      weight,
+      currentStake,
+      targetStake,
+    };
   }
 }

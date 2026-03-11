@@ -1080,6 +1080,52 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'getNodeOperatorBondInfo',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'info',
+        type: 'tuple',
+        internalType: 'struct IAccounting.NodeOperatorBondInfo',
+        components: [
+          {
+            name: 'currentBond',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'requiredBond',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'lockedBond',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'bondDebt',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'pendingSharesToSplit',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getPendingSharesToSplit',
     inputs: [
       {
