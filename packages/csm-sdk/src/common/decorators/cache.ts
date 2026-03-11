@@ -45,11 +45,13 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         if (cache.has(cacheKey)) {
           const cachedEntry = cache.get(cacheKey);
           const currentTime = Date.now();
+          const versionMatch =
+            cachedEntry?.version === CsmSDKCacheable.cacheVersion;
 
           if (
             cachedEntry &&
             (cachedEntry.isPromise ||
-              currentTime - cachedEntry.timestamp <= timeMs)
+              (currentTime - cachedEntry.timestamp <= timeMs && versionMatch))
           ) {
             callConsoleMessage.call(
               this,
@@ -85,6 +87,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
                 data: resolvedResult,
                 timestamp: Date.now(),
                 isPromise: false,
+                version: CsmSDKCacheable.cacheVersion,
               });
               return resolvedResult;
             })
@@ -97,6 +100,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
             data: result,
             timestamp: Date.now(),
             isPromise: false,
+            version: CsmSDKCacheable.cacheVersion,
           });
         }
 
@@ -115,11 +119,13 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
       if (cache.has(cacheKey)) {
         const cachedEntry = cache.get(cacheKey);
         const currentTime = Date.now();
+        const versionMatch =
+          cachedEntry?.version === CsmSDKCacheable.cacheVersion;
 
         if (
           cachedEntry &&
           (cachedEntry.isPromise ||
-            currentTime - cachedEntry.timestamp <= timeMs)
+            (currentTime - cachedEntry.timestamp <= timeMs && versionMatch))
         ) {
           callConsoleMessage.call(
             this,
@@ -155,6 +161,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
               data: resolvedResult,
               timestamp: Date.now(),
               isPromise: false,
+              version: CsmSDKCacheable.cacheVersion,
             });
             return resolvedResult;
           })
@@ -167,6 +174,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
           data: result,
           timestamp: Date.now(),
           isPromise: false,
+          version: CsmSDKCacheable.cacheVersion,
         });
       }
 

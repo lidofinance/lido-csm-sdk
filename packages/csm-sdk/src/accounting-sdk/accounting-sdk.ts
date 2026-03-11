@@ -123,12 +123,6 @@ export class AccountingSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getCurve(curveId: bigint) {
-    return this.accountingContract.read.getCurveInfo([curveId]);
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
   public async getKeysCountByBondAmount({
     amount,
     curveId,
