@@ -1,11 +1,12 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_LONG,
   CONTRACT_NAMES,
+  ERROR_CODE,
   Proof,
+  SDKError,
   TOKENS,
   WithToken,
 } from '../common/index.js';

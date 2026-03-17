@@ -1,7 +1,11 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, NodeOperatorId } from '../common/index.js';
+import {
+  CACHE_MID,
+  ERROR_CODE,
+  invariant,
+  NodeOperatorId,
+} from '../common/index.js';
 import {
   fetchAllValidatorRegistrations,
   isValidatorWithIssue,

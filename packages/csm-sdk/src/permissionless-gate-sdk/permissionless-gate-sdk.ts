@@ -1,7 +1,12 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CONTRACT_NAMES, TOKENS, WithToken } from '../common/index.js';
+import {
+  CONTRACT_NAMES,
+  ERROR_CODE,
+  SDKError,
+  TOKENS,
+  WithToken,
+} from '../common/index.js';
 import { parseNodeOperatorAddedEvents } from '../common/utils/index.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';

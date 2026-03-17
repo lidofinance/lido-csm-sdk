@@ -1,4 +1,4 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
+import { ERROR_CODE, invariant } from '../utils/sdk-error.js';
 
 export type BusWithModules<
   TModules extends object = object,

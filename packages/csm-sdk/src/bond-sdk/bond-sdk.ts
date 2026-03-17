@@ -1,14 +1,15 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CONTRACT_NAMES,
+  ERROR_CODE,
   NodeOperatorId,
+  SDKError,
   TOKENS,
   WithToken,
 } from '../common/index.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { parseClaimProps } from '../common/utils/parse-claim-props.js';
+import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import { parseCoverReceiptEvents } from './parse-cover-receipt-events.js';
 import {
   AddBondProps,

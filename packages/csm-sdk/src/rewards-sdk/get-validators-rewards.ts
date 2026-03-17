@@ -1,4 +1,4 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
+import { ERROR_CODE, SDKError } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
 import { isRewardsReportV1, isRewardsReportV2 } from './parse-report.js';
 import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types.js';

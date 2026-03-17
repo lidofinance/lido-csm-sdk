@@ -1,4 +1,3 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
@@ -6,6 +5,8 @@ import {
   CONTRACT_NAMES,
   EJECT_FEE_MIN_LIMIT,
   EJECT_FEE_MULTIPLIEER,
+  ERROR_CODE,
+  SDKError,
   TOKENS,
   WithToken,
 } from '../common/index.js';

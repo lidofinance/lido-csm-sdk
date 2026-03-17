@@ -20,3 +20,5 @@ export * from './create-merkle-tree-schema.js';
 export * from './is-valid-ipfs-cid.js';
 export * from './parse-claim-props.js';
 export * from './operator-type-utils.js';
+export * from './sdk-error.js';
+export * from './decode-revert-data.js';

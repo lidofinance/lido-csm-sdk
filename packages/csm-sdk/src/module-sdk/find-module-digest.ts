@@ -1,4 +1,4 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
+import { ERROR_CODE, invariant } from '../common/index.js';
 import { ModuleDigest } from './types.js';
 
 export const findModuleDigest = (

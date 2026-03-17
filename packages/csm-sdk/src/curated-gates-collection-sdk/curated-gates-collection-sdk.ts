@@ -1,4 +1,3 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
 import type { Address } from 'viem';
 import {
   CsmSDKModule,
@@ -6,6 +5,7 @@ import {
 } from '../common/class-primitives/csm-sdk-module.js';
 import { CURATED_GATES } from '../common/constants/contract-names.js';
 import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { ERROR_CODE, invariant } from '../common/index.js';
 import { CuratedGateSDK } from '../curated-gate-sdk/curated-gate-sdk.js';
 import { TxSDK } from '../tx-sdk/index.js';
 import type {

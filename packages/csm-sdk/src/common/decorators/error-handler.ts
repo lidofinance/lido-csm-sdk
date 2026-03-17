@@ -1,10 +1,10 @@
 import { callConsoleMessage } from './utils.js';
 import { type HeadMessage } from './types.js';
-import { SDKError } from '@lidofinance/lido-ethereum-sdk';
 import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '../../tx-sdk/types.js';
+import { SDKError } from '../index.js';
 
 export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
   return function ErrorHandlerDecorator<This, Value>(

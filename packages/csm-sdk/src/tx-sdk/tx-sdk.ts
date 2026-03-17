@@ -1,11 +1,9 @@
 import {
   AccountValue,
   CheckAllowanceResult,
-  ERROR_CODE,
   NOOP,
   TransactionOptions,
   TransactionResult,
-  withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
@@ -16,7 +14,9 @@ import {
   CONTRACT_NAMES,
   EMPTY_PERMIT,
   Erc20Tokens,
+  ERROR_CODE,
   PermitSignatureShort,
+  withSDKError,
 } from '../common/index.js';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
 import { BindedContract } from '../core-sdk/types.js';

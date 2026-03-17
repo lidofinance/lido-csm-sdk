@@ -1,6 +1,6 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { decodeEventLog, getAbiItem, Hex, toEventHash } from 'viem';
 import { AccountingAbi } from '../abi/Accounting.js';
+import { ERROR_CODE, SDKError } from '../common/index.js';
 import { ReceiptLike } from '../tx-sdk/types.js';
 
 const BOND_LOCK_CHANGED_EVENT = getAbiItem({

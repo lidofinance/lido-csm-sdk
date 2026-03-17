@@ -1,8 +1,4 @@
-import {
-  ERROR_CODE,
-  invariant,
-  LidoSDKCore,
-} from '@lidofinance/lido-ethereum-sdk';
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { Abi, Address, Chain, getContract, WalletClient } from 'viem';
 import { BaseModuleAbi, VersionCheckAbi } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
@@ -11,7 +7,9 @@ import {
   CACHE_LONG,
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
+  ERROR_CODE,
   EXTERNAL_LINKS,
+  invariant,
   LINK_TYPE,
   MODULE_CONTRACT,
   MODULE_NAME,
