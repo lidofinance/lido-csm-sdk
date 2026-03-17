@@ -38,6 +38,8 @@ export type OperatorGroup = {
 
 export type OperatorStakeSummary = OperatorStakeInfo & {
   weight: bigint;
+  activeKeys: number;
+  depositableKeys: number;
 };
 
 export type OperatorStakeInfo = {

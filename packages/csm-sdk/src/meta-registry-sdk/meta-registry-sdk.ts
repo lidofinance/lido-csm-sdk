@@ -2,6 +2,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import { CACHE_MID, CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
+import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   OperatorGroup,
@@ -17,6 +18,7 @@ import { decodeExternalOperator } from './utils.js';
 export class MetaRegistrySDK extends CsmSDKModule<{
   tx: TxSDK;
   module: ModuleSDK;
+  operator: OperatorSDK;
 }> {
   private get contract() {
     return this.core.getContract(CONTRACT_NAMES.metaRegistry);
@@ -131,15 +133,18 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   public async getOperatorStakeSummary(
     nodeOperatorId: NodeOperatorId,
   ): Promise<OperatorStakeSummary> {
-    const [weight, { currentStake, targetStake }] = await Promise.all([
+    const [weight, { currentStake, targetStake }, info] = await Promise.all([
       this.getOperatorWeight(nodeOperatorId),
       this.getOperatorTargetStake(nodeOperatorId),
+      this.bus.operator.getInfo(nodeOperatorId),
     ]);
 
     return {
       weight,
       currentStake,
       targetStake,
+      activeKeys: info.totalDepositedKeys - info.totalWithdrawnKeys,
+      depositableKeys: info.totalAddedKeys - info.totalDepositedKeys,
     };
   }
 
@@ -151,9 +156,10 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     const group = await this.getOperatorGroup(nodeOperatorId);
     const ids = group.subNodeOperators.map((op) => op.nodeOperatorId);
 
-    const [weights, [currentStakes, targetStakes]] = await Promise.all([
+    const [weights, [currentStakes, targetStakes], infos] = await Promise.all([
       this.contract.read.getOperatorWeights([ids]),
       this.getTopUpAllocations(),
+      Promise.all(ids.map((id) => this.bus.operator.getInfo(id))),
     ]);
 
     return group.subNodeOperators.map((op, i) => ({
@@ -162,6 +168,8 @@ export class MetaRegistrySDK extends CsmSDKModule<{
       weight: weights[i] ?? 0n,
       currentStake: currentStakes[Number(op.nodeOperatorId)] ?? 0n,
       targetStake: targetStakes[Number(op.nodeOperatorId)] ?? 0n,
+      activeKeys: infos[i]!.totalDepositedKeys - infos[i]!.totalWithdrawnKeys,
+      depositableKeys: infos[i]!.totalAddedKeys - infos[i]!.totalDepositedKeys,
     }));
   }
 }
