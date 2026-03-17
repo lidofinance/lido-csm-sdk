@@ -5,7 +5,9 @@ import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
-  OperatorGroup,
+  GroupInfo,
+  GroupOperators,
+  OperatorGroupStakeSummary,
   OperatorKeysInfo,
   OperatorMetadata,
   OperatorStakeInfo,
@@ -54,17 +56,34 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getOperatorGroup(
+  public async getOperatorGroupId(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<OperatorGroup> {
-    const groupId = await this.contract.read.getNodeOperatorGroupId([
-      nodeOperatorId,
-    ]);
-    const group = await this.contract.read.getOperatorGroup([groupId]);
+  ): Promise<bigint> {
+    return this.contract.read.getNodeOperatorGroupId([nodeOperatorId]);
+  }
 
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getGroup(groupId: bigint): Promise<GroupOperators> {
+    const group = await this.contract.read.getOperatorGroup([groupId]);
     return {
       ...group,
       externalOperators: group.externalOperators.map(decodeExternalOperator),
+    };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
+  public async getOperatorGroup(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<GroupInfo> {
+    const groupId = await this.getOperatorGroupId(nodeOperatorId);
+    const group = await this.getGroup(groupId);
+
+    return {
+      groupId,
+      ...group,
     };
   }
 
@@ -151,9 +170,9 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getGroupStakeSummary(
-    nodeOperatorId: NodeOperatorId,
+    groupId: bigint,
   ): Promise<SubOperatorStakeSummary[]> {
-    const group = await this.getOperatorGroup(nodeOperatorId);
+    const group = await this.getGroup(groupId);
     const ids = group.subNodeOperators.map((op) => op.nodeOperatorId);
 
     const [weights, [currentStakes, targetStakes], infos] = await Promise.all([
@@ -171,5 +190,20 @@ export class MetaRegistrySDK extends CsmSDKModule<{
       activeKeys: infos[i]!.totalDepositedKeys - infos[i]!.totalWithdrawnKeys,
       depositableKeys: infos[i]!.totalAddedKeys - infos[i]!.totalDepositedKeys,
     }));
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorGroupStakeSummary(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<OperatorGroupStakeSummary> {
+    const group = await this.getOperatorGroup(nodeOperatorId);
+
+    const operators = await this.getGroupStakeSummary(group.groupId);
+
+    return {
+      ...group,
+      operators,
+    };
   }
 }

@@ -31,10 +31,14 @@ export type DecodedExternalOperator =
   | ({ type: 'NOR' } & ExternalOperatorNOR)
   | ({ type: 'unknown' } & RawExternalOperator);
 
-export type OperatorGroup = {
+export type GroupOperators = {
   subNodeOperators: readonly SubNodeOperator[];
   externalOperators: readonly DecodedExternalOperator[];
 };
+
+export type GroupInfo = {
+  groupId: bigint;
+} & GroupOperators;
 
 export type OperatorStakeSummary = OperatorStakeInfo & {
   weight: bigint;
@@ -50,6 +54,10 @@ export type OperatorStakeInfo = {
 export type OperatorKeysInfo = {
   currentKeys: number;
   targetKeys: number;
+};
+
+export type OperatorGroupStakeSummary = GroupInfo & {
+  operators: SubOperatorStakeSummary[];
 };
 
 export type SubOperatorStakeSummary = OperatorStakeSummary & {
