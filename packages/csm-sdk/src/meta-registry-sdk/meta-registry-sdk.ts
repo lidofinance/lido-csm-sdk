@@ -5,9 +5,12 @@ import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
 import {
   OperatorGroup,
+  OperatorKeysInfo,
   OperatorMetadata,
   OperatorStakeInfo,
+  OperatorStakeSummary,
   SetOperatorDataProps,
+  SubOperatorStakeSummary,
 } from './types.js';
 import { decodeExternalOperator } from './utils.js';
 
@@ -83,37 +86,82 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   @Cache(CACHE_MID)
-  public async getTopUpAllocations() {
-    return this.moduleContract.read.getTopUpAllocationTargets();
+  private async getDepositAllocations() {
+    return this.moduleContract.read.getDepositAllocationTargets();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getOperatorTargetKeys(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<bigint> {
-    const [, target] =
-      await this.moduleContract.read.getDepositAllocationTargets();
-    return target[Number(nodeOperatorId)] ?? 0n;
-  }
-
-  @Logger('Utils:')
-  public async getOperatorStakeInfo(
-    nodeOperatorId: NodeOperatorId,
-  ): Promise<OperatorStakeInfo> {
-    const [weight, [currentAllocations, targetAllocations]] = await Promise.all(
-      [this.getOperatorWeight(nodeOperatorId), this.getTopUpAllocations()],
-    );
+  ): Promise<OperatorKeysInfo> {
+    const [current, target] = await this.getDepositAllocations();
 
     const idx = Number(nodeOperatorId);
 
-    const targetStake = targetAllocations[idx] ?? 0n;
-    const currentStake = currentAllocations[idx] ?? 0n;
+    return {
+      targetKeys: Number(target[idx] ?? 0n),
+      currentKeys: Number(current[idx] ?? 0n),
+    };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
+  private async getTopUpAllocations() {
+    return this.moduleContract.read.getTopUpAllocationTargets();
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorTargetStake(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<OperatorStakeInfo> {
+    const [current, target] = await this.getTopUpAllocations();
+
+    const idx = Number(nodeOperatorId);
+
+    return {
+      targetStake: target[idx] ?? 0n,
+      currentStake: current[idx] ?? 0n,
+    };
+  }
+
+  @Logger('Utils:')
+  public async getOperatorStakeSummary(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<OperatorStakeSummary> {
+    const [weight, { currentStake, targetStake }] = await Promise.all([
+      this.getOperatorWeight(nodeOperatorId),
+      this.getOperatorTargetStake(nodeOperatorId),
+    ]);
 
     return {
       weight,
       currentStake,
       targetStake,
     };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getGroupStakeSummary(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<SubOperatorStakeSummary[]> {
+    const group = await this.getOperatorGroup(nodeOperatorId);
+    const ids = group.subNodeOperators.map((op) => op.nodeOperatorId);
+
+    const [weights, [currentStakes, targetStakes]] = await Promise.all([
+      this.contract.read.getOperatorWeights([ids]),
+      this.getTopUpAllocations(),
+    ]);
+
+    return group.subNodeOperators.map((op, i) => ({
+      nodeOperatorId: op.nodeOperatorId,
+      share: op.share,
+      weight: weights[i] ?? 0n,
+      currentStake: currentStakes[Number(op.nodeOperatorId)] ?? 0n,
+      targetStake: targetStakes[Number(op.nodeOperatorId)] ?? 0n,
+    }));
   }
 }

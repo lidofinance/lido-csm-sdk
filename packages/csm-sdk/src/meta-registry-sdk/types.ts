@@ -36,8 +36,21 @@ export type OperatorGroup = {
   externalOperators: readonly DecodedExternalOperator[];
 };
 
-export type OperatorStakeInfo = {
+export type OperatorStakeSummary = OperatorStakeInfo & {
   weight: bigint;
+};
+
+export type OperatorStakeInfo = {
   currentStake: bigint;
   targetStake: bigint;
+};
+
+export type OperatorKeysInfo = {
+  currentKeys: number;
+  targetKeys: number;
+};
+
+export type SubOperatorStakeSummary = OperatorStakeSummary & {
+  nodeOperatorId: NodeOperatorId;
+  share: number;
 };
