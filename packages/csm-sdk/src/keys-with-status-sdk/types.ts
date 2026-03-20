@@ -80,4 +80,5 @@ export type StatusContext = {
   requestedToExit: Hex[];
   hasCLStatuses: boolean;
   hasStrikes: boolean;
+  hasQueue: boolean;
 };

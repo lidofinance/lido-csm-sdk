@@ -37,6 +37,7 @@ const makeContext = (
   requestedToExit: [],
   hasCLStatuses: true,
   hasStrikes: false,
+  hasQueue: true,
   ...overrides,
 });
 
@@ -93,6 +94,19 @@ describe('computeStatuses', () => {
         },
       });
       expect(computeStatuses(ctx)).toEqual([KEY_STATUS.NON_QUEUED]);
+    });
+
+    it('returns DEPOSITABLE when hasQueue is false regardless of enqueuedCount', () => {
+      const ctx = makeContext({
+        keyIndex: 6,
+        hasQueue: false,
+        info: {
+          ...makeContext().info,
+          enqueuedCount: 0,
+          depositableValidatorsCount: 3,
+        },
+      });
+      expect(computeStatuses(ctx)).toEqual([KEY_STATUS.DEPOSITABLE]);
     });
   });
 

@@ -56,16 +56,25 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_MID)
   public async getOperatorGroupId(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<bigint> {
-    return this.contract.read.getNodeOperatorGroupId([nodeOperatorId]);
+  ): Promise<bigint | null> {
+    const groupId = await this.contract.read.getNodeOperatorGroupId([
+      nodeOperatorId,
+    ]);
+
+    return !groupId ? null : groupId;
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getGroup(groupId: bigint): Promise<GroupOperators> {
+  @Cache(CACHE_MID)
+  public async getGroup(groupId: bigint): Promise<GroupOperators | null> {
+    if (!groupId) return null;
+
     const group = await this.contract.read.getOperatorGroup([groupId]);
+
     return {
       ...group,
       externalOperators: group.externalOperators.map(decodeExternalOperator),
@@ -77,9 +86,12 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   @Cache(CACHE_MID)
   public async getOperatorGroup(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<GroupInfo> {
+  ): Promise<GroupInfo | null> {
     const groupId = await this.getOperatorGroupId(nodeOperatorId);
+    if (!groupId) return null;
+
     const group = await this.getGroup(groupId);
+    if (!group) return null;
 
     return {
       groupId,
@@ -152,18 +164,15 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   public async getOperatorStakeSummary(
     nodeOperatorId: NodeOperatorId,
   ): Promise<OperatorStakeSummary> {
-    const [weight, { currentStake, targetStake }, info] = await Promise.all([
+    const [weight, { currentStake, targetStake }] = await Promise.all([
       this.getOperatorWeight(nodeOperatorId),
       this.getOperatorTargetStake(nodeOperatorId),
-      this.bus.operator.getInfo(nodeOperatorId),
     ]);
 
     return {
       weight,
       currentStake,
       targetStake,
-      activeKeys: info.totalDepositedKeys - info.totalWithdrawnKeys,
-      depositableKeys: info.totalAddedKeys - info.totalDepositedKeys,
     };
   }
 
@@ -171,14 +180,15 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   @ErrorHandler()
   public async getGroupStakeSummary(
     groupId: bigint,
-  ): Promise<SubOperatorStakeSummary[]> {
+  ): Promise<SubOperatorStakeSummary[] | null> {
     const group = await this.getGroup(groupId);
+    if (!group) return null;
+
     const ids = group.subNodeOperators.map((op) => op.nodeOperatorId);
 
-    const [weights, [currentStakes, targetStakes], infos] = await Promise.all([
+    const [weights, [currentStakes, targetStakes]] = await Promise.all([
       this.contract.read.getOperatorWeights([ids]),
       this.getTopUpAllocations(),
-      Promise.all(ids.map((id) => this.bus.operator.getInfo(id))),
     ]);
 
     return group.subNodeOperators.map((op, i) => ({
@@ -187,8 +197,6 @@ export class MetaRegistrySDK extends CsmSDKModule<{
       weight: weights[i] ?? 0n,
       currentStake: currentStakes[Number(op.nodeOperatorId)] ?? 0n,
       targetStake: targetStakes[Number(op.nodeOperatorId)] ?? 0n,
-      activeKeys: infos[i]!.totalDepositedKeys - infos[i]!.totalWithdrawnKeys,
-      depositableKeys: infos[i]!.totalAddedKeys - infos[i]!.totalDepositedKeys,
     }));
   }
 
@@ -196,10 +204,12 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   @ErrorHandler()
   public async getOperatorGroupStakeSummary(
     nodeOperatorId: NodeOperatorId,
-  ): Promise<OperatorGroupStakeSummary> {
+  ): Promise<OperatorGroupStakeSummary | null> {
     const group = await this.getOperatorGroup(nodeOperatorId);
+    if (!group) return null;
 
     const operators = await this.getGroupStakeSummary(group.groupId);
+    if (!operators) return null;
 
     return {
       ...group,

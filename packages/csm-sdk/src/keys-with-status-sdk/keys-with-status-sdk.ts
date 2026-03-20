@@ -5,6 +5,7 @@ import {
   CACHE_MID,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
+  MODULE_NAME,
 } from '../common/index.js';
 import { NodeOperatorId } from '../common/types.js';
 import { fetchJson, isNotUnique, isUnique } from '../common/utils/index.js';
@@ -133,6 +134,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     ]);
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
+    const hasQueue = this.core.moduleName === MODULE_NAME.CSM;
 
     return keys.map((pubkey, index) => {
       const prefilled = clKeysStatus?.find((item) => item.pubkey === pubkey);
@@ -150,6 +152,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         requestedToExit,
         hasCLStatuses: !!clKeysStatus,
         hasStrikes: !!keyStrikes?.strikes.reduce((a, b) => a + b, 0),
+        hasQueue,
       });
 
       return {

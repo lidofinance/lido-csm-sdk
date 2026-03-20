@@ -21,7 +21,10 @@ const getUnvettedStatus = (ctx: StatusContext): KEY_STATUS | null => {
 
 const getVettedStatus = (ctx: StatusContext): KEY_STATUS | null => {
   if (isDeposited(ctx)) return null;
-  if (ctx.info.enqueuedCount < ctx.info.depositableValidatorsCount) {
+  if (
+    ctx.hasQueue &&
+    ctx.info.enqueuedCount < ctx.info.depositableValidatorsCount
+  ) {
     return KEY_STATUS.NON_QUEUED;
   }
   return KEY_STATUS.DEPOSITABLE;
