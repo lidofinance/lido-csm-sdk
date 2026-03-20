@@ -6,7 +6,6 @@ import {
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
-import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
@@ -197,7 +196,7 @@ export class TxSDK extends CsmSDKModule {
       },
     });
 
-    CsmSDKCacheable.invalidateCache();
+    this.core.invalidateCache();
 
     return {
       hash,
@@ -294,7 +293,7 @@ export class TxSDK extends CsmSDKModule {
       },
     });
 
-    CsmSDKCacheable.invalidateCache();
+    this.core.invalidateCache();
 
     return {
       hash: txHash,

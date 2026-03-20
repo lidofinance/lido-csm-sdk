@@ -178,6 +178,10 @@ export class CoreSDK extends CsmSDKCacheable {
     };
   }
 
+  public invalidateCache() {
+    CsmSDKCacheable.invalidateCache();
+  }
+
   public getIpfsUrls(cid: string): string[] {
     if (!isValidIpfsCid(cid)) return [];
 
