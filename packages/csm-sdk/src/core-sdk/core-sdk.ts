@@ -4,7 +4,7 @@ import { BaseModuleAbi, VersionCheckAbi } from '../abi/index.js';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
 import { Cache, Logger } from '../common/decorators/index.js';
 import {
-  CACHE_LONG,
+  CACHE_IMMUTABLE,
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
   ERROR_CODE,
@@ -14,7 +14,7 @@ import {
   MODULE_CONTRACT,
   MODULE_NAME,
   SUPPORTED_CHAINS,
-  SUPPORTED_CONTRACT_VERSIONS,
+  SUPPORTED_CONTRACT_VERSIONS
 } from '../common/index.js';
 import { isValidIpfsCid } from '../common/utils/index.js';
 import { onVersionError } from '../common/utils/on-error.js';
@@ -26,6 +26,12 @@ import {
 } from './types.js';
 
 export class CoreSDK extends CsmSDKCacheable {
+  private _cacheVersion = 0;
+
+  get cacheVersion() {
+    return this._cacheVersion;
+  }
+
   readonly core: LidoSDKCore;
   readonly contractAddresses: ContractAddresses;
   readonly moduleId: bigint;
@@ -72,7 +78,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Utils:')
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   public getContractAddress(contract: CONTRACT_NAMES): Address {
     const address = this.contractAddresses[contract];
     invariant(
@@ -94,7 +100,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   @Logger('Contracts:')
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   public getContractWithAbi<TAbi extends Abi>(
     contractName: CONTRACT_NAMES,
     abi: TAbi,
@@ -179,7 +185,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public invalidateCache() {
-    CsmSDKCacheable.invalidateCache();
+    this._cacheVersion++;
   }
 
   public getIpfsUrls(cid: string): string[] {
