@@ -24,6 +24,12 @@ import {
 } from './types.js';
 import { MIN_EFFECTIVE_BALANCE } from './consts.js';
 
+const ACTIVE_LIFECYCLE = new Set([
+  KEY_STATUS.ACTIVE,
+  KEY_STATUS.ACTIVATION_PENDING,
+  KEY_STATUS.EXITING,
+]);
+
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
   frame: FrameSDK;
@@ -108,6 +114,22 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     return this.getClKeys(pubkeys);
   }
 
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_MID, ['id'])
+  public async getKeyBalance(
+    id: NodeOperatorId,
+    keyIndex: number,
+  ): Promise<bigint> {
+    const additionalBalance =
+      await this.core.contractBaseModule.read.getKeyAllocatedBalance([
+        id,
+        BigInt(keyIndex),
+      ]);
+
+    return additionalBalance + MIN_EFFECTIVE_BALANCE;
+  }
+
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
@@ -138,7 +160,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
     const hasQueue = this.core.moduleName === MODULE_NAME.CSM;
 
-    return keys.map((pubkey, index) => {
+    const preResults = keys.map((pubkey, index) => {
       const prefilled = clKeysStatus?.find((item) => item.pubkey === pubkey);
       const keyStrikes = keysWithStrikes.find((item) => item.pubkey === pubkey);
 
@@ -162,13 +184,42 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         index,
         statuses,
         validatorIndex: prefilled?.validatorIndex,
-        effectiveBalance:
-          (prefilled?.effectiveBalance ??
-          statuses.includes(KEY_STATUS.ACTIVATION_PENDING))
-            ? MIN_EFFECTIVE_BALANCE
-            : undefined,
+        effectiveBalance: prefilled?.effectiveBalance,
         strikes: keyStrikes?.strikes,
       };
+    });
+
+    return this.enchanceEffectiveBalance(id, preResults);
+  }
+
+  private async enchanceEffectiveBalance(
+    id: NodeOperatorId,
+    keys: KeyWithStatus[],
+  ): Promise<KeyWithStatus[]> {
+    if (this.core.moduleName !== MODULE_NAME.CM) {
+      return keys;
+    }
+
+    const indices = keys.reduce<number[]>((acc, key) => {
+      if (
+        key.effectiveBalance === undefined &&
+        ACTIVE_LIFECYCLE.has(key.statuses[0] as KEY_STATUS)
+      ) {
+        acc.push(key.index);
+      }
+      return acc;
+    }, []);
+
+    if (indices.length === 0) return keys;
+
+    const balances = await Promise.all(
+      indices.map((i) => this.getKeyBalance(id, i)),
+    );
+
+    return keys.map((key, i) => {
+      const balanceIdx = indices.indexOf(i);
+      if (balanceIdx === -1) return key;
+      return { ...key, effectiveBalance: balances[balanceIdx] };
     });
   }
 }
