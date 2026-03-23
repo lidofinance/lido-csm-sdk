@@ -193,6 +193,30 @@ const CuratedModuleExtrasAbi = [
   },
   {
     type: 'function',
+    name: 'getNodeOperatorWeightAndExternalStake',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'weight',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'externalStake',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getOperatorWeights',
     inputs: [
       {

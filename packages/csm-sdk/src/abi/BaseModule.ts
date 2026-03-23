@@ -601,7 +601,31 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
-    name: 'getKeyAddedBalance',
+    name: 'getKeyAllocatedBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getKeyConfirmedBalance',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -1302,19 +1326,6 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
-    name: 'onNodeOperatorBondCurveChange',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'onRewardsMinted',
     inputs: [
       {
@@ -1791,6 +1802,19 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'updateDepositInfo',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'updateDepositableValidatorsCount',
     inputs: [
       {
@@ -2115,7 +2139,7 @@ export const BaseModuleAbi = [
   },
   {
     type: 'event',
-    name: 'KeyAddedBalanceChanged',
+    name: 'KeyAllocatedBalanceChanged',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -2131,6 +2155,31 @@ export const BaseModuleAbi = [
       },
       {
         name: 'newTotal',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'KeyConfirmedBalanceChanged',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'keyIndex',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'newBalance',
         type: 'uint256',
         indexed: false,
         internalType: 'uint256',

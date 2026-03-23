@@ -95,6 +95,11 @@ export const VerifierAbi = [
         internalType: 'Slot',
       },
       {
+        name: 'minWithdrawalRatio',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
         name: 'admin',
         type: 'address',
         internalType: 'address',
@@ -280,6 +285,19 @@ export const VerifierAbi = [
         name: '',
         type: 'bytes32',
         internalType: 'GIndex',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'MIN_WITHDRAWAL_RATIO',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1629,6 +1647,11 @@ export const VerifierAbi = [
   },
   {
     type: 'error',
+    name: 'InvalidMinWithdrawalRatio',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'InvalidPivotSlot',
     inputs: [],
   },
@@ -1696,6 +1719,11 @@ export const VerifierAbi = [
   {
     type: 'error',
     name: 'ValidatorIsSlashed',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ValidatorIsWithdrawable',
     inputs: [],
   },
   {
