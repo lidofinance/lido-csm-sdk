@@ -4,6 +4,7 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
   EJECTABLE_EPOCH_COUNT,
+  KEY_STATUS,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
   MODULE_NAME,
 } from '../common/index.js';
@@ -21,6 +22,7 @@ import {
   FindKeysResponse,
   KeyWithStatus,
 } from './types.js';
+import { MIN_EFFECTIVE_BALANCE } from './consts.js';
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
@@ -160,7 +162,11 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         index,
         statuses,
         validatorIndex: prefilled?.validatorIndex,
-        effectiveBalance: prefilled?.effectiveBalance,
+        effectiveBalance:
+          (prefilled?.effectiveBalance ??
+          statuses.includes(KEY_STATUS.ACTIVATION_PENDING))
+            ? MIN_EFFECTIVE_BALANCE
+            : undefined,
         strikes: keyStrikes?.strikes,
       };
     });
