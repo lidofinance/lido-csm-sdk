@@ -13,6 +13,10 @@ export abstract class CsmSDKModule<
   readonly core: CoreSDK;
   readonly bus: BusWithModules<TBus>;
 
+  get cacheVersion() {
+    return this.core.cacheVersion;
+  }
+
   constructor(props: CsmSDKProps, name?: string) {
     super();
 

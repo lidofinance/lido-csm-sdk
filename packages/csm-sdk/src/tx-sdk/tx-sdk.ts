@@ -186,6 +186,8 @@ export class TxSDK extends CsmSDKModule {
       },
     });
 
+    this.core.invalidateCache();
+
     return {
       hash,
       receipt,
@@ -280,6 +282,8 @@ export class TxSDK extends CsmSDKModule {
         id: callData.id,
       },
     });
+
+    this.core.invalidateCache();
 
     return {
       hash: txHash,
