@@ -14,7 +14,7 @@ import {
   MODULE_CONTRACT,
   MODULE_NAME,
   SUPPORTED_CHAINS,
-  SUPPORTED_CONTRACT_VERSIONS
+  SUPPORTED_CONTRACT_VERSIONS,
 } from '../common/index.js';
 import { isValidIpfsCid } from '../common/utils/index.js';
 import { onVersionError } from '../common/utils/on-error.js';
