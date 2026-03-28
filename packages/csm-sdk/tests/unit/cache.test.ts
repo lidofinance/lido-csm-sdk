@@ -5,6 +5,16 @@ import { Cache } from '../../src/common/decorators/cache.js';
 const TTL = 10_000;
 
 class TestService extends CsmSDKCacheable {
+  private _cacheVersion = 0;
+
+  get cacheVersion() {
+    return this._cacheVersion;
+  }
+
+  invalidateCache() {
+    this._cacheVersion++;
+  }
+
   impl = vi.fn<(arg?: number) => Promise<string>>();
   syncImpl = vi.fn<(arg?: number) => string>();
   getterImpl = vi.fn<() => Promise<number>>();
@@ -65,7 +75,7 @@ describe('Cache decorator', () => {
     service.impl.mockResolvedValueOnce('old').mockResolvedValueOnce('new');
 
     const first = await service.getValue();
-    CsmSDKCacheable.invalidateCache();
+    service.invalidateCache();
     const second = await service.getValue();
 
     expect(first).toBe('old');
@@ -105,24 +115,32 @@ describe('Cache decorator', () => {
     expect(service.impl).toHaveBeenCalledTimes(1);
   });
 
-  it('in-flight promise survives invalidation (isPromise bypass)', async () => {
-    let resolvePromise: (v: string) => void;
-    service.impl.mockReturnValue(
-      new Promise((resolve) => {
-        resolvePromise = resolve;
-      }),
-    );
+  it('in-flight promise does not survive version-based invalidation', async () => {
+    let resolveFirst: (v: string) => void;
+    let resolveSecond: (v: string) => void;
+    service.impl
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          resolveFirst = resolve;
+        }),
+      )
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          resolveSecond = resolve;
+        }),
+      );
 
     const p1 = service.getValue();
-    CsmSDKCacheable.invalidateCache();
+    service.invalidateCache();
     const p2 = service.getValue();
 
-    resolvePromise!('inflight');
+    resolveFirst!('first');
+    resolveSecond!('second');
     const [r1, r2] = await Promise.all([p1, p2]);
 
-    expect(r1).toBe('inflight');
-    expect(r2).toBe('inflight');
-    expect(service.impl).toHaveBeenCalledTimes(1);
+    expect(r1).toBe('first');
+    expect(r2).toBe('second');
+    expect(service.impl).toHaveBeenCalledTimes(2);
   });
 
   it('does not cache rejected promises', async () => {
@@ -152,7 +170,7 @@ describe('Cache decorator', () => {
     service.syncImpl.mockReturnValueOnce('old').mockReturnValueOnce('new');
 
     const first = service.getSyncValue();
-    CsmSDKCacheable.invalidateCache();
+    service.invalidateCache();
     const second = service.getSyncValue();
 
     expect(first).toBe('old');
@@ -173,7 +191,7 @@ describe('Cache decorator', () => {
     service.getterImpl.mockResolvedValueOnce(1).mockResolvedValueOnce(2);
 
     const first = await service.computed;
-    CsmSDKCacheable.invalidateCache();
+    service.invalidateCache();
     const second = await service.computed;
 
     expect(first).toBe(1);
