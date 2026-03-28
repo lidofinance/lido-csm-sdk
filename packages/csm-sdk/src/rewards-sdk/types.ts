@@ -37,4 +37,9 @@ export type ValidatorRewardsEntity = ValidatorRewards & {
   pubkey: Hex | undefined; // Validator public key
 };
 
+export type ReportTimestamps = {
+  start: number;
+  end: number;
+};
+
 export type OperatorRewardsHistory = ValidatorRewardsEntity[];

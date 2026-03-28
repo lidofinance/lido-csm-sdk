@@ -36,6 +36,7 @@ import { parseRewardsTree } from './parse-rewards-tree.js';
 import {
   OperatorRewards,
   OperatorRewardsHistory,
+  ReportTimestamps,
   RewardsReport,
 } from './types.js';
 
@@ -186,7 +187,9 @@ export class RewardsSDK extends CsmSDKModule<{
   }
 
   @Logger('Utils:')
-  public async getLastReportTimestamps() {
+  public async getLastReportTimestamps(): Promise<
+    ReportTimestamps | undefined
+  > {
     const [report, config] = await Promise.all([
       this.getLastReport(),
       this.bus.frame.getConfig(),
