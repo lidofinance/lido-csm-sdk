@@ -7,9 +7,13 @@ export type FrameConfig = {
 
 export type FrameInfo = {
   /**
-   * Timestamp in seconds of last oracle report
+   * Timestamp in seconds of last oracle report, 0 if there were no reports yet
    */
   lastReport: number;
+  /**
+   * Timestamp in seconds of next expected oracle report
+   */
+  nextReport: number;
   /**
    * Duration of frame in seconds
    */

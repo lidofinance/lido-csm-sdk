@@ -1,6 +1,11 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { ErrorHandler, Logger, Cache } from '../common/decorators/index.js';
-import { CACHE_LONG, CACHE_SHORT, CONTRACT_NAMES } from '../common/index.js';
+import {
+  CACHE_IMMUTABLE,
+  CACHE_LONG,
+  CACHE_SHORT,
+  CONTRACT_NAMES,
+} from '../common/index.js';
 import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types.js';
 import {
   getFrameDuration,
@@ -22,8 +27,15 @@ export class FrameSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   @Cache(CACHE_SHORT)
-  public async getLastProcessedRefSlot(): Promise<bigint> {
+  public async getLastRefSlot(): Promise<bigint> {
     return this.oracleContract.read.getLastProcessingRefSlot();
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_IMMUTABLE)
+  public async getInitialRefSlot(): Promise<bigint> {
+    return this.consensusContract.read.getInitialRefSlot();
   }
 
   @Logger('Views:')
@@ -56,14 +68,21 @@ export class FrameSDK extends CsmSDKModule {
   public async getInfo(): Promise<FrameInfo> {
     const [config, lastRefSlot] = await Promise.all([
       this.getConfig(),
-      this.getLastProcessedRefSlot(),
+      this.getLastRefSlot(),
     ]);
+    const refSlot = lastRefSlot || (await this.getInitialRefSlot());
 
-    const lastReport = slotToTimestamp(lastRefSlot, config);
+    const lastReport =
+      lastRefSlot === 0n ? 0 : slotToTimestamp(lastRefSlot, config);
+    const nextReport = slotToTimestamp(
+      refSlot + getSlotsPerFrame(config),
+      config,
+    );
     const frameDuration = getFrameDuration(config);
 
     return {
       lastReport,
+      nextReport,
       frameDuration,
     };
   }
@@ -86,16 +105,18 @@ export class FrameSDK extends CsmSDKModule {
     const [config, lastRefSlot, { timestamp: latestBlockTimestamp }] =
       await Promise.all([
         this.getConfig(),
-        this.getLastProcessedRefSlot(),
+        this.getLastRefSlot(),
         this.getLatestBlock(),
       ]);
 
     const slotsPerFrame = getSlotsPerFrame(config);
     const latestSlot = timestampToSlot(latestBlockTimestamp, config);
 
+    const refSlot =
+      lastRefSlot === 0n ? await this.getInitialRefSlot() : lastRefSlot;
+
     const startSlot =
-      ((latestSlot - lastRefSlot) / slotsPerFrame) * slotsPerFrame +
-      lastRefSlot;
+      ((latestSlot - refSlot) / slotsPerFrame) * slotsPerFrame + refSlot;
     const startTimestamp = slotToTimestamp(startSlot, config);
     const endTimestamp = slotToTimestamp(startSlot + slotsPerFrame, config);
     const numberEpochs = slotToEpoch(latestSlot - startSlot, config);
