@@ -398,6 +398,45 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'allocateDeposits',
+    inputs: [
+      {
+        name: 'maxDepositAmount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'pubkeys',
+        type: 'bytes[]',
+        internalType: 'bytes[]',
+      },
+      {
+        name: 'keyIndices',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'operatorIds',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+      {
+        name: 'topUpLimits',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    outputs: [
+      {
+        name: 'allocations',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'batchDepositInfoUpdate',
     inputs: [
       {
@@ -601,7 +640,7 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
-    name: 'getKeyAllocatedBalance',
+    name: 'getKeyAllocatedBalances',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -609,23 +648,28 @@ export const BaseModuleAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'keyIndex',
+        name: 'startIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keysCount',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
     outputs: [
       {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
+        name: 'balances',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
       },
     ],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    name: 'getKeyConfirmedBalance',
+    name: 'getKeyConfirmedBalances',
     inputs: [
       {
         name: 'nodeOperatorId',
@@ -633,16 +677,21 @@ export const BaseModuleAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'keyIndex',
+        name: 'startIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'keysCount',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
     outputs: [
       {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
+        name: 'balances',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
       },
     ],
     stateMutability: 'view',
@@ -744,6 +793,25 @@ export const BaseModuleAbi = [
             internalType: 'bool',
           },
         ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getNodeOperatorBalance',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1132,6 +1200,19 @@ export const BaseModuleAbi = [
       },
       {
         name: 'depositableValidatorsCount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getTotalModuleStake',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -2233,6 +2314,25 @@ export const BaseModuleAbi = [
   },
   {
     type: 'event',
+    name: 'NodeOperatorBalanceUpdated',
+    inputs: [
+      {
+        name: 'operatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'balanceWei',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'NodeOperatorDepositInfoFullyUpdated',
     inputs: [],
     anonymous: false,
@@ -2717,6 +2817,16 @@ export const BaseModuleAbi = [
   {
     type: 'error',
     name: 'InvalidInput',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'InvalidManagerAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'InvalidRewardAddress',
     inputs: [],
   },
   {

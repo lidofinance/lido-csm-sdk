@@ -60,45 +60,6 @@ const CSModuleExtrasAbi = [
   },
   {
     type: 'function',
-    name: 'allocateDeposits',
-    inputs: [
-      {
-        name: 'maxDepositAmount',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'pubkeys',
-        type: 'bytes[]',
-        internalType: 'bytes[]',
-      },
-      {
-        name: 'keyIndices',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: 'operatorIds',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-      {
-        name: 'topUpLimits',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    outputs: [
-      {
-        name: 'allocations',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
-      },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'cleanDepositQueue',
     inputs: [
       {
@@ -290,24 +251,6 @@ const CSModuleExtrasAbi = [
     ],
     outputs: [],
     stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'updateOperatorBalances',
-    inputs: [
-      {
-        name: '',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-      {
-        name: '',
-        type: 'bytes',
-        internalType: 'bytes',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'view',
   },
   {
     type: 'event',

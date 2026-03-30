@@ -977,6 +977,11 @@ export const MetaRegistryAbi = [
   },
   {
     type: 'error',
+    name: 'InvalidBondCurveWeight',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'InvalidExternalOperatorDataEntry',
     inputs: [],
   },

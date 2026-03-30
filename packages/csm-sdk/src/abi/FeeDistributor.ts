@@ -1007,6 +1007,11 @@ export const FeeDistributorAbi = [
   },
   {
     type: 'error',
+    name: 'InvalidRebateRecipientAddress',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'InvalidReportData',
     inputs: [],
   },

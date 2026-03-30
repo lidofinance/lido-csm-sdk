@@ -2669,6 +2669,11 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
+    name: 'InvalidSplitRecipient',
+    inputs: [],
+  },
+  {
+    type: 'error',
     name: 'NoBondLocked',
     inputs: [],
   },

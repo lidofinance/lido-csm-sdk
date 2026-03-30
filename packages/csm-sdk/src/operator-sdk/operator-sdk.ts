@@ -1,10 +1,12 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
+import { AccountingSDK } from '../accounting-sdk/accounting-sdk.js';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache } from '../common/decorators/cache.js';
 import { ErrorHandler } from '../common/decorators/error-handler.js';
 import { Logger } from '../common/decorators/logger.js';
 import {
   BondBalance,
+  CACHE_MID,
   CACHE_SHORT,
   CONTRACT_NAMES,
   NodeOperatorId,
@@ -15,7 +17,9 @@ import { splitKeys } from '../common/utils/split-keys.js';
 import { calcBondBalance } from './calc-bond-balance.js';
 import { FeeSplit, NodeOperatorInfo } from './types.js';
 
-export class OperatorSDK extends CsmSDKModule {
+export class OperatorSDK extends CsmSDKModule<{
+  accounting: AccountingSDK;
+}> {
   private get accountingContract() {
     return this.core.getContract(CONTRACT_NAMES.accounting);
   }
@@ -34,16 +38,20 @@ export class OperatorSDK extends CsmSDKModule {
   @Logger('Views:')
   @ErrorHandler()
   public async getBondBalance(id: NodeOperatorId): Promise<BondBalance> {
-    const info = await this.accountingContract.read.getNodeOperatorBondInfo([
+    const bond = await this.accountingContract.read.getNodeOperatorBondInfo([
       id,
     ]);
 
+    const pendingToSplit = await this.bus.accounting.sharesToEth(
+      bond.pendingSharesToSplit,
+    );
+
     return calcBondBalance({
-      current: info.currentBond,
-      required: info.requiredBond,
-      locked: info.lockedBond,
-      debt: info.bondDebt,
-      pendingSharesToSplit: info.pendingSharesToSplit,
+      current: bond.currentBond,
+      required: bond.requiredBond,
+      locked: bond.lockedBond,
+      debt: bond.bondDebt,
+      pendingToSplit,
     });
   }
 
@@ -83,6 +91,22 @@ export class OperatorSDK extends CsmSDKModule {
     ]);
 
     return splitKeys(keysString);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
+  public async getKeyAllocatedBalances(
+    id: NodeOperatorId,
+    start = 0n,
+    count?: bigint,
+  ): Promise<readonly bigint[]> {
+    if (count === undefined) {
+      const info = await this.getInfo(id);
+      count = BigInt(info.totalAddedKeys) - start;
+    }
+
+    return this.moduleContract.read.getKeyAllocatedBalances([id, start, count]);
   }
 
   @Logger('Views:')

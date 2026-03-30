@@ -18,11 +18,6 @@ export const VerifierAbi = [
         internalType: 'uint64',
       },
       {
-        name: 'slotsPerHistoricalRoot',
-        type: 'uint64',
-        internalType: 'uint64',
-      },
-      {
         name: 'gindices',
         type: 'tuple',
         internalType: 'struct IVerifier.GIndices',
@@ -54,16 +49,6 @@ export const VerifierAbi = [
           },
           {
             name: 'gIFirstHistoricalSummaryCurr',
-            type: 'bytes32',
-            internalType: 'GIndex',
-          },
-          {
-            name: 'gIFirstBlockRootInSummaryPrev',
-            type: 'bytes32',
-            internalType: 'GIndex',
-          },
-          {
-            name: 'gIFirstBlockRootInSummaryCurr',
             type: 'bytes32',
             internalType: 'GIndex',
           },
@@ -187,20 +172,7 @@ export const VerifierAbi = [
   },
   {
     type: 'function',
-    name: 'GI_FIRST_BLOCK_ROOT_IN_SUMMARY_CURR',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'GIndex',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'GI_FIRST_BLOCK_ROOT_IN_SUMMARY_PREV',
+    name: 'GI_FIRST_BLOCK_ROOT_IN_SUMMARY',
     inputs: [],
     outputs: [
       {

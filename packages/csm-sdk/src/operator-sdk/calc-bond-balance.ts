@@ -1,21 +1,13 @@
 import { STETH_ROUNDING_THRESHOLD } from '../common/index.js';
 import { BondBalance } from '../common/types.js';
 
-type Props = {
-  current: bigint;
-  required: bigint;
-  locked: bigint;
-  debt: bigint;
-  pendingSharesToSplit: bigint;
-};
-
 export const calcBondBalance = ({
   current,
   required,
   locked,
   debt,
-  pendingSharesToSplit,
-}: Props): BondBalance => {
+  pendingToSplit,
+}: Omit<BondBalance, 'delta' | 'isInsufficient'>): BondBalance => {
   const requiredWithoutLocked = required - locked; // TODO: also subtract bondDebt?
 
   let delta = current - requiredWithoutLocked;
@@ -30,7 +22,7 @@ export const calcBondBalance = ({
     current,
     locked,
     debt,
-    pendingSharesToSplit,
+    pendingToSplit,
     delta: delta < 0 ? -delta : delta,
     isInsufficient,
   };
