@@ -24,12 +24,8 @@ import {
 import {
   EventRangeProps,
   OperatorCurveIdChange,
-  PenaltyCancelled,
-  PenaltyCompensated,
-  PenaltyExpiredLockRemoved,
   PenaltyRecord,
-  PenaltyReported,
-  PenaltySettled,
+  PenaltyRecordWithoutTimestamp,
 } from './types.js';
 
 type StepProps = { fromBlock: bigint; toBlock: bigint };
@@ -41,7 +37,7 @@ export class EventsSDK extends CsmSDKModule {
 
   private get moduleContractV1(): BindedContract<typeof CSModulev1EventsAbi> {
     return this.core.getContractWithAbi(
-      CONTRACT_NAMES.csModule,
+      this.core.moduleContract,
       CSModulev1EventsAbi,
     );
   }
@@ -251,7 +247,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyReported, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'reported',
             amount: e.args.amount!,
@@ -268,7 +264,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyReported, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'reported',
             amount: e.args.stolenAmount!,
@@ -282,7 +278,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyCancelled, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'cancelled',
             amount: e.args.amount!,
@@ -296,7 +292,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyCancelled, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'cancelled',
             amount: e.args.amount!,
@@ -310,7 +306,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyCompensated, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'compensated',
             amount: e.args.amount!,
@@ -324,7 +320,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyCompensated, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'compensated',
             amount: e.args.amount!,
@@ -338,7 +334,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltySettled, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'settled',
           }),
@@ -351,7 +347,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltySettled, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'settled',
           }),
@@ -364,7 +360,7 @@ export class EventsSDK extends CsmSDKModule {
             s,
           );
         return logs.map(
-          (e): Omit<PenaltyExpiredLockRemoved, 'timestamp'> => ({
+          (e): PenaltyRecordWithoutTimestamp => ({
             ...base(e),
             type: 'expired',
           }),

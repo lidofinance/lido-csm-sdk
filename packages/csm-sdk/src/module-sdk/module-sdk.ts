@@ -1,12 +1,7 @@
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import {
-  CACHE_LONG,
-  CACHE_MID,
-  CONTRACT_NAMES,
-  MODULE_CONTRACT,
-} from '../common/index.js';
+import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
 import { calculateShareLimit } from './calculate-share-limit.js';
 import { findModuleDigest } from './find-module-digest.js';
 import { findUsedOtherModule } from './find-used-other-module.js';
@@ -43,7 +38,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   public async isVersionsSupported(): Promise<boolean> {
     const results = await Promise.all([
-      this.core.checkContractVersion(MODULE_CONTRACT[this.core.moduleName]),
+      this.core.checkContractVersion(this.core.moduleContract),
       this.core.checkContractVersion(CONTRACT_NAMES.accounting),
     ]);
     return results.every((r) => r.supported);

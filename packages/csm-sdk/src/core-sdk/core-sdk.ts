@@ -77,6 +77,10 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.core.useWeb3Provider();
   }
 
+  public get moduleContract() {
+    return MODULE_CONTRACT[this.moduleName];
+  }
+
   @Logger('Utils:')
   @Cache(CACHE_IMMUTABLE)
   public getContractAddress(contract: CONTRACT_NAMES): Address {
@@ -123,8 +127,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
-    const contractName = MODULE_CONTRACT[this.moduleName];
-    return this.getContractWithAbi(contractName, BaseModuleAbi);
+    return this.getContractWithAbi(this.moduleContract, BaseModuleAbi);
   }
 
   public get externalLinks() {

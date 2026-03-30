@@ -60,3 +60,10 @@ export type PenaltyRecord =
   | PenaltyCompensated
   | PenaltySettled
   | PenaltyExpiredLockRemoved;
+
+export type PenaltyRecordWithoutTimestamp =
+  | Omit<PenaltyReported, 'timestamp'>
+  | Omit<PenaltyCancelled, 'timestamp'>
+  | Omit<PenaltyCompensated, 'timestamp'>
+  | Omit<PenaltySettled, 'timestamp'>
+  | Omit<PenaltyExpiredLockRemoved, 'timestamp'>;

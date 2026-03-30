@@ -110,6 +110,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
     [CHAINS.Hoodi]: {
       contractAddresses: {},
       moduleId: 5n,
+      deploymentBlockNumber: BigInt('0x249F00'), // TODO: update with actual deployment block number
     },
   },
 };
