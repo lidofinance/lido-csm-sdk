@@ -1,6 +1,23 @@
+import { Hex } from 'viem';
 import { KEY_STATUS } from '../common/index.js';
 import { compareLowercase } from '../common/utils/index.js';
-import { StatusContext } from './types.js';
+import { NodeOperatorInfo } from '../operator-sdk/types.js';
+import { ClPreparedKey } from './parse-cl-response.js';
+
+export type StatusContext = {
+  pubkey: Hex;
+  keyIndex: number;
+  info: NodeOperatorInfo;
+  prefilled?: ClPreparedKey;
+  ejectableEpoch: bigint;
+  unboundCount: number;
+  duplicates: Hex[] | null;
+  withdrawalSubmitted: Hex[] | null;
+  requestedToExit: Hex[];
+  hasCLStatuses: boolean;
+  hasStrikes: boolean;
+  hasQueue: boolean;
+};
 
 // Range predicates
 const isDeposited = (ctx: StatusContext) =>
@@ -60,7 +77,7 @@ const checkExitRequested = (ctx: StatusContext): boolean =>
 
 const checkUnbonded = (ctx: StatusContext): boolean =>
   ctx.unboundCount > 0 &&
-  ctx.info.totalAddedKeys - ctx.keyIndex < ctx.unboundCount;
+  ctx.info.totalAddedKeys - ctx.keyIndex <= ctx.unboundCount;
 
 export const computeStatuses = (ctx: StatusContext): KEY_STATUS[] => {
   const statuses: KEY_STATUS[] = [];

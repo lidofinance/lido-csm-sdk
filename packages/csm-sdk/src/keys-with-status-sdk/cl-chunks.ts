@@ -1,6 +1,3 @@
-import { KEY_STATUS } from '../common/index.js';
-import { ClKey, ClPreparedKey, CLStatus } from './types.js';
-
 const MAX_URL_LENGTH = 2048 - 66; // proxy gap
 const METHOD = '/eth/v1/beacon/states/head/validators';
 
@@ -23,25 +20,4 @@ export const getClUrls = (keys: string[] = [], base: string): string[] => {
   return chunks.map(
     (keys) => `${url}?id=${keys.join(encodeURIComponent(','))}`,
   );
-};
-
-export const prepareKey = (key: ClKey): ClPreparedKey => ({
-  validatorIndex: key.index,
-  pubkey: key.validator.pubkey,
-  slashed: key.validator.slashed,
-  status: StatusMap[key.status],
-  activationEpoch: BigInt(key.validator.activation_epoch),
-  effectiveBalance: BigInt(key.validator.effective_balance),
-});
-
-const StatusMap: Record<CLStatus, KEY_STATUS> = {
-  pending_initialized: KEY_STATUS.DEPOSITABLE,
-  pending_queued: KEY_STATUS.ACTIVATION_PENDING,
-  active_ongoing: KEY_STATUS.ACTIVE,
-  active_exiting: KEY_STATUS.EXITING,
-  active_slashed: KEY_STATUS.EXITING,
-  exited_unslashed: KEY_STATUS.WITHDRAWAL_PENDING,
-  exited_slashed: KEY_STATUS.WITHDRAWAL_PENDING,
-  withdrawal_possible: KEY_STATUS.WITHDRAWAL_PENDING,
-  withdrawal_done: KEY_STATUS.WITHDRAWN,
 };

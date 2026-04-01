@@ -4,7 +4,6 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
 import {
   CACHE_MID,
   EJECTABLE_EPOCH_COUNT,
-  KEY_STATUS,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
   MODULE_NAME,
 } from '../common/index.js';
@@ -14,21 +13,11 @@ import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { FrameSDK } from '../frame-sdk/frame-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
-import { getClUrls, prepareKey } from './cl-chunks.js';
+import { getClUrls } from './cl-chunks.js';
 import { computeStatuses } from './compute-statuses.js';
-import {
-  ClPreparedKey,
-  ClValidatorsResponse,
-  FindKeysResponse,
-  KeyWithStatus,
-} from './types.js';
-import { MIN_EFFECTIVE_BALANCE } from './consts.js';
-
-const ACTIVE_LIFECYCLE = [
-  KEY_STATUS.ACTIVE,
-  KEY_STATUS.ACTIVATION_PENDING,
-  KEY_STATUS.EXITING,
-] as const;
+import { ClPreparedKey, parseClResponse } from './parse-cl-response.js';
+import { resolveEffectiveBalance } from './resolve-effective-balance.js';
+import { FindKeysResponse, KeyWithStatus } from './types.js';
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
@@ -98,10 +87,10 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
     const urls = getClUrls(pubkeys, this.core.clApiUrl);
     const results = await Promise.all(
-      urls.map((url) => fetchJson<ClValidatorsResponse>(url)),
+      urls.map((url) => fetchJson(url, undefined, parseClResponse)),
     );
 
-    return results.flatMap(({ data }) => data?.map(prepareKey));
+    return results.flat().filter(Boolean);
   }
 
   @Logger('API:')
@@ -175,15 +164,11 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         hasQueue,
       });
 
-      let effectiveBalance = prefilled?.effectiveBalance;
-      if (
-        effectiveBalance === undefined &&
-        allocatedBalances &&
-        ACTIVE_LIFECYCLE.some((status) => statuses.includes(status))
-      ) {
-        effectiveBalance =
-          (allocatedBalances[index] ?? 0n) + MIN_EFFECTIVE_BALANCE;
-      }
+      const effectiveBalance = resolveEffectiveBalance({
+        statuses,
+        prefilled,
+        allocatedBalance: allocatedBalances?.[index],
+      });
 
       return {
         pubkey,

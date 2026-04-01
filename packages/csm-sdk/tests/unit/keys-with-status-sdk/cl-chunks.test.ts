@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import type { Hex } from 'viem';
 import { KEY_STATUS } from '../../../src/common/constants/keys.js';
 import {
   getKeysPerChunk,
   getChunks,
   getClUrls,
-  prepareKey,
 } from '../../../src/keys-with-status-sdk/cl-chunks.js';
-import type { ClKey } from '../../../src/keys-with-status-sdk/types.js';
+import {
+  parseClResponse,
+  type ClKeyInput,
+} from '../../../src/keys-with-status-sdk/parse-cl-response.js';
 
 describe('getKeysPerChunk', () => {
   it('calculates keys that fit in URL length', () => {
@@ -75,14 +76,14 @@ describe('getClUrls', () => {
   });
 });
 
-describe('prepareKey', () => {
-  const makeClKey = (overrides: Partial<ClKey> = {}): ClKey => ({
+describe('parseClResponse', () => {
+  const makeClKey = (overrides: Partial<ClKeyInput> = {}): ClKeyInput => ({
     index: '42',
     balance: '32000000000',
     status: 'active_ongoing',
     validator: {
-      pubkey: '0xaabb' as Hex,
-      withdrawal_credentials: '0x00' as Hex,
+      pubkey: '0xaabb',
+      withdrawal_credentials: '0x00',
       effective_balance: '32000000000',
       slashed: false,
       activation_eligibility_epoch: '100',
@@ -93,54 +94,116 @@ describe('prepareKey', () => {
     ...overrides,
   });
 
+  const makeResponse = (data: ClKeyInput[] = [makeClKey()]) =>
+    JSON.stringify({
+      execution_optimistic: false,
+      finalized: true,
+      data,
+    });
+
+  it('parses valid response', () => {
+    const result = parseClResponse(makeResponse());
+    expect(result).toHaveLength(1);
+    expect(result[0]!.pubkey).toBe('0xaabb');
+  });
+
+  it('parses empty data array', () => {
+    const result = parseClResponse(makeResponse([]));
+    expect(result).toEqual([]);
+  });
+
+  it('throws on missing fields', () => {
+    expect(() => parseClResponse(JSON.stringify({ data: [] }))).toThrow();
+  });
+
+  it('throws on invalid status', () => {
+    expect(() =>
+      parseClResponse(
+        makeResponse([makeClKey({ status: 'invalid_status' as any })]),
+      ),
+    ).toThrow();
+  });
+
+  it('throws on non-hex pubkey', () => {
+    expect(() =>
+      parseClResponse(
+        makeResponse([
+          makeClKey({
+            validator: {
+              ...makeClKey().validator,
+              pubkey: 'not-hex' as any,
+            },
+          }),
+        ]),
+      ),
+    ).toThrow();
+  });
+
+  it('throws on non-numeric index', () => {
+    expect(() =>
+      parseClResponse(makeResponse([makeClKey({ index: 'abc' as any })])),
+    ).toThrow();
+  });
+
+  // Status mapping tests (previously prepareKey tests)
   it('maps active_ongoing to ACTIVE', () => {
-    const result = prepareKey(makeClKey({ status: 'active_ongoing' }));
-    expect(result.status).toBe(KEY_STATUS.ACTIVE);
+    const result = parseClResponse(makeResponse([makeClKey()]));
+    expect(result[0]!.status).toBe(KEY_STATUS.ACTIVE);
   });
 
   it('maps pending_initialized to DEPOSITABLE', () => {
-    const result = prepareKey(makeClKey({ status: 'pending_initialized' }));
-    expect(result.status).toBe(KEY_STATUS.DEPOSITABLE);
+    const result = parseClResponse(
+      makeResponse([makeClKey({ status: 'pending_initialized' })]),
+    );
+    expect(result[0]!.status).toBe(KEY_STATUS.DEPOSITABLE);
   });
 
   it('maps pending_queued to ACTIVATION_PENDING', () => {
-    const result = prepareKey(makeClKey({ status: 'pending_queued' }));
-    expect(result.status).toBe(KEY_STATUS.ACTIVATION_PENDING);
+    const result = parseClResponse(
+      makeResponse([makeClKey({ status: 'pending_queued' })]),
+    );
+    expect(result[0]!.status).toBe(KEY_STATUS.ACTIVATION_PENDING);
   });
 
   it('maps active_exiting to EXITING', () => {
-    const result = prepareKey(makeClKey({ status: 'active_exiting' }));
-    expect(result.status).toBe(KEY_STATUS.EXITING);
+    const result = parseClResponse(
+      makeResponse([makeClKey({ status: 'active_exiting' })]),
+    );
+    expect(result[0]!.status).toBe(KEY_STATUS.EXITING);
   });
 
   it('maps active_slashed to EXITING', () => {
-    const result = prepareKey(makeClKey({ status: 'active_slashed' }));
-    expect(result.status).toBe(KEY_STATUS.EXITING);
+    const result = parseClResponse(
+      makeResponse([makeClKey({ status: 'active_slashed' })]),
+    );
+    expect(result[0]!.status).toBe(KEY_STATUS.EXITING);
   });
 
   it('maps exited statuses to WITHDRAWAL_PENDING', () => {
-    expect(prepareKey(makeClKey({ status: 'exited_unslashed' })).status).toBe(
-      KEY_STATUS.WITHDRAWAL_PENDING,
-    );
-    expect(prepareKey(makeClKey({ status: 'exited_slashed' })).status).toBe(
-      KEY_STATUS.WITHDRAWAL_PENDING,
-    );
-    expect(
-      prepareKey(makeClKey({ status: 'withdrawal_possible' })).status,
-    ).toBe(KEY_STATUS.WITHDRAWAL_PENDING);
+    for (const status of [
+      'exited_unslashed',
+      'exited_slashed',
+      'withdrawal_possible',
+    ] as const) {
+      const result = parseClResponse(makeResponse([makeClKey({ status })]));
+      expect(result[0]!.status).toBe(KEY_STATUS.WITHDRAWAL_PENDING);
+    }
   });
 
   it('maps withdrawal_done to WITHDRAWN', () => {
-    const result = prepareKey(makeClKey({ status: 'withdrawal_done' }));
-    expect(result.status).toBe(KEY_STATUS.WITHDRAWN);
+    const result = parseClResponse(
+      makeResponse([makeClKey({ status: 'withdrawal_done' })]),
+    );
+    expect(result[0]!.status).toBe(KEY_STATUS.WITHDRAWN);
   });
 
-  it('extracts validator fields correctly', () => {
-    const result = prepareKey(makeClKey());
-    expect(result.validatorIndex).toBe('42');
-    expect(result.pubkey).toBe('0xaabb');
-    expect(result.slashed).toBe(false);
-    expect(result.activationEpoch).toBe(200n);
-    expect(result.effectiveBalance).toBe(32_000_000_000n);
+  it('transforms validator fields correctly', () => {
+    const result = parseClResponse(makeResponse());
+    const key = result[0]!;
+    expect(key.validatorIndex).toBe('42');
+    expect(key.pubkey).toBe('0xaabb');
+    expect(key.slashed).toBe(false);
+    expect(key.activationEpoch).toBe(200n);
+    expect(key.effectiveBalance).toBe(32_000_000_000_000_000_000n);
   });
 });
