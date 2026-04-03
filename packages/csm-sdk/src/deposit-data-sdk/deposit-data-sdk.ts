@@ -60,6 +60,10 @@ export class DepositDataSDK extends CsmSDKModule<{
       currentBlockNumber: Number(blockNumber),
     });
 
+    if (errors.length) {
+      return [...errors];
+    }
+
     const pubkeys = depositData.map((data) => data.pubkey);
 
     const duplicateErrors = this.checkCachedKeys(pubkeys);
