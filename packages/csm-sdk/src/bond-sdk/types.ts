@@ -16,9 +16,8 @@ export type AddBondProps = CommonTransactionProps<AddBondResult> & {
   permit?: PermitSignatureShort;
 };
 
-export type CoverLockedBondProps = CommonTransactionProps<bigint> & {
+export type CompensateLockedBondProps = CommonTransactionProps<bigint> & {
   nodeOperatorId: NodeOperatorId;
-  amount: bigint;
 };
 
 export type ClaimBondProps = CommonTransactionProps &

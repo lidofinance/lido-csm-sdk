@@ -15,7 +15,7 @@ import {
   AddBondProps,
   AddBondResult,
   ClaimBondProps,
-  CoverLockedBondProps,
+  CompensateLockedBondProps,
   PullRewardsProps,
   UnlockExpiredLockProps,
 } from './types.js';
@@ -111,18 +111,15 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
   @Logger('Call:')
   @ErrorHandler()
-  public async coverLockedBond(props: CoverLockedBondProps) {
-    const { nodeOperatorId, amount, ...rest } = props;
+  public async compensateLockedBond(props: CompensateLockedBondProps) {
+    const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'compensateGeneralDelayedPenalty',
-          [nodeOperatorId],
-          amount,
-        ),
+        prepCall(this.moduleContract, 'compensateGeneralDelayedPenalty', [
+          nodeOperatorId,
+        ]),
       decodeResult: (receipt) => parseCoverReceiptEvents(receipt),
     });
   }
