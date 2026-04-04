@@ -1,3 +1,5 @@
+export * from './access.js';
+export * from './access-types.js';
 export * from './cache.js';
 export * from './constants.js';
 export * from './error-handler.js';

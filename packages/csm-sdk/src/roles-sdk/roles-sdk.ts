@@ -1,5 +1,10 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import {
   CONTRACT_NAMES,
   ERROR_CODE,
@@ -30,6 +35,10 @@ export class RolesSDK extends CsmSDKModule<{
     return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
+  @Access({
+    level: AccessLevel.MANAGER,
+    condition: { extendedManagerPermissions: true },
+  })
   @Logger('Call:')
   @ErrorHandler()
   public async changeRewardsAddress(props: ChangeRoleProps) {
@@ -46,6 +55,7 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async proposeManagerAddress(props: ChangeRoleProps) {
@@ -63,6 +73,7 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.REWARDS })
   @Logger('Call:')
   @ErrorHandler()
   public async proposeRewardsAddress(props: ChangeRoleProps) {
@@ -80,6 +91,10 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({
+    level: AccessLevel.REWARDS,
+    condition: { extendedManagerPermissions: false },
+  })
   @Logger('Call:')
   @ErrorHandler()
   public async resetManagerAddress(props: ResetRoleProps) {
@@ -95,6 +110,7 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.PROPOSED_REWARDS })
   @Logger('Call:')
   @ErrorHandler()
   public async confirmRewardsAddress(props: ConfirmRoleProps) {
@@ -112,6 +128,7 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.PROPOSED_MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async confirmManagerAddress(props: ConfirmRoleProps) {
@@ -151,6 +168,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   // Custom Claimer
 
+  @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async setCustomRewardsClaimer(props: SetCustomClaimerProps) {
@@ -168,6 +186,7 @@ export class RolesSDK extends CsmSDKModule<{
 
   // Fee Splits
 
+  @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async setFeeSplits(props: SetFeeSplitsProps) {

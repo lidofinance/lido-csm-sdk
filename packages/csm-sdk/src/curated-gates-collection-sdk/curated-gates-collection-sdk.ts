@@ -4,7 +4,12 @@ import {
   CsmSDKProps,
 } from '../common/class-primitives/csm-sdk-module.js';
 import { CURATED_GATES } from '../common/constants/contract-names.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import { ERROR_CODE, invariant } from '../common/index.js';
 import { CuratedGateSDK } from '../curated-gate-sdk/curated-gate-sdk.js';
 import { TxSDK } from '../tx-sdk/index.js';
@@ -82,6 +87,7 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
 
   // Operator creation in specific gate
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async createNodeOperator(props: CreateNodeOperatorInGateProps) {

@@ -152,7 +152,20 @@ export class DepositDataSDK extends CsmSDKModule<{
 
 ### Decorator Order Convention
 
-**Standard order (outermost to innermost):** `@Logger → @ErrorHandler → @Cache`
+**Standard order (outermost to innermost):** `@Access → @Logger → @ErrorHandler → @Cache`
+
+**Every transaction method (with`tx.perform`) must have `@Access`** — it declares who can call the method, enabling frontend permission checks via `getMethodAccess()` and `resolveAccess()`.
+
+Transaction methods (with `@Access`):
+
+```typescript
+@Access({ level: AccessLevel.MANAGER })  // Outermost - metadata only, no wrapping
+@Logger('Call:')
+@ErrorHandler()
+public async compensateLockedBond(props: CompensateLockedBondProps)
+```
+
+View methods (without `@Access`):
 
 ```typescript
 @Logger('Views:')      // Outermost - logs all calls (including cache hits)
@@ -164,10 +177,52 @@ public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo>
 **Why this order:**
 
 - Decorators execute **bottom-to-top** (innermost first)
+- `@Access` is metadata-only (stores Symbol on function, no wrapping) — outermost so the Symbol attaches to the final wrapped function
 - Logger tracks all calls for debugging/monitoring (executes first)
 - ErrorHandler catches errors from both cache and method execution
 - Cache only stores successful results (uses `.then()` without `.catch()`)
 - Errors are never cached regardless of decorator order
+
+### Access Permission Metadata
+
+The `@Access(...)` decorator exposes **who can execute each transaction method**. This is metadata-only — contracts enforce permissions on-chain; the decorator enables frontend UX (disable buttons, show warnings).
+
+#### Permission Model (`AccessLevel` enum)
+
+| Level | Who can call |
+|-------|-------------|
+| `ANYONE` | No restriction |
+| `MANAGER` | Operator's manager address |
+| `REWARDS` | Operator's reward address |
+| `OWNER` | Manager if `extendedManagerPermissions`, reward address otherwise |
+| `PROPOSED_MANAGER` | Address proposed as the new manager (two-phase change) |
+| `PROPOSED_REWARDS` | Address proposed as the new reward address (two-phase change) |
+| `CLAIMER` | Manager, reward address, or custom rewards claimer |
+| `PROTOCOL_ROLE` | OpenZeppelin AccessControl role (system-level, not per-operator) |
+
+Some methods have **conditions**: e.g. `changeRewardsAddress` requires `extendedManagerPermissions: true`.
+
+#### Query Methods (on `CsmSDKModule` base class)
+
+- `getMethodAccess(name)` — type-safe (typos are compile errors), returns `MethodAccess | undefined`
+- `getAccessMap()` — returns `Record<string, MethodAccess>` for all annotated methods
+
+#### Runtime Permission Check
+
+`resolveAccess(access, ctx)` — pure function, no RPC calls. Consumer pre-fetches operator info:
+
+```typescript
+const operatorInfo = await sdk.operator.getManagementProperties(operatorId);
+const access = sdk.bond.getMethodAccess('claimBondStETH')!;
+const result = resolveAccess(access, { account: wallet, operatorInfo });
+if (!result.allowed) disableButton(result.reason);
+```
+
+#### Key Files
+
+- `common/decorators/access-types.ts` — `AccessLevel` enum, `MethodAccess` type
+- `common/decorators/access.ts` — `@Access` decorator, `ACCESS` symbol
+- `common/utils/can-perform.ts` — `resolveAccess()`, `CanPerformContext`, `CanPerformResult`
 
 ### Key Dependencies
 

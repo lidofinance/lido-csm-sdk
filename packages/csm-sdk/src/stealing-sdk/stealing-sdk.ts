@@ -1,7 +1,13 @@
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
 import { CACHE_LONG } from '../common/constants/index.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  Cache,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import { EventsSDK } from '../events-sdk/events-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
 import { prepCall, TxSDK } from '../tx-sdk/index.js';
@@ -16,6 +22,10 @@ export class StealingSDK extends CsmSDKModule<{
     return this.core.contractBaseModule;
   }
 
+  @Access({
+    level: AccessLevel.PROTOCOL_ROLE,
+    protocolRole: 'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+  })
   @Logger('Call:')
   @ErrorHandler()
   public async report(props: ReportProps) {
@@ -33,6 +43,10 @@ export class StealingSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({
+    level: AccessLevel.PROTOCOL_ROLE,
+    protocolRole: 'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+  })
   @Logger('Call:')
   @ErrorHandler()
   public async cancel(props: CancelProps) {

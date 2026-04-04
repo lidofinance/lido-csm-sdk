@@ -1,6 +1,12 @@
 import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  Cache,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import {
   CACHE_LONG,
   CONTRACT_NAMES,
@@ -41,6 +47,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorETH(props: AddVettedNodeOperatorProps) {
@@ -75,6 +82,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorStETH(props: AddVettedNodeOperatorProps) {
@@ -107,6 +115,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorWstETH(props: AddVettedNodeOperatorProps) {
@@ -230,6 +239,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.icsContract.read.verifyProof([address, proof]);
   }
 
+  @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimCurve(props: ClaimCuvrveProps) {

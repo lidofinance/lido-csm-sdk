@@ -1,5 +1,10 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import {
   CONTRACT_NAMES,
   ERROR_CODE,
@@ -38,6 +43,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return { current, required };
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addBondETH(props: AddBondProps) {
@@ -56,6 +62,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addBondStETH(props: AddBondProps) {
@@ -74,6 +81,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addBondWstETH(props: AddBondProps) {
@@ -109,6 +117,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     }
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async compensateLockedBond(props: CompensateLockedBondProps) {
@@ -124,6 +133,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async unlockExpiredLock(props: UnlockExpiredLockProps) {
@@ -138,6 +148,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async pullRewards(props: PullRewardsProps) {
@@ -154,6 +165,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimBondUnstETH(props: ClaimBondProps) {
@@ -172,6 +184,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimBondStETH(props: ClaimBondProps) {
@@ -190,6 +203,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimBondWstETH(props: ClaimBondProps) {

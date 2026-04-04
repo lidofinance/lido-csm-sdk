@@ -1,5 +1,10 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import {
   CONTRACT_NAMES,
   ERROR_CODE,
@@ -27,6 +32,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorETH(props: AddNodeOperatorProps) {
@@ -53,6 +59,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorStETH(props: AddNodeOperatorProps) {
@@ -83,6 +90,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorWstETH(props: AddNodeOperatorProps) {

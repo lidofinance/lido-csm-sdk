@@ -1,6 +1,11 @@
 import { zeroAddress } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import {
   CONTRACT_NAMES,
   EJECT_FEE_MIN_LIMIT,
@@ -31,6 +36,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.core.getContract(CONTRACT_NAMES.withdrawalVault);
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async addKeysETH(props: AddKeysProps) {
@@ -56,6 +62,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async addKeysStETH(props: AddKeysProps) {
@@ -84,6 +91,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async addKeysWstETH(props: AddKeysProps) {
@@ -134,6 +142,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     }
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async removeKeys(props: RemoveKeysProps) {
@@ -150,6 +159,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async ejectKeys(props: EjectKeysByArrayProps) {

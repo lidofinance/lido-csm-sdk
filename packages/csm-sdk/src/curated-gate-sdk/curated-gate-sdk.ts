@@ -4,7 +4,13 @@ import {
   CsmSDKModule,
   CsmSDKProps,
 } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  Cache,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import {
   CACHE_LONG,
   CURATED_GATES,
@@ -44,6 +50,7 @@ export class CuratedGateSDK extends CsmSDKModule<{
   }
 
   // Transaction Method
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async createNodeOperator(props: CreateNodeOperatorProps) {

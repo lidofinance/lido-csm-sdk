@@ -1,5 +1,11 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  Cache,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import { CACHE_MID, CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
 import { ModuleSDK } from '../module-sdk/module-sdk.js';
 import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
@@ -30,6 +36,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     return this.core.getContract(CONTRACT_NAMES.curatedModule);
   }
 
+  @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async setOperatorInfo(props: SetOperatorDataProps) {

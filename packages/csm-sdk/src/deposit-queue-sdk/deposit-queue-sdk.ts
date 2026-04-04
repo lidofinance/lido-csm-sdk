@@ -4,7 +4,13 @@ import {
   CONTRACT_NAMES,
   DEFAULT_CLEAN_MAX_ITEMS,
 } from '../common/constants/index.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import {
+  Access,
+  AccessLevel,
+  Cache,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index.js';
 import { NodeOperatorId } from '../common/types.js';
 import { bigIntRange } from '../common/utils/bigint-range.js';
 import {
@@ -161,6 +167,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return filterEmptyBatches(queueBatches, depositableKeysCount);
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async clean(
@@ -179,6 +186,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async normalize(
