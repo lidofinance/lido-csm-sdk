@@ -4,6 +4,11 @@ import type {
   MethodAccess,
   PublicMethods,
 } from '../decorators/access-types.js';
+import {
+  resolveAccess,
+  type CanPerformContext,
+  type CanPerformResult,
+} from '../utils/can-perform.js';
 import { BusRegistry, BusWithModules } from './bus-registry.js';
 import { CsmSDKCacheable } from './csm-sdk-cacheable.js';
 
@@ -39,6 +44,15 @@ export abstract class CsmSDKModule<
   ): MethodAccess | undefined {
     const fn = (this as any)[method];
     return typeof fn === 'function' ? fn[ACCESS] : undefined;
+  }
+
+  hasMethodAccess<K extends string & PublicMethods<this>>(
+    method: K,
+    ctx: CanPerformContext,
+  ): CanPerformResult {
+    const access = this.getMethodAccess(method);
+    if (!access) return { allowed: true, reason: 'no access restriction' };
+    return resolveAccess(access, ctx);
   }
 
   getAccessMap(): Record<string, MethodAccess> {
