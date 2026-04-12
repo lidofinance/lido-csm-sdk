@@ -50,6 +50,10 @@ export class EventsSDK extends CsmSDKModule {
     return this.core.getContract(CONTRACT_NAMES.validatorsExitBusOracle);
   }
 
+  private get ejectorContract() {
+    return this.core.getContract(CONTRACT_NAMES.ejector);
+  }
+
   private get accountingContract() {
     return this.core.getContract(CONTRACT_NAMES.accounting);
   }
@@ -185,6 +189,32 @@ export class EventsSDK extends CsmSDKModule {
     );
 
     return logs.map((e) => e.args.validatorPubkey).filter(isDefined);
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getTriggeredEjectionKeys(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<Hex[]> {
+    const logs = await this.queryEvents<{
+      blockNumber: bigint;
+      args: { pubkey?: Hex };
+    }>(
+      options,
+      (s) =>
+        this.ejectorContract.getEvents.VoluntaryEjectionRequested(
+          { nodeOperatorId },
+          s,
+        ),
+      (s) =>
+        this.ejectorContract.getEvents.BadPerformerEjectionRequested(
+          { nodeOperatorId },
+          s,
+        ),
+    );
+
+    return logs.map((e) => e.args.pubkey).filter(isDefined);
   }
 
   @Logger('Events:')

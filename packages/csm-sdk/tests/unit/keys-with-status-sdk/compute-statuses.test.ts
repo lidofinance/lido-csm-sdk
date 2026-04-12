@@ -33,6 +33,7 @@ const makeContext = (
   duplicates: null,
   withdrawalSubmitted: null,
   requestedToExit: [],
+  triggeredEjection: [],
   hasCLStatuses: true,
   hasStrikes: false,
   hasQueue: true,
@@ -230,6 +231,64 @@ describe('computeStatuses', () => {
       expect(statuses).toContain(KEY_STATUS.WITH_STRIKES);
     });
 
+    it('adds TRIGGERED_EJECTION when key is in triggered ejection list', () => {
+      const ctx = makeContext({
+        keyIndex: 2,
+        prefilled: {
+          status: KEY_STATUS.ACTIVE,
+          slashed: false,
+          activationEpoch: 100n,
+        } as ClPreparedKey,
+        triggeredEjection: [PUBKEY],
+      });
+      const statuses = computeStatuses(ctx);
+      expect(statuses).toContain(KEY_STATUS.TRIGGERED_EJECTION);
+    });
+
+    it('does not add TRIGGERED_EJECTION when slashed', () => {
+      const ctx = makeContext({
+        keyIndex: 2,
+        prefilled: {
+          status: KEY_STATUS.ACTIVE,
+          slashed: true,
+        } as ClPreparedKey,
+        triggeredEjection: [PUBKEY],
+      });
+      const statuses = computeStatuses(ctx);
+      expect(statuses).not.toContain(KEY_STATUS.TRIGGERED_EJECTION);
+    });
+
+    it('TRIGGERED_EJECTION suppresses EJECTABLE', () => {
+      const ctx = makeContext({
+        keyIndex: 2,
+        prefilled: {
+          status: KEY_STATUS.ACTIVE,
+          slashed: false,
+          activationEpoch: 100n,
+        } as ClPreparedKey,
+        ejectableEpoch: 1000n,
+        triggeredEjection: [PUBKEY],
+      });
+      const statuses = computeStatuses(ctx);
+      expect(statuses).toContain(KEY_STATUS.TRIGGERED_EJECTION);
+      expect(statuses).not.toContain(KEY_STATUS.EJECTABLE);
+    });
+
+    it('TRIGGERED_EJECTION coexists with EXIT_REQUESTED', () => {
+      const ctx = makeContext({
+        keyIndex: 2,
+        prefilled: {
+          status: KEY_STATUS.ACTIVE,
+          slashed: false,
+        } as ClPreparedKey,
+        requestedToExit: [PUBKEY],
+        triggeredEjection: [PUBKEY],
+      });
+      const statuses = computeStatuses(ctx);
+      expect(statuses).toContain(KEY_STATUS.TRIGGERED_EJECTION);
+      expect(statuses).toContain(KEY_STATUS.EXIT_REQUESTED);
+    });
+
     it('adds UNBONDED when key is in unbonded tail', () => {
       const ctx = makeContext({
         keyIndex: 8, // totalAddedKeys=10, unboundCount=3 → 10-8=2 < 3
@@ -260,6 +319,7 @@ describe('computeStatuses', () => {
         withdrawalSubmitted: [PUBKEY],
         hasStrikes: true,
         requestedToExit: [PUBKEY],
+        triggeredEjection: [PUBKEY],
       });
       const statuses = computeStatuses(ctx);
       expect(statuses).toEqual([KEY_STATUS.WITHDRAWN]);
@@ -274,6 +334,7 @@ describe('computeStatuses', () => {
         } as ClPreparedKey,
         hasStrikes: true,
         requestedToExit: [PUBKEY],
+        triggeredEjection: [PUBKEY],
       });
       const statuses = computeStatuses(ctx);
       expect(statuses).toEqual([KEY_STATUS.EXITING]);
@@ -287,6 +348,7 @@ describe('computeStatuses', () => {
           slashed: false,
         } as ClPreparedKey,
         hasStrikes: true,
+        triggeredEjection: [PUBKEY],
       });
       const statuses = computeStatuses(ctx);
       expect(statuses).toEqual([KEY_STATUS.WITHDRAWAL_PENDING]);

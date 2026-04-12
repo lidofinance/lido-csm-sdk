@@ -14,6 +14,7 @@ export type StatusContext = {
   duplicates: Hex[] | null;
   withdrawalSubmitted: Hex[] | null;
   requestedToExit: Hex[];
+  triggeredEjection: Hex[];
   hasCLStatuses: boolean;
   hasStrikes: boolean;
   hasQueue: boolean;
@@ -75,6 +76,10 @@ const checkExitRequested = (ctx: StatusContext): boolean =>
   isDeposited(ctx) &&
   ctx.requestedToExit.some((key) => compareLowercase(ctx.pubkey, key));
 
+const checkTriggeredEjection = (ctx: StatusContext): boolean =>
+  isDeposited(ctx) &&
+  ctx.triggeredEjection.some((key) => compareLowercase(ctx.pubkey, key));
+
 const checkUnbonded = (ctx: StatusContext): boolean =>
   ctx.unboundCount > 0 &&
   ctx.info.totalAddedKeys - ctx.keyIndex <= ctx.unboundCount;
@@ -98,7 +103,11 @@ export const computeStatuses = (ctx: StatusContext): KEY_STATUS[] => {
     if (!isSlashed && checkExitRequested(ctx))
       statuses.push(KEY_STATUS.EXIT_REQUESTED);
 
-    if (!isSlashed && checkEjectable(ctx)) statuses.push(KEY_STATUS.EJECTABLE);
+    const isTriggeredEjection = !isSlashed && checkTriggeredEjection(ctx);
+    if (isTriggeredEjection) statuses.push(KEY_STATUS.TRIGGERED_EJECTION);
+
+    if (!isSlashed && !isTriggeredEjection && checkEjectable(ctx))
+      statuses.push(KEY_STATUS.EJECTABLE);
 
     if (checkWithStrikes(ctx)) statuses.push(KEY_STATUS.WITH_STRIKES);
 

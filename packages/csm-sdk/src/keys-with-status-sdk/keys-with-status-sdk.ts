@@ -116,6 +116,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
       currentEpoch,
       withdrawalSubmitted,
       requestedToExit,
+      triggeredEjection,
       duplicates,
       clKeysStatus,
       keysWithStrikes,
@@ -128,6 +129,9 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
       }),
       this.bus.events.getRequestedToExitKeys(id, {
+        maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
+      }),
+      this.bus.events.getTriggeredEjectionKeys(id, {
         maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
       }),
       this.getApiKeysDuplicates(id),
@@ -159,6 +163,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         duplicates,
         withdrawalSubmitted,
         requestedToExit,
+        triggeredEjection,
         hasCLStatuses: !!clKeysStatus,
         hasStrikes: !!keyStrikes?.strikes.reduce((a, b) => a + b, 0),
         hasQueue,
