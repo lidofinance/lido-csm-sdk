@@ -207,7 +207,8 @@ export class RewardsSDK extends CsmSDKModule<{
   public async getAllReports() {
     const reportsCount = await this.getHistoryCount();
 
-    const oldReportLogCids = REPORT_V1_LOG_CIDS[this.core.chainId];
+    const oldReportLogCids =
+      REPORT_V1_LOG_CIDS[this.core.moduleName]?.[this.core.chainId] ?? [];
 
     const reports = await Promise.all([
       ...oldReportLogCids.map((cid) => this.getReportByCid(cid)),
