@@ -116,12 +116,14 @@ export class RewardsSDK extends CsmSDKModule<{
   ) {
     if (proof.length === 0) return 0n;
 
-    const available = await this.distributorContract.read.getFeesToDistribute([
-      nodeOperatorId,
-      shares,
-      proof,
-    ]);
-    return await this.bus.accounting.sharesToEth(available);
+    try {
+      const available = await this.distributorContract.read.getFeesToDistribute(
+        [nodeOperatorId, shares, proof],
+      );
+      return await this.bus.accounting.sharesToEth(available);
+    } catch {
+      return 0n;
+    }
   }
 
   @Logger('Utils:')
