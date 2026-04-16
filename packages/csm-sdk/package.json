@@ -2,218 +2,11 @@
   "name": "@lidofinance/lido-csm-sdk",
   "version": "0.2.0",
   "license": "GPL-3.0-or-later",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
   "sideEffects": false,
   "type": "module",
   "files": [
     "dist"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "default": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./abi": {
-      "import": "./dist/esm/abi/index.js",
-      "default": "./dist/cjs/abi/index.js",
-      "types": "./dist/types/abi/index.d.ts"
-    },
-    "./common": {
-      "import": "./dist/esm/common/index.js",
-      "default": "./dist/cjs/common/index.js",
-      "types": "./dist/types/common/index.d.ts"
-    },
-    "./accounting": {
-      "import": "./dist/esm/accounting/index.js",
-      "default": "./dist/cjs/accounting/index.js",
-      "types": "./dist/types/accounting/index.d.ts"
-    },
-    "./bond-sdk": {
-      "import": "./dist/esm/bond-sdk/index.js",
-      "default": "./dist/cjs/bond-sdk/index.js",
-      "types": "./dist/types/bond-sdk/index.d.ts"
-    },
-    "./core-sdk": {
-      "import": "./dist/esm/core-sdk/index.js",
-      "default": "./dist/cjs/core-sdk/index.js",
-      "types": "./dist/types/core-sdk/index.d.ts"
-    },
-    "./events-sdk": {
-      "import": "./dist/esm/events-sdk/index.js",
-      "default": "./dist/cjs/events-sdk/index.js",
-      "types": "./dist/types/events-sdk/index.d.ts"
-    },
-    "./keys-sdk": {
-      "import": "./dist/esm/keys-sdk/index.js",
-      "default": "./dist/cjs/keys-sdk/index.js",
-      "types": "./dist/types/keys-sdk/index.d.ts"
-    },
-    "./keys-with-status-sdk": {
-      "import": "./dist/esm/keys-with-status-sdk/index.js",
-      "default": "./dist/cjs/keys-with-status-sdk/index.js",
-      "types": "./dist/types/keys-with-status-sdk/index.d.ts"
-    },
-    "./module-sdk": {
-      "import": "./dist/esm/module-sdk/index.js",
-      "default": "./dist/cjs/module-sdk/index.js",
-      "types": "./dist/types/module-sdk/index.d.ts"
-    },
-    "./operator-sdk": {
-      "import": "./dist/esm/operator-sdk/index.js",
-      "default": "./dist/cjs/operator-sdk/index.js",
-      "types": "./dist/types/operator-sdk/index.d.ts"
-    },
-    "./parameters-sdk": {
-      "import": "./dist/esm/parameters-sdk/index.js",
-      "default": "./dist/cjs/parameters-sdk/index.js",
-      "types": "./dist/types/parameters-sdk/index.d.ts"
-    },
-    "./permissionless-gate-sdk": {
-      "import": "./dist/esm/permissionless-gate-sdk/index.js",
-      "default": "./dist/cjs/permissionless-gate-sdk/index.js",
-      "types": "./dist/types/permissionless-gate-sdk/index.d.ts"
-    },
-    "./ics-gate-sdk": {
-      "import": "./dist/esm/ics-gate-sdk/index.js",
-      "default": "./dist/cjs/ics-gate-sdk/index.js",
-      "types": "./dist/types/ics-gate-sdk/index.d.ts"
-    },
-    "./rewards-sdk": {
-      "import": "./dist/esm/rewards-sdk/index.js",
-      "default": "./dist/cjs/rewards-sdk/index.js",
-      "types": "./dist/types/rewards-sdk/index.d.ts"
-    },
-    "./roles-sdk": {
-      "import": "./dist/esm/roles-sdk/index.js",
-      "default": "./dist/cjs/roles-sdk/index.js",
-      "types": "./dist/types/roles-sdk/index.d.ts"
-    },
-    "./tx-sdk": {
-      "import": "./dist/esm/tx-sdk/index.js",
-      "default": "./dist/cjs/tx-sdk/index.js",
-      "types": "./dist/types/tx-sdk/index.d.ts"
-    },
-    "./strikes-sdk": {
-      "import": "./dist/esm/strikes-sdk/index.js",
-      "default": "./dist/cjs/strikes-sdk/index.js",
-      "types": "./dist/types/strikes-sdk/index.d.ts"
-    },
-    "./frame-sdk": {
-      "import": "./dist/esm/frame-sdk/index.js",
-      "default": "./dist/cjs/frame-sdk/index.js",
-      "types": "./dist/types/frame-sdk/index.d.ts"
-    },
-    "./deposit-queue-sdk": {
-      "import": "./dist/esm/deposit-queue-sdk/index.js",
-      "default": "./dist/cjs/deposit-queue-sdk/index.js",
-      "types": "./dist/types/deposit-queue-sdk/index.d.ts"
-    },
-    "./stealing-sdk": {
-      "import": "./dist/esm/stealing-sdk/index.js",
-      "default": "./dist/cjs/stealing-sdk/index.js",
-      "types": "./dist/types/stealing-sdk/index.d.ts"
-    },
-    "./satellite-sdk": {
-      "import": "./dist/esm/satellite-sdk/index.js",
-      "default": "./dist/cjs/satellite-sdk/index.js",
-      "types": "./dist/types/satellite-sdk/index.d.ts"
-    },
-    "./deposit-data-sdk": {
-      "import": "./dist/esm/deposit-data-sdk/index.js",
-      "default": "./dist/cjs/deposit-data-sdk/index.js",
-      "types": "./dist/types/deposit-data-sdk/index.d.ts"
-    },
-    "./fees-monitoring-sdk": {
-      "import": "./dist/esm/fees-monitoring-sdk/index.js",
-      "default": "./dist/cjs/fees-monitoring-sdk/index.js",
-      "types": "./dist/types/fees-monitoring-sdk/index.d.ts"
-    },
-    "./keys-cache-sdk": {
-      "import": "./dist/esm/keys-cache-sdk/index.js",
-      "default": "./dist/cjs/keys-cache-sdk/index.js",
-      "types": "./dist/types/keys-cache-sdk/index.d.ts"
-    },
-    "./package.json": "./package.json"
-  },
-  "typesVersions": {
-    "*": {
-      "abi": [
-        "./dist/types/abi/index.d.ts"
-      ],
-      "accounting": [
-        "./dist/types/accounting/index.d.ts"
-      ],
-      "bond-sdk": [
-        "./dist/types/bond-sdk/index.d.ts"
-      ],
-      "common": [
-        "./dist/types/common/index.d.ts"
-      ],
-      "core-sdk": [
-        "./dist/types/core-sdk/index.d.ts"
-      ],
-      "events-sdk": [
-        "./dist/types/events-sdk/index.d.ts"
-      ],
-      "keys-sdk": [
-        "./dist/types/keys-sdk/index.d.ts"
-      ],
-      "keys-with-status-sdk": [
-        "./dist/types/keys-with-status-sdk/index.d.ts"
-      ],
-      "module-sdk": [
-        "./dist/types/module-sdk/index.d.ts"
-      ],
-      "operator-sdk": [
-        "./dist/types/operator-sdk/index.d.ts"
-      ],
-      "parameters-sdk": [
-        "./dist/types/parameters-sdk/index.d.ts"
-      ],
-      "permissionless-gate-sdk": [
-        "./dist/types/permissionless-gate-sdk/index.d.ts"
-      ],
-      "ics-gate-sdk": [
-        "./dist/types/ics-gate-sdk/index.d.ts"
-      ],
-      "rewards-sdk": [
-        "./dist/types/rewards-sdk/index.d.ts"
-      ],
-      "roles-sdk": [
-        "./dist/types/roles-sdk/index.d.ts"
-      ],
-      "tx-sdk": [
-        "./dist/types/tx-sdk/index.d.ts"
-      ],
-      "strikes-sdk": [
-        "./dist/types/strikes-sdk/index.d.ts"
-      ],
-      "frame-sdk": [
-        "./dist/types/frame-sdk/index.d.ts"
-      ],
-      "deposit-queue-sdk": [
-        "./dist/types/deposit-queue-sdk/index.d.ts"
-      ],
-      "stealing-sdk": [
-        "./dist/types/stealing-sdk/index.d.ts"
-      ],
-      "satellite-sdk": [
-        "./dist/types/satellite-sdk/index.d.ts"
-      ],
-      "deposit-data-sdk": [
-        "./dist/types/deposit-data-sdk/index.d.ts"
-      ],
-      "fees-monitoring-sdk": [
-        "./dist/types/fees-monitoring-sdk/index.d.ts"
-      ],
-      "keys-cache-sdk": [
-        "./dist/types/keys-cache-sdk/index.d.ts"
-      ]
-    }
-  },
   "keywords": [
     "lido",
     "lido-sdk",
@@ -238,36 +31,318 @@
     "provenance": true
   },
   "scripts": {
-    "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn build:types",
+    "build": "tsdown",
     "types": "tsc --noEmit",
-    "build:cjs": "tsc --project tsconfig.cjs.json && echo > ./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
-    "build:esm": "tsc --project tsconfig.build.json && echo > ./dist/esm/package.json '{\"type\":\"module\",\"sideEffects\":false}'",
-    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "test": "vitest run",
-    "prepublishOnly": "node scripts/updateVersion.cjs",
-    "lint": "eslint --max-warnings 0",
-    "clean": "rimraf dist"
+    "lint": "eslint --max-warnings 0"
   },
   "peerDependencies": {
     "@lidofinance/lido-ethereum-sdk": "^4.7.0",
     "viem": "^2.46.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
+    "@lidofinance/lido-ethereum-sdk": "^4.7.0",
     "@vitest/eslint-plugin": "^1.1.44",
     "dotenv": "^17.3.1",
-    "fs-extra": "^11.3.3",
-    "rimraf": "^6.1.3",
-    "typescript": "^5.8.3",
+    "tsdown": "^0.21.8",
+    "typescript": "^6.0.2",
+    "viem": "^2.46.0",
     "vitest": "^3.1.1"
   },
   "dependencies": {
     "@chainsafe/ssz": "^1.3.0",
-    "@lidofinance/lido-ethereum-sdk": "^4.7.0",
     "@openzeppelin/merkle-tree": "^1.0.8",
     "bls-eth-wasm": "^1.4.0",
     "json-with-bigint": "^3.5.3",
-    "viem": "^2.46.2",
     "zod": "^4.3.6"
+  },
+  "inlinedDependencies": {
+    "abitype": "1.2.3"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./abi": {
+      "import": {
+        "types": "./dist/abi.d.mts",
+        "default": "./dist/abi.mjs"
+      },
+      "require": {
+        "types": "./dist/abi.d.cts",
+        "default": "./dist/abi.cjs"
+      }
+    },
+    "./accounting-sdk": {
+      "import": {
+        "types": "./dist/accounting-sdk.d.mts",
+        "default": "./dist/accounting-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/accounting-sdk.d.cts",
+        "default": "./dist/accounting-sdk.cjs"
+      }
+    },
+    "./bond-sdk": {
+      "import": {
+        "types": "./dist/bond-sdk.d.mts",
+        "default": "./dist/bond-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/bond-sdk.d.cts",
+        "default": "./dist/bond-sdk.cjs"
+      }
+    },
+    "./common": {
+      "import": {
+        "types": "./dist/common.d.mts",
+        "default": "./dist/common.mjs"
+      },
+      "require": {
+        "types": "./dist/common.d.cts",
+        "default": "./dist/common.cjs"
+      }
+    },
+    "./core-sdk": {
+      "import": {
+        "types": "./dist/core-sdk.d.mts",
+        "default": "./dist/core-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/core-sdk.d.cts",
+        "default": "./dist/core-sdk.cjs"
+      }
+    },
+    "./curated-gate-sdk": {
+      "import": {
+        "types": "./dist/curated-gate-sdk.d.mts",
+        "default": "./dist/curated-gate-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/curated-gate-sdk.d.cts",
+        "default": "./dist/curated-gate-sdk.cjs"
+      }
+    },
+    "./curated-gates-collection-sdk": {
+      "import": {
+        "types": "./dist/curated-gates-collection-sdk.d.mts",
+        "default": "./dist/curated-gates-collection-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/curated-gates-collection-sdk.d.cts",
+        "default": "./dist/curated-gates-collection-sdk.cjs"
+      }
+    },
+    "./deposit-data-sdk": {
+      "import": {
+        "types": "./dist/deposit-data-sdk.d.mts",
+        "default": "./dist/deposit-data-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/deposit-data-sdk.d.cts",
+        "default": "./dist/deposit-data-sdk.cjs"
+      }
+    },
+    "./deposit-queue-sdk": {
+      "import": {
+        "types": "./dist/deposit-queue-sdk.d.mts",
+        "default": "./dist/deposit-queue-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/deposit-queue-sdk.d.cts",
+        "default": "./dist/deposit-queue-sdk.cjs"
+      }
+    },
+    "./discovery-sdk": {
+      "import": {
+        "types": "./dist/discovery-sdk.d.mts",
+        "default": "./dist/discovery-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/discovery-sdk.d.cts",
+        "default": "./dist/discovery-sdk.cjs"
+      }
+    },
+    "./events-sdk": {
+      "import": {
+        "types": "./dist/events-sdk.d.mts",
+        "default": "./dist/events-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/events-sdk.d.cts",
+        "default": "./dist/events-sdk.cjs"
+      }
+    },
+    "./fees-monitoring-sdk": {
+      "import": {
+        "types": "./dist/fees-monitoring-sdk.d.mts",
+        "default": "./dist/fees-monitoring-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/fees-monitoring-sdk.d.cts",
+        "default": "./dist/fees-monitoring-sdk.cjs"
+      }
+    },
+    "./frame-sdk": {
+      "import": {
+        "types": "./dist/frame-sdk.d.mts",
+        "default": "./dist/frame-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/frame-sdk.d.cts",
+        "default": "./dist/frame-sdk.cjs"
+      }
+    },
+    "./ics-gate-sdk": {
+      "import": {
+        "types": "./dist/ics-gate-sdk.d.mts",
+        "default": "./dist/ics-gate-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/ics-gate-sdk.d.cts",
+        "default": "./dist/ics-gate-sdk.cjs"
+      }
+    },
+    "./keys-cache-sdk": {
+      "import": {
+        "types": "./dist/keys-cache-sdk.d.mts",
+        "default": "./dist/keys-cache-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/keys-cache-sdk.d.cts",
+        "default": "./dist/keys-cache-sdk.cjs"
+      }
+    },
+    "./keys-sdk": {
+      "import": {
+        "types": "./dist/keys-sdk.d.mts",
+        "default": "./dist/keys-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/keys-sdk.d.cts",
+        "default": "./dist/keys-sdk.cjs"
+      }
+    },
+    "./keys-with-status-sdk": {
+      "import": {
+        "types": "./dist/keys-with-status-sdk.d.mts",
+        "default": "./dist/keys-with-status-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/keys-with-status-sdk.d.cts",
+        "default": "./dist/keys-with-status-sdk.cjs"
+      }
+    },
+    "./meta-registry-sdk": {
+      "import": {
+        "types": "./dist/meta-registry-sdk.d.mts",
+        "default": "./dist/meta-registry-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/meta-registry-sdk.d.cts",
+        "default": "./dist/meta-registry-sdk.cjs"
+      }
+    },
+    "./module-sdk": {
+      "import": {
+        "types": "./dist/module-sdk.d.mts",
+        "default": "./dist/module-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/module-sdk.d.cts",
+        "default": "./dist/module-sdk.cjs"
+      }
+    },
+    "./operator-sdk": {
+      "import": {
+        "types": "./dist/operator-sdk.d.mts",
+        "default": "./dist/operator-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/operator-sdk.d.cts",
+        "default": "./dist/operator-sdk.cjs"
+      }
+    },
+    "./parameters-sdk": {
+      "import": {
+        "types": "./dist/parameters-sdk.d.mts",
+        "default": "./dist/parameters-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/parameters-sdk.d.cts",
+        "default": "./dist/parameters-sdk.cjs"
+      }
+    },
+    "./permissionless-gate-sdk": {
+      "import": {
+        "types": "./dist/permissionless-gate-sdk.d.mts",
+        "default": "./dist/permissionless-gate-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/permissionless-gate-sdk.d.cts",
+        "default": "./dist/permissionless-gate-sdk.cjs"
+      }
+    },
+    "./rewards-sdk": {
+      "import": {
+        "types": "./dist/rewards-sdk.d.mts",
+        "default": "./dist/rewards-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/rewards-sdk.d.cts",
+        "default": "./dist/rewards-sdk.cjs"
+      }
+    },
+    "./roles-sdk": {
+      "import": {
+        "types": "./dist/roles-sdk.d.mts",
+        "default": "./dist/roles-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/roles-sdk.d.cts",
+        "default": "./dist/roles-sdk.cjs"
+      }
+    },
+    "./stealing-sdk": {
+      "import": {
+        "types": "./dist/stealing-sdk.d.mts",
+        "default": "./dist/stealing-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/stealing-sdk.d.cts",
+        "default": "./dist/stealing-sdk.cjs"
+      }
+    },
+    "./strikes-sdk": {
+      "import": {
+        "types": "./dist/strikes-sdk.d.mts",
+        "default": "./dist/strikes-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/strikes-sdk.d.cts",
+        "default": "./dist/strikes-sdk.cjs"
+      }
+    },
+    "./tx-sdk": {
+      "import": {
+        "types": "./dist/tx-sdk.d.mts",
+        "default": "./dist/tx-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/tx-sdk.d.cts",
+        "default": "./dist/tx-sdk.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   }
 }

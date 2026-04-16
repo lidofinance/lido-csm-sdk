@@ -20,7 +20,7 @@
     // Language and environment
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "target": "ES2021", // Setting this to `ES2021` enables native support for `Node v16+`: https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping.
+    "target": "ES2022", // ES2022: class fields, Error.cause, top-level await. SDK requires Node >=24.
     "lib": [
       "ES2023", // We are using some ES2023 features like `Array.prototype.at`.
       "ES2022", // By using ES2022 we get access to the `.cause` property on `Error` instances.

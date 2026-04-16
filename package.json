@@ -12,7 +12,6 @@
     "ethereum"
   ],
   "scripts": {
-    "dev": "yarn playground:dev",
     "w-info": "yarn workspaces info",
     "build": "yarn workspaces foreach -pt run build",
     "build:packages": "yarn workspaces foreach --no-private run build",
@@ -40,12 +39,17 @@
     "husky": "^9.1.7",
     "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
+    "typescript": "^6.0.2",
     "typescript-eslint": "^8.56.0"
   },
   "resolutions": {
     "postcss": "8.4.31",
-    "crypto-js": "4.2.0"
+    "crypto-js": "4.2.0",
+    "lodash": ">=4.18.0",
+    "lodash-es": ">=4.18.0",
+    "micromatch/picomatch": "2.3.2",
+    "glob/minimatch": "3.1.5",
+    "eslint-plugin-import/minimatch": "3.1.5"
   },
   "workspaces": [
     "packages/*"
@@ -69,6 +73,6 @@
   },
   "packageManager": "yarn@3.6.3",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   }
 }

@@ -10,7 +10,7 @@ import vitest from '@vitest/eslint-plugin';
 export default tseslint.config(
   // Global ignores
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'vitest.config.ts', 'scripts/**'],
+    ignores: ['dist/**', 'node_modules/**', '*.js', '*.cjs', '*.mjs', 'vitest.config.ts', 'tsdown.config.ts', 'scripts/**'],
   },
 
   // Base configs
