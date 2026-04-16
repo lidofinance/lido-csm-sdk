@@ -1881,12 +1881,6 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'amountToBurn',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
         name: 'burnedAmount',
         type: 'uint256',
         indexed: false,

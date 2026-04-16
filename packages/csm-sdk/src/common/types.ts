@@ -33,12 +33,20 @@ export type NodeOperatorShortInfo = {
   curveId: bigint;
 };
 
+export type NodeOperatorInviteInfo = {
+  nodeOperatorId: NodeOperatorId;
+  extendedManagerPermissions: boolean;
+  curveId: bigint;
+  role: ROLES;
+};
+
 /** @deprecated */
 export type NodeOperator = {
   id: NodeOperatorId;
   roles: ROLES[];
 };
 
+/** @deprecated */
 export type NodeOperatorInvite = {
   id: NodeOperatorId;
   role: ROLES;

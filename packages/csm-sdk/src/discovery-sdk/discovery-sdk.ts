@@ -5,7 +5,7 @@ import { ROLES } from '../common/constants/roles';
 import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
   NodeOperatorId,
-  NodeOperatorInvite,
+  NodeOperatorInviteInfo,
   NodeOperatorShortInfo,
 } from '../common/types';
 import { ModuleSDK } from '../module-sdk/module-sdk';
@@ -93,7 +93,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   public async getNodeOperatorsByProposedAddress(
     address: Address,
     pagination?: Pagination,
-  ): Promise<NodeOperatorInvite[]> {
+  ): Promise<NodeOperatorInviteInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
         this.discoveryContract.read.getNodeOperatorsByProposedAddress([
@@ -105,14 +105,18 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
     );
 
-    // FIXME: return curveId
     return operators.flatMap((operator) =>
       [
         { address: operator.proposedManagerAddress, role: ROLES.MANAGER },
         { address: operator.proposedRewardAddress, role: ROLES.REWARDS },
       ]
         .filter((item) => isAddressEqual(item.address, address))
-        .map((item) => ({ id: operator.id, role: item.role })),
+        .map((item) => ({
+          nodeOperatorId: operator.id,
+          extendedManagerPermissions: operator.extendedManagerPermissions,
+          curveId: operator.curveId,
+          role: item.role,
+        })),
     );
   }
 

@@ -289,6 +289,11 @@ export const SMDiscoveryAbi = [
             internalType: 'address',
           },
           {
+            name: 'extendedManagerPermissions',
+            type: 'bool',
+            internalType: 'bool',
+          },
+          {
             name: 'curveId',
             type: 'uint256',
             internalType: 'uint256',
