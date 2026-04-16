@@ -1,10 +1,10 @@
 import { Hex } from 'viem';
-import { compareLowercase } from '../common/utils/compare-lowercase.js';
+import { compareLowercase } from '../common/utils/compare-lowercase';
 import {
   isHexadecimalString,
   toHexString,
   trimHexPrefix,
-} from '../common/utils/index.js';
+} from '../common/utils/index';
 import {
   DEPOSIT_ROOT_LENGTH,
   FIXED_AMOUNT,
@@ -13,8 +13,8 @@ import {
   PUBKEY_LENGTH,
   SIGNATURE_LENGTH,
   WITHDRAWAL_CREDENTIALS_LENGTH,
-} from './constants.js';
-import { verifyDepositSignature } from './signature.js';
+} from './constants';
+import { verifyDepositSignature } from './signature';
 import {
   DepositData,
   DepositDataV1,
@@ -24,7 +24,7 @@ import {
   ValidationErrorCode,
   ValidationExtendedProps,
   ValidationProps,
-} from './types.js';
+} from './types';
 
 const validateBasicFields = (
   data: DepositData,

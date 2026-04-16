@@ -1,7 +1,7 @@
 import { decodeEventLog, getAbiItem, Hex, toEventHash } from 'viem';
-import { CuratedModuleAbi } from '../../abi/index.js';
-import { ReceiptLike } from '../../tx-sdk/types.js';
-import { ERROR_CODE, SDKError } from './sdk-error.js';
+import { CuratedModuleAbi } from '../../abi/index';
+import { ReceiptLike } from '../../tx-sdk/types';
+import { ERROR_CODE, SDKError } from './sdk-error';
 
 const NODE_OPERATOR_ADDED_EVENT = getAbiItem({
   abi: CuratedModuleAbi,

@@ -1,8 +1,8 @@
 import { Hex } from 'viem';
-import { KEY_STATUS } from '../common/index.js';
-import { compareLowercase } from '../common/utils/index.js';
-import { NodeOperatorInfo } from '../operator-sdk/types.js';
-import { ClPreparedKey } from './parse-cl-response.js';
+import { KEY_STATUS } from '../common/index';
+import { compareLowercase } from '../common/utils/index';
+import { NodeOperatorInfo } from '../operator-sdk/types';
+import { ClPreparedKey } from './parse-cl-response';
 
 export type StatusContext = {
   pubkey: Hex;

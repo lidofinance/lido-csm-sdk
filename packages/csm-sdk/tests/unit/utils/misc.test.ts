@@ -1,17 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import type { Hex } from 'viem';
 import { zeroAddress } from 'viem';
-import { clearEmptyAddress } from '../../../src/common/utils/clear-empty-address.js';
-import { compareLowercase } from '../../../src/common/utils/compare-lowercase.js';
-import { isBigint } from '../../../src/common/utils/is-bigint.js';
-import { isValidIpfsCid } from '../../../src/common/utils/is-valid-ipfs-cid.js';
-import { parseValue } from '../../../src/common/utils/parse-value.js';
+import { clearEmptyAddress } from '../../../src/common/utils/clear-empty-address';
+import { compareLowercase } from '../../../src/common/utils/compare-lowercase';
+import { isBigint } from '../../../src/common/utils/is-bigint';
+import { isValidIpfsCid } from '../../../src/common/utils/is-valid-ipfs-cid';
+import { parseValue } from '../../../src/common/utils/parse-value';
 import {
   sortByBlockNumber,
   sortRewardsByRefSlot,
-} from '../../../src/common/utils/sort.js';
-import { parseClaimProps } from '../../../src/common/utils/parse-claim-props.js';
-import { parseDepositData } from '../../../src/common/utils/parse-deposit-data.js';
+} from '../../../src/common/utils/sort';
+import { parseClaimProps } from '../../../src/common/utils/parse-claim-props';
+import { parseDepositData } from '../../../src/common/utils/parse-deposit-data';
 
 describe('clearEmptyAddress', () => {
   it('returns undefined for zeroAddress', () => {

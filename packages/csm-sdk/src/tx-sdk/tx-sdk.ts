@@ -6,9 +6,9 @@ import {
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { ErrorHandler } from '../common/decorators/error-handler';
+import { Logger } from '../common/decorators/logger';
 import {
   CONTRACT_NAMES,
   EMPTY_PERMIT,
@@ -16,18 +16,18 @@ import {
   ERROR_CODE,
   PermitSignatureShort,
   withSDKError,
-} from '../common/index.js';
-import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
-import { BindedContract } from '../core-sdk/types.js';
-import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts.js';
+} from '../common/index';
+import { isCapabilitySupported } from '../common/utils/is-capability-supported';
+import { BindedContract } from '../core-sdk/types';
+import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts';
 import {
   PerformCallOptions,
   PerformTransactionOptions,
   SignPermitOrApproveProps,
-} from './internal-types.js';
-import { parseSpendingProps } from './parse-spending-props.js';
-import { prepCall } from './prep-call.js';
-import { stripPermit } from './strip-permit.js';
+} from './internal-types';
+import { parseSpendingProps } from './parse-spending-props';
+import { prepCall } from './prep-call';
+import { stripPermit } from './strip-permit';
 import {
   AllowanceProps,
   AmountAndTokenProps,
@@ -40,7 +40,7 @@ import {
   ReceiptLike,
   TransactionCallback,
   TransactionCallbackStage,
-} from './types.js';
+} from './types';
 
 export class TxSDK extends CsmSDKModule {
   protected get spender(): Address {

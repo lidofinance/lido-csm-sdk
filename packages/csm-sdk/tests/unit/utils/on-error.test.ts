@@ -4,7 +4,7 @@ import {
   ContractFunctionRevertedError,
   ContractFunctionZeroDataError,
 } from 'viem';
-import { onError, onVersionError } from '../../../src/common/utils/on-error.js';
+import { onError, onVersionError } from '../../../src/common/utils/on-error';
 
 const makeZeroDataError = () => {
   const inner = new ContractFunctionZeroDataError({ functionName: 'foo' });

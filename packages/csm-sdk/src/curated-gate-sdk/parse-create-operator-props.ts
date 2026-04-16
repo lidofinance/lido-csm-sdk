@@ -1,4 +1,4 @@
-import { CreateNodeOperatorProps } from './types.js';
+import { CreateNodeOperatorProps } from './types';
 
 export const parseCreateOperatorProps = async (
   props: CreateNodeOperatorProps,

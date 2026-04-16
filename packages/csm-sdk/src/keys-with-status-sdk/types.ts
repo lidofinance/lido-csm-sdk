@@ -1,6 +1,6 @@
 import { Address, Hex } from 'viem';
-import { KEY_STATUS } from '../common/index.js';
-import { KeyStrikes } from '../strikes-sdk/types.js';
+import { KEY_STATUS } from '../common/index';
+import { KeyStrikes } from '../strikes-sdk/types';
 
 export type KeyWithStatus = {
   pubkey: Hex;

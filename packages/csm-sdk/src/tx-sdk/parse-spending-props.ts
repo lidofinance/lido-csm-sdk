@@ -1,5 +1,5 @@
-import { STETH_ROUNDING_THRESHOLD, TOKENS } from '../common/index.js';
-import { SpendOptions } from './types.js';
+import { STETH_ROUNDING_THRESHOLD, TOKENS } from '../common/index';
+import { SpendOptions } from './types';
 
 const DEFAULT_DEADLINE_SEC = 3600;
 

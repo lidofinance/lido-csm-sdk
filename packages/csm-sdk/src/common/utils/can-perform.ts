@@ -1,6 +1,6 @@
 import { type Address, isAddressEqual } from 'viem';
 
-import { AccessLevel, type MethodAccess } from '../decorators/access-types.js';
+import { AccessLevel, type MethodAccess } from '../decorators/access-types';
 
 export type CanPerformContext = {
   account: Address;

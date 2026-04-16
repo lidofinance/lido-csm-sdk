@@ -1,7 +1,7 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { NodeOperatorId, Proof, RewardProof } from '../common/types.js';
-import { RewardsTreeLeaf } from './types.js';
-import { findIndexAndLeaf } from '../common/utils/find-index-and-leaf.js';
+import { NodeOperatorId, Proof, RewardProof } from '../common/types';
+import { RewardsTreeLeaf } from './types';
+import { findIndexAndLeaf } from '../common/utils/find-index-and-leaf';
 
 export const EMPTY_PROOF: RewardProof = { proof: [], shares: 0n };
 

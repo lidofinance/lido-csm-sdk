@@ -1,37 +1,37 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   CACHE_LONG,
   CONTRACT_NAMES,
   DEFAULT_CLEAN_MAX_ITEMS,
-} from '../common/constants/index.js';
+} from '../common/constants/index';
 import {
   Access,
   AccessLevel,
   Cache,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
-import { NodeOperatorId } from '../common/types.js';
-import { bigIntRange } from '../common/utils/bigint-range.js';
+} from '../common/decorators/index';
+import { NodeOperatorId } from '../common/types';
+import { bigIntRange } from '../common/utils/bigint-range';
 import {
   byTotalCount,
   iteratePages,
   onePage,
   Pagination,
-} from '../discovery-sdk/index.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
-import { filterEmptyBatches } from './filter-batches.js';
-import { byNextBatchIndex } from './next-batch-index.js';
-import { parseBatch } from './parse-batch.js';
+} from '../discovery-sdk/index';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { CommonTransactionProps } from '../tx-sdk/types';
+import { filterEmptyBatches } from './filter-batches';
+import { byNextBatchIndex } from './next-batch-index';
+import { parseBatch } from './parse-batch';
 import {
   DepositQueueBatch,
   DepositQueuePointer,
   QueueBatchesPagination,
   RawDepositQueueBatch,
   RawDepositQueueBatchWithIndex,
-} from './types.js';
+} from './types';
 
 export class DepositQueueSDK extends CsmSDKModule<{
   tx: TxSDK;

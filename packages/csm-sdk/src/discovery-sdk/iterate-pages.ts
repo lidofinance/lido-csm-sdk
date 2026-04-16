@@ -1,4 +1,4 @@
-import { Pagination } from './types.js';
+import { Pagination } from './types';
 
 type ContinueParams<T> = {
   items: T[];

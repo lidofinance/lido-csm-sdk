@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import z from 'zod';
-import { createMerkleTreeSchema } from '../../../src/common/utils/create-merkle-tree-schema.js';
+import { createMerkleTreeSchema } from '../../../src/common/utils/create-merkle-tree-schema';
 
 const addressLeafSchema = z.tuple([z.string()]);
 const schema = createMerkleTreeSchema(addressLeafSchema);

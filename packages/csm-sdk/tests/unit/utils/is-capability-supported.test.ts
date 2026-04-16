@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isCapabilitySupported } from '../../../src/common/utils/is-capability-supported.js';
+import { isCapabilitySupported } from '../../../src/common/utils/is-capability-supported';
 
 describe('isCapabilitySupported', () => {
   it('returns true when status is "supported"', () => {

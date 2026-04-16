@@ -1,9 +1,9 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 
-import { CONTRACT_NAMES } from './contract-names.js';
-import { MODULE_NAME, PerModule } from './module-name.js';
-import { PerSupportedChain } from './supported-chains.js';
+import { CONTRACT_NAMES } from './contract-names';
+import { MODULE_NAME, PerModule } from './module-name';
+import { PerSupportedChain } from './supported-chains';
 
 type ContractAddressMap = { [key in CONTRACT_NAMES]?: Address };
 

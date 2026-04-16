@@ -1,7 +1,7 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
-import { NodeOperatorShortInfo, ROLES } from '../common/index.js';
-import { NodeOperatorInfo } from '../operator-sdk/types.js';
-import { packRoles } from './merge.js';
+import { NodeOperatorShortInfo, ROLES } from '../common/index';
+import { NodeOperatorInfo } from '../operator-sdk/types';
+import { packRoles } from './merge';
 
 export const getNodeOperatorRoles = (
   {

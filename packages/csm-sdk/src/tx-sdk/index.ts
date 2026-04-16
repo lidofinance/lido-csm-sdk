@@ -1,3 +1,3 @@
-export * from './tx-sdk.js';
-export * from './types.js';
-export * from './prep-call.js';
+export * from './tx-sdk';
+export * from './types';
+export * from './prep-call';

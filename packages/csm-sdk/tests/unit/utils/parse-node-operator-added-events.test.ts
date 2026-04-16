@@ -8,9 +8,9 @@ import {
   type Hex,
   type Log,
 } from 'viem';
-import { CSModuleAbi } from '../../../src/abi/index.js';
-import { parseNodeOperatorAddedEvents } from '../../../src/common/utils/parse-node-operator-added-events.js';
-import type { ReceiptLike } from '../../../src/tx-sdk/types.js';
+import { CSModuleAbi } from '../../../src/abi/index';
+import { parseNodeOperatorAddedEvents } from '../../../src/common/utils/parse-node-operator-added-events';
+import type { ReceiptLike } from '../../../src/tx-sdk/types';
 
 const event = getAbiItem({ abi: CSModuleAbi, name: 'NodeOperatorAdded' });
 

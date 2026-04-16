@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   parseDepositData,
   removeKey,
-} from '../../../src/deposit-data-sdk/parser.js';
+} from '../../../src/deposit-data-sdk/parser';
 
 const VALID_ITEM = {
   pubkey: 'aabbccdd',

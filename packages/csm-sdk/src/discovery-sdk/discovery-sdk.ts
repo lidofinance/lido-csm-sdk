@@ -1,16 +1,16 @@
 import { Address, isAddressEqual } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { CONTRACT_NAMES } from '../common/constants/index.js';
-import { ROLES } from '../common/constants/roles.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { CONTRACT_NAMES } from '../common/constants/index';
+import { ROLES } from '../common/constants/roles';
+import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
   NodeOperatorId,
   NodeOperatorInvite,
   NodeOperatorShortInfo,
-} from '../common/types.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { byTotalCount, iteratePages, onePage } from './iterate-pages.js';
-import { NodeOperatorDiscoveryInfo, Pagination, SearchMode } from './types.js';
+} from '../common/types';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { byTotalCount, iteratePages, onePage } from './iterate-pages';
+import { NodeOperatorDiscoveryInfo, Pagination, SearchMode } from './types';
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {

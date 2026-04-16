@@ -4,7 +4,7 @@ import {
   getFromLocalStorage,
   isKeyExpired,
   cleanExpiredKeys,
-} from '../../../src/keys-cache-sdk/storage.js';
+} from '../../../src/keys-cache-sdk/storage';
 
 // Mock localStorage in node environment
 const store: Record<string, string> = {};

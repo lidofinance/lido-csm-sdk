@@ -1,8 +1,8 @@
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { Abi, Address, Chain, getContract, WalletClient } from 'viem';
-import { BaseModuleAbi, VersionCheckAbi } from '../abi/index.js';
-import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
-import { Cache, Logger } from '../common/decorators/index.js';
+import { BaseModuleAbi, VersionCheckAbi } from '../abi/index';
+import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
+import { Cache, Logger } from '../common/decorators/index';
 import {
   CACHE_IMMUTABLE,
   CONTRACT_BASE_ABI,
@@ -15,15 +15,15 @@ import {
   MODULE_NAME,
   SUPPORTED_CHAINS,
   SUPPORTED_CONTRACT_VERSIONS,
-} from '../common/index.js';
-import { isValidIpfsCid } from '../common/utils/index.js';
-import { onVersionError } from '../common/utils/on-error.js';
+} from '../common/index';
+import { isValidIpfsCid } from '../common/utils/index';
+import { onVersionError } from '../common/utils/on-error';
 import {
   BindedContract,
   ContractAddresses,
   CoreProps,
   VersionCheckResult,
-} from './types.js';
+} from './types';
 
 export class CoreSDK extends CsmSDKCacheable {
   private _cacheVersion = 0;

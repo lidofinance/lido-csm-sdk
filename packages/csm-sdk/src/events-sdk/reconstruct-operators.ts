@@ -1,7 +1,7 @@
 import { Address, isAddressEqual } from 'viem';
-import { ROLES } from '../common/index.js';
-import { NodeOperator } from '../common/types.js';
-import { isNotEmptyRoles, mergeRoles } from './merge.js';
+import { ROLES } from '../common/index';
+import { NodeOperator } from '../common/types';
+import { isNotEmptyRoles, mergeRoles } from './merge';
 
 export type NodeOperatorLog = {
   blockNumber: bigint;

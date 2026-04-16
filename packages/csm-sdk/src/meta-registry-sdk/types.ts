@@ -1,7 +1,7 @@
 import { Hex } from 'viem';
 
-import { NodeOperatorId } from '../common/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
+import { NodeOperatorId } from '../common/index';
+import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type OperatorMetadata = {
   name: string;

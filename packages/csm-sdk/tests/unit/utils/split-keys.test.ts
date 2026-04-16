@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { Hex } from 'viem';
-import { splitKeys } from '../../../src/common/utils/split-keys.js';
-import { PUBKEY_LENGTH_BYTES } from '../../../src/common/constants/keys.js';
+import { splitKeys } from '../../../src/common/utils/split-keys';
+import { PUBKEY_LENGTH_BYTES } from '../../../src/common/constants/keys';
 
 describe('splitKeys', () => {
   const pubkey48 = ('0x' + 'aa'.repeat(PUBKEY_LENGTH_BYTES)) as Hex;

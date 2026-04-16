@@ -1,5 +1,5 @@
 import { type Abi, type Hex, decodeErrorResult } from 'viem';
-import { CONTRACT_BASE_ABI } from '../constants/contract-abi.js';
+import { CONTRACT_BASE_ABI } from '../constants/contract-abi';
 
 const HEX_DATA_RE = /(?:custom error |reason: )(0x[0-9a-fA-F]{8,})/;
 

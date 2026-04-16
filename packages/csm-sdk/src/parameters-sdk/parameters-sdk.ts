@@ -1,15 +1,15 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache } from '../common/decorators/cache';
+import { ErrorHandler } from '../common/decorators/error-handler';
+import { Logger } from '../common/decorators/logger';
 import {
   CACHE_LONG,
   CACHE_MID,
   CONTRACT_NAMES,
   PERCENT_BASIS,
-} from '../common/index.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { CurveParameters, KeyNumberValueInterval } from './types.js';
+} from '../common/index';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { CurveParameters, KeyNumberValueInterval } from './types';
 
 export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get parametersContract() {

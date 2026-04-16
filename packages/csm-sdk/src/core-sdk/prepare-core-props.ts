@@ -3,8 +3,8 @@ import {
   MODULE_CONFIG,
   MODULE_NAME,
   SUPPORTED_CHAINS,
-} from '../common/index.js';
-import { CoreProps, SdkProps } from './types.js';
+} from '../common/index';
+import { CoreProps, SdkProps } from './types';
 
 export const prepareCoreProps = (
   props: SdkProps,

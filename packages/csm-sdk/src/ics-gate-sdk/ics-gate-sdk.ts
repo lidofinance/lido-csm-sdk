@@ -1,12 +1,12 @@
 import { Address } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   Cache,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
+} from '../common/decorators/index';
 import {
   CACHE_LONG,
   CONTRACT_NAMES,
@@ -15,24 +15,24 @@ import {
   SDKError,
   TOKENS,
   WithToken,
-} from '../common/index.js';
+} from '../common/index';
 import {
   fetchTree,
   findAddressProof,
   isDefined,
   onError,
   parseNodeOperatorAddedEvents,
-} from '../common/utils/index.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { ReceiptLike } from '../tx-sdk/types.js';
-import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props.js';
+} from '../common/utils/index';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { ReceiptLike } from '../tx-sdk/types';
+import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props';
 import {
   AddressesTreeLeaf,
   AddressProof,
   AddVettedNodeOperatorProps,
   ClaimCuvrveProps,
-} from './types.js';
+} from './types';
 
 export class IcsGateSDK extends CsmSDKModule<{
   tx: TxSDK;

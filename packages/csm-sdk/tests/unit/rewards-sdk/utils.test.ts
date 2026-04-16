@@ -4,12 +4,12 @@ import {
   isRewardsReportV1,
   isRewardsReportV2,
   isRewardsReportV2Array,
-} from '../../../src/rewards-sdk/parse-report.js';
-import { findOperatorRewards } from '../../../src/rewards-sdk/find-operator-rewards.js';
+} from '../../../src/rewards-sdk/parse-report';
+import { findOperatorRewards } from '../../../src/rewards-sdk/find-operator-rewards';
 import {
   findProofAndAmount,
   EMPTY_PROOF,
-} from '../../../src/rewards-sdk/find-proof.js';
+} from '../../../src/rewards-sdk/find-proof';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 
 const BLOCKSTAMP = {

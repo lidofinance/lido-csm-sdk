@@ -1,19 +1,14 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
-import {
-  CONTRACT_NAMES,
-  ERROR_CODE,
-  ROLES,
-  SDKError,
-} from '../common/index.js';
-import { parseClaimProps } from '../common/utils/parse-claim-props.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
+} from '../common/decorators/index';
+import { CONTRACT_NAMES, ERROR_CODE, ROLES, SDKError } from '../common/index';
+import { parseClaimProps } from '../common/utils/parse-claim-props';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
@@ -21,7 +16,7 @@ import {
   SetCustomClaimerProps,
   SetFeeSplitsProps,
   WithRole,
-} from './types.js';
+} from './types';
 
 export class RolesSDK extends CsmSDKModule<{
   tx: TxSDK;

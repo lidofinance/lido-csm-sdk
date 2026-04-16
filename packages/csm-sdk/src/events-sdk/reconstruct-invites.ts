@@ -1,6 +1,6 @@
 import { Address, isAddressEqual } from 'viem';
-import { ROLES } from '../common/index.js';
-import { NodeOperatorInvite } from '../common/types.js';
+import { ROLES } from '../common/index';
+import { NodeOperatorInvite } from '../common/types';
 
 export type ChangeAddressLog = {
   blockNumber: bigint;

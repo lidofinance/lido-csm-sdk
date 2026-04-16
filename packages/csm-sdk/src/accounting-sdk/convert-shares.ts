@@ -1,4 +1,4 @@
-import { StethPoolData } from './types.js';
+import { StethPoolData } from './types';
 
 const PRECISION = 10n ** 27n;
 

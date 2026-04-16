@@ -1,6 +1,6 @@
 import { isAddress, zeroAddress } from 'viem';
-import { parseDepositData } from '../common/utils/index.js';
-import { AddNodeOperatorInnerProps, AddNodeOperatorProps } from './types.js';
+import { parseDepositData } from '../common/utils/index';
+import { AddNodeOperatorInnerProps, AddNodeOperatorProps } from './types';
 
 export const parseAddOperatorProps = async (
   props: AddNodeOperatorProps,

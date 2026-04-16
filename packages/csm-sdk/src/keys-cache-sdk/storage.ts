@@ -1,5 +1,5 @@
-import { KEY_TTL_DURATION } from './constants.js';
-import { KeysRecord } from './types.js';
+import { KEY_TTL_DURATION } from './constants';
+import { KeysRecord } from './types';
 
 type SerializeLocalStorageResult =
   | { success: true }

@@ -1,4 +1,4 @@
-import { KeyNumberValueInterval } from './types.js';
+import { KeyNumberValueInterval } from './types';
 
 /**
  * Find the interval that contains a specific key index

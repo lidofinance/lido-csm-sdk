@@ -1,25 +1,25 @@
 import { Hex } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
+import { CACHE_MID, CONTRACT_NAMES } from '../common/index';
 import {
   compareLowercase,
   isHexadecimalString,
   toHexString,
-} from '../common/utils/index.js';
-import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
-import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { PUBKEY_LENGTH } from './constants.js';
-import { parseDepositData, removeKey } from './parser.js';
+} from '../common/utils/index';
+import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk';
+import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { PUBKEY_LENGTH } from './constants';
+import { parseDepositData, removeKey } from './parser';
 import {
   DepositData,
   ParseResult,
   RemoveKeyResult,
   ValidationError,
   ValidationErrorCode,
-} from './types.js';
-import { validateDepositData } from './validator.js';
+} from './types';
+import { validateDepositData } from './validator';
 
 export class DepositDataSDK extends CsmSDKModule<{
   module: ModuleSDK;

@@ -1,10 +1,10 @@
-import { callConsoleMessage } from './utils.js';
-import { type HeadMessage } from './types.js';
+import { callConsoleMessage } from './utils';
+import { type HeadMessage } from './types';
 import {
   TransactionCallback,
   TransactionCallbackStage,
-} from '../../tx-sdk/types.js';
-import { SDKError } from '../index.js';
+} from '../../tx-sdk/types';
+import { SDKError } from '../index';
 
 export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
   return function ErrorHandlerDecorator<This, Value>(

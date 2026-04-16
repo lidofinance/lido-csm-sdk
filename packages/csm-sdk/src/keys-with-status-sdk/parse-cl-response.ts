@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { KEY_STATUS } from '../common/index.js';
+import { KEY_STATUS } from '../common/index';
 import { parseGwei } from 'viem';
 
 const HexSchema = z.templateLiteral([z.literal('0x'), z.string()]);

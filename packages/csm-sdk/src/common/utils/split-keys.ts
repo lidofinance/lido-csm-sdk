@@ -1,5 +1,5 @@
 import { Hex, isHex, size, slice } from 'viem';
-import { PUBKEY_LENGTH_BYTES } from '../constants/keys.js';
+import { PUBKEY_LENGTH_BYTES } from '../constants/keys';
 
 export const splitKeys = (
   value: Hex,

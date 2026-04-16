@@ -1,5 +1,5 @@
-import { ERROR_CODE, invariant } from '../common/index.js';
-import { ModuleDigest } from './types.js';
+import { ERROR_CODE, invariant } from '../common/index';
+import { ModuleDigest } from './types';
 
 export const findModuleDigest = (
   digests: ModuleDigest[],

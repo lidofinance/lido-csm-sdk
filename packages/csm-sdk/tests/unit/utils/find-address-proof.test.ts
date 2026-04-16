@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { type Address, getAddress } from 'viem';
-import { findAddressProof } from '../../../src/common/utils/find-address-proof.js';
+import { findAddressProof } from '../../../src/common/utils/find-address-proof';
 
 const ADDR_A = '0x000000000000000000000000000000000000000a' as Address;
 const ADDR_B = '0x000000000000000000000000000000000000000b' as Address;

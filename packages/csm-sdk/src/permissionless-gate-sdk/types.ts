@@ -3,8 +3,8 @@ import {
   DepositDataKey,
   NodeOperatorShortInfo,
   PermitSignatureShort,
-} from '../common/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
+} from '../common/index';
+import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type AddNodeOperatorProps =
   CommonTransactionProps<NodeOperatorShortInfo> & {

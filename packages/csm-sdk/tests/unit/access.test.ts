@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import { Address } from 'viem';
 
-import { Access, ACCESS } from '../../src/common/decorators/access.js';
+import { Access, ACCESS } from '../../src/common/decorators/access';
 import {
   AccessLevel,
   type MethodAccess,
-} from '../../src/common/decorators/access-types.js';
+} from '../../src/common/decorators/access-types';
 import {
   resolveAccess,
   type CanPerformContext,
-} from '../../src/common/utils/can-perform.js';
+} from '../../src/common/utils/can-perform';
 
 // --- Decorator & registry tests ---
 

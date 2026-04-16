@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { CsmSDKCacheable } from '../../src/common/class-primitives/csm-sdk-cacheable.js';
-import { Cache } from '../../src/common/decorators/cache.js';
+import { CsmSDKCacheable } from '../../src/common/class-primitives/csm-sdk-cacheable';
+import { Cache } from '../../src/common/decorators/cache';
 
 const TTL = 10_000;
 

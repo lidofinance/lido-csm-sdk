@@ -1,3 +1,3 @@
-export * from './frame-sdk.js';
-export * from './types.js';
-export * from './utils.js';
+export * from './frame-sdk';
+export * from './types';
+export * from './utils';

@@ -1,7 +1,7 @@
 import { PermitSignature } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Hex } from 'viem';
-import { ROLES } from './constants/roles.js';
-import { TOKENS } from './constants/tokens.js';
+import { ROLES } from './constants/roles';
+import { TOKENS } from './constants/tokens';
 
 export type DepositDataKey = {
   pubkey: Hex;

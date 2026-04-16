@@ -1,17 +1,17 @@
 import { Address } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { CACHE_LONG } from '../common/constants/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { CACHE_LONG } from '../common/constants/index';
 import {
   Access,
   AccessLevel,
   Cache,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
-import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { CancelProps, OperatorWithLockedBond, ReportProps } from './types.js';
+} from '../common/decorators/index';
+import { EventsSDK } from '../events-sdk/events-sdk';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { CancelProps, OperatorWithLockedBond, ReportProps } from './types';
 
 export class StealingSDK extends CsmSDKModule<{
   tx: TxSDK;

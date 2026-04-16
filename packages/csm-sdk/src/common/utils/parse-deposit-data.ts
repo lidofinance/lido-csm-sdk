@@ -1,5 +1,5 @@
-import { DepositDataKey } from '../types.js';
-import { toHexString, trimHexPrefix } from './index.js';
+import { DepositDataKey } from '../types';
+import { toHexString, trimHexPrefix } from './index';
 
 export const parseDepositData = (keys: DepositDataKey[]) => {
   const publicKeys = keys.map((key) => trimHexPrefix(key.pubkey));

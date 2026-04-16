@@ -1,32 +1,29 @@
 import { Address, Hex } from 'viem';
-import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CONTRACT_NAMES,
   NodeOperator,
   NodeOperatorId,
   NodeOperatorInvite,
-} from '../common/index.js';
+} from '../common/index';
 import {
   isDefined,
   isPropsDefined,
   isUnique,
   requestWithBlockStep,
   sortByBlockNumber,
-} from '../common/utils/index.js';
-import { BindedContract } from '../core-sdk/types.js';
-import { ChangeAddressLog, reconstructInvites } from './reconstruct-invites.js';
-import {
-  NodeOperatorLog,
-  reconstructOperators,
-} from './reconstruct-operators.js';
+} from '../common/utils/index';
+import { BindedContract } from '../core-sdk/types';
+import { ChangeAddressLog, reconstructInvites } from './reconstruct-invites';
+import { NodeOperatorLog, reconstructOperators } from './reconstruct-operators';
 import {
   EventRangeProps,
   OperatorCurveIdChange,
   PenaltyRecord,
   PenaltyRecordWithoutTimestamp,
-} from './types.js';
+} from './types';
 
 type StepProps = { fromBlock: bigint; toBlock: bigint };
 

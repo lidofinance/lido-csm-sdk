@@ -1,6 +1,6 @@
-import { PERCENT_BASIS } from '../common/index.js';
-import { findModuleDigest } from './find-module-digest.js';
-import { ModuleDigest, ShareLimitInfo } from './types.js';
+import { PERCENT_BASIS } from '../common/index';
+import { findModuleDigest } from './find-module-digest';
+import { ModuleDigest, ShareLimitInfo } from './types';
 
 export const calculateShareLimit = (
   digests: ModuleDigest[],

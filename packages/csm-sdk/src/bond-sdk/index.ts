@@ -1,2 +1,2 @@
-export * from './bond-sdk.js';
-export * from './types.js';
+export * from './bond-sdk';
+export * from './types';

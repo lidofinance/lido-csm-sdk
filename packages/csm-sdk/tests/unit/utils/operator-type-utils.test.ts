@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
   getCurveIdByOperatorType,
   getOperatorTypeByCurveId,
-} from '../../../src/common/utils/operator-type-utils.js';
-import { OPERATOR_TYPE } from '../../../src/common/constants/operator-types.js';
+} from '../../../src/common/utils/operator-type-utils';
+import { OPERATOR_TYPE } from '../../../src/common/constants/operator-types';
 
 describe('getCurveIdByOperatorType', () => {
   it('returns correct curve ID for CSM types', () => {

@@ -7,8 +7,8 @@ import {
   epochToTimestamp,
   getSlotsPerFrame,
   getFrameDuration,
-} from '../../../src/frame-sdk/utils.js';
-import type { FrameConfig } from '../../../src/frame-sdk/types.js';
+} from '../../../src/frame-sdk/utils';
+import type { FrameConfig } from '../../../src/frame-sdk/types';
 
 const config: FrameConfig = {
   slotsPerEpoch: 32n,

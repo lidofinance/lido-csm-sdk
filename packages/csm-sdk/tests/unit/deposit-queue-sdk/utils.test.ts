@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { parseBatch } from '../../../src/deposit-queue-sdk/parse-batch.js';
-import { filterEmptyBatches } from '../../../src/deposit-queue-sdk/filter-batches.js';
-import { byNextBatchIndex } from '../../../src/deposit-queue-sdk/next-batch-index.js';
+import { parseBatch } from '../../../src/deposit-queue-sdk/parse-batch';
+import { filterEmptyBatches } from '../../../src/deposit-queue-sdk/filter-batches';
+import { byNextBatchIndex } from '../../../src/deposit-queue-sdk/next-batch-index';
 
 describe('parseBatch', () => {
   it('decodes a packed bigint into batch fields', () => {

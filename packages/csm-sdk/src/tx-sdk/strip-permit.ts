@@ -1,4 +1,4 @@
-import { PermitSignatureShort } from '../common/types.js';
+import { PermitSignatureShort } from '../common/types';
 
 export const stripPermit = ({
   v,

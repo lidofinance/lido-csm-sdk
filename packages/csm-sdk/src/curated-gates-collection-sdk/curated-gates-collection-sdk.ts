@@ -2,21 +2,21 @@ import type { Address } from 'viem';
 import {
   CsmSDKModule,
   CsmSDKProps,
-} from '../common/class-primitives/csm-sdk-module.js';
-import { CURATED_GATES } from '../common/constants/contract-names.js';
+} from '../common/class-primitives/csm-sdk-module';
+import { CURATED_GATES } from '../common/constants/contract-names';
 import {
   Access,
   AccessLevel,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
-import { ERROR_CODE, invariant } from '../common/index.js';
-import { CuratedGateSDK } from '../curated-gate-sdk/curated-gate-sdk.js';
-import { TxSDK } from '../tx-sdk/index.js';
+} from '../common/decorators/index';
+import { ERROR_CODE, invariant } from '../common/index';
+import { CuratedGateSDK } from '../curated-gate-sdk/curated-gate-sdk';
+import { TxSDK } from '../tx-sdk/index';
 import type {
   CreateNodeOperatorInGateProps,
   GateItemEligibility,
-} from './types.js';
+} from './types';
 
 export class CuratedGatesCollectionSDK extends CsmSDKModule<{
   tx: TxSDK;

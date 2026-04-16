@@ -1,12 +1,12 @@
 import { Hex } from 'viem';
 
-export type { RewardsTreeLeaf } from './parse-rewards-tree.js';
+export type { RewardsTreeLeaf } from './parse-rewards-tree';
 
 export type {
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
-} from './parse-report.js';
+} from './parse-report';
 
 export type OperatorRewards = {
   shares: bigint;

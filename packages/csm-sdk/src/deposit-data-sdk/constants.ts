@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { SUPPORTED_CHAINS } from '../common/index.js';
+import { SUPPORTED_CHAINS } from '../common/index';
 
 export const TRIM_LENGTH = 6;
 

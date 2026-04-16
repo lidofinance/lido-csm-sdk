@@ -1,3 +1,3 @@
-export * from './keys-with-status-sdk.js';
-export * from './types.js';
-export * from './consts.js';
+export * from './keys-with-status-sdk';
+export * from './types';
+export * from './consts';

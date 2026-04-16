@@ -4,10 +4,10 @@ import { encodeFunctionData, parseAbi } from 'viem';
 import {
   TOKENS,
   STETH_ROUNDING_THRESHOLD,
-} from '../../../src/common/constants/tokens.js';
-import { prepCall } from '../../../src/tx-sdk/prep-call.js';
-import { parseSpendingProps } from '../../../src/tx-sdk/parse-spending-props.js';
-import { stripPermit } from '../../../src/tx-sdk/strip-permit.js';
+} from '../../../src/common/constants/tokens';
+import { prepCall } from '../../../src/tx-sdk/prep-call';
+import { parseSpendingProps } from '../../../src/tx-sdk/parse-spending-props';
+import { stripPermit } from '../../../src/tx-sdk/strip-permit';
 
 const TEST_ABI = parseAbi([
   'function transfer(address to, uint256 amount)',

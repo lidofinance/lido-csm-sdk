@@ -1,5 +1,5 @@
-import { STETH_ROUNDING_THRESHOLD } from '../common/index.js';
-import { BondBalance } from '../common/types.js';
+import { STETH_ROUNDING_THRESHOLD } from '../common/index';
+import { BondBalance } from '../common/types';
 
 export const calcBondBalance = ({
   current,

@@ -1,4 +1,4 @@
-import { CreateNodeOperatorProps, GateEligibility } from '../index.js';
+import { CreateNodeOperatorProps, GateEligibility } from '../index';
 
 export type GateItem<T> = T & {
   gateIndex: number;

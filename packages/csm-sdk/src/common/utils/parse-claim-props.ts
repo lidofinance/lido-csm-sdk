@@ -1,4 +1,4 @@
-import { RewardProof } from '../index.js';
+import { RewardProof } from '../index';
 
 export const parseClaimProps = <T>(
   props: T & Partial<RewardProof>,

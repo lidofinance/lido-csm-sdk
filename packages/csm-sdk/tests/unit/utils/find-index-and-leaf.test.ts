@@ -3,7 +3,7 @@ import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import {
   findIndexAndLeaf,
   filterLeafs,
-} from '../../../src/common/utils/find-index-and-leaf.js';
+} from '../../../src/common/utils/find-index-and-leaf';
 
 const ADDR_A = '0x000000000000000000000000000000000000000a';
 const ADDR_B = '0x000000000000000000000000000000000000000b';

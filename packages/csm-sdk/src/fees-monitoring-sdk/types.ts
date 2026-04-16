@@ -1,5 +1,5 @@
 import { Hash, Hex } from 'viem';
-import { NodeOperatorId } from '../common/types.js';
+import { NodeOperatorId } from '../common/types';
 
 export type ValidatorInfo = Pick<
   ValidatorRegistration,

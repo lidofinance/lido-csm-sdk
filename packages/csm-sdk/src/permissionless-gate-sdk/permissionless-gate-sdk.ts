@@ -1,23 +1,23 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
+} from '../common/decorators/index';
 import {
   CONTRACT_NAMES,
   ERROR_CODE,
   SDKError,
   TOKENS,
   WithToken,
-} from '../common/index.js';
-import { parseNodeOperatorAddedEvents } from '../common/utils/index.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { ReceiptLike } from '../tx-sdk/types.js';
-import { parseAddOperatorProps } from './parse-add-operator-props.js';
-import { AddNodeOperatorProps } from './types.js';
+} from '../common/index';
+import { parseNodeOperatorAddedEvents } from '../common/utils/index';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { ReceiptLike } from '../tx-sdk/types';
+import { parseAddOperatorProps } from './parse-add-operator-props';
+import { AddNodeOperatorProps } from './types';
 
 export class PermissionlessGateSDK extends CsmSDKModule<{
   tx: TxSDK;

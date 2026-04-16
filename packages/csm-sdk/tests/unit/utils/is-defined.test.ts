@@ -4,7 +4,7 @@ import {
   isUnique,
   isNotUnique,
   isPropsDefined,
-} from '../../../src/common/utils/is-defined.js';
+} from '../../../src/common/utils/is-defined';
 
 describe('isDefined', () => {
   it('returns false for undefined', () => {

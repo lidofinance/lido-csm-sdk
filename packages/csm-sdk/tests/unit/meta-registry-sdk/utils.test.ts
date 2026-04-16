@@ -3,7 +3,7 @@ import type { Hex } from 'viem';
 import {
   decodeExternalOperatorNOR,
   decodeExternalOperator,
-} from '../../../src/meta-registry-sdk/utils.js';
+} from '../../../src/meta-registry-sdk/utils';
 
 // Valid NOR entry: type=0 (1 byte), moduleId=1 (1 byte), nodeOperatorId=42 (8 bytes) = 10 bytes
 // 0x00 01 000000000000002a

@@ -1,15 +1,15 @@
-import { NodeOperatorId } from '../common/types.js';
+import { NodeOperatorId } from '../common/types';
 import {
   isRewardsReportV1,
   isRewardsReportV2,
   isRewardsReportV2Array,
-} from './parse-report.js';
+} from './parse-report';
 import {
   OperatorRewards,
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
-} from './types.js';
+} from './types';
 
 const EMPTY_REWARDS: Omit<OperatorRewards, 'distributed'> = {
   shares: 0n,

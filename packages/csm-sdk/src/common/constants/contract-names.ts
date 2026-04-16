@@ -1,4 +1,4 @@
-import { TOKENS } from './tokens.js';
+import { TOKENS } from './tokens';
 
 export enum CONTRACT_NAMES {
   // Common Lido contracts

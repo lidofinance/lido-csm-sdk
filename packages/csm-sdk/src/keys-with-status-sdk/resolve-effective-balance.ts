@@ -1,6 +1,6 @@
-import { KEY_STATUS } from '../common/index.js';
-import { MIN_EFFECTIVE_BALANCE } from './consts.js';
-import { ClPreparedKey } from './parse-cl-response.js';
+import { KEY_STATUS } from '../common/index';
+import { MIN_EFFECTIVE_BALANCE } from './consts';
+import { ClPreparedKey } from './parse-cl-response';
 
 const ACTIVE_LIFECYCLE = [
   KEY_STATUS.ACTIVE,

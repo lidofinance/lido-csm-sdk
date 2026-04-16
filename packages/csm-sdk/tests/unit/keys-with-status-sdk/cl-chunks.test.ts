@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { KEY_STATUS } from '../../../src/common/constants/keys.js';
+import { KEY_STATUS } from '../../../src/common/constants/keys';
 import {
   getKeysPerChunk,
   getChunks,
   getClUrls,
-} from '../../../src/keys-with-status-sdk/cl-chunks.js';
+} from '../../../src/keys-with-status-sdk/cl-chunks';
 import {
   parseClResponse,
   type ClKeyInput,
-} from '../../../src/keys-with-status-sdk/parse-cl-response.js';
+} from '../../../src/keys-with-status-sdk/parse-cl-response';
 
 describe('getKeysPerChunk', () => {
   it('calculates keys that fit in URL length', () => {

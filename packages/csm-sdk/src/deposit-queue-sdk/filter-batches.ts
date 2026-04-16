@@ -1,4 +1,4 @@
-import { DepositQueueBatch } from './types.js';
+import { DepositQueueBatch } from './types';
 
 export const filterEmptyBatches = (
   allQueueBatches: DepositQueueBatch[][],

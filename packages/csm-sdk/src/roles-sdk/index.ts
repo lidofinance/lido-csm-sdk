@@ -1,3 +1,3 @@
-export * from './roles-sdk.js';
-export * from './types.js';
-export * from './consts.js';
+export * from './roles-sdk';
+export * from './types';
+export * from './consts';

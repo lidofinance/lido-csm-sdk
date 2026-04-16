@@ -1,2 +1,2 @@
-export * from './strikes-sdk.js';
-export * from './types.js';
+export * from './strikes-sdk';
+export * from './types';

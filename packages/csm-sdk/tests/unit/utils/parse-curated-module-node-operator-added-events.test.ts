@@ -7,9 +7,9 @@ import {
   type Hex,
   type Log,
 } from 'viem';
-import { CuratedModuleAbi } from '../../../src/abi/index.js';
-import { parseCuratedModuleNodeOperatorAddedEvents } from '../../../src/common/utils/parse-curated-module-node-operator-added-events.js';
-import type { ReceiptLike } from '../../../src/tx-sdk/types.js';
+import { CuratedModuleAbi } from '../../../src/abi/index';
+import { parseCuratedModuleNodeOperatorAddedEvents } from '../../../src/common/utils/parse-curated-module-node-operator-added-events';
+import type { ReceiptLike } from '../../../src/tx-sdk/types';
 
 const event = getAbiItem({
   abi: CuratedModuleAbi,

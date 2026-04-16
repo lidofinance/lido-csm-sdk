@@ -1,9 +1,9 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
-import { AccountingSDK } from '../accounting-sdk/accounting-sdk.js';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
+import { AccountingSDK } from '../accounting-sdk/accounting-sdk';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache } from '../common/decorators/cache';
+import { ErrorHandler } from '../common/decorators/error-handler';
+import { Logger } from '../common/decorators/logger';
 import {
   BondBalance,
   CACHE_MID,
@@ -11,11 +11,11 @@ import {
   CONTRACT_NAMES,
   NodeOperatorId,
   NodeOperatorShortInfo,
-} from '../common/index.js';
-import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
-import { splitKeys } from '../common/utils/split-keys.js';
-import { calcBondBalance } from './calc-bond-balance.js';
-import { FeeSplit, NodeOperatorInfo } from './types.js';
+} from '../common/index';
+import { clearEmptyAddress } from '../common/utils/clear-empty-address';
+import { splitKeys } from '../common/utils/split-keys';
+import { calcBondBalance } from './calc-bond-balance';
+import { FeeSplit, NodeOperatorInfo } from './types';
 
 export class OperatorSDK extends CsmSDKModule<{
   accounting: AccountingSDK;

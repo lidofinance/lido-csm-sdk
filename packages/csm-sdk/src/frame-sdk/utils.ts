@@ -1,4 +1,4 @@
-import { FrameConfig } from './types.js';
+import { FrameConfig } from './types';
 
 export const slotToTimestamp = (
   slot: number | bigint,

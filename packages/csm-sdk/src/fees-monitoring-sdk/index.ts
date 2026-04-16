@@ -1,2 +1,2 @@
-export * from './fees-monitoring-sdk.js';
-export * from './types.js';
+export * from './fees-monitoring-sdk';
+export * from './types';

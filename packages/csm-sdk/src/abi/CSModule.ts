@@ -1,4 +1,4 @@
-import { BaseModuleAbi } from './BaseModule.js';
+import { BaseModuleAbi } from './BaseModule';
 
 const CSModuleExtrasAbi = [
   {

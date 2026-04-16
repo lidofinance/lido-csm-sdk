@@ -1,15 +1,15 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   Cache,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
-import { CACHE_MID, CONTRACT_NAMES, NodeOperatorId } from '../common/index.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
+} from '../common/decorators/index';
+import { CACHE_MID, CONTRACT_NAMES, NodeOperatorId } from '../common/index';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
 import {
   GroupInfo,
   GroupOperators,
@@ -20,8 +20,8 @@ import {
   OperatorStakeSummary,
   SetOperatorDataProps,
   SubOperatorStakeSummary,
-} from './types.js';
-import { decodeExternalOperator } from './utils.js';
+} from './types';
+import { decodeExternalOperator } from './utils';
 
 export class MetaRegistrySDK extends CsmSDKModule<{
   tx: TxSDK;

@@ -1,6 +1,6 @@
 import { Address, isAddressEqual } from 'viem';
-import { fetchJson } from '../common/utils/fetch-json.js';
-import { ModuleOperatorsResponse, ModulesResponse } from './types.js';
+import { fetchJson } from '../common/utils/fetch-json';
+import { ModuleOperatorsResponse, ModulesResponse } from './types';
 
 const fetchModules = async (
   keysApiLink: string,

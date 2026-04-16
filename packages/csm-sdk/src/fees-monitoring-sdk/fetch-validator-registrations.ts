@@ -1,12 +1,12 @@
 import { Hex } from 'viem';
-import { fetchJson } from '../common/utils/fetch-json.js';
-import { API_REQUEST_TIMEOUT, DEFAULT_PAGE_LIMIT } from './constants.js';
+import { fetchJson } from '../common/utils/fetch-json';
+import { API_REQUEST_TIMEOUT, DEFAULT_PAGE_LIMIT } from './constants';
 import {
   CheckOperatorKeysProps,
   ValidatorInfo,
   ValidatorInfoIssues,
   ValidatorRegistrationResponse,
-} from './types.js';
+} from './types';
 
 export const fetchValidatorRegistrations = async (
   baseUrl: string,

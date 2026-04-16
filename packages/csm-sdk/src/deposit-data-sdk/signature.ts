@@ -15,9 +15,9 @@
 import { ByteVectorType, ContainerType, UintBigintType } from '@chainsafe/ssz';
 import bls from 'bls-eth-wasm';
 import { hexToBytes, toHex, type Hex } from 'viem';
-import { SUPPORTED_CHAINS } from '../common/index.js';
-import { DepositData } from './types.js';
-import { DOMAIN_DEPOSIT, FIXED_FORK_VERSION } from './constants.js';
+import { SUPPORTED_CHAINS } from '../common/index';
+import { DepositData } from './types';
+import { DOMAIN_DEPOSIT, FIXED_FORK_VERSION } from './constants';
 
 /**
  * SSZ Types following Ethereum consensus spec

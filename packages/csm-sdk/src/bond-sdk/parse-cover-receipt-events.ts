@@ -1,7 +1,7 @@
 import { decodeEventLog, getAbiItem, Hex, toEventHash } from 'viem';
-import { AccountingAbi } from '../abi/Accounting.js';
-import { ERROR_CODE, SDKError } from '../common/index.js';
-import { ReceiptLike } from '../tx-sdk/types.js';
+import { AccountingAbi } from '../abi/Accounting';
+import { ERROR_CODE, SDKError } from '../common/index';
+import { ReceiptLike } from '../tx-sdk/types';
 
 const BOND_LOCK_CHANGED_EVENT = getAbiItem({
   abi: AccountingAbi,

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BusRegistry } from '../../src/common/class-primitives/bus-registry.js';
+import { BusRegistry } from '../../src/common/class-primitives/bus-registry';
 
 type TestModules = {
   foo: { value: number };

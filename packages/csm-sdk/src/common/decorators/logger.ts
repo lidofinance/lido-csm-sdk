@@ -1,5 +1,5 @@
-import { callConsoleMessage } from './utils.js';
-import { type HeadMessage } from './types.js';
+import { callConsoleMessage } from './utils';
+import { type HeadMessage } from './types';
 
 export const Logger = function (headMessage: HeadMessage = 'LOG:') {
   return function LoggerDecorator<This, Value>(

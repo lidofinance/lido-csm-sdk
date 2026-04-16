@@ -1,16 +1,13 @@
-import { CoreSDK } from '../../core-sdk/core-sdk.js';
-import { ACCESS } from '../decorators/access.js';
-import type {
-  MethodAccess,
-  PublicMethods,
-} from '../decorators/access-types.js';
+import { CoreSDK } from '../../core-sdk/core-sdk';
+import { ACCESS } from '../decorators/access';
+import type { MethodAccess, PublicMethods } from '../decorators/access-types';
 import {
   resolveAccess,
   type CanPerformContext,
   type CanPerformResult,
-} from '../utils/can-perform.js';
-import { BusRegistry, BusWithModules } from './bus-registry.js';
-import { CsmSDKCacheable } from './csm-sdk-cacheable.js';
+} from '../utils/can-perform';
+import { BusRegistry, BusWithModules } from './bus-registry';
+import { CsmSDKCacheable } from './csm-sdk-cacheable';
 
 export type CsmSDKProps = {
   core: CoreSDK;

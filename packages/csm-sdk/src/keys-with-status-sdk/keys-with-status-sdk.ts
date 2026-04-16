@@ -1,23 +1,23 @@
 import { Hex, isAddressEqual } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_MID,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
   MODULE_NAME,
-} from '../common/index.js';
-import { NodeOperatorId } from '../common/types.js';
-import { fetchJson, isNotUnique, isUnique } from '../common/utils/index.js';
-import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { FrameSDK } from '../frame-sdk/frame-sdk.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
-import { getClUrls } from './cl-chunks.js';
-import { computeStatuses } from './compute-statuses.js';
-import { ClPreparedKey, parseClResponse } from './parse-cl-response.js';
-import { resolveEffectiveBalance } from './resolve-effective-balance.js';
-import { FindKeysResponse, KeyWithStatus } from './types.js';
+} from '../common/index';
+import { NodeOperatorId } from '../common/types';
+import { fetchJson, isNotUnique, isUnique } from '../common/utils/index';
+import { EventsSDK } from '../events-sdk/events-sdk';
+import { FrameSDK } from '../frame-sdk/frame-sdk';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { StrikesSDK } from '../strikes-sdk/strikes-sdk';
+import { getClUrls } from './cl-chunks';
+import { computeStatuses } from './compute-statuses';
+import { ClPreparedKey, parseClResponse } from './parse-cl-response';
+import { resolveEffectiveBalance } from './resolve-effective-balance';
+import { FindKeysResponse, KeyWithStatus } from './types';
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;

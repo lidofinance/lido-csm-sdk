@@ -18,8 +18,8 @@
     "forceConsistentCasingInFileNames": true,
 
     // Language and environment
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
     "target": "ES2022", // ES2022: class fields, Error.cause, top-level await. SDK requires Node >=24.
     "lib": [
       "ES2023", // We are using some ES2023 features like `Array.prototype.at`.

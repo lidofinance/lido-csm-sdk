@@ -1,11 +1,11 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { Hex } from 'viem';
-import { NodeOperatorId, Proof } from '../common/types.js';
+import { NodeOperatorId, Proof } from '../common/types';
 import {
   filterLeafs,
   findIndexAndLeaf,
-} from '../common/utils/find-index-and-leaf.js';
-import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
+} from '../common/utils/find-index-and-leaf';
+import { KeyWithStrikes, StrikesTreeLeaf } from './types';
 
 export const findProof = (
   tree: StandardMerkleTree<StrikesTreeLeaf>,

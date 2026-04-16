@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { parseTree, verifyRoot } from '../../../src/common/utils/fetch-tree.js';
+import { parseTree, verifyRoot } from '../../../src/common/utils/fetch-tree';
 
 const values: [string][] = [
   ['0x000000000000000000000000000000000000000a'],

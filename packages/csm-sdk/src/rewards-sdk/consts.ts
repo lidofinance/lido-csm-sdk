@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { MODULE_NAME, PerModule, PerSupportedChain } from '../common/index.js';
+import { MODULE_NAME, PerModule, PerSupportedChain } from '../common/index';
 
 export const REPORT_V1_LOG_CIDS: Partial<
   PerModule<PerSupportedChain<string[]>>

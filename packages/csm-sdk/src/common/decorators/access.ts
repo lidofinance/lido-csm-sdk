@@ -1,4 +1,4 @@
-import type { MethodAccess } from './access-types.js';
+import type { MethodAccess } from './access-types';
 
 export const ACCESS = Symbol('access');
 

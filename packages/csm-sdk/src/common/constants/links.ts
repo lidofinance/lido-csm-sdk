@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { PerSupportedChain } from './supported-chains.js';
+import { PerSupportedChain } from './supported-chains';
 
 export enum LINK_TYPE {
   icsTree = 'icsTree',

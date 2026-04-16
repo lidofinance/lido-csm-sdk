@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import {
   fetchWithFallback,
   fetchOneOf,
-} from '../../../src/common/utils/fetch-json.js';
+} from '../../../src/common/utils/fetch-json';
 
 describe('fetchWithFallback', () => {
   it('returns result from first successful fetch', async () => {

@@ -4,9 +4,9 @@ import {
   NodeOperatorShortInfo,
   RewardProof,
   ROLES,
-} from '../common/index.js';
-import { FeeSplit } from '../operator-sdk/types.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
+} from '../common/index';
+import { FeeSplit } from '../operator-sdk/types';
+import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type ChangeRoleProps = CommonTransactionProps<NodeOperatorShortInfo> & {
   nodeOperatorId: NodeOperatorId;

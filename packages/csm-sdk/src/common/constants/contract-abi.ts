@@ -19,8 +19,8 @@ import {
   VerifierAbi,
   VettedGateAbi,
   WithdrawalVaultAbi,
-} from '../../abi/index.js';
-import { CONTRACT_NAMES } from './contract-names.js';
+} from '../../abi/index';
+import { CONTRACT_NAMES } from './contract-names';
 
 export const CONTRACT_BASE_ABI = {
   [CONTRACT_NAMES.stakingRouter]: StakingRouterAbi,

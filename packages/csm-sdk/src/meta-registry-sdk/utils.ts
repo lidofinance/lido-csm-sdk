@@ -4,7 +4,7 @@ import {
   DecodedExternalOperator,
   ExternalOperatorNOR,
   RawExternalOperator,
-} from './types.js';
+} from './types';
 
 const NOR_TYPE = 0;
 const NOR_ENTRY_LEN = 10; // 1 + 1 + 8 bytes

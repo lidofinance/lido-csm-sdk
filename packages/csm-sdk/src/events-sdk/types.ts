@@ -1,5 +1,5 @@
 import { BlockNumber, BlockTag, Hex } from 'viem';
-import { NodeOperatorId } from '../common/index.js';
+import { NodeOperatorId } from '../common/index';
 
 // Events Props
 

@@ -1,7 +1,7 @@
-import { ERROR_CODE, SDKError } from '../common/index.js';
-import { NodeOperatorId } from '../common/types.js';
-import { isRewardsReportV1, isRewardsReportV2 } from './parse-report.js';
-import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types.js';
+import { ERROR_CODE, SDKError } from '../common/index';
+import { NodeOperatorId } from '../common/types';
+import { isRewardsReportV1, isRewardsReportV2 } from './parse-report';
+import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types';
 
 const DEFAULT_REWARD_SHARE = 1;
 

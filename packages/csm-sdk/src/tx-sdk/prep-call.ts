@@ -6,7 +6,7 @@ import {
   type ContractFunctionArgs,
   type ContractFunctionName,
 } from 'viem';
-import { CallResult } from './types.js';
+import { CallResult } from './types';
 
 /**
  * Contract-like object with address and ABI

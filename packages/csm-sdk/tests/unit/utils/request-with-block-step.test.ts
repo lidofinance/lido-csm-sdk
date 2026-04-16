@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { requestWithBlockStep } from '../../../src/common/utils/request-with-block-step.js';
+import { requestWithBlockStep } from '../../../src/common/utils/request-with-block-step';
 
 describe('requestWithBlockStep', () => {
   it('splits range into chunks of step size', () => {

@@ -1,7 +1,7 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { Address, isAddressEqual } from 'viem';
-import { Proof } from '../types.js';
-import { findIndexAndLeaf } from './find-index-and-leaf.js';
+import { Proof } from '../types';
+import { findIndexAndLeaf } from './find-index-and-leaf';
 
 export type AddressTreeLeaf = [Address];
 

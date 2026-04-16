@@ -4,7 +4,7 @@ import {
   trimHexPrefix,
   toHexString,
   normalizeTrimHex,
-} from '../../../src/common/utils/is-hexadecimal-string.js';
+} from '../../../src/common/utils/is-hexadecimal-string';
 
 describe('isHexadecimalString', () => {
   it('returns true for valid hex without prefix', () => {

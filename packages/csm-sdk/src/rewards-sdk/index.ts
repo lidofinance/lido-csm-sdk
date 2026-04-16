@@ -1,2 +1,2 @@
-export * from './rewards-sdk.js';
-export * from './types.js';
+export * from './rewards-sdk';
+export * from './types';

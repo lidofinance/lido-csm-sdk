@@ -1,19 +1,19 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger, Cache } from '../common/decorators/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { ErrorHandler, Logger, Cache } from '../common/decorators/index';
 import {
   CACHE_IMMUTABLE,
   CACHE_LONG,
   CACHE_SHORT,
   CONTRACT_NAMES,
-} from '../common/index.js';
-import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types.js';
+} from '../common/index';
+import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types';
 import {
   getFrameDuration,
   getSlotsPerFrame,
   slotToEpoch,
   slotToTimestamp,
   timestampToSlot,
-} from './utils.js';
+} from './utils';
 
 export class FrameSDK extends CsmSDKModule {
   private get oracleContract() {

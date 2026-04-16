@@ -1,6 +1,6 @@
-import { CsmSDKCacheable } from '../class-primitives/csm-sdk-cacheable.js';
-import { isBigint } from '../utils/index.js';
-import { callConsoleMessage } from './utils.js';
+import { CsmSDKCacheable } from '../class-primitives/csm-sdk-cacheable';
+import { isBigint } from '../utils/index';
+import { callConsoleMessage } from './utils';
 
 const serializeArgs = (args: any[]) =>
   args

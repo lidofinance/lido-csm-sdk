@@ -1,6 +1,6 @@
-import { toHexString } from '../common/utils/is-hexadecimal-string.js';
-import { DepositData, ParseResult, RemoveKeyResult } from './types.js';
-import { MAX_JSON_LENGTH } from './constants.js';
+import { toHexString } from '../common/utils/is-hexadecimal-string';
+import { DepositData, ParseResult, RemoveKeyResult } from './types';
+import { MAX_JSON_LENGTH } from './constants';
 
 /**
  * Normalizes hex values in JSON by removing '0x' prefixes

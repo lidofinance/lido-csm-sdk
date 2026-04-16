@@ -1,19 +1,19 @@
 import { describe, it, expect } from 'vitest';
 import type { Address } from 'viem';
-import { ROLES } from '../../../src/common/constants/roles.js';
+import { ROLES } from '../../../src/common/constants/roles';
 import {
   packRoles,
   mergeRoles,
   isNotEmptyRoles,
-} from '../../../src/events-sdk/merge.js';
+} from '../../../src/events-sdk/merge';
 import {
   reconstructOperators,
   type NodeOperatorLog,
-} from '../../../src/events-sdk/reconstruct-operators.js';
+} from '../../../src/events-sdk/reconstruct-operators';
 import {
   reconstructInvites,
   type ChangeAddressLog,
-} from '../../../src/events-sdk/reconstruct-invites.js';
+} from '../../../src/events-sdk/reconstruct-invites';
 
 const ADDR_A = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' as Address;
 const ADDR_B = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' as Address;

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import type { Hex } from 'viem';
-import { KEY_STATUS } from '../../../src/common/constants/keys.js';
-import { computeStatuses } from '../../../src/keys-with-status-sdk/compute-statuses.js';
-import type { ClPreparedKey } from '../../../src/keys-with-status-sdk/parse-cl-response.js';
-import type { StatusContext } from '../../../src/keys-with-status-sdk/compute-statuses.js';
+import { KEY_STATUS } from '../../../src/common/constants/keys';
+import { computeStatuses } from '../../../src/keys-with-status-sdk/compute-statuses';
+import type { ClPreparedKey } from '../../../src/keys-with-status-sdk/parse-cl-response';
+import type { StatusContext } from '../../../src/keys-with-status-sdk/compute-statuses';
 
 const PUBKEY = '0xaabbccdd' as Hex;
 

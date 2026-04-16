@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { BaseError, encodeErrorResult, Hex } from 'viem';
-import { AccountingAbi } from '../../src/abi/Accounting.js';
-import { decodeRevertData } from '../../src/common/utils/decode-revert-data.js';
-import { SDKError } from '../../src/common/utils/sdk-error.js';
+import { AccountingAbi } from '../../src/abi/Accounting';
+import { decodeRevertData } from '../../src/common/utils/decode-revert-data';
+import { SDKError } from '../../src/common/utils/sdk-error';
 
 const encodeKnownError = (name: string, args?: unknown[]): Hex =>
   encodeErrorResult({

@@ -2,9 +2,9 @@ import {
   AccountingSDK,
   convertSharesToEth,
   StethPoolData,
-} from '../accounting-sdk/index.js';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+} from '../accounting-sdk/index';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_LONG,
   CACHE_MID,
@@ -12,7 +12,7 @@ import {
   NodeOperatorId,
   PERCENT_BASIS,
   RewardProof,
-} from '../common/index.js';
+} from '../common/index';
 import {
   bigIntRange,
   fetchOneOf,
@@ -20,25 +20,25 @@ import {
   isDefined,
   isUnique,
   sortRewardsByRefSlot,
-} from '../common/utils/index.js';
-import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { FrameSDK } from '../frame-sdk/frame-sdk.js';
-import { epochToTimestamp } from '../frame-sdk/utils.js';
-import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { ParametersSDK } from '../parameters-sdk/index.js';
-import { REPORT_V1_LOG_CIDS } from './consts.js';
-import { findOperatorRewards } from './find-operator-rewards.js';
-import { findProofAndAmount } from './find-proof.js';
-import { getValidatorsRewards } from './get-validators-rewards.js';
-import { parseReport } from './parse-report.js';
-import { parseRewardsTree } from './parse-rewards-tree.js';
+} from '../common/utils/index';
+import { EventsSDK } from '../events-sdk/events-sdk';
+import { FrameSDK } from '../frame-sdk/frame-sdk';
+import { epochToTimestamp } from '../frame-sdk/utils';
+import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { ParametersSDK } from '../parameters-sdk/index';
+import { REPORT_V1_LOG_CIDS } from './consts';
+import { findOperatorRewards } from './find-operator-rewards';
+import { findProofAndAmount } from './find-proof';
+import { getValidatorsRewards } from './get-validators-rewards';
+import { parseReport } from './parse-report';
+import { parseRewardsTree } from './parse-rewards-tree';
 import {
   OperatorRewards,
   OperatorRewardsHistory,
   ReportTimestamps,
   RewardsReport,
-} from './types.js';
+} from './types';
 
 export class RewardsSDK extends CsmSDKModule<{
   accounting: AccountingSDK;

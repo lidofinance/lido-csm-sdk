@@ -1,17 +1,17 @@
 import { Hex } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Logger } from '../common/decorators/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Logger } from '../common/decorators/index';
 import {
   normalizeTrimHex,
   toHexString,
-} from '../common/utils/is-hexadecimal-string.js';
+} from '../common/utils/is-hexadecimal-string';
 import {
   cleanExpiredKeys,
   getFromLocalStorage,
   isKeyExpired,
   saveToLocalStorage,
-} from './storage.js';
-import { KeysRecord } from './types.js';
+} from './storage';
+import { KeysRecord } from './types';
 
 export class KeysCacheSDK extends CsmSDKModule {
   private get storageKey() {

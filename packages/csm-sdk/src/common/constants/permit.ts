@@ -1,5 +1,5 @@
 import { zeroHash } from 'viem';
-import { PermitSignatureShort } from '../types.js';
+import { PermitSignatureShort } from '../types';
 
 export const EMPTY_PERMIT: PermitSignatureShort = {
   value: 0n,

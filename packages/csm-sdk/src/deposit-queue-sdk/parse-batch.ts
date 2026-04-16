@@ -1,4 +1,4 @@
-import { RawDepositQueueBatch } from './types.js';
+import { RawDepositQueueBatch } from './types';
 
 export const parseBatch = (rawBatch: bigint): RawDepositQueueBatch => {
   const nextBatchIndex =

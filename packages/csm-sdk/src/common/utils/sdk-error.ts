@@ -1,4 +1,4 @@
-import { decodeRevertData } from './decode-revert-data.js';
+import { decodeRevertData } from './decode-revert-data';
 
 export enum ERROR_CODE {
   INVALID_ARGUMENT = 'INVALID_ARGUMENT',

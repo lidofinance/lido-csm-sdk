@@ -1,11 +1,11 @@
 import { Address } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index.js';
-import { calculateShareLimit } from './calculate-share-limit.js';
-import { findModuleDigest } from './find-module-digest.js';
-import { findUsedOtherModule } from './find-used-other-module.js';
-import { CsmStatus, ModuleDigest, ShareLimitInfo } from './types.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
+import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index';
+import { calculateShareLimit } from './calculate-share-limit';
+import { findModuleDigest } from './find-module-digest';
+import { findUsedOtherModule } from './find-used-other-module';
+import { CsmStatus, ModuleDigest, ShareLimitInfo } from './types';
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {

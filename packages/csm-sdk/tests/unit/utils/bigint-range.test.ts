@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { bigIntRange } from '../../../src/common/utils/bigint-range.js';
+import { bigIntRange } from '../../../src/common/utils/bigint-range';
 
 describe('bigIntRange', () => {
   it('yields 0n to count-1n', () => {

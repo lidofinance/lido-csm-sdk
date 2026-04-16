@@ -7,7 +7,7 @@ import type {
   WaitForTransactionReceiptParameters,
   WalletCallReceipt,
 } from 'viem';
-import { Erc20Tokens, PermitSignatureShort } from '../common/index.js';
+import { Erc20Tokens, PermitSignatureShort } from '../common/index';
 
 // Core Transaction Props
 

@@ -1,2 +1,2 @@
-export * from './curated-gate-sdk.js';
-export * from './types.js';
+export * from './curated-gate-sdk';
+export * from './types';

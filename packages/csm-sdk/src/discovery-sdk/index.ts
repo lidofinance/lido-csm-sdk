@@ -1,3 +1,3 @@
-export * from './discovery-sdk.js';
-export * from './types.js';
-export * from './iterate-pages.js';
+export * from './discovery-sdk';
+export * from './types';
+export * from './iterate-pages';

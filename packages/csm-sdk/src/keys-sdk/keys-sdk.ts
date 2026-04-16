@@ -1,11 +1,11 @@
 import { zeroAddress } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
+} from '../common/decorators/index';
 import {
   CONTRACT_NAMES,
   EJECT_FEE_MIN_LIMIT,
@@ -14,14 +14,10 @@ import {
   SDKError,
   TOKENS,
   WithToken,
-} from '../common/index.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { parseAddKeysProps } from './parse-add-keys-props.js';
-import {
-  AddKeysProps,
-  EjectKeysByArrayProps,
-  RemoveKeysProps,
-} from './types.js';
+} from '../common/index';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { parseAddKeysProps } from './parse-add-keys-props';
+import { AddKeysProps, EjectKeysByArrayProps, RemoveKeysProps } from './types';
 
 export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get moduleContract() {

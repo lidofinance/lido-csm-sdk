@@ -1,5 +1,5 @@
 import { Hex } from 'viem';
-import { SUPPORTED_CHAINS } from '../common/index.js';
+import { SUPPORTED_CHAINS } from '../common/index';
 
 export type DepositDataCommon = {
   pubkey: Hex;

@@ -1,4 +1,4 @@
-import { ERROR_CODE, invariant } from '../utils/sdk-error.js';
+import { ERROR_CODE, invariant } from '../utils/sdk-error';
 
 export type BusWithModules<
   TModules extends object = object,

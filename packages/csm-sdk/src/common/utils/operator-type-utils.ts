@@ -2,7 +2,7 @@ import {
   MODULE_NAME,
   OPERATOR_TYPE_CURVE_ID,
   OPERATOR_TYPE,
-} from '../constants/index.js';
+} from '../constants/index';
 
 export const getCurveIdByOperatorType = (
   operatorType: OPERATOR_TYPE,

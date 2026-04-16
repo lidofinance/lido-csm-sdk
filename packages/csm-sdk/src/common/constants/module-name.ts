@@ -1,4 +1,4 @@
-import { CONTRACT_NAMES } from './contract-names.js';
+import { CONTRACT_NAMES } from './contract-names';
 
 export enum MODULE_NAME {
   CSM = 'CSM',

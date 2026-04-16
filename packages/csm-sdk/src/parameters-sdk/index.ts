@@ -1,3 +1,3 @@
-export * from './parameters-sdk.js';
-export * from './types.js';
-export * from './find-key-interval.js';
+export * from './parameters-sdk';
+export * from './types';
+export * from './find-key-interval';

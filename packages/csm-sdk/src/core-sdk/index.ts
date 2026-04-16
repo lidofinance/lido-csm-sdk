@@ -1,3 +1,3 @@
-export * from './core-sdk.js';
-export * from './types.js';
-export * from './prepare-core-props.js';
+export * from './core-sdk';
+export * from './types';
+export * from './prepare-core-props';

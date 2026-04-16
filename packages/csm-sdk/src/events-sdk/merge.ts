@@ -1,5 +1,5 @@
-import { ROLES } from '../common/index.js';
-import { NodeOperator, NodeOperatorId } from '../common/types.js';
+import { ROLES } from '../common/index';
+import { NodeOperator, NodeOperatorId } from '../common/types';
 
 const ALL_ROLES = [ROLES.REWARDS, ROLES.MANAGER];
 

@@ -1,6 +1,6 @@
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import type { Abi, Address, GetContractReturnType, WalletClient } from 'viem';
-import { CONTRACT_NAMES, MODULE_NAME } from '../common/index.js';
+import { CONTRACT_NAMES, MODULE_NAME } from '../common/index';
 
 export type ContractAddresses = {
   [contract in CONTRACT_NAMES]?: Address;

@@ -1,10 +1,10 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
+} from '../common/decorators/index';
 import {
   CONTRACT_NAMES,
   ERROR_CODE,
@@ -12,10 +12,10 @@ import {
   SDKError,
   TOKENS,
   WithToken,
-} from '../common/index.js';
-import { parseClaimProps } from '../common/utils/parse-claim-props.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { parseCoverReceiptEvents } from './parse-cover-receipt-events.js';
+} from '../common/index';
+import { parseClaimProps } from '../common/utils/parse-claim-props';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { parseCoverReceiptEvents } from './parse-cover-receipt-events';
 import {
   AddBondProps,
   AddBondResult,
@@ -23,7 +23,7 @@ import {
   CompensateLockedBondProps,
   PullRewardsProps,
   UnlockExpiredLockProps,
-} from './types.js';
+} from './types';
 
 export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get accountingContract() {

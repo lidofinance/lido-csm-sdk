@@ -1,6 +1,6 @@
 import { JSONParse } from 'json-with-bigint';
 import z from 'zod';
-import { createMerkleTreeSchema } from '../common/utils/index.js';
+import { createMerkleTreeSchema } from '../common/utils/index';
 
 const RewardsLeaf = z.tuple([z.coerce.bigint(), z.coerce.bigint()]);
 

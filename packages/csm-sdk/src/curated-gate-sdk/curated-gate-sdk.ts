@@ -1,36 +1,36 @@
 import { Address } from 'viem';
-import { CuratedGateAbi } from '../abi/CuratedGate.js';
+import { CuratedGateAbi } from '../abi/CuratedGate';
 import {
   CsmSDKModule,
   CsmSDKProps,
-} from '../common/class-primitives/csm-sdk-module.js';
+} from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
   Cache,
   ErrorHandler,
   Logger,
-} from '../common/decorators/index.js';
+} from '../common/decorators/index';
 import {
   CACHE_LONG,
   CURATED_GATES,
   NodeOperatorShortInfo,
   Proof,
-} from '../common/index.js';
-import { findAddressProof } from '../common/utils/find-address-proof.js';
+} from '../common/index';
+import { findAddressProof } from '../common/utils/find-address-proof';
 import {
   fetchTree,
   isDefined,
   onError,
   parseNodeOperatorAddedEvents,
-} from '../common/utils/index.js';
-import { BindedContract } from '../core-sdk/types.js';
-import type { AddressesTreeLeaf, AddressProof } from '../ics-gate-sdk/types.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { ReceiptLike } from '../tx-sdk/types.js';
-import { parseCreateOperatorProps } from './parse-create-operator-props.js';
-import { CreateNodeOperatorProps, GateEligibility } from './types.js';
+} from '../common/utils/index';
+import { BindedContract } from '../core-sdk/types';
+import type { AddressesTreeLeaf, AddressProof } from '../ics-gate-sdk/types';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { ReceiptLike } from '../tx-sdk/types';
+import { parseCreateOperatorProps } from './parse-create-operator-props';
+import { CreateNodeOperatorProps, GateEligibility } from './types';
 
 export class CuratedGateSDK extends CsmSDKModule<{
   tx: TxSDK;
