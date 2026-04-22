@@ -39,8 +39,8 @@ export enum CONTRACT_NAMES {
 }
 
 export const CURATED_GATES = [
-  CONTRACT_NAMES.curatedGatePTO,
   CONTRACT_NAMES.curatedGatePO,
+  CONTRACT_NAMES.curatedGatePTO,
   CONTRACT_NAMES.curatedGatePGO,
   CONTRACT_NAMES.curatedGateDO,
   CONTRACT_NAMES.curatedGateMODC,
