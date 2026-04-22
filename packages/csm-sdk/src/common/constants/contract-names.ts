@@ -35,6 +35,7 @@ export enum CONTRACT_NAMES {
   curatedGateDO = 'curatedGateDO',
   curatedGateMODC = 'curatedGateMODC',
   curatedGateIODC = 'curatedGateIODC',
+  curatedGateIODCP = 'curatedGateIODCP',
 }
 
 export const CURATED_GATES = [
@@ -44,6 +45,7 @@ export const CURATED_GATES = [
   CONTRACT_NAMES.curatedGateDO,
   CONTRACT_NAMES.curatedGateMODC,
   CONTRACT_NAMES.curatedGateIODC,
+  CONTRACT_NAMES.curatedGateIODCP,
 ] as const;
 
 export type CURATED_GATES = (typeof CURATED_GATES)[number];

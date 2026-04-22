@@ -78,7 +78,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.csModule]: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
         [CONTRACT_NAMES.accounting]:
           '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
-        [CONTRACT_NAMES.ejector]: '0x777bd76326E4aDcD353b03AD45b33BAF41048476',
+        [CONTRACT_NAMES.ejector]: '0xCAe028378d69D54dc8bF809e6C44CF751F997b80',
         [CONTRACT_NAMES.exitPenalties]:
           '0xD259b31083Be841E5C85b2D481Cfc17C14276800',
         [CONTRACT_NAMES.feeDistributor]:
@@ -89,11 +89,11 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
           '0xA4aD5236963f9Fe4229864712269D8d79B65C5Ad',
         [CONTRACT_NAMES.validatorStrikes]:
           '0x8fBA385C3c334D251eE413e79d4D3890db98693c',
-        [CONTRACT_NAMES.verifier]: '0x1773b2Ff99A030F6000554Cb8A5Ec93145650cbA',
+        [CONTRACT_NAMES.verifier]: '0xC96406b0eADdAC5708aFCa04DcCA67BAdC9642Fd',
         [CONTRACT_NAMES.hashConsensus]:
           '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
         [CONTRACT_NAMES.permissionlessGate]:
-          '0x5553077102322689876A6AdFd48D75014c28acfb',
+          '0xd7bD8D2A9888D1414c770B35ACF55890B15de26a',
         [CONTRACT_NAMES.vettedGate]:
           '0x10a254E724fe2b7f305F76f3F116a3969c53845f',
       },
@@ -108,9 +108,44 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
       moduleId: 4n,
     },
     [CHAINS.Hoodi]: {
-      contractAddresses: {},
+      contractAddresses: {
+        [CONTRACT_NAMES.curatedModule]:
+          '0x87EB69Ae51317405FD285efD2326a4a11f6173b9',
+        [CONTRACT_NAMES.accounting]:
+          '0x7f7356D29aCd915F1934220956c3305808ceB235',
+        [CONTRACT_NAMES.ejector]: '0xfDbde2B3554B69C84e0f8d7daB68D390Ff0f4394',
+        [CONTRACT_NAMES.exitPenalties]:
+          '0xad79e1d3B380cEb1a0e188fBAB91f85A446E9E54',
+        [CONTRACT_NAMES.feeDistributor]:
+          '0x0ced6de191E2A15f7BBAf9E32307626C9f6BD0Cd',
+        [CONTRACT_NAMES.feeOracle]:
+          '0x5D2F27000C80f6f7A03015Fd49dB7FEba3fBfa83',
+        [CONTRACT_NAMES.parametersRegistry]:
+          '0xefb8e4091A75C4828826bf64595F392f87A07b37',
+        [CONTRACT_NAMES.validatorStrikes]:
+          '0x4c427Ec826F403339719C0FABfb3209e80939eA6',
+        [CONTRACT_NAMES.verifier]: '0x209190Ebc2Be80367a15d05e626784Eb94d6A880',
+        [CONTRACT_NAMES.hashConsensus]:
+          '0x920883908A78c1554f682006a8aB32E62Be09F33',
+        [CONTRACT_NAMES.metaRegistry]:
+          '0x857289cCBFBc4C134Cc312022a104CD9b38d8AAE',
+        [CONTRACT_NAMES.curatedGatePO]:
+          '0xF1862d120831eBE31f7202378Ff3Ae63A5658ae3',
+        [CONTRACT_NAMES.curatedGatePTO]:
+          '0x410A309dF81B782190188CDB3d215729cc6bC1f3',
+        [CONTRACT_NAMES.curatedGatePGO]:
+          '0xa5A604b172787e017b1b118F02fE54fC1D696519',
+        [CONTRACT_NAMES.curatedGateDO]:
+          '0xE966874cDB6A4282ED75Cd10439e3799e5531a2D',
+        [CONTRACT_NAMES.curatedGateMODC]:
+          '0x5c063da03e3f21443716D75a2205EE16706e1153',
+        [CONTRACT_NAMES.curatedGateIODC]:
+          '0x1cD655Ac53CfE8269DE0DBfc0140B074623C4A6B',
+        [CONTRACT_NAMES.curatedGateIODCP]:
+          '0x28518be9894C20135F280a9539617783b08a04c7',
+      },
       moduleId: 5n,
-      deploymentBlockNumber: BigInt('0x249F00'), // TODO: update with actual deployment block number
+      deploymentBlockNumber: BigInt('0x28a0f0'),
     },
   },
 };
