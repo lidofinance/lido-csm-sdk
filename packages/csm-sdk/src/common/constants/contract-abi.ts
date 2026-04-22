@@ -49,4 +49,5 @@ export const CONTRACT_BASE_ABI = {
   [CONTRACT_NAMES.curatedGateDO]: CuratedGateAbi,
   [CONTRACT_NAMES.curatedGateMODC]: CuratedGateAbi,
   [CONTRACT_NAMES.curatedGateIODC]: CuratedGateAbi,
+  [CONTRACT_NAMES.curatedGateIODCP]: CuratedGateAbi,
 } as const;
