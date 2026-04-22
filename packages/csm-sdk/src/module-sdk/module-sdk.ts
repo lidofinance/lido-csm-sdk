@@ -100,14 +100,6 @@ export class ModuleSDK extends CsmSDKModule {
     return calculateShareLimit(digests, this.core.moduleId);
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getBalance(): Promise<bigint> {
-    return this.stakingRouterContract.read.getStakingModuleBalance([
-      this.core.moduleId,
-    ]);
-  }
-
   @Logger('API:')
   @ErrorHandler()
   @Cache(CACHE_MID)

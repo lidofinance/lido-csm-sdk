@@ -1,5 +1,36 @@
 export const StakingRouterAbi = [
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_depositContract',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_lido',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_lidoLocator',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxEBType1',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxEBType2',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
     inputs: [],
     name: 'AccessControlBadConfirmation',
     type: 'error',
@@ -37,11 +68,6 @@ export const StakingRouterAbi = [
   },
   {
     inputs: [],
-    name: 'CannotDeposit',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'DirectETHTransfer',
     type: 'error',
   },
@@ -53,6 +79,11 @@ export const StakingRouterAbi = [
   {
     inputs: [],
     name: 'ExitedValidatorsCountCannotDecrease',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'InconsistentFeeSum',
     type: 'error',
   },
   {
@@ -103,11 +134,6 @@ export const StakingRouterAbi = [
   },
   {
     inputs: [],
-    name: 'InvalidTopUpPubkeyLength',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'ModuleReturnExceedTarget',
     type: 'error',
   },
@@ -119,6 +145,11 @@ export const StakingRouterAbi = [
   {
     inputs: [],
     name: 'NotInitializing',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'OracleExtraDataNotSubmitted',
     type: 'error',
   },
   {
@@ -140,6 +171,11 @@ export const StakingRouterAbi = [
   {
     inputs: [],
     name: 'StakingModuleAddressExists',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'StakingModuleNotActive',
     type: 'error',
   },
   {
@@ -195,8 +231,29 @@ export const StakingRouterAbi = [
     type: 'error',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'expectedId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'actualId',
+        type: 'uint256',
+      },
+    ],
+    name: 'UnexpectedModuleId',
+    type: 'error',
+  },
+  {
     inputs: [],
     name: 'UnrecoverableModuleError',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'WrongPubkeyLength',
     type: 'error',
   },
   {
@@ -212,6 +269,11 @@ export const StakingRouterAbi = [
   {
     inputs: [],
     name: 'ZeroArgument',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'ZeroDeposits',
     type: 'error',
   },
   {
@@ -624,19 +686,6 @@ export const StakingRouterAbi = [
   },
   {
     inputs: [],
-    name: 'ACCOUNTING_REPORT_ROLE',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'DEFAULT_ADMIN_ROLE',
     outputs: [
       {
@@ -845,6 +894,19 @@ export const StakingRouterAbi = [
   },
   {
     inputs: [],
+    name: 'STAKING_MODULE_SHARE_MANAGE_ROLE',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'STAKING_MODULE_UNVETTING_ROLE',
     outputs: [
       {
@@ -1003,13 +1065,7 @@ export const StakingRouterAbi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_admin',
-        type: 'address',
-      },
-    ],
+    inputs: [],
     name: 'finalizeUpgrade_v4',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -1181,6 +1237,11 @@ export const StakingRouterAbi = [
                 name: 'withdrawalCredentialsType',
                 type: 'uint8',
               },
+              {
+                internalType: 'uint64',
+                name: 'validatorsBalanceGwei',
+                type: 'uint64',
+              },
             ],
             internalType: 'struct StakingModule',
             name: 'state',
@@ -1237,18 +1298,47 @@ export const StakingRouterAbi = [
         name: '_depositAmount',
         type: 'uint256',
       },
+      {
+        internalType: 'bool',
+        name: '_isTopUp',
+        type: 'bool',
+      },
     ],
-    name: 'getDepositsAllocation',
+    name: 'getDepositAllocations',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'allocated',
+        name: 'totalAllocated',
         type: 'uint256',
       },
       {
         internalType: 'uint256[]',
-        name: 'allocations',
+        name: 'allocated',
         type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'newAllocations',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'moduleId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getModuleValidatorsBalance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1695,6 +1785,11 @@ export const StakingRouterAbi = [
             name: 'withdrawalCredentialsType',
             type: 'uint8',
           },
+          {
+            internalType: 'uint64',
+            name: 'validatorsBalanceGwei',
+            type: 'uint64',
+          },
         ],
         internalType: 'struct StakingModule',
         name: '',
@@ -1717,25 +1812,6 @@ export const StakingRouterAbi = [
       {
         internalType: 'uint256',
         name: 'activeValidatorsCount',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'moduleId',
-        type: 'uint256',
-      },
-    ],
-    name: 'getStakingModuleBalance',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
         type: 'uint256',
       },
     ],
@@ -1835,6 +1911,11 @@ export const StakingRouterAbi = [
                 internalType: 'uint8',
                 name: 'withdrawalCredentialsType',
                 type: 'uint8',
+              },
+              {
+                internalType: 'uint64',
+                name: 'validatorsBalanceGwei',
+                type: 'uint64',
               },
             ],
             internalType: 'struct StakingModule',
@@ -2055,11 +2136,6 @@ export const StakingRouterAbi = [
       {
         internalType: 'uint64',
         name: 'validatorsBalanceGwei',
-        type: 'uint64',
-      },
-      {
-        internalType: 'uint64',
-        name: 'pendingBalanceGwei',
         type: 'uint64',
       },
       {
@@ -2318,6 +2394,11 @@ export const StakingRouterAbi = [
             name: 'withdrawalCredentialsType',
             type: 'uint8',
           },
+          {
+            internalType: 'uint64',
+            name: 'validatorsBalanceGwei',
+            type: 'uint64',
+          },
         ],
         internalType: 'struct StakingModule[]',
         name: '',
@@ -2374,30 +2455,6 @@ export const StakingRouterAbi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_depositAmount',
-        type: 'uint256',
-      },
-    ],
-    name: 'getTopUpAllocation',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'allocated',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256[]',
-        name: 'allocations',
-        type: 'uint256[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'getTotalFeeE4Precision',
     outputs: [
@@ -2412,7 +2469,7 @@ export const StakingRouterAbi = [
   },
   {
     inputs: [],
-    name: 'getTotalStakingModulesBalance',
+    name: 'getTotalModulesValidatorsBalance',
     outputs: [
       {
         internalType: 'uint256',
@@ -2631,29 +2688,6 @@ export const StakingRouterAbi = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_stakingModuleId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bytes',
-        name: '_nodeOperatorIds',
-        type: 'bytes',
-      },
-      {
-        internalType: 'bytes',
-        name: '_totalBalancesGwei',
-        type: 'bytes',
-      },
-    ],
-    name: 'reportStakingModuleOperatorBalances',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'uint256[]',
         name: '_stakingModuleIds',
         type: 'uint256[]',
@@ -2661,11 +2695,6 @@ export const StakingRouterAbi = [
       {
         internalType: 'uint256[]',
         name: '_validatorBalancesGwei',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'uint256[]',
-        name: '_pendingBalancesGwei',
         type: 'uint256[]',
       },
     ],
@@ -2862,6 +2891,24 @@ export const StakingRouterAbi = [
     inputs: [
       {
         internalType: 'uint256[]',
+        name: '_stakingModuleFees',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_treasuryFees',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'updateAllStakingModulesFees',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
         name: '_stakingModuleIds',
         type: 'uint256[]',
       },
@@ -2879,6 +2926,29 @@ export const StakingRouterAbi = [
         type: 'uint256',
       },
     ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakingModuleId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint16',
+        name: '_stakeShareLimit',
+        type: 'uint16',
+      },
+      {
+        internalType: 'uint16',
+        name: '_priorityExitShareThreshold',
+        type: 'uint16',
+      },
+    ],
+    name: 'updateModuleShares',
+    outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -2951,6 +3021,24 @@ export const StakingRouterAbi = [
     name: 'updateTargetValidatorsLimits',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: '_stakingModuleIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_validatorBalancesGwei',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'validateReportValidatorBalancesByStakingModule',
+    outputs: [],
+    stateMutability: 'view',
     type: 'function',
   },
   {

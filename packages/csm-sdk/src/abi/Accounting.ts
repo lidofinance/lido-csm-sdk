@@ -2042,6 +2042,12 @@ export const AccountingAbi = [
         indexed: false,
         internalType: 'uint256',
       },
+      {
+        name: 'setter',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
     ],
     anonymous: false,
   },
@@ -2608,11 +2614,6 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
-    name: 'ElRewardsVaultReceiveFailed',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'FailedToSendEther',
     inputs: [],
   },
@@ -2634,11 +2635,6 @@ export const AccountingAbi = [
   {
     type: 'error',
     name: 'InvalidBondCurveValues',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'InvalidBondCurvesLength',
     inputs: [],
   },
   {

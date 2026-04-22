@@ -2666,6 +2666,19 @@ export const BaseModuleAbi = [
   },
   {
     type: 'event',
+    name: 'TotalWithdrawnValidatorsRebuilt',
+    inputs: [
+      {
+        name: 'totalWithdrawnValidators',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'ValidatorSlashingReported',
     inputs: [
       {

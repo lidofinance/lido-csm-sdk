@@ -718,11 +718,6 @@ export const ValidatorStrikesAbi = [
   },
   {
     type: 'error',
-    name: 'ZeroExitPenaltiesAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'ZeroModuleAddress',
     inputs: [],
   },
@@ -734,11 +729,6 @@ export const ValidatorStrikesAbi = [
   {
     type: 'error',
     name: 'ZeroOracleAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroParametersRegistryAddress',
     inputs: [],
   },
 ] as const;

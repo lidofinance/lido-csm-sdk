@@ -791,11 +791,6 @@ export const CuratedGateAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidCurveId',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidInitialization',
     inputs: [],
   },

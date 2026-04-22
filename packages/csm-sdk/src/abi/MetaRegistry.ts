@@ -1028,11 +1028,6 @@ export const MetaRegistryAbi = [
   },
   {
     type: 'error',
-    name: 'NodeOperatorNotInGroup',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'NotInitializing',
     inputs: [],
   },
@@ -1063,32 +1058,12 @@ export const MetaRegistryAbi = [
   },
   {
     type: 'error',
-    name: 'SenderIsNotModule',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'UnsupportedExternalOperatorType',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroAccountingAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'ZeroAdminAddress',
     inputs: [],
   },
   {
     type: 'error',
     name: 'ZeroModuleAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ZeroStakingRouterAddress',
     inputs: [],
   },
 ] as const;

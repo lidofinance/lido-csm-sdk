@@ -228,6 +228,13 @@ const CSModuleExtrasAbi = [
   },
   {
     type: 'function',
+    name: 'rebuildTotalWithdrawnValidators',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'rewindTopUpQueue',
     inputs: [
       {
@@ -401,6 +408,11 @@ const CSModuleExtrasAbi = [
   {
     type: 'error',
     name: 'UnexpectedExtraKey',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'UpgradeIsNotFinalized',
     inputs: [],
   },
   {

@@ -232,17 +232,7 @@ const CuratedModuleExtrasAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidMaxCount',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidSigningKey',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'NodeOperatorWeightsUpdateInProgress',
     inputs: [],
   },
   {

@@ -393,11 +393,6 @@ export const ExitPenaltiesAbi = [
   },
   {
     type: 'error',
-    name: 'ZeroParametersRegistryAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'ZeroStrikesAddress',
     inputs: [],
   },
