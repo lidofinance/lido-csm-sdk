@@ -34,3 +34,16 @@ export const onVersionError = (err: unknown) => {
 
   throw err;
 };
+
+export const onRevertEmptyList = <T>(err: unknown): T[] => {
+  if (err instanceof BaseError) {
+    const revertError = err.walk(
+      (err) => err instanceof ContractFunctionRevertedError,
+    );
+    if (revertError instanceof ContractFunctionRevertedError) {
+      return [];
+    }
+  }
+
+  throw err;
+};

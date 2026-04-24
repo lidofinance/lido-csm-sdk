@@ -8,6 +8,7 @@ import {
   NodeOperatorInviteInfo,
   NodeOperatorShortInfo,
 } from '../common/types';
+import { onRevertEmptyList } from '../common/utils/on-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { byTotalCount, iteratePages, onePage } from './iterate-pages';
 import { NodeOperatorDiscoveryInfo, Pagination, SearchMode } from './types';
@@ -41,7 +42,9 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
       ? onePage
       : byTotalCount(await this.bus.module.getOperatorsCount());
 
-    return iteratePages(fetchPage, { offset, limit }, getNextOffset);
+    return iteratePages(fetchPage, { offset, limit }, getNextOffset).catch(
+      onRevertEmptyList<T>,
+    );
   }
 
   @Logger('Views:')
