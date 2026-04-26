@@ -1,6 +1,11 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { PerSupportedChain } from './supported-chains';
 
+export const DEFAULT_IPFS_GATEWAYS = [
+  'https://ipfs.io/ipfs/{cid}',
+  'https://gateway.pinata.cloud/ipfs/{cid}',
+];
+
 export enum LINK_TYPE {
   icsTree = 'icsTree',
   curatedGateTree = 'curatedGateTree',

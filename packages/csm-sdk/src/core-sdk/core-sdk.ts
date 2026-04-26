@@ -7,6 +7,7 @@ import {
   CACHE_IMMUTABLE,
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
+  DEFAULT_IPFS_GATEWAYS,
   ERROR_CODE,
   EXTERNAL_LINKS,
   invariant,
@@ -42,6 +43,7 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly maxEventBlocksRange?: number;
   readonly skipHistoricalCalls: boolean;
   readonly moduleName: MODULE_NAME;
+  readonly ipfsGateways: string[];
 
   constructor(props: CoreProps) {
     super();
@@ -55,6 +57,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
     this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
+    this.ipfsGateways = props.ipfsGateways ?? [];
   }
 
   public get chainId(): SUPPORTED_CHAINS {
@@ -194,9 +197,12 @@ export class CoreSDK extends CsmSDKCacheable {
   public getIpfsUrls(cid: string): string[] {
     if (!isValidIpfsCid(cid)) return [];
 
-    return [
-      `https://ipfs.io/ipfs/${cid}`,
-      `https://gateway.pinata.cloud/ipfs/${cid}`,
-    ];
+    const gateways = [...this.ipfsGateways, ...DEFAULT_IPFS_GATEWAYS];
+
+    return gateways.map((gateway) =>
+      gateway.includes('{cid}')
+        ? gateway.replace('{cid}', cid)
+        : `${gateway}${cid}`,
+    );
   }
 }

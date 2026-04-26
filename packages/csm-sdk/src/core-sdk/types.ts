@@ -17,6 +17,7 @@ export type CoreProps = {
   keysApiUrl?: string;
   feesMonitoringApiUrl?: string;
   skipHistoricalCalls?: boolean;
+  ipfsGateways?: string[];
 };
 
 export type SdkProps = Omit<
