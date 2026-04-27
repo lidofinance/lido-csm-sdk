@@ -116,6 +116,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   public async addKeys(props: WithToken<AddKeysProps>) {
     const { token, amount } = props;
 

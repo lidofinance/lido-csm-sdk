@@ -100,6 +100,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   public async addBond(props: WithToken<AddBondProps>) {
     const { token } = props;
     switch (token) {
@@ -222,6 +223,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   public async claimBond(props: WithToken<ClaimBondProps>) {
     const { token, amount } = props;
 
