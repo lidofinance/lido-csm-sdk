@@ -8,9 +8,9 @@ export const calcBondBalance = ({
   debt,
   pendingToSplit,
 }: Omit<BondBalance, 'delta' | 'isInsufficient'>): BondBalance => {
-  const requiredWithoutLocked = required - locked; // TODO: also subtract bondDebt?
+  const requiredForKeys = required - locked - debt;
 
-  let delta = current - requiredWithoutLocked;
+  let delta = current - requiredForKeys;
   if (delta < 0 && delta > -STETH_ROUNDING_THRESHOLD) {
     delta = 0n;
   }
@@ -18,7 +18,7 @@ export const calcBondBalance = ({
   const isInsufficient = delta < 0 || false;
 
   return {
-    required: requiredWithoutLocked,
+    required: requiredForKeys,
     current,
     locked,
     debt,
