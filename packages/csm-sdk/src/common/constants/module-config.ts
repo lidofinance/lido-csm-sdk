@@ -137,7 +137,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
           '0xa5A604b172787e017b1b118F02fE54fC1D696519',
         [CONTRACT_NAMES.curatedGateDO]:
           '0xE966874cDB6A4282ED75Cd10439e3799e5531a2D',
-        [CONTRACT_NAMES.curatedGateMODC]:
+        [CONTRACT_NAMES.curatedGateEEO]:
           '0x5c063da03e3f21443716D75a2205EE16706e1153',
         [CONTRACT_NAMES.curatedGateIODC]:
           '0x1cD655Ac53CfE8269DE0DBfc0140B074623C4A6B',

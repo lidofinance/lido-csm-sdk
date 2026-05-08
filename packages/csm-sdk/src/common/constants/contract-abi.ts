@@ -47,7 +47,7 @@ export const CONTRACT_BASE_ABI = {
   [CONTRACT_NAMES.curatedGatePO]: CuratedGateAbi,
   [CONTRACT_NAMES.curatedGatePGO]: CuratedGateAbi,
   [CONTRACT_NAMES.curatedGateDO]: CuratedGateAbi,
-  [CONTRACT_NAMES.curatedGateMODC]: CuratedGateAbi,
+  [CONTRACT_NAMES.curatedGateEEO]: CuratedGateAbi,
   [CONTRACT_NAMES.curatedGateIODC]: CuratedGateAbi,
   [CONTRACT_NAMES.curatedGateIODCP]: CuratedGateAbi,
 } as const;

@@ -33,7 +33,7 @@ export enum CONTRACT_NAMES {
   curatedGatePO = 'curatedGatePO',
   curatedGatePGO = 'curatedGatePGO',
   curatedGateDO = 'curatedGateDO',
-  curatedGateMODC = 'curatedGateMODC',
+  curatedGateEEO = 'curatedGateEEO',
   curatedGateIODC = 'curatedGateIODC',
   curatedGateIODCP = 'curatedGateIODCP',
 }
@@ -43,7 +43,7 @@ export const CURATED_GATES = [
   CONTRACT_NAMES.curatedGatePTO,
   CONTRACT_NAMES.curatedGatePGO,
   CONTRACT_NAMES.curatedGateDO,
-  CONTRACT_NAMES.curatedGateMODC,
+  CONTRACT_NAMES.curatedGateEEO,
   CONTRACT_NAMES.curatedGateIODC,
   CONTRACT_NAMES.curatedGateIODCP,
 ] as const;
