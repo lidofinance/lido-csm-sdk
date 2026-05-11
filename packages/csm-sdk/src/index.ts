@@ -20,6 +20,7 @@ export * from './events-sdk/index';
 export * from './tx-sdk/index';
 export * from './permissionless-gate-sdk/index';
 export * from './ics-gate-sdk/index';
+export * from './idvtc-gate-sdk/index';
 export * from './strikes-sdk/index';
 export * from './frame-sdk/index';
 export * from './deposit-queue-sdk/index';

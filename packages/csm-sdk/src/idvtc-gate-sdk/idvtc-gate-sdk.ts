@@ -23,23 +23,23 @@ import {
   onError,
   parseNodeOperatorAddedEvents,
 } from '../common/utils/index';
-import { OperatorSDK } from '../operator-sdk/operator-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
-import { ReceiptLike } from '../tx-sdk/types';
-import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props';
 import {
   AddressesTreeLeaf,
   AddressProof,
   AddVettedNodeOperatorProps,
   ClaimCuvrveProps,
-} from './types';
+  parseAddVettedOperatorProps,
+} from '../ics-gate-sdk/index';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { prepCall, TxSDK } from '../tx-sdk/index';
+import { ReceiptLike } from '../tx-sdk/types';
 
-export class IcsGateSDK extends CsmSDKModule<{
+export class IdvtcGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
 }> {
-  private get icsContract() {
-    return this.core.getContract(CONTRACT_NAMES.icsGate);
+  private get idvtcContract() {
+    return this.core.getContract(CONTRACT_NAMES.idvtcGate);
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {
@@ -66,7 +66,7 @@ export class IcsGateSDK extends CsmSDKModule<{
       ...rest,
       call: () =>
         prepCall(
-          this.icsContract,
+          this.idvtcContract,
           'addNodeOperatorETH',
           [
             keysCount,
@@ -102,7 +102,7 @@ export class IcsGateSDK extends CsmSDKModule<{
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
-        prepCall(this.icsContract, 'addNodeOperatorStETH', [
+        prepCall(this.idvtcContract, 'addNodeOperatorStETH', [
           keysCount,
           publicKeys,
           signatures,
@@ -135,7 +135,7 @@ export class IcsGateSDK extends CsmSDKModule<{
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
-        prepCall(this.icsContract, 'addNodeOperatorWstETH', [
+        prepCall(this.idvtcContract, 'addNodeOperatorWstETH', [
           keysCount,
           publicKeys,
           signatures,
@@ -169,22 +169,22 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getCurveId(): Promise<bigint> {
-    return this.icsContract.read.curveId();
+    return this.idvtcContract.read.curveId();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getTreeConfig() {
     const [root, cid] = await Promise.all([
-      this.icsContract.read.treeRoot(),
-      this.icsContract.read.treeCid(),
+      this.idvtcContract.read.treeRoot(),
+      this.idvtcContract.read.treeCid(),
     ]).catch(onError);
     return { root, cid };
   }
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [...this.core.getIpfsUrls(cid), this.core.icsTreeLink].filter(
+    return [...this.core.getIpfsUrls(cid), this.core.idvtcTreeLink].filter(
       isDefined,
     );
   }
@@ -225,19 +225,19 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async isConsumed(address: Address): Promise<boolean> {
-    return this.icsContract.read.isConsumed([address]);
+    return this.idvtcContract.read.isConsumed([address]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async isPaused(): Promise<boolean> {
-    return this.icsContract.read.isPaused();
+    return this.idvtcContract.read.isPaused();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async verifyProof(address: Address, proof: Proof): Promise<boolean> {
-    return this.icsContract.read.verifyProof([address, proof]);
+    return this.idvtcContract.read.verifyProof([address, proof]);
   }
 
   @Access({ level: AccessLevel.OWNER })
@@ -249,7 +249,7 @@ export class IcsGateSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.icsContract, 'claimBondCurve', [nodeOperatorId, proof]),
+        prepCall(this.idvtcContract, 'claimBondCurve', [nodeOperatorId, proof]),
     });
   }
 }

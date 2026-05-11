@@ -24,7 +24,8 @@ export enum CONTRACT_NAMES {
   // CSM-specific
   csModule = 'csModule',
   permissionlessGate = 'permissionlessGate',
-  vettedGate = 'vettedGate',
+  icsGate = 'icsGate',
+  idvtcGate = 'idvtcGate',
 
   // CM-specific
   curatedModule = 'curatedModule',
@@ -58,6 +59,7 @@ export const SUPPORTED_CONTRACT_VERSIONS: Partial<
   [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
   [CONTRACT_NAMES.validatorStrikes]: [1n, 1n],
   [CONTRACT_NAMES.csModule]: [3n, 3n],
-  [CONTRACT_NAMES.vettedGate]: [1n, 1n],
+  [CONTRACT_NAMES.icsGate]: [1n, 1n],
+  [CONTRACT_NAMES.idvtcGate]: [1n, 1n],
   [CONTRACT_NAMES.curatedModule]: [1n, 1n],
 };

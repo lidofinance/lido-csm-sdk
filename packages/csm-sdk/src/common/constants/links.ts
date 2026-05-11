@@ -8,6 +8,7 @@ export const DEFAULT_IPFS_GATEWAYS = [
 
 export enum LINK_TYPE {
   icsTree = 'icsTree',
+  idvtcTree = 'idvtcTree',
   curatedGateTree = 'curatedGateTree',
   rewardsTree = 'rewardsTree',
   keysApi = 'keysApi',

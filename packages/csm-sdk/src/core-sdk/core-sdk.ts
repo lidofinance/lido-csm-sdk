@@ -153,6 +153,10 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getExternalLink(LINK_TYPE.icsTree);
   }
 
+  public get idvtcTreeLink() {
+    return this.getExternalLink(LINK_TYPE.idvtcTree);
+  }
+
   public get curatedGateTreeLink() {
     return this.getExternalLink(LINK_TYPE.curatedGateTree);
   }

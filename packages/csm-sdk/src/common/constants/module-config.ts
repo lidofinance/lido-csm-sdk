@@ -67,8 +67,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
           '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
         [CONTRACT_NAMES.permissionlessGate]:
           '0xcF33a38111d0B1246A3F38a838fb41D626B454f0',
-        [CONTRACT_NAMES.vettedGate]:
-          '0xB314D4A76C457c93150d308787939063F4Cc67E0',
+        [CONTRACT_NAMES.icsGate]: '0xB314D4A76C457c93150d308787939063F4Cc67E0',
       },
       moduleId: 3n,
       deploymentBlockNumber: BigInt('0x13f7326'),
@@ -94,8 +93,9 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
           '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
         [CONTRACT_NAMES.permissionlessGate]:
           '0xd7bD8D2A9888D1414c770B35ACF55890B15de26a',
-        [CONTRACT_NAMES.vettedGate]:
-          '0x10a254E724fe2b7f305F76f3F116a3969c53845f',
+        [CONTRACT_NAMES.icsGate]: '0x10a254E724fe2b7f305F76f3F116a3969c53845f',
+        [CONTRACT_NAMES.idvtcGate]:
+          '0x887F8512F9998045f4b5993e6eaa6BCfE5F02A94',
       },
       moduleId: 4n,
       deploymentBlockNumber: BigInt('0x1374'),

@@ -11,6 +11,7 @@ import { EventsSDK } from './events-sdk/events-sdk';
 import { FeesMonitoringSDK } from './fees-monitoring-sdk/fees-monitoring-sdk';
 import { FrameSDK } from './frame-sdk/frame-sdk';
 import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk';
+import { IdvtcGateSDK } from './idvtc-gate-sdk/idvtc-gate-sdk';
 import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk';
 import { KeysSDK } from './keys-sdk/keys-sdk';
 import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk';
@@ -39,6 +40,7 @@ export class LidoSDKCsm {
   readonly roles: RolesSDK;
   readonly permissionlessGate: PermissionlessGateSDK;
   readonly icsGate: IcsGateSDK;
+  readonly idvtcGate: IdvtcGateSDK;
   readonly strikes: StrikesSDK;
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
@@ -58,6 +60,7 @@ export class LidoSDKCsm {
     this.accounting = new AccountingSDK(commonProps, 'accounting');
     this.permissionlessGate = new PermissionlessGateSDK(commonProps);
     this.icsGate = new IcsGateSDK(commonProps);
+    this.idvtcGate = new IdvtcGateSDK(commonProps);
     this.parameters = new ParametersSDK(commonProps, 'parameters');
     this.operator = new OperatorSDK(commonProps, 'operator');
     this.keys = new KeysSDK(commonProps);
