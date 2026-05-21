@@ -13,8 +13,8 @@ describe('getCurveIdByOperatorType', () => {
   });
 
   it('returns correct curve ID for CM types', () => {
-    expect(getCurveIdByOperatorType(OPERATOR_TYPE.CM_PTO)).toBe(0n);
-    expect(getCurveIdByOperatorType(OPERATOR_TYPE.CM_PO)).toBe(1n);
+    expect(getCurveIdByOperatorType(OPERATOR_TYPE.CM_PO)).toBe(0n);
+    expect(getCurveIdByOperatorType(OPERATOR_TYPE.CM_PTO)).toBe(1n);
   });
 
   it('returns undefined for CC type', () => {
@@ -30,8 +30,8 @@ describe('getOperatorTypeByCurveId', () => {
   });
 
   it('returns CM operator type for CM module', () => {
-    expect(getOperatorTypeByCurveId('CM', 0n)).toBe(OPERATOR_TYPE.CM_PTO);
-    expect(getOperatorTypeByCurveId('CM', 1n)).toBe(OPERATOR_TYPE.CM_PO);
+    expect(getOperatorTypeByCurveId('CM', 0n)).toBe(OPERATOR_TYPE.CM_PO);
+    expect(getOperatorTypeByCurveId('CM', 1n)).toBe(OPERATOR_TYPE.CM_PTO);
     expect(getOperatorTypeByCurveId('CM', 2n)).toBe(OPERATOR_TYPE.CM_PGO);
   });
 
