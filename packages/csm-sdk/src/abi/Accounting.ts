@@ -2649,11 +2649,6 @@ export const AccountingAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidChargePenaltyRecipientAddress',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidInitialization',
     inputs: [],
   },

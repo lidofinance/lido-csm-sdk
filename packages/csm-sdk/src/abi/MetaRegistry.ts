@@ -129,11 +129,6 @@ export const MetaRegistryAbi = [
         internalType: 'struct IMetaRegistry.OperatorGroup',
         components: [
           {
-            name: 'name',
-            type: 'string',
-            internalType: 'string',
-          },
-          {
             name: 'subNodeOperators',
             type: 'tuple[]',
             internalType: 'struct IMetaRegistry.SubNodeOperator[]',
@@ -209,19 +204,6 @@ export const MetaRegistryAbi = [
         name: 'operatorGroupId',
         type: 'uint256',
         internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'getInitializedVersion',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint64',
-        internalType: 'uint64',
       },
     ],
     stateMutability: 'view',
@@ -304,11 +286,6 @@ export const MetaRegistryAbi = [
         type: 'tuple',
         internalType: 'struct IMetaRegistry.OperatorGroup',
         components: [
-          {
-            name: 'name',
-            type: 'string',
-            internalType: 'string',
-          },
           {
             name: 'subNodeOperators',
             type: 'tuple[]',
@@ -778,11 +755,6 @@ export const MetaRegistryAbi = [
         internalType: 'struct IMetaRegistry.OperatorGroup',
         components: [
           {
-            name: 'name',
-            type: 'string',
-            internalType: 'string',
-          },
-          {
             name: 'subNodeOperators',
             type: 'tuple[]',
             internalType: 'struct IMetaRegistry.SubNodeOperator[]',
@@ -832,11 +804,6 @@ export const MetaRegistryAbi = [
         indexed: false,
         internalType: 'struct IMetaRegistry.OperatorGroup',
         components: [
-          {
-            name: 'name',
-            type: 'string',
-            internalType: 'string',
-          },
           {
             name: 'subNodeOperators',
             type: 'tuple[]',
@@ -1031,11 +998,6 @@ export const MetaRegistryAbi = [
   {
     type: 'error',
     name: 'InvalidOperatorGroupId',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'InvalidOperatorGroupName',
     inputs: [],
   },
   {

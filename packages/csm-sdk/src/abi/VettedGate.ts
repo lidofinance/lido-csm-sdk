@@ -580,11 +580,6 @@ export const VettedGateAbi = [
         internalType: 'string',
       },
       {
-        name: 'name',
-        type: 'string',
-        internalType: 'string',
-      },
-      {
         name: 'admin',
         type: 'address',
         internalType: 'address',
@@ -621,19 +616,6 @@ export const VettedGateAbi = [
         name: '',
         type: 'bool',
         internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'name',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'string',
-        internalType: 'string',
       },
     ],
     stateMutability: 'view',
@@ -757,19 +739,6 @@ export const VettedGateAbi = [
   },
   {
     type: 'function',
-    name: 'setName',
-    inputs: [
-      {
-        name: 'name_',
-        type: 'string',
-        internalType: 'string',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'setTreeParams',
     inputs: [
       {
@@ -877,19 +846,6 @@ export const VettedGateAbi = [
         type: 'uint64',
         indexed: false,
         internalType: 'uint64',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'NameSet',
-    inputs: [
-      {
-        name: 'name',
-        type: 'string',
-        indexed: false,
-        internalType: 'string',
       },
     ],
     anonymous: false,
@@ -1041,11 +997,6 @@ export const VettedGateAbi = [
   {
     type: 'error',
     name: 'InvalidInitialization',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'InvalidName',
     inputs: [],
   },
   {
