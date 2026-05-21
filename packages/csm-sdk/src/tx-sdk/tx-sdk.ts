@@ -247,6 +247,16 @@ export class TxSDK extends CsmSDKModule {
     );
 
     if (callStatus.status === 'failure') {
+      console.error('AA call failure', {
+        id: callData.id,
+        status: callStatus.status,
+        statusCode: callStatus.statusCode,
+        atomic: callStatus.atomic,
+        chainId: callStatus.chainId,
+        version: callStatus.version,
+        capabilities: callStatus.capabilities,
+        receipts: callStatus.receipts,
+      });
       throw this.core.core.error({
         code: ERROR_CODE.TRANSACTION_ERROR,
         message: 'Transaction failed. Check your wallet for details.',
