@@ -5,6 +5,7 @@ import { MODULE_NAME } from './common/index';
 import { CoreSDK } from './core-sdk/core-sdk';
 import { prepareCoreProps, SdkProps } from './core-sdk/index';
 import { CuratedGatesCollectionSDK } from './curated-gates-collection-sdk/curated-gates-collection-sdk';
+import { DelayedPenaltySDK } from './delayed-penalty-sdk/delayed-penalty-sdk';
 import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk';
 import { DiscoverySDK } from './discovery-sdk/discovery-sdk';
 import { EventsSDK } from './events-sdk/events-sdk';
@@ -19,7 +20,6 @@ import { OperatorSDK } from './operator-sdk/operator-sdk';
 import { ParametersSDK } from './parameters-sdk/parameters-sdk';
 import { RewardsSDK } from './rewards-sdk/rewards-sdk';
 import { RolesSDK } from './roles-sdk/roles-sdk';
-import { StealingSDK } from './stealing-sdk/stealing-sdk';
 import { TxSDK } from './tx-sdk/tx-sdk';
 
 export class LidoSDKCm {
@@ -42,7 +42,7 @@ export class LidoSDKCm {
   readonly curatedGates: CuratedGatesCollectionSDK;
   readonly metaRegistry: MetaRegistrySDK;
   readonly discovery: DiscoverySDK;
-  readonly stealing: StealingSDK;
+  readonly delayedPenalty: DelayedPenaltySDK;
 
   constructor(props: SdkProps) {
     const bus = new BusRegistry();
@@ -66,7 +66,7 @@ export class LidoSDKCm {
     this.feesMonitoring = new FeesMonitoringSDK(commonProps);
     this.curatedGates = new CuratedGatesCollectionSDK(commonProps);
     this.metaRegistry = new MetaRegistrySDK(commonProps);
-    this.stealing = new StealingSDK(commonProps);
+    this.delayedPenalty = new DelayedPenaltySDK(commonProps);
     this.discovery = new DiscoverySDK(commonProps, 'discovery');
   }
 }

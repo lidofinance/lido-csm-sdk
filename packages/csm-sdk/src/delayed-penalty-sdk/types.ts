@@ -4,8 +4,8 @@ import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type ReportProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
-  penaltyType: Hex;
   amount: bigint;
+  penaltyType: Hex;
   details: string;
 };
 

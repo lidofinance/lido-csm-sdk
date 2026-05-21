@@ -24,7 +24,7 @@ export * from './idvtc-gate-sdk/index';
 export * from './strikes-sdk/index';
 export * from './frame-sdk/index';
 export * from './deposit-queue-sdk/index';
-export * from './stealing-sdk/index';
+export * from './delayed-penalty-sdk/index';
 export * from './discovery-sdk/index';
 export * from './deposit-data-sdk/index';
 export * from './fees-monitoring-sdk/index';

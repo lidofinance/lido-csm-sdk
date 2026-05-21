@@ -313,14 +313,14 @@
         "default": "./dist/roles-sdk.cjs"
       }
     },
-    "./stealing-sdk": {
+    "./delayed-penalty-sdk": {
       "import": {
-        "types": "./dist/stealing-sdk.d.mts",
-        "default": "./dist/stealing-sdk.mjs"
+        "types": "./dist/delayed-penalty-sdk.d.mts",
+        "default": "./dist/delayed-penalty-sdk.mjs"
       },
       "require": {
-        "types": "./dist/stealing-sdk.d.cts",
-        "default": "./dist/stealing-sdk.cjs"
+        "types": "./dist/delayed-penalty-sdk.d.cts",
+        "default": "./dist/delayed-penalty-sdk.cjs"
       }
     },
     "./strikes-sdk": {

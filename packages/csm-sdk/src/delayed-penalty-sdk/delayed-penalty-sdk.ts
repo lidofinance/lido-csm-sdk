@@ -11,9 +11,13 @@ import {
 import { EventsSDK } from '../events-sdk/events-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
-import { CancelProps, OperatorWithLockedBond, ReportProps } from './types';
+import {
+  CancelProps,
+  OperatorWithLockedBond,
+  ReportProps,
+} from './types';
 
-export class StealingSDK extends CsmSDKModule<{
+export class DelayedPenaltySDK extends CsmSDKModule<{
   tx: TxSDK;
   events: EventsSDK;
   operator: OperatorSDK;

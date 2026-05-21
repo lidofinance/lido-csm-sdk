@@ -68,10 +68,10 @@ Key modules include:
 - **deposit-data-sdk** - Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **fees-monitoring-sdk** - Validator fee recipient monitoring and issue detection
 - **discovery-sdk** - Operator discovery and pagination using SMDiscovery contract (renamed from satellite-sdk)
+- **delayed-penalty-sdk** - General delayed penalty management: report, cancel, settle (renamed from stealing-sdk, generalized to match contract `GeneralDelayedPenalty` surface)
 
 **CSM-specific modules**:
 - **strikes-sdk** - Operator penalty tracking
-- **stealing-sdk** - EL rewards stealing penalty management
 - **permissionless-gate-sdk** - Permissionless operator creation
 - **ics-gate-sdk** - ICS (Independent Community Staker) entry points
 
@@ -287,7 +287,6 @@ Modules manage their own specialized contracts using `this.core.getContract()`:
 - **PermissionlessGateSDK** - Manages `PermissionlessGateAbi` contract (single-use)
 - **IcsGateSDK** - Manages `VettedGateAbi` contract (single-use)
 - **MetaRegistrySDK** - Manages `MetaRegistryAbi` contract (single-use)
-- **StealingSDK** - Manages `CSModuleAbi` contract (CSM-specific)
 - **DepositQueueSDK** - Manages `CSModuleAbi` contract (CSM-specific)
 - **CuratedRolesSDK** - Manages `CuratedModuleAbi` contract (CM-specific)
 
@@ -320,7 +319,7 @@ The SDK now supports two distinct module types through separate SDK classes:
 #### LidoSDKCsm (Community Staking Module)
 - **Purpose**: Permissionless and ICS (Independent Community Staker) operator entry
 - **Contract**: `csModule` (Mainnet Module ID: 3, Hoodi: 4)
-- **Unique Modules**: strikes, stealing, permissionlessGate, icsGate, standard roles
+- **Unique Modules**: strikes, permissionlessGate, icsGate, standard roles
 - **Use When**: Building applications for permissionless staking or ICS integration
 
 #### LidoSDKCm (Curated Module)
@@ -338,7 +337,8 @@ The SDK now supports two distinct module types through separate SDK classes:
 | Data & Events | ✅ | ✅ | events, depositQueue, depositData, discovery, feesMonitoring |
 | Rewards | ✅ | ✅ | rewards |
 | Roles | RolesSDK | CuratedRolesSDK | CM uses extended variant |
-| Strikes & Penalties | ✅ | ❌ | CSM-only: strikes, stealing |
+| Strikes | ✅ | ❌ | CSM-only: strikes |
+| Delayed Penalties | ✅ | ✅ | Shared: delayedPenalty (general delayed penalty system) |
 | Entry Gates | permissionlessGate, icsGate | curatedGates | Different entry mechanisms |
 | Metadata | ❌ | ✅ | CM-only: metaRegistry |
 

@@ -91,13 +91,13 @@ These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
 - **depositData**: Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **feesMonitoring**: Validator fee recipient monitoring and issue detection
 - **discovery**: Operator discovery and pagination using SMDiscovery contract (renamed from satellite-sdk)
+- **delayedPenalty**: General delayed penalty management — report, cancel, and settle delayed penalties (renamed from stealing-sdk, generalized to match contract `GeneralDelayedPenalty` surface)
 
 ### CSM-Specific Modules
 
 Only available in `LidoSDKCsm`:
 
 - **strikes**: Query operator penalties
-- **stealing**: Manage execution layer rewards stealing penalties - report and cancel penalties
 - **permissionlessGate**: Permissionless entry point for creating new operators
 - **icsGate**: ICS (Independent Community Staker) vetted entry point for creating new operators with benefits
 - **roles**: Standard role management for CSM operators
