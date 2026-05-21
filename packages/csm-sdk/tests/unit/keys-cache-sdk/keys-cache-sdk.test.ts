@@ -39,8 +39,7 @@ const localStorageMock = {
   key: vi.fn((index: number) => Object.keys(store)[index] ?? null),
 };
 
-const makeSdk = () =>
-  new KeysCacheSDK({ core: { chainId: CHAIN_ID } as any });
+const makeSdk = () => new KeysCacheSDK({ core: { chainId: CHAIN_ID } as any });
 
 const readStore = () => JSON.parse(store[STORAGE_KEY] ?? '{}');
 
@@ -184,9 +183,9 @@ describe('KeysCacheSDK.getCachedKeys', () => {
     const sdk = makeSdk();
     sdk.addPubkeys([PK_A]);
     sdk.addPubkeys([PK_B], { confirmed: true });
-    const result = sdk.getCachedKeys().sort((a, b) =>
-      a.pubkey.localeCompare(b.pubkey),
-    );
+    const result = sdk
+      .getCachedKeys()
+      .sort((a, b) => a.pubkey.localeCompare(b.pubkey));
     expect(result).toEqual([
       { pubkey: PK_A, confirmed: false },
       { pubkey: PK_B, confirmed: true },
@@ -474,7 +473,10 @@ describe('withKeysCacheCallback', () => {
     const sdk = makeSdk();
     const user = vi.fn();
     const wrapped = withKeysCacheCallback(sdk, depositData, user);
-    const props = { stage: TransactionCallbackStage.SIGN, payload: {} } as const;
+    const props = {
+      stage: TransactionCallbackStage.SIGN,
+      payload: {},
+    } as const;
     await wrapped!(props);
     expect(user).toHaveBeenCalledWith(props);
   });
