@@ -11,7 +11,12 @@ import {
 import { onRevertEmptyList } from '../common/utils/on-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { byTotalCount, iteratePages, onePage } from './iterate-pages';
-import { NodeOperatorDiscoveryInfo, Pagination, SearchMode } from './types';
+import {
+  NodeOperatorDiscoveryInfo,
+  NodeOperatorLockedBond,
+  Pagination,
+  SearchMode,
+} from './types';
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
@@ -138,5 +143,27 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
       500n, // Custom default limit for bulk fetching
     ) as Promise<NodeOperatorDiscoveryInfo[]>;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorsWithLockedBond(
+    pagination?: Pagination,
+  ): Promise<NodeOperatorLockedBond[]> {
+    const entries = await this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getOperatorsWithLockedBond([
+          this.core.moduleId,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+    );
+
+    return entries.map((e) => ({
+      nodeOperatorId: e.id,
+      locked: e.amount,
+      until: Number(e.until),
+    }));
   }
 }

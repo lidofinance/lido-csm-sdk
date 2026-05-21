@@ -17,4 +17,5 @@ export type CancelProps = CommonTransactionProps & {
 export type OperatorWithLockedBond = {
   nodeOperatorId: NodeOperatorId;
   locked: bigint;
+  until: number;
 };

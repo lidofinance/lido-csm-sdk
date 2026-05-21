@@ -1,4 +1,5 @@
 import { Address } from 'viem';
+import { NodeOperatorId } from '../common/types';
 
 export enum SearchMode {
   CURRENT_ADDRESSES = 0,
@@ -19,4 +20,10 @@ export type NodeOperatorDiscoveryInfo = {
   proposedManagerAddress: Address;
   proposedRewardAddress: Address;
   curveId: bigint;
+};
+
+export type NodeOperatorLockedBond = {
+  nodeOperatorId: NodeOperatorId;
+  locked: bigint;
+  until: number;
 };

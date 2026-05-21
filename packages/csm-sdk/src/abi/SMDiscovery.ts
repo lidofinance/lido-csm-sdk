@@ -334,6 +334,52 @@ export const SMDiscoveryAbi = [
   },
   {
     type: 'function',
+    name: 'getOperatorsWithLockedBond',
+    inputs: [
+      {
+        name: '_moduleId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_offset',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_limit',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'tuple[]',
+        internalType: 'struct NodeOperatorLockedBond[]',
+        components: [
+          {
+            name: 'id',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'amount',
+            type: 'uint128',
+            internalType: 'uint128',
+          },
+          {
+            name: 'until',
+            type: 'uint128',
+            internalType: 'uint128',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'moduleCache',
     inputs: [
       {

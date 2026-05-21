@@ -8,19 +8,13 @@ import {
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
-import { EventsSDK } from '../events-sdk/events-sdk';
-import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { DiscoverySDK } from '../discovery-sdk/discovery-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
-import {
-  CancelProps,
-  OperatorWithLockedBond,
-  ReportProps,
-} from './types';
+import { CancelProps, OperatorWithLockedBond, ReportProps } from './types';
 
 export class DelayedPenaltySDK extends CsmSDKModule<{
   tx: TxSDK;
-  events: EventsSDK;
-  operator: OperatorSDK;
+  discovery: DiscoverySDK;
 }> {
   private get moduleContract() {
     return this.core.contractBaseModule;
@@ -80,17 +74,9 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
     return this.moduleContract.read.hasRole([role, address]);
   }
 
-  // TODO: optimize loading
-  @Logger('Utils:')
+  @Logger('Views:')
+  @ErrorHandler()
   public async getOperatorsWithLockedBond(): Promise<OperatorWithLockedBond[]> {
-    const operators = await this.bus.events.getOperatorsWithPenalties();
-
-    return await Promise.all(
-      operators.map((nodeOperatorId) =>
-        this.bus.operator
-          .getBondBalance(nodeOperatorId)
-          .then(({ locked }) => ({ nodeOperatorId, locked })),
-      ),
-    );
+    return this.bus.discovery.getOperatorsWithLockedBond();
   }
 }
