@@ -143,6 +143,16 @@
         "default": "./dist/curated-gates-collection-sdk.cjs"
       }
     },
+    "./delayed-penalty-sdk": {
+      "import": {
+        "types": "./dist/delayed-penalty-sdk.d.mts",
+        "default": "./dist/delayed-penalty-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/delayed-penalty-sdk.d.cts",
+        "default": "./dist/delayed-penalty-sdk.cjs"
+      }
+    },
     "./deposit-data-sdk": {
       "import": {
         "types": "./dist/deposit-data-sdk.d.mts",
@@ -311,16 +321,6 @@
       "require": {
         "types": "./dist/roles-sdk.d.cts",
         "default": "./dist/roles-sdk.cjs"
-      }
-    },
-    "./delayed-penalty-sdk": {
-      "import": {
-        "types": "./dist/delayed-penalty-sdk.d.mts",
-        "default": "./dist/delayed-penalty-sdk.mjs"
-      },
-      "require": {
-        "types": "./dist/delayed-penalty-sdk.d.cts",
-        "default": "./dist/delayed-penalty-sdk.cjs"
       }
     },
     "./strikes-sdk": {
