@@ -15,11 +15,19 @@ import {
   TOKENS,
   WithToken,
 } from '../common/index';
+import {
+  KeysCacheSDK,
+  withKeysCacheCallback,
+  withKeysRemovalCacheCallback,
+} from '../keys-cache-sdk/index';
 import { prepCall, TxSDK } from '../tx-sdk/index';
 import { parseAddKeysProps } from './parse-add-keys-props';
 import { AddKeysProps, EjectKeysByArrayProps, RemoveKeysProps } from './types';
 
-export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
+export class KeysSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  keysCache?: KeysCacheSDK;
+}> {
   private get moduleContract() {
     return this.core.contractBaseModule;
   }
@@ -48,6 +56,11 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       call: ({ from }) =>
         prepCall(
           this.moduleContract,
@@ -74,6 +87,11 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ from, permit }) =>
         prepCall(this.moduleContract, 'addValidatorKeysStETH', [
@@ -103,6 +121,11 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ from, permit }) =>
         prepCall(this.moduleContract, 'addValidatorKeysWstETH', [
@@ -143,10 +166,15 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   @Logger('Call:')
   @ErrorHandler()
   public async removeKeys(props: RemoveKeysProps) {
-    const { nodeOperatorId, startIndex, keysCount, ...rest } = props;
+    const { nodeOperatorId, startIndex, keysCount, pubkeys, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysRemovalCacheCallback(
+        this.bus.keysCache,
+        pubkeys,
+        rest.callback,
+      ),
       call: () =>
         prepCall(this.moduleContract, 'removeKeys', [
           nodeOperatorId,

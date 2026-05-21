@@ -8,6 +8,7 @@ import {
   toHexString,
 } from '../common/utils/index';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk';
+import { KeyCacheStatus } from '../keys-cache-sdk/types';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { PUBKEY_LENGTH } from './constants';
@@ -45,6 +46,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   @Logger('Utils:')
   public async validateDepositData(
     depositData: DepositData[],
+    options?: { skipPending?: boolean },
   ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
     const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
@@ -66,7 +68,7 @@ export class DepositDataSDK extends CsmSDKModule<{
 
     const pubkeys = depositData.map((data) => data.pubkey);
 
-    const duplicateErrors = this.checkCachedKeys(pubkeys);
+    const duplicateErrors = this.checkCachedKeys(pubkeys, options);
     const uploadedDuplicateErrors = await this.checkUploadedKeys(pubkeys);
     const clErrors = await this.checkClKeys(pubkeys.map(toHexString));
 
@@ -105,21 +107,29 @@ export class DepositDataSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   @ErrorHandler()
-  public checkCachedKeys(pubkeys: Hex[]): ValidationError[] {
+  public checkCachedKeys(
+    pubkeys: Hex[],
+    options?: { skipPending?: boolean },
+  ): ValidationError[] {
     const keysCache = this.bus.keysCache;
     const errors: ValidationError[] = [];
 
     if (!keysCache) return errors;
 
     pubkeys.forEach((pubkey, index) => {
-      if (keysCache.isDuplicate(pubkey)) {
-        errors.push({
-          index,
-          message: `pubkey already exists in cache`,
-          field: 'pubkey',
-          code: ValidationErrorCode.DUPLICATE_PUBKEY,
-        });
-      }
+      const status = keysCache.getCacheStatus(pubkey);
+      if (!status) return;
+      if (status === KeyCacheStatus.PENDING && options?.skipPending) return;
+
+      errors.push({
+        index,
+        field: 'pubkey',
+        message: `pubkey already submitted`,
+        code:
+          status === KeyCacheStatus.CONFIRMED
+            ? ValidationErrorCode.CACHED_PUBKEY_CONFIRMED
+            : ValidationErrorCode.CACHED_PUBKEY_PENDING,
+      });
     });
 
     return errors;

@@ -13,6 +13,7 @@ import {
   WithToken,
 } from '../common/index';
 import { parseNodeOperatorAddedEvents } from '../common/utils/index';
+import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
@@ -22,6 +23,7 @@ import { AddNodeOperatorProps } from './types';
 export class PermissionlessGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
+  keysCache?: KeysCacheSDK;
 }> {
   private get permissionlessContract() {
     return this.core.getContract(CONTRACT_NAMES.permissionlessGate);
@@ -48,6 +50,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       call: () =>
         prepCall(
           this.permissionlessContract,
@@ -76,6 +83,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
         prepCall(this.permissionlessContract, 'addNodeOperatorStETH', [
@@ -107,6 +119,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
         prepCall(this.permissionlessContract, 'addNodeOperatorWstETH', [

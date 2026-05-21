@@ -23,6 +23,7 @@ import {
   onError,
   parseNodeOperatorAddedEvents,
 } from '../common/utils/index';
+import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
@@ -37,6 +38,7 @@ import {
 export class IcsGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
+  keysCache?: KeysCacheSDK;
 }> {
   private get icsContract() {
     return this.core.getContract(CONTRACT_NAMES.icsGate);
@@ -64,6 +66,11 @@ export class IcsGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       call: () =>
         prepCall(
           this.icsContract,
@@ -100,6 +107,11 @@ export class IcsGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
         prepCall(this.icsContract, 'addNodeOperatorStETH', [
@@ -133,6 +145,11 @@ export class IcsGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
         prepCall(this.icsContract, 'addNodeOperatorWstETH', [

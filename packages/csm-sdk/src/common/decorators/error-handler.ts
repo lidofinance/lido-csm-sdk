@@ -6,6 +6,26 @@ import {
 } from '../../tx-sdk/types';
 import { SDKError } from '../index';
 
+// First-fire-wins marker. When @ErrorHandler is nested (e.g. tx-sdk's
+// perform() inside a gate SDK method), only the innermost layer notifies the
+// user via the ERROR callback. Outer layers still log + ensure SDKError
+// wrapping, but skip duplicate callback firing. WeakSet avoids mutating the
+// error object and allows GC when the error is no longer referenced.
+const notifiedErrors = new WeakSet<SDKError>();
+
+const notifyOnce = (
+  error: SDKError,
+  callback: TransactionCallback | undefined,
+): void => {
+  if (!callback) return;
+  if (notifiedErrors.has(error)) return;
+  notifiedErrors.add(error);
+  void callback({
+    stage: TransactionCallbackStage.ERROR,
+    payload: { error },
+  });
+};
+
 export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
   return function ErrorHandlerDecorator<This, Value>(
     target:
@@ -67,11 +87,7 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
               );
 
               const txError = SDKError.from(error);
-              // eslint-disable-next-line promise/no-callback-in-promise
-              void callback?.({
-                stage: TransactionCallbackStage.ERROR,
-                payload: { error: txError },
-              });
+              notifyOnce(txError, callback);
 
               throw txError;
             }) as any)
@@ -85,10 +101,7 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
         );
 
         const txError = SDKError.from(error);
-        void callback?.({
-          stage: TransactionCallbackStage.ERROR,
-          payload: { error: txError },
-        });
+        notifyOnce(txError, callback);
 
         throw txError;
       }

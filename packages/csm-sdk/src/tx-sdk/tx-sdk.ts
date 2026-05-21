@@ -309,6 +309,9 @@ export class TxSDK extends CsmSDKModule {
   public async perform<TDecodedResult = undefined>(
     props: PerformOptionsNoSpend<TDecodedResult>,
   ): Promise<TransactionResult<TDecodedResult>>;
+
+  @Logger('Call:')
+  @ErrorHandler()
   public async perform<TDecodedResult = undefined>(
     props: PerformOptions<TDecodedResult>,
   ): Promise<TransactionResult<TDecodedResult>> {

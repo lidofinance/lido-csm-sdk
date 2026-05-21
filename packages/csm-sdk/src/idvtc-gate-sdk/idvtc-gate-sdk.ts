@@ -30,6 +30,7 @@ import {
   ClaimCuvrveProps,
   parseAddVettedOperatorProps,
 } from '../ics-gate-sdk/index';
+import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
@@ -37,6 +38,7 @@ import { ReceiptLike } from '../tx-sdk/types';
 export class IdvtcGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
+  keysCache?: KeysCacheSDK;
 }> {
   private get idvtcContract() {
     return this.core.getContract(CONTRACT_NAMES.idvtcGate);
@@ -64,6 +66,11 @@ export class IdvtcGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       call: () =>
         prepCall(
           this.idvtcContract,
@@ -100,6 +107,11 @@ export class IdvtcGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
         prepCall(this.idvtcContract, 'addNodeOperatorStETH', [
@@ -133,6 +145,11 @@ export class IdvtcGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
         prepCall(this.idvtcContract, 'addNodeOperatorWstETH', [

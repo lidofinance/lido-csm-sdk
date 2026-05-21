@@ -27,6 +27,7 @@ export type RemoveKeysProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
   startIndex: bigint;
   keysCount: bigint;
+  pubkeys?: Hex[];
 };
 
 export type EjectKeysByArrayProps = CommonTransactionProps & {

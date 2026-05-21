@@ -1,88 +1,70 @@
+import { z } from 'zod';
 import { KEY_TTL_DURATION } from './constants';
-import { KeysRecord } from './types';
+import { KeyCacheEntry, KeysRecord } from './types';
 
-type SerializeLocalStorageResult =
-  | { success: true }
-  | { success: false; error: Error };
+const entrySchema = z.union([
+  z.object({ ts: z.number(), confirmed: z.boolean() }),
+  // Legacy v1: bare timestamp → normalize to pending (we have no proof it
+  // ever made it on-chain, so treat it as the safer "duplicate but rollback-able"
+  // state).
+  z.number().transform((ts): KeyCacheEntry => ({ ts, confirmed: false })),
+]);
 
-type DeserializeLocalStorageResult<T> =
-  | { success: true; value: T }
-  | { success: false; error: Error };
-
-// Low-level storage functions
-const trySerializeToLocalStorage = (
-  key: string,
-  value: unknown,
-): SerializeLocalStorageResult => {
+const hasLocalStorage = (): boolean => {
   try {
-    const item = JSON.stringify(value);
-    localStorage.setItem(key, item);
-    return { success: true };
-  } catch (error) {
-    return {
-      success: false,
-      error: error as Error,
-    };
+    return typeof localStorage !== 'undefined';
+  } catch {
+    return false;
   }
 };
 
-const tryDeserializeFromLocalStorage = <T>(
-  key: string,
-): DeserializeLocalStorageResult<T> => {
+export const saveToLocalStorage = (key: string, value: unknown): void => {
+  if (!hasLocalStorage()) return;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error('[keys cache localStorage] save error:', error);
+  }
+};
+
+/**
+ * Load and normalize the keys record from localStorage in one shot.
+ * Returns {} for missing keys, corrupt JSON, non-object payloads, or
+ * SSR environments. Malformed entries are dropped individually; legacy
+ * `number` entries (v1 shape) are lifted into `{ ts, confirmed: false }`.
+ */
+export const loadKeysRecord = (key: string): KeysRecord => {
+  if (!hasLocalStorage()) return {};
+  let raw: unknown;
   try {
     const item = localStorage.getItem(key);
-
-    if (item === null) {
-      return {
-        success: false,
-        error: new Error(`Item with key "${key}" does not exist`),
-      };
-    }
-
-    const value = JSON.parse(item) as T;
-    return { success: true, value };
+    if (item === null) return {};
+    raw = JSON.parse(item);
   } catch (error) {
-    return {
-      success: false,
-      error: error as Error,
-    };
+    console.error('[keys cache localStorage] load error:', error);
+    return {};
   }
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const result: KeysRecord = {};
+  for (const [pubkey, value] of Object.entries(
+    raw as Record<string, unknown>,
+  )) {
+    const parsed = entrySchema.safeParse(value);
+    if (parsed.success) result[pubkey] = parsed.data;
+  }
+  return result;
 };
 
-// Error-swallowing wrappers for localStorage operations
-export const saveToLocalStorage = (key: string, value: unknown): void => {
-  const result = trySerializeToLocalStorage(key, value);
-
-  if (!result.success) {
-    console.error('[keys cache localStorage] save error:', result.error);
-  }
-};
-
-export const getFromLocalStorage = <T>(key: string): T | null => {
-  const result = tryDeserializeFromLocalStorage<T>(key);
-
-  if (result.success) {
-    return result.value;
-  } else {
-    if (!localStorage.getItem(key)) {
-      return null; // Item doesn't exist, don't log error
-    }
-    console.error('[keys cache localStorage] get error:', result.error);
-    return null;
-  }
-};
-
-export const isKeyExpired = (timestamp: number): boolean => {
-  const now = Date.now();
-  const age = now - timestamp;
-  return age >= KEY_TTL_DURATION;
+export const isKeyExpired = (entry: KeyCacheEntry): boolean => {
+  return Date.now() - entry.ts >= KEY_TTL_DURATION;
 };
 
 export const cleanExpiredKeys = (keys: KeysRecord): KeysRecord => {
-  return Object.entries(keys).reduce((cleanedKeys, [pubKey, timestamp]) => {
-    if (!isKeyExpired(timestamp)) {
-      cleanedKeys[pubKey] = timestamp;
+  const result: KeysRecord = {};
+  for (const [pubkey, entry] of Object.entries(keys)) {
+    if (!isKeyExpired(entry)) {
+      result[pubkey] = entry;
     }
-    return cleanedKeys;
-  }, {} as KeysRecord);
+  }
+  return result;
 };
