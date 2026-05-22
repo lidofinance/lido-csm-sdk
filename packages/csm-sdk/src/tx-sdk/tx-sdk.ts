@@ -246,24 +246,16 @@ export class TxSDK extends CsmSDKModule {
       ERROR_CODE.TRANSACTION_ERROR,
     );
 
-    if (callStatus.status === 'failure') {
-      console.error('AA call failure', {
-        id: callData.id,
-        status: callStatus.status,
-        statusCode: callStatus.statusCode,
-        atomic: callStatus.atomic,
-        chainId: callStatus.chainId,
-        version: callStatus.version,
-        capabilities: callStatus.capabilities,
-        receipts: callStatus.receipts,
-      });
-      throw this.core.core.error({
-        code: ERROR_CODE.TRANSACTION_ERROR,
-        message: 'Transaction failed. Check your wallet for details.',
-      });
-    }
+    // On-chain receipt is the source of truth. Some smart-account wallets
+    // (e.g. ERC-4337 with paymasters whose post-op reverts) report a batch
+    // failure even when the user's call succeeded on-chain — trust the
+    // receipt over `callStatus.status`.
+    const receipts = callStatus.receipts ?? [];
+    const receipt = receipts.at(-1) as
+      | WalletCallReceipt<bigint, 'success' | 'reverted'>
+      | undefined;
 
-    if (callStatus.receipts?.find((receipt) => receipt.status === 'reverted')) {
+    if (receipts.some((r) => r.status === 'reverted')) {
       throw this.core.core.error({
         code: ERROR_CODE.TRANSACTION_ERROR,
         message:
@@ -271,18 +263,17 @@ export class TxSDK extends CsmSDKModule {
       });
     }
 
-    // extract last receipt if there was no atomic batch
-    const receipt = callStatus.receipts?.at(-1) as
-      | WalletCallReceipt<bigint, 'success'>
-      | undefined;
-    const txHash = receipt?.transactionHash;
-
-    if (!txHash) {
+    if (!receipt?.transactionHash) {
       throw this.core.core.error({
         code: ERROR_CODE.TRANSACTION_ERROR,
-        message: 'Transaction hash is missing. Check your wallet for details.',
+        message:
+          callStatus.status === 'failure'
+            ? 'Transaction failed. Check your wallet for details.'
+            : 'Transaction hash is missing. Check your wallet for details.',
       });
     }
+
+    const txHash = receipt.transactionHash;
 
     const result = await decodeResult?.(receipt as any);
 
