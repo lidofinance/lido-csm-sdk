@@ -32,6 +32,7 @@ export type DecodedExternalOperator =
   | ({ type: 'unknown' } & RawExternalOperator);
 
 export type GroupOperators = {
+  name: string;
   subNodeOperators: readonly SubNodeOperator[];
   externalOperators: readonly DecodedExternalOperator[];
 };

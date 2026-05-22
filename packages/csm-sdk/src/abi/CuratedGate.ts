@@ -380,6 +380,11 @@ export const CuratedGateAbi = [
         internalType: 'string',
       },
       {
+        name: 'name',
+        type: 'string',
+        internalType: 'string',
+      },
+      {
         name: 'admin',
         type: 'address',
         internalType: 'address',
@@ -416,6 +421,19 @@ export const CuratedGateAbi = [
         name: '',
         type: 'bool',
         internalType: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'name',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'string',
+        internalType: 'string',
       },
     ],
     stateMutability: 'view',
@@ -539,6 +557,19 @@ export const CuratedGateAbi = [
   },
   {
     type: 'function',
+    name: 'setName',
+    inputs: [
+      {
+        name: 'name_',
+        type: 'string',
+        internalType: 'string',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     name: 'setTreeParams',
     inputs: [
       {
@@ -646,6 +677,19 @@ export const CuratedGateAbi = [
         type: 'uint64',
         indexed: false,
         internalType: 'uint64',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'NameSet',
+    inputs: [
+      {
+        name: 'name',
+        type: 'string',
+        indexed: false,
+        internalType: 'string',
       },
     ],
     anonymous: false,
@@ -792,6 +836,11 @@ export const CuratedGateAbi = [
   {
     type: 'error',
     name: 'InvalidInitialization',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'InvalidName',
     inputs: [],
   },
   {
