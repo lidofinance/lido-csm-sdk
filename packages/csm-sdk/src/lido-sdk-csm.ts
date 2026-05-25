@@ -1,6 +1,7 @@
 import { AccountingSDK } from './accounting-sdk/accounting-sdk';
 import { BondSDK } from './bond-sdk/bond-sdk';
 import { BusRegistry } from './common/class-primitives/bus-registry';
+import { CONTRACT_NAMES } from './common/constants/contract-names';
 import { MODULE_NAME } from './common/index';
 import { CoreSDK } from './core-sdk/core-sdk';
 import { prepareCoreProps, SdkProps } from './core-sdk/index';
@@ -11,8 +12,6 @@ import { DiscoverySDK } from './discovery-sdk/discovery-sdk';
 import { EventsSDK } from './events-sdk/events-sdk';
 import { FeesMonitoringSDK } from './fees-monitoring-sdk/fees-monitoring-sdk';
 import { FrameSDK } from './frame-sdk/frame-sdk';
-import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk';
-import { IdvtcGateSDK } from './idvtc-gate-sdk/idvtc-gate-sdk';
 import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk';
 import { KeysSDK } from './keys-sdk/keys-sdk';
 import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk';
@@ -24,6 +23,7 @@ import { RewardsSDK } from './rewards-sdk/rewards-sdk';
 import { RolesSDK } from './roles-sdk/roles-sdk';
 import { StrikesSDK } from './strikes-sdk/strikes-sdk';
 import { TxSDK } from './tx-sdk/tx-sdk';
+import { VettedGateSDK } from './vetted-gate-sdk/vetted-gate-sdk';
 
 export class LidoSDKCsm {
   readonly core: CoreSDK;
@@ -39,8 +39,8 @@ export class LidoSDKCsm {
   readonly bond: BondSDK;
   readonly roles: RolesSDK;
   readonly permissionlessGate: PermissionlessGateSDK;
-  readonly icsGate: IcsGateSDK;
-  readonly idvtcGate: IdvtcGateSDK;
+  readonly icsGate: VettedGateSDK;
+  readonly idvtcGate: VettedGateSDK;
   readonly strikes: StrikesSDK;
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
@@ -59,8 +59,8 @@ export class LidoSDKCsm {
     this.module = new ModuleSDK(commonProps, 'module');
     this.accounting = new AccountingSDK(commonProps, 'accounting');
     this.permissionlessGate = new PermissionlessGateSDK(commonProps);
-    this.icsGate = new IcsGateSDK(commonProps);
-    this.idvtcGate = new IdvtcGateSDK(commonProps);
+    this.icsGate = new VettedGateSDK(commonProps, CONTRACT_NAMES.icsGate);
+    this.idvtcGate = new VettedGateSDK(commonProps, CONTRACT_NAMES.idvtcGate);
     this.parameters = new ParametersSDK(commonProps, 'parameters');
     this.operator = new OperatorSDK(commonProps, 'operator');
     this.keys = new KeysSDK(commonProps);

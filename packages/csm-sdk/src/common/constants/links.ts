@@ -1,4 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { CONTRACT_NAMES } from './contract-names';
 import { PerSupportedChain } from './supported-chains';
 
 export const DEFAULT_IPFS_GATEWAYS = [
@@ -6,33 +7,47 @@ export const DEFAULT_IPFS_GATEWAYS = [
   'https://gateway.pinata.cloud/ipfs/{cid}',
 ];
 
-export enum LINK_TYPE {
-  icsTree = 'icsTree',
-  idvtcTree = 'idvtcTree',
-  curatedGateTree = 'curatedGateTree',
-  rewardsTree = 'rewardsTree',
-  keysApi = 'keysApi',
-  feesMonitoringApi = 'feesMonitoringApi',
-}
-
-export const EXTERNAL_LINKS: PerSupportedChain<{
-  [key2 in LINK_TYPE]?: string;
-}> = {
+export const MERKLE_TREE_FALLBACKS: PerSupportedChain<
+  Partial<Record<CONTRACT_NAMES, string>>
+> = {
   [CHAINS.Mainnet]: {
-    [LINK_TYPE.icsTree]:
+    [CONTRACT_NAMES.icsGate]:
       'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/main/artifacts/mainnet/ics/merkle-tree.json',
-    [LINK_TYPE.rewardsTree]:
+    [CONTRACT_NAMES.feeDistributor]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    [LINK_TYPE.keysApi]: 'https://keys-api.lido.fi',
-    [LINK_TYPE.feesMonitoringApi]: 'https://api-fees-monitoring.lido.fi',
   },
   [CHAINS.Hoodi]: {
-    [LINK_TYPE.icsTree]:
+    [CONTRACT_NAMES.icsGate]:
       'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/main/artifacts/hoodi/ics/merkle-tree.json',
-    [LINK_TYPE.rewardsTree]:
+    [CONTRACT_NAMES.curatedGatePTO]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/hoodi/curated/gates/PTO/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGatePGO]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/hoodi/curated/gates/PGO/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGateDO]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/hoodi/curated/gates/DO/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGateEEO]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/hoodi/curated/gates/EE/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGateIODC]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGateIODCP]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC%2B/merkle-tree.json',
+    [CONTRACT_NAMES.feeDistributor]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-    [LINK_TYPE.keysApi]: 'https://keys-api-hoodi.testnet.fi',
-    [LINK_TYPE.feesMonitoringApi]:
-      'https://api-fees-monitoring-hoodi.testnet.fi',
+  },
+};
+
+export enum API_NAME {
+  keys = 'keys',
+  feesMonitoring = 'feesMonitoring',
+}
+
+export const API_URLS: PerSupportedChain<Partial<Record<API_NAME, string>>> = {
+  [CHAINS.Mainnet]: {
+    [API_NAME.keys]: 'https://keys-api.lido.fi',
+    [API_NAME.feesMonitoring]: 'https://api-fees-monitoring.lido.fi',
+  },
+  [CHAINS.Hoodi]: {
+    [API_NAME.keys]: 'https://keys-api-hoodi.testnet.fi',
+    [API_NAME.feesMonitoring]: 'https://api-fees-monitoring-hoodi.testnet.fi',
   },
 };

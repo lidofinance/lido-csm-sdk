@@ -1,5 +1,9 @@
 import { Address } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { VettedGateAbi } from '../abi/VettedGate';
+import {
+  CsmSDKModule,
+  CsmSDKProps,
+} from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
@@ -9,39 +13,47 @@ import {
 } from '../common/decorators/index';
 import {
   CACHE_LONG,
-  CONTRACT_NAMES,
   ERROR_CODE,
+  GateEligibility,
+  NodeOperatorShortInfo,
   Proof,
   SDKError,
   TOKENS,
   WithToken,
 } from '../common/index';
 import {
+  AddressProof,
+  AddressTreeLeaf,
   fetchTree,
   findAddressProof,
   isDefined,
   onError,
+  parseAddOperatorProps,
   parseNodeOperatorAddedEvents,
 } from '../common/utils/index';
+import { BindedContract } from '../core-sdk/types';
 import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
-import { parseAddVettedOperatorProps } from './parse-add-vetted-operator-props';
 import {
-  AddressesTreeLeaf,
-  AddressProof,
   AddVettedNodeOperatorProps,
-  ClaimCuvrveProps,
+  ClaimCurveProps,
+  VettedGateContractName,
 } from './types';
 
-export class IcsGateSDK extends CsmSDKModule<{
+export class VettedGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
   keysCache?: KeysCacheSDK;
 }> {
-  private get icsContract() {
-    return this.core.getContract(CONTRACT_NAMES.icsGate);
+  private readonly gateName: VettedGateContractName;
+  private readonly contract: BindedContract<typeof VettedGateAbi>;
+
+  constructor(props: CsmSDKProps, gateName: VettedGateContractName) {
+    super(props, gateName);
+    this.gateName = gateName;
+    this.contract = this.core.getContract(gateName);
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {
@@ -53,6 +65,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorETH(props: AddVettedNodeOperatorProps) {
+    const { depositData } = props;
     const {
       amount,
       keysCount,
@@ -62,18 +75,18 @@ export class IcsGateSDK extends CsmSDKModule<{
       proof,
       referrer,
       ...rest
-    } = await parseAddVettedOperatorProps(props);
+    } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
-        props.depositData,
+        depositData,
         rest.callback,
       ),
       call: () =>
         prepCall(
-          this.icsContract,
+          this.contract,
           'addNodeOperatorETH',
           [
             keysCount,
@@ -93,6 +106,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorStETH(props: AddVettedNodeOperatorProps) {
+    const { depositData } = props;
     const {
       amount,
       keysCount,
@@ -103,23 +117,23 @@ export class IcsGateSDK extends CsmSDKModule<{
       referrer,
       permit,
       ...rest
-    } = await parseAddVettedOperatorProps(props);
+    } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
-        props.depositData,
+        depositData,
         rest.callback,
       ),
       spend: { token: TOKENS.steth, amount, permit },
-      call: ({ permit }) =>
-        prepCall(this.icsContract, 'addNodeOperatorStETH', [
+      call: ({ permit: signedPermit }) =>
+        prepCall(this.contract, 'addNodeOperatorStETH', [
           keysCount,
           publicKeys,
           signatures,
           managementProperties,
-          permit,
+          signedPermit,
           proof,
           referrer,
         ]),
@@ -131,6 +145,7 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorWstETH(props: AddVettedNodeOperatorProps) {
+    const { depositData } = props;
     const {
       amount,
       keysCount,
@@ -141,23 +156,23 @@ export class IcsGateSDK extends CsmSDKModule<{
       referrer,
       permit,
       ...rest
-    } = await parseAddVettedOperatorProps(props);
+    } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
-        props.depositData,
+        depositData,
         rest.callback,
       ),
       spend: { token: TOKENS.wsteth, amount, permit },
-      call: ({ permit }) =>
-        prepCall(this.icsContract, 'addNodeOperatorWstETH', [
+      call: ({ permit: signedPermit }) =>
+        prepCall(this.contract, 'addNodeOperatorWstETH', [
           keysCount,
           publicKeys,
           signatures,
           managementProperties,
-          permit,
+          signedPermit,
           proof,
           referrer,
         ]),
@@ -186,24 +201,25 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getCurveId(): Promise<bigint> {
-    return this.icsContract.read.curveId();
+    return this.contract.read.curveId();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async getTreeConfig() {
     const [root, cid] = await Promise.all([
-      this.icsContract.read.treeRoot(),
-      this.icsContract.read.treeCid(),
+      this.contract.read.treeRoot(),
+      this.contract.read.treeCid(),
     ]).catch(onError);
     return { root, cid };
   }
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [...this.core.getIpfsUrls(cid), this.core.icsTreeLink].filter(
-      isDefined,
-    );
+    return [
+      ...this.core.getIpfsUrls(cid),
+      this.core.getMerkleTreeFallback(this.gateName),
+    ].filter(isDefined);
   }
 
   @Logger('API:')
@@ -217,7 +233,7 @@ export class IcsGateSDK extends CsmSDKModule<{
 
     const urls = this.getProofTreeUrls(cid);
 
-    return fetchTree<AddressesTreeLeaf>({
+    return fetchTree<AddressTreeLeaf>({
       urls,
       root,
     });
@@ -242,31 +258,51 @@ export class IcsGateSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async isConsumed(address: Address): Promise<boolean> {
-    return this.icsContract.read.isConsumed([address]);
+    return this.contract.read.isConsumed([address]);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async isPaused(): Promise<boolean> {
-    return this.icsContract.read.isPaused();
+    return this.contract.read.isPaused();
   }
 
   @Logger('Views:')
   @ErrorHandler()
   public async verifyProof(address: Address, proof: Proof): Promise<boolean> {
-    return this.icsContract.read.verifyProof([address, proof]);
+    return this.contract.read.verifyProof([address, proof]);
+  }
+
+  @Logger('Views:')
+  public async getEligibility(address: Address): Promise<GateEligibility> {
+    const [curveId, isPaused, proof, isConsumed] = await Promise.all([
+      this.getCurveId(),
+      this.isPaused(),
+      this.getProof(address),
+      this.isConsumed(address),
+    ]);
+
+    const isEligible = !!proof && !isConsumed && !isPaused;
+
+    return {
+      isPaused,
+      curveId,
+      proof,
+      isConsumed,
+      isEligible,
+    };
   }
 
   @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
-  public async claimCurve(props: ClaimCuvrveProps) {
+  public async claimCurve(props: ClaimCurveProps) {
     const { nodeOperatorId, proof, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.icsContract, 'claimBondCurve', [nodeOperatorId, proof]),
+        prepCall(this.contract, 'claimBondCurve', [nodeOperatorId, proof]),
     });
   }
 }

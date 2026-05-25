@@ -14,33 +14,37 @@ import {
 import {
   CACHE_LONG,
   CURATED_GATES,
+  GateEligibility,
   NodeOperatorShortInfo,
   Proof,
 } from '../common/index';
-import { findAddressProof } from '../common/utils/find-address-proof';
 import {
+  AddressProof,
+  AddressTreeLeaf,
   fetchTree,
+  findAddressProof,
   isDefined,
   onError,
   parseNodeOperatorAddedEvents,
 } from '../common/utils/index';
 import { BindedContract } from '../core-sdk/types';
-import type { AddressesTreeLeaf, AddressProof } from '../ics-gate-sdk/types';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { prepCall, TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
 import { parseCreateOperatorProps } from './parse-create-operator-props';
-import { CreateNodeOperatorProps, GateEligibility } from './types';
+import { CreateNodeOperatorProps } from './types';
 
 export class CuratedGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
 }> {
-  private contract: BindedContract<typeof CuratedGateAbi>;
+  private readonly gateName: CURATED_GATES;
+  private readonly contract: BindedContract<typeof CuratedGateAbi>;
 
   constructor(props: CsmSDKProps, gateName: CURATED_GATES, name?: string) {
     super(props, name);
 
+    this.gateName = gateName;
     this.contract = this.core.getContract(gateName);
   }
 
@@ -111,7 +115,7 @@ export class CuratedGateSDK extends CsmSDKModule<{
   public getProofTreeUrls(cid: string): string[] {
     return [
       ...this.core.getIpfsUrls(cid),
-      this.core.curatedGateTreeLink,
+      this.core.getMerkleTreeFallback(this.gateName),
     ].filter(isDefined);
   }
 
@@ -122,7 +126,7 @@ export class CuratedGateSDK extends CsmSDKModule<{
     if (!root || !cid) return null;
 
     const urls = this.getProofTreeUrls(cid);
-    return fetchTree<AddressesTreeLeaf>({ urls, root });
+    return fetchTree<AddressTreeLeaf>({ urls, root });
   }
 
   @Logger('Utils:')

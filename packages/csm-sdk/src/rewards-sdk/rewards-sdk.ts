@@ -54,9 +54,10 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [...this.core.getIpfsUrls(cid), this.core.rewardsTreeLink].filter(
-      isDefined,
-    );
+    return [
+      ...this.core.getIpfsUrls(cid),
+      this.core.getMerkleTreeFallback(CONTRACT_NAMES.feeDistributor),
+    ].filter(isDefined);
   }
 
   @Logger('Utils:')

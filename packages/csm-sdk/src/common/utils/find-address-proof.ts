@@ -5,6 +5,11 @@ import { findIndexAndLeaf } from './find-index-and-leaf';
 
 export type AddressTreeLeaf = [Address];
 
+export type AddressProof = {
+  proof: Proof | null;
+  isConsumed: boolean;
+};
+
 export const findAddressProof = (
   tree: StandardMerkleTree<AddressTreeLeaf>,
   address: Address,

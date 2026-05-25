@@ -19,6 +19,7 @@ export * from './parse-curated-module-node-operator-added-events';
 export * from './find-address-proof';
 export * from './create-merkle-tree-schema';
 export * from './is-valid-ipfs-cid';
+export * from './parse-add-operator-props';
 export * from './parse-claim-props';
 export * from './operator-type-utils';
 export * from './sdk-error';

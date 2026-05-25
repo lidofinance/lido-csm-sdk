@@ -72,3 +72,11 @@ export type RewardProof = {
 export type Rewards = RewardProof & {
   available: bigint; // steth amount
 };
+
+export type GateEligibility = {
+  isPaused: boolean;
+  curveId: bigint;
+  proof: Proof | null;
+  isConsumed: boolean;
+  isEligible: boolean;
+};

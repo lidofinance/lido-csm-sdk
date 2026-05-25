@@ -4,14 +4,15 @@ import { BaseModuleAbi, VersionCheckAbi } from '../abi/index';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
 import { Cache, Logger } from '../common/decorators/index';
 import {
+  API_NAME,
+  API_URLS,
   CACHE_IMMUTABLE,
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
   DEFAULT_IPFS_GATEWAYS,
   ERROR_CODE,
-  EXTERNAL_LINKS,
   invariant,
-  LINK_TYPE,
+  MERKLE_TREE_FALLBACKS,
   MODULE_CONTRACT,
   MODULE_NAME,
   SUPPORTED_CHAINS,
@@ -133,39 +134,26 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getContractWithAbi(this.moduleContract, BaseModuleAbi);
   }
 
-  public get externalLinks() {
-    return EXTERNAL_LINKS[this.chainId];
+  public get merkleTreeFallbacks() {
+    return MERKLE_TREE_FALLBACKS[this.chainId];
   }
 
-  private getExternalLink(type: LINK_TYPE) {
-    return this.externalLinks[type];
+  public get apiUrls() {
+    return API_URLS[this.chainId];
+  }
+
+  public getMerkleTreeFallback(
+    contractName: CONTRACT_NAMES,
+  ): string | undefined {
+    return this.merkleTreeFallbacks[contractName];
   }
 
   public get keysApiLink() {
-    return this.keysApiUrl ?? this.getExternalLink(LINK_TYPE.keysApi);
-  }
-
-  public get rewardsTreeLink() {
-    return this.getExternalLink(LINK_TYPE.rewardsTree);
-  }
-
-  public get icsTreeLink() {
-    return this.getExternalLink(LINK_TYPE.icsTree);
-  }
-
-  public get idvtcTreeLink() {
-    return this.getExternalLink(LINK_TYPE.idvtcTree);
-  }
-
-  public get curatedGateTreeLink() {
-    return this.getExternalLink(LINK_TYPE.curatedGateTree);
+    return this.keysApiUrl ?? this.apiUrls[API_NAME.keys];
   }
 
   public get feesMonitoringApiLink() {
-    return (
-      this.feesMonitoringApiUrl ??
-      this.getExternalLink(LINK_TYPE.feesMonitoringApi)
-    );
+    return this.feesMonitoringApiUrl ?? this.apiUrls[API_NAME.feesMonitoring];
   }
 
   @Logger('Utils:')

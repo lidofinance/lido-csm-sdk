@@ -213,16 +213,6 @@
         "default": "./dist/frame-sdk.cjs"
       }
     },
-    "./ics-gate-sdk": {
-      "import": {
-        "types": "./dist/ics-gate-sdk.d.mts",
-        "default": "./dist/ics-gate-sdk.mjs"
-      },
-      "require": {
-        "types": "./dist/ics-gate-sdk.d.cts",
-        "default": "./dist/ics-gate-sdk.cjs"
-      }
-    },
     "./keys-cache-sdk": {
       "import": {
         "types": "./dist/keys-cache-sdk.d.mts",
@@ -341,6 +331,16 @@
       "require": {
         "types": "./dist/tx-sdk.d.cts",
         "default": "./dist/tx-sdk.cjs"
+      }
+    },
+    "./vetted-gate-sdk": {
+      "import": {
+        "types": "./dist/vetted-gate-sdk.d.mts",
+        "default": "./dist/vetted-gate-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/vetted-gate-sdk.d.cts",
+        "default": "./dist/vetted-gate-sdk.cjs"
       }
     },
     "./package.json": "./package.json"

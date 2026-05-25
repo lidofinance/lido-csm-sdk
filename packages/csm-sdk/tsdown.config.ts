@@ -42,7 +42,7 @@ export default defineConfig({
     'events-sdk': 'src/events-sdk/index.ts',
     'fees-monitoring-sdk': 'src/fees-monitoring-sdk/index.ts',
     'frame-sdk': 'src/frame-sdk/index.ts',
-    'ics-gate-sdk': 'src/ics-gate-sdk/index.ts',
+    'vetted-gate-sdk': 'src/vetted-gate-sdk/index.ts',
     'keys-cache-sdk': 'src/keys-cache-sdk/index.ts',
     'keys-sdk': 'src/keys-sdk/index.ts',
     'keys-with-status-sdk': 'src/keys-with-status-sdk/index.ts',

@@ -21,50 +21,38 @@ import type {
 export class CuratedGatesCollectionSDK extends CsmSDKModule<{
   tx: TxSDK;
 }> {
-  private gates: CuratedGateSDK[] = [];
+  private readonly gates: Map<CURATED_GATES, CuratedGateSDK> = new Map();
 
   constructor(props: CsmSDKProps, name?: string) {
     super(props, name);
 
-    // Initialize gate instances for each gate name
     for (const gateName of CURATED_GATES) {
-      try {
-        if (!this.core.contractAddresses[gateName]) continue;
-        const gateSdk = new CuratedGateSDK(props, gateName);
-        this.gates.push(gateSdk);
-      } catch (error) {
-        console.warn(`Failed to initialize gate ${gateName}:`, error);
-      }
+      invariant(
+        this.core.contractAddresses[gateName],
+        `Curated gate ${gateName} address is not configured`,
+        ERROR_CODE.NOT_SUPPORTED,
+      );
+      this.gates.set(gateName, new CuratedGateSDK(props, gateName));
     }
-
-    invariant(
-      this.gates.length > 0,
-      'No gates configured',
-      ERROR_CODE.NOT_SUPPORTED,
-    );
   }
 
   public getCount(): number {
-    return this.gates.length;
+    return this.gates.size;
   }
 
-  public getAll(): ReadonlyArray<CuratedGateSDK> {
+  public getAll(): ReadonlyMap<CURATED_GATES, CuratedGateSDK> {
     return this.gates;
   }
 
-  public get(index: number): CuratedGateSDK | undefined {
-    return this.gates[index];
+  public get(gateName: CURATED_GATES): CuratedGateSDK | undefined {
+    return this.gates.get(gateName);
   }
 
   @Logger('Utils:')
   @ErrorHandler()
-  public getOrThrow(index: number): CuratedGateSDK {
-    const gate = this.gates[index];
-    invariant(
-      gate,
-      `Gate at index ${index} not found`,
-      ERROR_CODE.NOT_SUPPORTED,
-    );
+  public getOrThrow(gateName: CURATED_GATES): CuratedGateSDK {
+    const gate = this.gates.get(gateName);
+    invariant(gate, `Gate ${gateName} not found`, ERROR_CODE.NOT_SUPPORTED);
     return gate;
   }
 
@@ -74,26 +62,23 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
     address: Address,
   ): Promise<GateItemEligibility[]> {
     return Promise.all(
-      this.gates.map(async (gate, gateIndex) => {
+      Array.from(this.gates, async ([gateName, gate]) => {
         const eligibility = await gate.getEligibility(address);
-
         return {
           ...eligibility,
-          gateIndex,
+          gateName,
         };
       }),
     );
   }
 
-  // Operator creation in specific gate
-
   @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async createNodeOperator(props: CreateNodeOperatorInGateProps) {
-    const { gateIndex, ...gateProps } = props;
+    const { gateName, ...gateProps } = props;
 
-    const gate = this.getOrThrow(gateIndex);
+    const gate = this.getOrThrow(gateName);
 
     return gate.createNodeOperator(gateProps);
   }
