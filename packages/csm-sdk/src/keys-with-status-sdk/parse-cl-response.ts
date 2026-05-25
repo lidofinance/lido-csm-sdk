@@ -21,7 +21,7 @@ const CLStatusSchema = z.enum([
 type CLStatus = z.infer<typeof CLStatusSchema>;
 
 const StatusMap: Record<CLStatus, KEY_STATUS> = {
-  pending_initialized: KEY_STATUS.DEPOSITABLE,
+  pending_initialized: KEY_STATUS.ACTIVATION_PENDING,
   pending_queued: KEY_STATUS.ACTIVATION_PENDING,
   active_ongoing: KEY_STATUS.ACTIVE,
   active_exiting: KEY_STATUS.EXITING,
