@@ -41,8 +41,12 @@ export type GroupInfo = {
   groupId: bigint;
 } & GroupOperators;
 
-export type OperatorStakeSummary = OperatorStakeInfo & {
+export type OperatorStakeSummary = OperatorStakeInfo &
+  OperatorWeightAndExternalStake;
+
+export type OperatorWeightAndExternalStake = {
   weight: bigint;
+  externalStake: bigint;
 };
 
 export type OperatorStakeInfo = {

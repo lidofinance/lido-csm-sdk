@@ -117,6 +117,19 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_MID)
+  public async getOperatorWeightAndExternalStake(
+    nodeOperatorId: NodeOperatorId,
+  ) {
+    const [weight, externalStake] =
+      await this.contract.read.getNodeOperatorWeightAndExternalStake([
+        nodeOperatorId,
+      ]);
+    return { weight, externalStake };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getOperatorBalance(
     nodeOperatorId: NodeOperatorId,
   ): Promise<bigint> {
@@ -171,15 +184,17 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   public async getOperatorStakeSummary(
     nodeOperatorId: NodeOperatorId,
   ): Promise<OperatorStakeSummary> {
-    const [weight, { currentStake, targetStake }] = await Promise.all([
-      this.getOperatorWeight(nodeOperatorId),
-      this.getOperatorTargetStake(nodeOperatorId),
-    ]);
+    const [{ weight, externalStake }, { currentStake, targetStake }] =
+      await Promise.all([
+        this.getOperatorWeightAndExternalStake(nodeOperatorId),
+        this.getOperatorTargetStake(nodeOperatorId),
+      ]);
 
     return {
       weight,
       currentStake,
       targetStake,
+      externalStake,
     };
   }
 
@@ -191,19 +206,16 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     const group = await this.getGroup(groupId);
     if (!group) return null;
 
-    const ids = group.subNodeOperators.map((op) => op.nodeOperatorId);
-
-    const [weights, [currentStakes, targetStakes]] = await Promise.all([
-      this.contract.read.getOperatorWeights([ids]),
-      this.getTopUpAllocations(),
-    ]);
+    const summaries = await Promise.all(
+      group.subNodeOperators.map((op) =>
+        this.getOperatorStakeSummary(op.nodeOperatorId),
+      ),
+    );
 
     return group.subNodeOperators.map((op, i) => ({
       nodeOperatorId: op.nodeOperatorId,
       share: op.share,
-      weight: weights[i] ?? 0n,
-      currentStake: currentStakes[Number(op.nodeOperatorId)] ?? 0n,
-      targetStake: targetStakes[Number(op.nodeOperatorId)] ?? 0n,
+      ...summaries[i]!,
     }));
   }
 
