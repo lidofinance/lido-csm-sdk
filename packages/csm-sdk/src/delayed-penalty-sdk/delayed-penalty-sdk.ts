@@ -9,7 +9,7 @@ import {
   Logger,
 } from '../common/decorators/index';
 import { DiscoverySDK } from '../discovery-sdk/discovery-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { CancelProps, OperatorWithLockedBond, ReportProps } from './types';
 
 export class DelayedPenaltySDK extends CsmSDKModule<{
@@ -32,7 +32,7 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'reportGeneralDelayedPenalty', [
+        this.moduleContract.encode.reportGeneralDelayedPenalty([
           nodeOperatorId,
           penaltyType,
           amount,
@@ -53,7 +53,7 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'cancelGeneralDelayedPenalty', [
+        this.moduleContract.encode.cancelGeneralDelayedPenalty([
           nodeOperatorId,
           amount,
         ]),

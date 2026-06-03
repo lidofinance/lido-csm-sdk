@@ -34,7 +34,7 @@ import {
 import { BindedContract } from '../core-sdk/types';
 import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
 import {
   AddVettedNodeOperatorProps,
@@ -85,9 +85,7 @@ export class VettedGateSDK extends CsmSDKModule<{
         rest.callback,
       ),
       call: () =>
-        prepCall(
-          this.contract,
-          'addNodeOperatorETH',
+        this.contract.encode.addNodeOperatorETH(
           [
             keysCount,
             publicKeys,
@@ -96,7 +94,7 @@ export class VettedGateSDK extends CsmSDKModule<{
             proof,
             referrer,
           ],
-          amount,
+          { value: amount },
         ),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
@@ -128,7 +126,7 @@ export class VettedGateSDK extends CsmSDKModule<{
       ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit: signedPermit }) =>
-        prepCall(this.contract, 'addNodeOperatorStETH', [
+        this.contract.encode.addNodeOperatorStETH([
           keysCount,
           publicKeys,
           signatures,
@@ -167,7 +165,7 @@ export class VettedGateSDK extends CsmSDKModule<{
       ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit: signedPermit }) =>
-        prepCall(this.contract, 'addNodeOperatorWstETH', [
+        this.contract.encode.addNodeOperatorWstETH([
           keysCount,
           publicKeys,
           signatures,
@@ -301,8 +299,7 @@ export class VettedGateSDK extends CsmSDKModule<{
 
     return this.bus.tx.perform({
       ...rest,
-      call: () =>
-        prepCall(this.contract, 'claimBondCurve', [nodeOperatorId, proof]),
+      call: () => this.contract.encode.claimBondCurve([nodeOperatorId, proof]),
     });
   }
 }

@@ -8,7 +8,7 @@ import {
 import { CONTRACT_NAMES, ERROR_CODE, ROLES, SDKError } from '../common/index';
 import { parseClaimProps } from '../common/utils/parse-claim-props';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
@@ -42,7 +42,7 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'changeNodeOperatorRewardAddress', [
+        this.moduleContract.encode.changeNodeOperatorRewardAddress([
           nodeOperatorId,
           address,
         ]),
@@ -59,11 +59,10 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'proposeNodeOperatorManagerAddressChange',
-          [nodeOperatorId, address],
-        ),
+        this.moduleContract.encode.proposeNodeOperatorManagerAddressChange([
+          nodeOperatorId,
+          address,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
@@ -77,11 +76,10 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'proposeNodeOperatorRewardAddressChange',
-          [nodeOperatorId, address],
-        ),
+        this.moduleContract.encode.proposeNodeOperatorRewardAddressChange([
+          nodeOperatorId,
+          address,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
@@ -98,7 +96,7 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'resetNodeOperatorManagerAddress', [
+        this.moduleContract.encode.resetNodeOperatorManagerAddress([
           nodeOperatorId,
         ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
@@ -114,11 +112,9 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'confirmNodeOperatorRewardAddressChange',
-          [nodeOperatorId],
-        ),
+        this.moduleContract.encode.confirmNodeOperatorRewardAddressChange([
+          nodeOperatorId,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
@@ -132,11 +128,9 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'confirmNodeOperatorManagerAddressChange',
-          [nodeOperatorId],
-        ),
+        this.moduleContract.encode.confirmNodeOperatorManagerAddressChange([
+          nodeOperatorId,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
@@ -172,7 +166,7 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'setCustomRewardsClaimer', [
+        this.accountingContract.encode.setCustomRewardsClaimer([
           nodeOperatorId,
           claimerAddress,
         ]),
@@ -191,7 +185,7 @@ export class RolesSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'updateFeeSplits', [
+        this.accountingContract.encode.updateFeeSplits([
           nodeOperatorId,
           feeSplits,
           shares,

@@ -9,7 +9,7 @@ import {
 import { CACHE_MID, CONTRACT_NAMES, NodeOperatorId } from '../common/index';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import {
   GroupInfo,
   GroupOperators,
@@ -45,7 +45,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.contract, 'setOperatorMetadataAsOwner', [
+        this.contract.encode.setOperatorMetadataAsOwner([
           nodeOperatorId,
           name,
           description,

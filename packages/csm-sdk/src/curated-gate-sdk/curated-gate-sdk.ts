@@ -29,7 +29,7 @@ import {
 } from '../common/utils/index';
 import { BindedContract } from '../core-sdk/types';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
 import { parseCreateOperatorProps } from './parse-create-operator-props';
 import { CreateNodeOperatorProps } from './types';
@@ -64,7 +64,7 @@ export class CuratedGateSDK extends CsmSDKModule<{
     return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
       call: () =>
-        prepCall(this.contract, 'createNodeOperator', [
+        this.contract.encode.createNodeOperator([
           name,
           description,
           managerAddress,

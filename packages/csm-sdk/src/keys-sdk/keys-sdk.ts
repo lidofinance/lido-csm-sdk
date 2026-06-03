@@ -20,7 +20,7 @@ import {
   withKeysCacheCallback,
   withKeysRemovalCacheCallback,
 } from '../keys-cache-sdk/index';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { parseAddKeysProps } from './parse-add-keys-props';
 import { AddKeysProps, EjectKeysByArrayProps, RemoveKeysProps } from './types';
 
@@ -62,11 +62,9 @@ export class KeysSDK extends CsmSDKModule<{
         rest.callback,
       ),
       call: ({ from }) =>
-        prepCall(
-          this.moduleContract,
-          'addValidatorKeysETH',
+        this.moduleContract.encode.addValidatorKeysETH(
           [from, nodeOperatorId, keysCount, publicKeys, signatures],
-          amount,
+          { value: amount },
         ),
     });
   }
@@ -94,7 +92,7 @@ export class KeysSDK extends CsmSDKModule<{
       ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ from, permit }) =>
-        prepCall(this.moduleContract, 'addValidatorKeysStETH', [
+        this.moduleContract.encode.addValidatorKeysStETH([
           from,
           nodeOperatorId,
           keysCount,
@@ -128,7 +126,7 @@ export class KeysSDK extends CsmSDKModule<{
       ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ from, permit }) =>
-        prepCall(this.moduleContract, 'addValidatorKeysWstETH', [
+        this.moduleContract.encode.addValidatorKeysWstETH([
           from,
           nodeOperatorId,
           keysCount,
@@ -176,7 +174,7 @@ export class KeysSDK extends CsmSDKModule<{
         rest.callback,
       ),
       call: () =>
-        prepCall(this.moduleContract, 'removeKeys', [
+        this.moduleContract.encode.removeKeys([
           nodeOperatorId,
           startIndex,
           keysCount,
@@ -199,11 +197,9 @@ export class KeysSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.ejectorContract,
-          'voluntaryEject',
+        this.ejectorContract.encode.voluntaryEject(
           [nodeOperatorId, keyIndices, refundRecipient],
-          amount,
+          { value: amount },
         ),
     });
   }

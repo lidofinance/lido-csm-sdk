@@ -20,7 +20,7 @@ import {
   Pagination,
 } from '../discovery-sdk/index';
 import { ModuleSDK } from '../module-sdk/module-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { CommonTransactionProps } from '../tx-sdk/types';
 import { filterEmptyBatches } from './filter-batches';
 import { byNextBatchIndex } from './next-batch-index';
@@ -180,7 +180,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'cleanDepositQueue', [
+        this.moduleContract.encode.cleanDepositQueue([
           BigInt(maxItems ?? DEFAULT_CLEAN_MAX_ITEMS),
         ]),
     });
@@ -199,7 +199,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'updateDepositableValidatorsCount', [
+        this.moduleContract.encode.updateDepositableValidatorsCount([
           nodeOperatorId,
         ]),
     });

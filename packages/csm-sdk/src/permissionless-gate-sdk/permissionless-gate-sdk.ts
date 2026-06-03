@@ -19,7 +19,7 @@ import {
 } from '../common/utils/index';
 import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { ReceiptLike } from '../tx-sdk/types';
 import { AddNodeOperatorProps } from './types';
 
@@ -60,11 +60,9 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
         rest.callback,
       ),
       call: () =>
-        prepCall(
-          this.permissionlessContract,
-          'addNodeOperatorETH',
+        this.permissionlessContract.encode.addNodeOperatorETH(
           [keysCount, publicKeys, signatures, managementProperties, referrer],
-          amount,
+          { value: amount },
         ),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
@@ -95,7 +93,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit: signedPermit }) =>
-        prepCall(this.permissionlessContract, 'addNodeOperatorStETH', [
+        this.permissionlessContract.encode.addNodeOperatorStETH([
           keysCount,
           publicKeys,
           signatures,
@@ -132,7 +130,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit: signedPermit }) =>
-        prepCall(this.permissionlessContract, 'addNodeOperatorWstETH', [
+        this.permissionlessContract.encode.addNodeOperatorWstETH([
           keysCount,
           publicKeys,
           signatures,

@@ -26,7 +26,6 @@ import {
   SignPermitOrApproveProps,
 } from './internal-types';
 import { parseSpendingProps } from './parse-spending-props';
-import { prepCall } from './prep-call';
 import { stripPermit } from './strip-permit';
 import {
   AllowanceProps,
@@ -499,10 +498,7 @@ export class TxSDK extends CsmSDKModule {
 
   private async getApproveCall(props: AmountAndTokenProps) {
     const { amount, token } = parseSpendingProps(props);
-    return prepCall(this.getTokenContract(token), 'approve', [
-      this.spender,
-      amount,
-    ]);
+    return this.getTokenContract(token).encode.approve([this.spender, amount]);
   }
 
   @Logger('Utils:')

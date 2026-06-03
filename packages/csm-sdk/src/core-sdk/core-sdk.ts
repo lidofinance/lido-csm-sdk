@@ -1,4 +1,7 @@
-import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
+import {
+  getEncodableContract,
+  LidoSDKCore,
+} from '@lidofinance/lido-ethereum-sdk';
 import { Abi, Address, Chain, getContract } from 'viem';
 import { BaseModuleAbi, VersionCheckAbi } from '../abi/index';
 import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
@@ -113,11 +116,13 @@ export class CoreSDK extends CsmSDKCacheable {
     contractName: CONTRACT_NAMES,
     abi: TAbi,
   ): BindedContract<TAbi> {
-    return getContract({
-      address: this.getContractAddress(contractName),
-      abi,
-      client: this.core.keyedClient,
-    });
+    return getEncodableContract(
+      getContract({
+        address: this.getContractAddress(contractName),
+        abi,
+        client: this.core.keyedClient,
+      }),
+    ) as BindedContract<TAbi>;
   }
 
   public getContract<TName extends keyof typeof CONTRACT_BASE_ABI>(

@@ -1,44 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import type { Hex } from 'viem';
-import { encodeFunctionData, parseAbi } from 'viem';
 import {
   TOKENS,
   STETH_ROUNDING_THRESHOLD,
 } from '../../../src/common/constants/tokens';
-import { prepCall } from '../../../src/tx-sdk/prep-call';
 import { parseSpendingProps } from '../../../src/tx-sdk/parse-spending-props';
 import { stripPermit } from '../../../src/tx-sdk/strip-permit';
-
-const TEST_ABI = parseAbi([
-  'function transfer(address to, uint256 amount)',
-  'function deposit(uint256 id) payable',
-]);
-
-const TEST_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678' as const;
-
-describe('prepCall', () => {
-  const contract = { address: TEST_ADDRESS, abi: TEST_ABI };
-
-  it('produces correct to and data for non-payable call', () => {
-    const result = prepCall(contract, 'transfer', [TEST_ADDRESS, 100n]);
-    expect(result.to).toBe(TEST_ADDRESS);
-    expect(result.data).toBe(
-      encodeFunctionData({
-        abi: TEST_ABI,
-        functionName: 'transfer',
-        args: [TEST_ADDRESS, 100n],
-      }),
-    );
-    expect(result.value).toBeUndefined();
-  });
-
-  it('includes value for payable call', () => {
-    const result = prepCall(contract, 'deposit', [42n], 1000n);
-    expect(result.to).toBe(TEST_ADDRESS);
-    expect(result.value).toBe(1000n);
-    expect(result.data).toBeDefined();
-  });
-});
 
 describe('parseSpendingProps', () => {
   it('adds 10 wei buffer for stETH', () => {

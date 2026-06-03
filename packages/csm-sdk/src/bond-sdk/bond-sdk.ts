@@ -14,7 +14,7 @@ import {
   WithToken,
 } from '../common/index';
 import { parseClaimProps } from '../common/utils/parse-claim-props';
-import { prepCall, TxSDK } from '../tx-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
 import { parseCoverReceiptEvents } from './parse-cover-receipt-events';
 import {
   AddBondProps,
@@ -52,12 +52,9 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.accountingContract,
-          'depositETH',
-          [nodeOperatorId],
-          amount,
-        ),
+        this.accountingContract.encode.depositETH([nodeOperatorId], {
+          value: amount,
+        }),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
@@ -72,7 +69,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
-        prepCall(this.accountingContract, 'depositStETH', [
+        this.accountingContract.encode.depositStETH([
           nodeOperatorId,
           amount,
           permit,
@@ -91,7 +88,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
-        prepCall(this.accountingContract, 'depositWstETH', [
+        this.accountingContract.encode.depositWstETH([
           nodeOperatorId,
           amount,
           permit,
@@ -127,7 +124,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'compensateGeneralDelayedPenalty', [
+        this.moduleContract.encode.compensateGeneralDelayedPenalty([
           nodeOperatorId,
         ]),
       decodeResult: (receipt) => parseCoverReceiptEvents(receipt),
@@ -143,9 +140,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'unlockExpiredLock', [
-          nodeOperatorId,
-        ]),
+        this.accountingContract.encode.unlockExpiredLock([nodeOperatorId]),
     });
   }
 
@@ -158,7 +153,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'pullAndSplitFeeRewards', [
+        this.accountingContract.encode.pullAndSplitFeeRewards([
           nodeOperatorId,
           shares,
           proof,
@@ -176,7 +171,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'claimRewardsUnstETH', [
+        this.accountingContract.encode.claimRewardsUnstETH([
           nodeOperatorId,
           amount,
           shares,
@@ -195,7 +190,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'claimRewardsStETH', [
+        this.accountingContract.encode.claimRewardsStETH([
           nodeOperatorId,
           amount,
           shares,
@@ -214,7 +209,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'claimRewardsWstETH', [
+        this.accountingContract.encode.claimRewardsWstETH([
           nodeOperatorId,
           amount,
           shares,
