@@ -82,4 +82,7 @@ export default defineConfig({
   sourcemap: true,
   report: false,
   logLevel: 'warn',
+  // esbuild-decorators + rolldown-plugin-dts are inherently slow; the timing
+  // nag is expected noise, so suppress just that check (others stay on).
+  checks: { pluginTimings: false },
 });
