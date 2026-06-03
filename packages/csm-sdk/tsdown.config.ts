@@ -82,6 +82,10 @@ export default defineConfig({
   sourcemap: true,
   report: false,
   logLevel: 'warn',
+  // Validate the published surface in CI only: publint checks the exports map
+  // against emitted files; attw verifies the dual .d.mts/.d.cts types resolve.
+  publint: 'ci-only',
+  attw: { enabled: 'ci-only', profile: 'node16', level: 'error' },
   // esbuild-decorators + rolldown-plugin-dts are inherently slow; the timing
   // nag is expected noise, so suppress just that check (others stay on).
   checks: { pluginTimings: false },
