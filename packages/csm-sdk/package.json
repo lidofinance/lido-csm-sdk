@@ -37,11 +37,11 @@
     "lint": "eslint --max-warnings 0"
   },
   "peerDependencies": {
-    "@lidofinance/lido-ethereum-sdk": "^4.7.0",
+    "@lidofinance/lido-ethereum-sdk": "^4.8.0",
     "viem": "^2.46.0"
   },
   "devDependencies": {
-    "@lidofinance/lido-ethereum-sdk": "^4.7.0",
+    "@lidofinance/lido-ethereum-sdk": "^4.8.0",
     "@vitest/eslint-plugin": "^1.6.16",
     "dotenv": "^17.4.2",
     "tsdown": "^0.21.9",

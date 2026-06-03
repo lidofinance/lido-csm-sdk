@@ -8,7 +8,7 @@ type CoreLog = {
 };
 
 const getLogMode = function <This>(this: This): LOG_MODE {
-  let logMode: LOG_MODE = 'info';
+  let logMode: LOG_MODE = 'none';
 
   if (isCore(this)) {
     logMode = this.logMode;

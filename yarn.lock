@@ -825,22 +825,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/bytes@npm:^5.7.0":
-  version: 5.8.0
-  resolution: "@ethersproject/bytes@npm:5.8.0"
-  dependencies:
-    "@ethersproject/logger": ^5.8.0
-  checksum: 507e8ef1f1559590b4e78e3392a2b16090e96fb1091e0b08d3a8491df65976b313c29cdb412594454f68f9f04d5f77ea5a400b489d80a3e46a608156ef31b251
-  languageName: node
-  linkType: hard
-
-"@ethersproject/logger@npm:^5.8.0":
-  version: 5.8.0
-  resolution: "@ethersproject/logger@npm:5.8.0"
-  checksum: 6249885a7fd4a5806e4c8700b76ffcc8f1ff00d71f31aa717716a89fa6b391de19fbb0cb5ae2560b9f57ec0c2e8e0a11ebc2099124c73d3b42bc58e3eedc41d1
-  languageName: node
-  linkType: hard
-
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -1031,7 +1015,7 @@ __metadata:
   resolution: "@lidofinance/lido-csm-sdk@workspace:packages/csm-sdk"
   dependencies:
     "@chainsafe/ssz": ^1.3.0
-    "@lidofinance/lido-ethereum-sdk": ^4.7.0
+    "@lidofinance/lido-ethereum-sdk": ^4.8.0
     "@openzeppelin/merkle-tree": ^1.0.8
     "@vitest/eslint-plugin": ^1.6.16
     bls-eth-wasm: ^1.4.0
@@ -1043,16 +1027,15 @@ __metadata:
     vitest: ^3.2.4
     zod: ^4.3.6
   peerDependencies:
-    "@lidofinance/lido-ethereum-sdk": ^4.7.0
+    "@lidofinance/lido-ethereum-sdk": ^4.8.0
     viem: ^2.46.0
   languageName: unknown
   linkType: soft
 
-"@lidofinance/lido-ethereum-sdk@npm:^4.7.0":
-  version: 4.7.0
-  resolution: "@lidofinance/lido-ethereum-sdk@npm:4.7.0"
+"@lidofinance/lido-ethereum-sdk@npm:^4.8.0":
+  version: 4.8.0
+  resolution: "@lidofinance/lido-ethereum-sdk@npm:4.8.0"
   dependencies:
-    "@ethersproject/bytes": ^5.7.0
     "@openzeppelin/merkle-tree": ^1.0.8
     blockstore-core: ^5.0.4
     graphql: ^16.8.1
@@ -1061,7 +1044,7 @@ __metadata:
     multiformats: ^13.4.0
   peerDependencies:
     viem: ^2.45.0
-  checksum: d2857a7c4ebaa1d5bbfe52d8a8c3e3f585645f6d1cc96b69a8df426c3352c0d6dea65abfea35bcb97b431fb652a1ac36c0c16bab3effec97dd641a8ed8a55a17
+  checksum: 77ecbb0c913380c6d0ab869c02ff1d535d1b4e1aa30b6c7e838f1ace621169e49cf2e5f9f7c00ba732be3230cf47ddf5f8241ea5168a2d283a9e11f6a2d7e2ef
   languageName: node
   linkType: hard
 

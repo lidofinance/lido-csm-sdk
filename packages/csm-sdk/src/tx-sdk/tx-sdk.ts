@@ -166,7 +166,7 @@ export class TxSDK extends CsmSDKModule {
     });
 
     const receipt = await withSDKError(
-      this.core.core.rpcProvider.waitForTransactionReceipt({
+      this.core.core.publicClient.waitForTransactionReceipt({
         hash,
         timeout: 120_000,
         ...waitForTransactionReceiptParameters,
@@ -180,7 +180,7 @@ export class TxSDK extends CsmSDKModule {
     });
 
     const confirmations =
-      await this.core.core.rpcProvider.getTransactionConfirmations({
+      await this.core.core.publicClient.getTransactionConfirmations({
         hash: receipt.transactionHash,
       });
 
