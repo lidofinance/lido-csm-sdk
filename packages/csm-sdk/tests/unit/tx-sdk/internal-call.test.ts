@@ -69,11 +69,12 @@ const buildTx = () => {
 };
 
 const invokeCall = (tx: TxSDK, overrides: Record<string, unknown> = {}) =>
-  (tx as unknown as { internalCall: (props: unknown) => Promise<unknown> })
-    .internalCall({
-      calls: [{ to: TARGET_ADDRESS, data: CALLDATA }],
-      ...overrides,
-    });
+  (
+    tx as unknown as { internalCall: (props: unknown) => Promise<unknown> }
+  ).internalCall({
+    calls: [{ to: TARGET_ADDRESS, data: CALLDATA }],
+    ...overrides,
+  });
 
 describe('TxSDK.internalCall (AA / sendCalls path)', () => {
   let fakes: ReturnType<typeof buildTx>;

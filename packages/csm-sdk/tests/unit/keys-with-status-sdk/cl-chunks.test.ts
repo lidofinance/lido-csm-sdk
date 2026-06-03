@@ -151,11 +151,11 @@ describe('parseClResponse', () => {
     expect(result[0]!.status).toBe(KEY_STATUS.ACTIVE);
   });
 
-  it('maps pending_initialized to DEPOSITABLE', () => {
+  it('maps pending_initialized to ACTIVATION_PENDING', () => {
     const result = parseClResponse(
       makeResponse([makeClKey({ status: 'pending_initialized' })]),
     );
-    expect(result[0]!.status).toBe(KEY_STATUS.DEPOSITABLE);
+    expect(result[0]!.status).toBe(KEY_STATUS.ACTIVATION_PENDING);
   });
 
   it('maps pending_queued to ACTIVATION_PENDING', () => {
