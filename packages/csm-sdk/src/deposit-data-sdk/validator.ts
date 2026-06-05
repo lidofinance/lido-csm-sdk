@@ -38,7 +38,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'pubkey',
-      message: 'pubkey is not valid string',
+      message: 'pubkey is not a valid string',
       code: ValidationErrorCode.INVALID_PUBKEY,
     });
   }
@@ -48,7 +48,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'signature',
-      message: 'signature is not valid string',
+      message: 'signature is not a valid string',
       code: ValidationErrorCode.INVALID_SIGNATURE,
     });
   }
