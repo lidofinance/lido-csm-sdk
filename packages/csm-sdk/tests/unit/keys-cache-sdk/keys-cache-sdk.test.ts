@@ -6,6 +6,7 @@ import {
 import { KEY_TTL_DURATION } from '../../../src/keys-cache-sdk/constants';
 import { withKeysCacheCallback } from '../../../src/keys-cache-sdk/with-keys-cache-callback';
 import { TransactionCallbackStage } from '../../../src/tx-sdk/types';
+import { SDKError } from '../../../src/common/utils/sdk-error';
 
 const CHAIN_ID = 1;
 const STORAGE_KEY = `lido-keys-cache-${CHAIN_ID}`;
@@ -302,7 +303,7 @@ describe('KeysCacheSDK.makeCallback', () => {
     await cb({ stage: TransactionCallbackStage.SIGN, payload: {} });
     await cb({
       stage: TransactionCallbackStage.ERROR,
-      payload: { error: new Error('boom') },
+      payload: { error: SDKError.from(new Error('boom')) },
     });
     expect(sdk.getCacheStatus(PK_A)).toBeNull();
     expect(sdk.getCacheStatus(PK_B)).toBeNull();
@@ -323,7 +324,7 @@ describe('KeysCacheSDK.makeCallback', () => {
     });
     await cb({
       stage: TransactionCallbackStage.ERROR,
-      payload: { error: new Error('late') },
+      payload: { error: SDKError.from(new Error('late')) },
     });
     expect(sdk.getCacheStatus(PK_A)).toBe(KeyCacheStatus.CONFIRMED);
   });
@@ -434,7 +435,7 @@ describe('KeysCacheSDK.makeRemovalCallback', () => {
     await cb({ stage: TransactionCallbackStage.SIGN, payload: {} });
     await cb({
       stage: TransactionCallbackStage.ERROR,
-      payload: { error: new Error('x') },
+      payload: { error: SDKError.from(new Error('x')) },
     });
     expect(sdk.getCacheStatus(PK_A)).toBe(KeyCacheStatus.CONFIRMED);
   });

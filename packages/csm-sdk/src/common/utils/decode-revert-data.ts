@@ -1,5 +1,15 @@
+import type { ExtractAbiErrorNames } from 'abitype';
 import { type Abi, type Hex, decodeErrorResult } from 'viem';
 import { CONTRACT_BASE_ABI } from '../constants/contract-abi';
+
+type ContractAbis = (typeof CONTRACT_BASE_ABI)[keyof typeof CONTRACT_BASE_ABI];
+
+export type ContractErrorName = ExtractAbiErrorNames<ContractAbis>;
+
+export type DecodedRevert = {
+  name: ContractErrorName;
+  args: readonly unknown[];
+};
 
 const HEX_DATA_RE = /(?:custom error |reason: )(0x[0-9a-fA-F]{8,})/;
 
@@ -75,17 +85,24 @@ const extractErrorData = (error: unknown): Hex | undefined => {
   return undefined;
 };
 
-export const decodeRevertData = (error: unknown): string | undefined => {
+export const decodeRevertData = (error: unknown): DecodedRevert | undefined => {
   const data = extractErrorData(error);
   if (!data || data === '0x') return undefined;
 
   try {
     const decoded = decodeErrorResult({ abi: getCombinedErrorAbi(), data });
-    const args = decoded.args?.length
-      ? `(${decoded.args.map(String).join(', ')})`
-      : '';
-    return `${decoded.errorName}${args}`;
+    return {
+      name: decoded.errorName as ContractErrorName,
+      args: decoded.args ?? [],
+    };
   } catch {
     return undefined;
   }
+};
+
+export const formatDecodedRevert = (decoded: DecodedRevert): string => {
+  const args = decoded.args.length
+    ? `(${decoded.args.map(String).join(', ')})`
+    : '';
+  return `${decoded.name}${args}`;
 };

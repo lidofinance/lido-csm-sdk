@@ -15,6 +15,7 @@ import {
   Erc20Tokens,
   ERROR_CODE,
   PermitSignatureShort,
+  SDKError,
   withSDKError,
 } from '../common/index';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported';
@@ -79,7 +80,7 @@ export class TxSDK extends CsmSDKModule {
 
     const result = await this.core.checkContractVersion(contractName);
     if (!result.supported) {
-      throw this.core.core.error({
+      throw new SDKError({
         code: ERROR_CODE.NOT_SUPPORTED,
         message: `Contract ${contractName} version ${result.version} not supported`,
       });
@@ -133,7 +134,7 @@ export class TxSDK extends CsmSDKModule {
           }),
           ERROR_CODE.TRANSACTION_ERROR,
         );
-        throw this.core.core.error({
+        throw new SDKError({
           code: ERROR_CODE.TRANSACTION_ERROR,
           message: 'Not enough ether for gas',
         });
@@ -255,7 +256,7 @@ export class TxSDK extends CsmSDKModule {
       | undefined;
 
     if (receipts.some((r) => r.status === 'reverted')) {
-      throw this.core.core.error({
+      throw new SDKError({
         code: ERROR_CODE.TRANSACTION_ERROR,
         message:
           'Some operations were reverted. Check your wallet for details.',
@@ -263,7 +264,7 @@ export class TxSDK extends CsmSDKModule {
     }
 
     if (!receipt?.transactionHash) {
-      throw this.core.core.error({
+      throw new SDKError({
         code: ERROR_CODE.TRANSACTION_ERROR,
         message:
           callStatus.status === 'failure'

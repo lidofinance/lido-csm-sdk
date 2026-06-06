@@ -23,4 +23,6 @@ export * from './parse-add-operator-props';
 export * from './parse-claim-props';
 export * from './operator-type-utils';
 export * from './sdk-error';
+export * from './sdk-error-code';
+export * from './classify-error';
 export * from './decode-revert-data';

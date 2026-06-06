@@ -7,7 +7,7 @@ import type {
   WaitForTransactionReceiptParameters,
   WalletCallReceipt,
 } from 'viem';
-import { Erc20Tokens, PermitSignatureShort } from '../common/index';
+import { Erc20Tokens, PermitSignatureShort, SDKError } from '../common/index';
 
 // Core Transaction Props
 
@@ -80,7 +80,7 @@ export type TransactionCallbackProps<TDecodedResult = undefined> =
   | { stage: TransactionCallbackStage.MULTISIG_DONE; payload?: undefined }
   | {
       stage: TransactionCallbackStage.ERROR;
-      payload: { error: any }; // SDKError
+      payload: { error: SDKError };
     };
 
 export type TransactionCallback<TDecodedResult = undefined> = (

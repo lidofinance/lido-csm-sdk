@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { BaseError, encodeErrorResult, Hex } from 'viem';
 import { AccountingAbi } from '../../src/abi/Accounting';
-import { decodeRevertData } from '../../src/common/utils/decode-revert-data';
+import {
+  decodeRevertData,
+  formatDecodedRevert,
+} from '../../src/common/utils/decode-revert-data';
 import { SDKError } from '../../src/common/utils/sdk-error';
 
 const encodeKnownError = (name: string, args?: unknown[]): Hex =>
@@ -15,7 +18,10 @@ describe('decodeRevertData', () => {
   it('decodes error without args from BaseError.data', () => {
     const data = encodeKnownError('FailedToSendEther');
     const error = Object.assign(new BaseError('reverted'), { data });
-    expect(decodeRevertData(error)).toBe('FailedToSendEther');
+    expect(decodeRevertData(error)).toEqual({
+      name: 'FailedToSendEther',
+      args: [],
+    });
   });
 
   it('decodes error with args', () => {
@@ -25,8 +31,11 @@ describe('decodeRevertData', () => {
     ]);
     const error = Object.assign(new BaseError('reverted'), { data });
     const result = decodeRevertData(error);
-    expect(result).toContain('AccessControlUnauthorizedAccount');
-    expect(result).toContain('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
+    expect(result?.name).toBe('AccessControlUnauthorizedAccount');
+    expect(result?.args).toEqual([
+      '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      '0x0000000000000000000000000000000000000000000000000000000000000001',
+    ]);
   });
 
   it('returns undefined for unknown selector', () => {
@@ -43,7 +52,7 @@ describe('decodeRevertData', () => {
       shortMessage: `Execution reverted with reason: custom error ${data}.`,
       cause: undefined,
     };
-    expect(decodeRevertData(error)).toBe('FailedToSendEther');
+    expect(decodeRevertData(error)?.name).toBe('FailedToSendEther');
   });
 
   it('extracts hex from nested cause chain', () => {
@@ -55,13 +64,13 @@ describe('decodeRevertData', () => {
         name: 'ExecutionRevertedError',
       },
     };
-    expect(decodeRevertData(error)).toBe('FailedToSendEther');
+    expect(decodeRevertData(error)?.name).toBe('FailedToSendEther');
   });
 
   it('extracts hex from error message via regex', () => {
     const data = encodeKnownError('FailedToSendEther');
     const error = new BaseError(`execution reverted: custom error ${data}`);
-    expect(decodeRevertData(error)).toBe('FailedToSendEther');
+    expect(decodeRevertData(error)?.name).toBe('FailedToSendEther');
   });
 
   it('returns undefined for non-object errors', () => {
@@ -76,17 +85,69 @@ describe('decodeRevertData', () => {
   });
 });
 
+describe('formatDecodedRevert', () => {
+  it('formats name without args', () => {
+    expect(formatDecodedRevert({ name: 'FailedToSendEther', args: [] })).toBe(
+      'FailedToSendEther',
+    );
+  });
+
+  it('formats name with args', () => {
+    expect(
+      formatDecodedRevert({
+        name: 'AccessControlUnauthorizedAccount',
+        args: ['0xabc', '0xdef'],
+      }),
+    ).toBe('AccessControlUnauthorizedAccount(0xabc, 0xdef)');
+  });
+});
+
 describe('SDKError.from with revert decoding', () => {
-  it('enriches message with decoded error', () => {
+  it('exposes structured decodedRevert', () => {
     const data = encodeKnownError('FailedToSendEther');
     const error = Object.assign(new BaseError('tx reverted'), { data });
     const sdkError = SDKError.from(error);
-    expect(sdkError.errorMessage).toBe('FailedToSendEther');
+    expect(sdkError.decodedRevert).toEqual({
+      name: 'FailedToSendEther',
+      args: [],
+    });
   });
 
-  it('preserves original message when decoding fails', () => {
+  it('formats message from decoded revert', () => {
+    const data = encodeKnownError('AccessControlUnauthorizedAccount', [
+      '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      '0x0000000000000000000000000000000000000000000000000000000000000001',
+    ]);
+    const error = Object.assign(new BaseError('tx reverted'), { data });
+    const sdkError = SDKError.from(error);
+    expect(sdkError.message).toContain('AccessControlUnauthorizedAccount');
+    expect(sdkError.message).toContain(
+      '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+    );
+  });
+
+  it('leaves decodedRevert undefined when decoding fails', () => {
     const error = new Error('some other error');
     const sdkError = SDKError.from(error);
-    expect(sdkError.errorMessage).toBe('some other error');
+    expect(sdkError.decodedRevert).toBeUndefined();
+    expect(sdkError.message).toBe('some other error');
+  });
+
+  it('preserves the full upstream error as cause', () => {
+    const data = encodeKnownError('FailedToSendEther');
+    const upstream = Object.assign(new BaseError('tx reverted'), { data });
+    const sdkError = SDKError.from(upstream);
+    expect(sdkError.cause).toBe(upstream);
+  });
+
+  it('errorMessage getter aliases message for back-compat', () => {
+    const sdkError = SDKError.from(new Error('boom'));
+    expect(sdkError.errorMessage).toBe(sdkError.message);
+    expect(sdkError.errorMessage).toBe('boom');
+  });
+
+  it('returns the same SDKError when wrapping an SDKError', () => {
+    const inner = SDKError.from(new Error('inner'));
+    expect(SDKError.from(inner)).toBe(inner);
   });
 });
