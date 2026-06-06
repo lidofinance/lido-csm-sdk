@@ -6,6 +6,7 @@ import {
   type TransactionCallbackProps,
 } from '../../../src/tx-sdk/types';
 import { ERROR_CODE, SDKError } from '../../../src/common/utils/sdk-error';
+import { DecodeResultError } from '../../../src/tx-sdk/errors';
 
 const ACCOUNT_ADDRESS = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' as Address;
 const TARGET_ADDRESS = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' as Address;
@@ -230,6 +231,83 @@ describe('TxSDK.internalCall (AA / sendCalls path)', () => {
       await expect(invokeCall(fakes.tx, { callback })).rejects.toBeDefined();
       expect(fakes.invalidateCache).not.toHaveBeenCalled();
       expect(stages).not.toContain(TransactionCallbackStage.DONE);
+    });
+  });
+
+  // The tx is mined and confirmed; only the caller-supplied decode step
+  // threw. Consumers must be able to tell this apart from a real failure so
+  // they can still show the hash, link to the explorer, or retry decode.
+  describe('decodeResult failure after successful tx', () => {
+    beforeEach(() => {
+      fakes.waitForCallsStatus.mockResolvedValue({
+        status: 'success',
+        receipts: [makeReceipt('success', TX_HASH)],
+      });
+    });
+
+    it('throws SDKError(DECODE_RESULT_ERROR) when decodeResult throws', async () => {
+      const decodeResult = vi.fn(async () => {
+        throw new Error('bad parse');
+      });
+      await expect(
+        invokeCall(fakes.tx, { decodeResult }),
+      ).rejects.toMatchObject({
+        code: ERROR_CODE.DECODE_RESULT_ERROR,
+        message: 'bad parse',
+      });
+    });
+
+    it('attaches DecodeResultError as cause with hash + receipt + confirmations', async () => {
+      const original = new Error('bad parse');
+      const decodeResult = vi.fn(async () => {
+        throw original;
+      });
+      const thrown = await invokeCall(fakes.tx, { decodeResult }).catch(
+        (e) => e,
+      );
+      expect(thrown).toBeInstanceOf(SDKError);
+      const sdkErr = thrown as SDKError;
+      expect(sdkErr.cause).toBeInstanceOf(DecodeResultError);
+      const decodeErr = sdkErr.cause as DecodeResultError;
+      expect(decodeErr.hash).toBe(TX_HASH);
+      expect(decodeErr.receipt).toBeDefined();
+      expect(decodeErr.confirmations).toBe(5n);
+      // Original Error is reachable via the standard cause chain.
+      expect(decodeErr.cause).toBe(original);
+    });
+
+    it('does NOT fire DONE callback when decode throws', async () => {
+      const decodeResult = vi.fn(async () => {
+        throw new Error('bad parse');
+      });
+      const stages: TransactionCallbackStage[] = [];
+      const callback = vi.fn((p: TransactionCallbackProps) => {
+        stages.push(p.stage);
+      });
+      await expect(
+        invokeCall(fakes.tx, { decodeResult, callback }),
+      ).rejects.toBeDefined();
+      expect(stages).not.toContain(TransactionCallbackStage.DONE);
+    });
+
+    it('does NOT invalidate cache when decode throws', async () => {
+      const decodeResult = vi.fn(async () => {
+        throw new Error('bad parse');
+      });
+      await expect(
+        invokeCall(fakes.tx, { decodeResult }),
+      ).rejects.toBeDefined();
+      expect(fakes.invalidateCache).not.toHaveBeenCalled();
+    });
+
+    it('falls back to a generic message when the throw is not an Error', async () => {
+      const decodeResult = vi.fn(async () => Promise.reject('plain string'));
+      await expect(
+        invokeCall(fakes.tx, { decodeResult }),
+      ).rejects.toMatchObject({
+        code: ERROR_CODE.DECODE_RESULT_ERROR,
+        message: 'Failed to decode transaction result',
+      });
     });
   });
 });

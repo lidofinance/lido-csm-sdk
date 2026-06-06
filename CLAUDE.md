@@ -257,6 +257,7 @@ class SDKError extends Error {
 | `TRANSACTION_REVERTED` | tx mined, receipt status `reverted` (gas spent) |
 | `EXECUTION_REVERTED` | `eth_call` simulation reverted without decodable selector |
 | `CONTRACT_REVERT` | revert with decodable selector — see `decodedRevert` |
+| `DECODE_RESULT_ERROR` | tx mined & confirmed, but `decodeResult` callback threw — see `cause` (`DecodeResultError` with `hash` + `receipt` + `confirmations`) |
 
 #### Narrowing Pattern
 
@@ -267,6 +268,11 @@ try {
   if (!(e instanceof SDKError)) throw e;
   if (e.code === ERROR_CODE.USER_REJECTED) return;       // wallet closed
   if (e.code === ERROR_CODE.NETWORK_ERROR) return retryWithBackoff();
+  if (e.code === ERROR_CODE.DECODE_RESULT_ERROR) {       // tx succeeded on-chain
+    const c = e.cause as DecodeResultError;
+    showSuccessWithExplorerLink(c.hash);                  // c.receipt / c.confirmations also available
+    return;
+  }
   if (e.decodedRevert?.name === 'AccessControlUnauthorizedAccount') {
     const [account, role] = e.decodedRevert.args;        // typed tuple
     showRoleErrorToast(account, role);

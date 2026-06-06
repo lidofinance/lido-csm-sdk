@@ -1,5 +1,6 @@
-import type { WalletCallReceipt } from 'viem';
+import type { Hash, WalletCallReceipt } from 'viem';
 import type { WaitForCallsStatusReturnType } from 'viem/actions';
+import type { ReceiptLike } from './types';
 
 export type BatchCallReceipt = WalletCallReceipt<
   bigint,
@@ -32,5 +33,33 @@ export class BatchTransactionRevertedError extends Error {
     this.revertedReceipts = data.receipts.filter(
       (r) => r.status === 'reverted',
     );
+  }
+}
+
+export type DecodeResultErrorData = {
+  hash: Hash;
+  receipt: ReceiptLike;
+  confirmations?: bigint;
+  cause: unknown;
+};
+
+/**
+ * Thrown when the caller-supplied `decodeResult` callback throws after the
+ * transaction has already been mined and confirmed on-chain. Wrapped as
+ * `cause` of an SDKError({ code: DECODE_RESULT_ERROR }) so consumers can
+ * surface the hash + receipt + confirmations and retry decoding off-chain
+ * instead of treating a successful tx as a failure.
+ */
+export class DecodeResultError extends Error {
+  public readonly hash: Hash;
+  public readonly receipt: ReceiptLike;
+  public readonly confirmations: bigint | undefined;
+
+  constructor(message: string, data: DecodeResultErrorData) {
+    super(message, { cause: data.cause });
+    this.name = 'DecodeResultError';
+    this.hash = data.hash;
+    this.receipt = data.receipt;
+    this.confirmations = data.confirmations;
   }
 }

@@ -26,4 +26,8 @@ export enum ERROR_CODE {
   CONTRACT_REVERT = 'CONTRACT_REVERT', // revert with decodable selector — see SDKError.decodedRevert
   TRANSACTION_REVERTED = 'TRANSACTION_REVERTED', // tx mined, receipt status === 'reverted' (gas spent)
   EXECUTION_REVERTED = 'EXECUTION_REVERTED', // eth_call simulation reverted without decodable selector
+  // Tx mined & confirmed on-chain, but the caller-supplied `decodeResult`
+  // callback threw. cause is a DecodeResultError carrying hash + receipt +
+  // confirmations so consumers can still render success UI / retry decode.
+  DECODE_RESULT_ERROR = 'DECODE_RESULT_ERROR',
 }

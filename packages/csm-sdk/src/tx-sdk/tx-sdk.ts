@@ -21,7 +21,7 @@ import {
 import { isCapabilitySupported } from '../common/utils/is-capability-supported';
 import { BindedContract } from '../core-sdk/types';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts';
-import { BatchTransactionRevertedError } from './errors';
+import { BatchTransactionRevertedError, DecodeResultError } from './errors';
 import {
   PerformCallOptions,
   PerformTransactionOptions,
@@ -72,6 +72,42 @@ export class TxSDK extends CsmSDKModule {
   public async isMultisig(_account?: AccountValue): Promise<boolean> {
     const account = await this.core.core.useAccount(_account);
     return this.core.core.isContract(account.address);
+  }
+
+  // Both internalTransaction (EOA) and internalCall (AA) reach this helper
+  // only after the tx is mined and confirmed. If the caller-supplied
+  // decodeResult throws, the on-chain state already changed — surface that
+  // via DecodeResultError so consumers can recover hash/receipt instead of
+  // collapsing a successful tx into a bare UNKNOWN_ERROR.
+  private async runDecodeResult<TDecodedResult>(opts: {
+    decodeResult:
+      | ((receipt: ReceiptLike) => Promise<TDecodedResult>)
+      | undefined;
+    receipt: ReceiptLike;
+    hash: `0x${string}`;
+    confirmations: bigint;
+  }): Promise<TDecodedResult | undefined> {
+    const { decodeResult, receipt, hash, confirmations } = opts;
+    if (!decodeResult) return undefined;
+    try {
+      return await decodeResult(receipt);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to decode transaction result';
+      const decodeErr = new DecodeResultError(message, {
+        hash,
+        receipt,
+        confirmations,
+        cause: error,
+      });
+      throw new SDKError({
+        code: ERROR_CODE.DECODE_RESULT_ERROR,
+        error: decodeErr,
+        message: decodeErr.message,
+      });
+    }
   }
 
   @Logger('Utils:')
@@ -185,7 +221,12 @@ export class TxSDK extends CsmSDKModule {
         hash: receipt.transactionHash,
       });
 
-    const result = await decodeResult?.(receipt);
+    const result = await this.runDecodeResult({
+      decodeResult,
+      receipt,
+      hash,
+      confirmations,
+    });
 
     await callback({
       stage: TransactionCallbackStage.DONE,
@@ -284,13 +325,18 @@ export class TxSDK extends CsmSDKModule {
 
     const txHash = receipt.transactionHash;
 
-    const result = await decodeResult?.(receipt as any);
-
     const confirmations = txHash
       ? await this.core.publicClient.getTransactionConfirmations({
           hash: txHash,
         })
       : 0n;
+
+    const result = await this.runDecodeResult({
+      decodeResult,
+      receipt: receipt as ReceiptLike,
+      hash: txHash,
+      confirmations,
+    });
 
     await callback({
       stage: TransactionCallbackStage.DONE,
