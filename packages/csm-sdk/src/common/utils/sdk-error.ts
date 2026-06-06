@@ -1,9 +1,5 @@
 import { classifyError } from './classify-error';
-import {
-  type DecodedRevert,
-  decodeRevertData,
-  formatDecodedRevert,
-} from './decode-revert-data';
+import { type DecodedRevert, decodeRevertData } from './decode-revert-data';
 import { ERROR_CODE } from './sdk-error-code';
 
 export { ERROR_CODE } from './sdk-error-code';
@@ -15,29 +11,34 @@ export type SDKErrorProps = {
   decodedRevert?: DecodedRevert;
 };
 
+const messageOf = (error: unknown): string =>
+  typeof error === 'object' &&
+  error !== null &&
+  'message' in error &&
+  typeof error.message === 'string'
+    ? error.message
+    : 'something went wrong';
+
+const formatRevert = (decoded: DecodedRevert): string => {
+  if (!decoded.args.length) return decoded.name;
+  const args = (decoded.args as readonly unknown[]).map(String).join(', ');
+  return `${decoded.name}(${args})`;
+};
+
 export class SDKError extends Error {
   public static from(error: unknown, code?: ERROR_CODE): SDKError {
     if (error instanceof SDKError) return error;
 
-    const baseMessage =
-      typeof error === 'object' &&
-      error &&
-      'message' in error &&
-      typeof error.message === 'string'
-        ? error.message
-        : 'something went wrong';
-
     const decodedRevert = decodeRevertData(error);
     const message = decodedRevert
-      ? formatDecodedRevert(decodedRevert)
-      : baseMessage;
+      ? formatRevert(decodedRevert)
+      : messageOf(error);
 
-    // Classifier wins when it identifies a viem class — it is more specific
-    // than any context-only code (e.g. TRANSACTION_ERROR) supplied by a
-    // `withSDKError(..., code)` call site. When viem yields nothing, fall back
-    // to the caller-supplied code, then to UNKNOWN_ERROR.
-    const classifiedCode = classifyError(error, decodedRevert);
-    const finalCode = classifiedCode ?? code ?? ERROR_CODE.UNKNOWN_ERROR;
+    // Classifier wins over caller-supplied `code` when it identifies a viem
+    // class — more specific than any context code (e.g. TRANSACTION_ERROR).
+    // When the classifier yields nothing, fall back to `code`, then UNKNOWN.
+    const finalCode =
+      classifyError(error, decodedRevert) ?? code ?? ERROR_CODE.UNKNOWN_ERROR;
 
     return new SDKError({ code: finalCode, error, message, decodedRevert });
   }
@@ -48,9 +49,9 @@ export class SDKError extends Error {
   constructor({ code, error, message, decodedRevert }: SDKErrorProps) {
     super(message);
     this.name = 'SDKError';
-    // Preserve the full upstream error as `cause`. Previous behavior assigned
-    // `error.cause`, which silently discarded the top viem BaseError and forced
-    // every consumer to walk the chain via a separate channel.
+    // Preserve full upstream error as `cause` — consumers walk it via the
+    // standard Error chain. Previous code assigned `error.cause` and silently
+    // dropped the top viem BaseError.
     if (error !== undefined) {
       this.cause = error;
     }
@@ -59,15 +60,6 @@ export class SDKError extends Error {
     }
     this.code = code ?? ERROR_CODE.UNKNOWN_ERROR;
     this.decodedRevert = decodedRevert;
-  }
-
-  /**
-   * @deprecated Use `message` (idiomatic `Error` field) instead. Will be
-   * removed in the next major. For structured access to a decoded contract
-   * revert, read `decodedRevert` ({ name, args }).
-   */
-  public get errorMessage(): string | undefined {
-    return this.message || undefined;
   }
 }
 

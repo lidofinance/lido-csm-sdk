@@ -10,22 +10,31 @@ import {
 import type { DecodedRevert } from './decode-revert-data';
 import { ERROR_CODE } from './sdk-error-code';
 
-// viem does not re-export TransactionReceiptRevertedError from its top-level
-// entry, so `instanceof` is unavailable. Detection is by `error.name`, which
-// viem sets explicitly on the class (transaction.js: this.name = '…') and is
-// thrown only by sendTransactionSync / sendRawTransactionSync.
+// viem doesn't re-export TransactionReceiptRevertedError from its top-level
+// entry, so `instanceof` is unavailable — match by `name`, which viem sets
+// explicitly. Thrown only by sendTransactionSync / sendRawTransactionSync.
 const TX_RECEIPT_REVERTED_NAME = 'TransactionReceiptRevertedError';
 
-const isTxReceiptReverted = (e: unknown): boolean =>
-  typeof e === 'object' &&
-  e !== null &&
-  (e as { name?: unknown }).name === TX_RECEIPT_REVERTED_NAME;
+// Ordered most-specific → most-generic: a UserRejectedRequestError wrapped
+// inside an InternalRpcError must still classify as USER_REJECTED.
+const CLASSIFIERS: Array<[(e: unknown) => boolean, ERROR_CODE]> = [
+  [(e) => e instanceof UserRejectedRequestError, ERROR_CODE.USER_REJECTED],
+  [(e) => e instanceof UnknownBundleIdError, ERROR_CODE.BUNDLE_NOT_FOUND],
+  [(e) => e instanceof InsufficientFundsError, ERROR_CODE.INSUFFICIENT_FUNDS],
+  [
+    (e) =>
+      typeof e === 'object' &&
+      e !== null &&
+      (e as { name?: unknown }).name === TX_RECEIPT_REVERTED_NAME,
+    ERROR_CODE.TRANSACTION_REVERTED,
+  ],
+  [(e) => e instanceof ExecutionRevertedError, ERROR_CODE.EXECUTION_REVERTED],
+  [
+    (e) => e instanceof InternalRpcError || e instanceof InvalidInputRpcError,
+    ERROR_CODE.WALLET_RPC_ERROR,
+  ],
+];
 
-// Walks the full cause chain. Order is most-specific → most-generic:
-// a wallet that wraps a 4001 inside a -32603 must classify as USER_REJECTED.
-// Returns undefined when the error is not a viem BaseError or no known class
-// is found in the chain — the caller falls back to UNKNOWN_ERROR or an
-// explicitly supplied code.
 export const classifyError = (
   error: unknown,
   decodedRevert: DecodedRevert | undefined,
@@ -33,28 +42,8 @@ export const classifyError = (
   if (decodedRevert) return ERROR_CODE.CONTRACT_REVERT;
   if (!(error instanceof BaseError)) return undefined;
 
-  if (error.walk((e) => e instanceof UserRejectedRequestError)) {
-    return ERROR_CODE.USER_REJECTED;
+  for (const [match, code] of CLASSIFIERS) {
+    if (error.walk(match)) return code;
   }
-  if (error.walk((e) => e instanceof UnknownBundleIdError)) {
-    return ERROR_CODE.BUNDLE_NOT_FOUND;
-  }
-  if (error.walk((e) => e instanceof InsufficientFundsError)) {
-    return ERROR_CODE.INSUFFICIENT_FUNDS;
-  }
-  if (error.walk(isTxReceiptReverted)) {
-    return ERROR_CODE.TRANSACTION_REVERTED;
-  }
-  if (error.walk((e) => e instanceof ExecutionRevertedError)) {
-    return ERROR_CODE.EXECUTION_REVERTED;
-  }
-  if (
-    error.walk(
-      (e) => e instanceof InternalRpcError || e instanceof InvalidInputRpcError,
-    )
-  ) {
-    return ERROR_CODE.WALLET_RPC_ERROR;
-  }
-
   return undefined;
 };

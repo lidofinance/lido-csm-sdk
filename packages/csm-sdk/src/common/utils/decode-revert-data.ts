@@ -1,4 +1,8 @@
-import type { ExtractAbiErrorNames } from 'abitype';
+import type {
+  AbiParametersToPrimitiveTypes,
+  ExtractAbiError,
+  ExtractAbiErrorNames,
+} from 'abitype';
 import { type Abi, type Hex, decodeErrorResult } from 'viem';
 import { CONTRACT_BASE_ABI } from '../constants/contract-abi';
 
@@ -6,82 +10,65 @@ type ContractAbis = (typeof CONTRACT_BASE_ABI)[keyof typeof CONTRACT_BASE_ABI];
 
 export type ContractErrorName = ExtractAbiErrorNames<ContractAbis>;
 
+type ArgsOf<Name extends ContractErrorName> = AbiParametersToPrimitiveTypes<
+  ExtractAbiError<ContractAbis, Name>['inputs']
+>;
+
+// Discriminated union: narrowing on `name` types the `args` tuple too.
+// `if (e.decodedRevert?.name === 'AccessControlUnauthorizedAccount') {
+//    const [account, role] = e.decodedRevert.args; // typed }`
 export type DecodedRevert = {
-  name: ContractErrorName;
-  args: readonly unknown[];
-};
+  [K in ContractErrorName]: { name: K; args: ArgsOf<K> };
+}[ContractErrorName];
 
 const HEX_DATA_RE = /(?:custom error |reason: )(0x[0-9a-fA-F]{8,})/;
 
-let combinedErrorAbi: Abi | null = null;
-
-const getCombinedErrorAbi = (): Abi => {
-  if (combinedErrorAbi) return combinedErrorAbi;
-
+const combinedErrorAbi: Abi = (() => {
   const seen = new Set<string>();
   const errors: Abi[number][] = [];
-
   for (const abi of Object.values(CONTRACT_BASE_ABI)) {
     for (const item of abi) {
-      if (item.type !== 'error') continue;
-      if (seen.has(item.name)) continue;
+      if (item.type !== 'error' || seen.has(item.name)) continue;
       seen.add(item.name);
       errors.push(item);
     }
   }
+  return errors as Abi;
+})();
 
-  combinedErrorAbi = errors as Abi;
-  return combinedErrorAbi;
-};
+const tryHex = (value: unknown): Hex | undefined =>
+  typeof value === 'string' && value.startsWith('0x')
+    ? (value as Hex)
+    : undefined;
 
-const tryExtractHex = (value: unknown): Hex | undefined => {
-  if (typeof value === 'string' && value.startsWith('0x')) {
-    return value as Hex;
-  }
-  return undefined;
-};
-
-const extractFromNode = (err: unknown): Hex | undefined => {
-  if (typeof err !== 'object' || err === null) return undefined;
-
-  // prettier-ignore
-  if ('raw' in err && typeof err.raw === 'string' && err.raw.startsWith('0x')) {
-    return err.raw as Hex;
-  }
-
-  if ('data' in err) {
-    const d = (err as { data: unknown }).data;
-    const direct = tryExtractHex(d);
-    if (direct) return direct;
-
-    if (typeof d === 'object' && d !== null && 'data' in d) {
-      return tryExtractHex((d as { data: unknown }).data);
-    }
-  }
-
-  return undefined;
-};
-
-const extractHexFromString = (value: unknown): Hex | undefined => {
+const tryHexFromString = (value: unknown): Hex | undefined => {
   if (typeof value !== 'string') return undefined;
   const match = HEX_DATA_RE.exec(value);
   return match ? (match[1] as Hex) : undefined;
 };
 
-const extractHexFromNode = (node: Record<string, unknown>): Hex | undefined =>
-  extractFromNode(node) ??
-  extractHexFromString(node.details) ??
-  extractHexFromString(node.shortMessage);
+const extractFromNode = (node: Record<string, unknown>): Hex | undefined => {
+  const fromRaw = tryHex(node.raw);
+  if (fromRaw) return fromRaw;
+
+  const direct = tryHex(node.data);
+  if (direct) return direct;
+
+  if (typeof node.data === 'object' && node.data !== null) {
+    const nested = tryHex((node.data as { data?: unknown }).data);
+    if (nested) return nested;
+  }
+
+  return tryHexFromString(node.details) ?? tryHexFromString(node.shortMessage);
+};
 
 const extractErrorData = (error: unknown): Hex | undefined => {
   let current: unknown = error;
-
   while (typeof current === 'object' && current !== null) {
-    const hex = extractHexFromNode(current as Record<string, unknown>);
+    const hex = extractFromNode(current as Record<string, unknown>);
     if (hex) return hex;
     current = (current as Record<string, unknown>).cause;
   }
-
   return undefined;
 };
 
@@ -90,19 +77,12 @@ export const decodeRevertData = (error: unknown): DecodedRevert | undefined => {
   if (!data || data === '0x') return undefined;
 
   try {
-    const decoded = decodeErrorResult({ abi: getCombinedErrorAbi(), data });
+    const decoded = decodeErrorResult({ abi: combinedErrorAbi, data });
     return {
-      name: decoded.errorName as ContractErrorName,
+      name: decoded.errorName,
       args: decoded.args ?? [],
-    };
+    } as DecodedRevert;
   } catch {
     return undefined;
   }
-};
-
-export const formatDecodedRevert = (decoded: DecodedRevert): string => {
-  const args = decoded.args.length
-    ? `(${decoded.args.map(String).join(', ')})`
-    : '';
-  return `${decoded.name}${args}`;
 };

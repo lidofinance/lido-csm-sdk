@@ -1,10 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { BaseError, encodeErrorResult, Hex } from 'viem';
 import { AccountingAbi } from '../../src/abi/Accounting';
-import {
-  decodeRevertData,
-  formatDecodedRevert,
-} from '../../src/common/utils/decode-revert-data';
+import { decodeRevertData } from '../../src/common/utils/decode-revert-data';
 import { SDKError } from '../../src/common/utils/sdk-error';
 
 const encodeKnownError = (name: string, args?: unknown[]): Hex =>
@@ -85,23 +82,6 @@ describe('decodeRevertData', () => {
   });
 });
 
-describe('formatDecodedRevert', () => {
-  it('formats name without args', () => {
-    expect(formatDecodedRevert({ name: 'FailedToSendEther', args: [] })).toBe(
-      'FailedToSendEther',
-    );
-  });
-
-  it('formats name with args', () => {
-    expect(
-      formatDecodedRevert({
-        name: 'AccessControlUnauthorizedAccount',
-        args: ['0xabc', '0xdef'],
-      }),
-    ).toBe('AccessControlUnauthorizedAccount(0xabc, 0xdef)');
-  });
-});
-
 describe('SDKError.from with revert decoding', () => {
   it('exposes structured decodedRevert', () => {
     const data = encodeKnownError('FailedToSendEther');
@@ -140,14 +120,27 @@ describe('SDKError.from with revert decoding', () => {
     expect(sdkError.cause).toBe(upstream);
   });
 
-  it('errorMessage getter aliases message for back-compat', () => {
-    const sdkError = SDKError.from(new Error('boom'));
-    expect(sdkError.errorMessage).toBe(sdkError.message);
-    expect(sdkError.errorMessage).toBe('boom');
-  });
-
   it('returns the same SDKError when wrapping an SDKError', () => {
     const inner = SDKError.from(new Error('inner'));
     expect(SDKError.from(inner)).toBe(inner);
+  });
+
+  // Narrowing on `decodedRevert.name` types `args` per error — the consumer
+  // DX win of moving from string formatting to structured access.
+  it('narrows args by name (compile-time only)', () => {
+    const data = encodeKnownError('AccessControlUnauthorizedAccount', [
+      '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      '0x0000000000000000000000000000000000000000000000000000000000000001',
+    ]);
+    const sdkError = SDKError.from(
+      Object.assign(new BaseError('reverted'), { data }),
+    );
+    const revert = sdkError.decodedRevert;
+    if (revert?.name !== 'AccessControlUnauthorizedAccount') {
+      throw new Error('expected AccessControlUnauthorizedAccount');
+    }
+    const [account, role] = revert.args;
+    expect(account).toMatch(/^0x[0-9a-fA-F]+$/);
+    expect(role).toMatch(/^0x[0-9a-fA-F]+$/);
   });
 });
