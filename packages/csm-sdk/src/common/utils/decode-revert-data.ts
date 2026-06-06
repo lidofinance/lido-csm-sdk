@@ -4,6 +4,7 @@ import type {
   ExtractAbiErrorNames,
 } from 'abitype';
 import { type Abi, type Hex, decodeErrorResult } from 'viem';
+import { formatAbiItem, toFunctionSelector } from 'viem/utils';
 import { CONTRACT_BASE_ABI } from '../constants/contract-abi';
 
 type ContractAbis = (typeof CONTRACT_BASE_ABI)[keyof typeof CONTRACT_BASE_ABI];
@@ -23,18 +24,45 @@ export type DecodedRevert = {
 
 const HEX_DATA_RE = /(?:custom error |reason: )(0x[0-9a-fA-F]{8,})/;
 
-const combinedErrorAbi: Abi = (() => {
-  const seen = new Set<string>();
-  const errors: Abi[number][] = [];
-  for (const abi of Object.values(CONTRACT_BASE_ABI)) {
+// Dedup by 4-byte selector, not by name: two ABIs may declare distinct errors
+// that happen to share a name but encode different argument tuples. Dropping
+// by name would silently misdecode one of them. Same-selector duplicates
+// (identical signature in multiple contracts) are still collapsed silently.
+// Name collisions across different selectors emit a single console.warn each
+// so future ABI drift surfaces without breaking decoding.
+export const buildCombinedErrorAbi = (abis: readonly Abi[]): Abi => {
+  const bySelector = new Map<Hex, Abi[number]>();
+  const byName = new Map<string, string>();
+  const warned = new Set<string>();
+  for (const abi of abis) {
     for (const item of abi) {
-      if (item.type !== 'error' || seen.has(item.name)) continue;
-      seen.add(item.name);
-      errors.push(item);
+      if (item.type !== 'error') continue;
+      const signature = formatAbiItem(item);
+      const selector = toFunctionSelector(signature);
+      if (bySelector.has(selector)) continue;
+      bySelector.set(selector, item);
+      const prevSignature = byName.get(item.name);
+      if (
+        prevSignature &&
+        prevSignature !== signature &&
+        !warned.has(item.name)
+      ) {
+        warned.add(item.name);
+
+        console.warn(
+          `[csm-sdk] ABI error name collision for "${item.name}": ${prevSignature} vs ${signature}`,
+        );
+      } else if (!prevSignature) {
+        byName.set(item.name, signature);
+      }
     }
   }
-  return errors as Abi;
-})();
+  return [...bySelector.values()] as Abi;
+};
+
+const combinedErrorAbi: Abi = buildCombinedErrorAbi(
+  Object.values(CONTRACT_BASE_ABI),
+);
 
 const tryHex = (value: unknown): Hex | undefined =>
   typeof value === 'string' && value.startsWith('0x')

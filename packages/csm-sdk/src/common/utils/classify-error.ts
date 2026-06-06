@@ -1,11 +1,22 @@
 import {
   BaseError,
+  ChainDisconnectedError,
+  ChainMismatchError,
   ExecutionRevertedError,
+  HttpRequestError,
   InsufficientFundsError,
   InternalRpcError,
   InvalidInputRpcError,
+  ProviderDisconnectedError,
+  RpcRequestError,
+  SocketClosedError,
+  SwitchChainError,
+  TimeoutError,
   UnknownBundleIdError,
+  UnsupportedChainIdError,
   UserRejectedRequestError,
+  WaitForCallsStatusTimeoutError,
+  WebSocketRequestError,
 } from 'viem';
 import type { DecodedRevert } from './decode-revert-data';
 import { ERROR_CODE } from './sdk-error-code';
@@ -16,10 +27,31 @@ import { ERROR_CODE } from './sdk-error-code';
 const TX_RECEIPT_REVERTED_NAME = 'TransactionReceiptRevertedError';
 
 // Ordered most-specific → most-generic: a UserRejectedRequestError wrapped
-// inside an InternalRpcError must still classify as USER_REJECTED.
+// inside an InternalRpcError must still classify as USER_REJECTED. CHAIN_MISMATCH
+// precedes EXECUTION_REVERTED — a wallet on the wrong chain may surface an
+// execution revert under the hood, but the chain issue is the actionable root.
 const CLASSIFIERS: Array<[(e: unknown) => boolean, ERROR_CODE]> = [
   [(e) => e instanceof UserRejectedRequestError, ERROR_CODE.USER_REJECTED],
   [(e) => e instanceof UnknownBundleIdError, ERROR_CODE.BUNDLE_NOT_FOUND],
+  [
+    (e) =>
+      e instanceof ChainMismatchError ||
+      e instanceof ChainDisconnectedError ||
+      e instanceof ProviderDisconnectedError ||
+      e instanceof SwitchChainError ||
+      e instanceof UnsupportedChainIdError,
+    ERROR_CODE.CHAIN_MISMATCH,
+  ],
+  [
+    (e) =>
+      e instanceof HttpRequestError ||
+      e instanceof TimeoutError ||
+      e instanceof WaitForCallsStatusTimeoutError ||
+      e instanceof WebSocketRequestError ||
+      e instanceof RpcRequestError ||
+      e instanceof SocketClosedError,
+    ERROR_CODE.NETWORK_ERROR,
+  ],
   [(e) => e instanceof InsufficientFundsError, ERROR_CODE.INSUFFICIENT_FUNDS],
   [
     (e) =>

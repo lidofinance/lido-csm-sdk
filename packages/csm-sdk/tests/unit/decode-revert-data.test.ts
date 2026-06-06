@@ -1,7 +1,16 @@
-import { describe, it, expect } from 'vitest';
-import { BaseError, encodeErrorResult, Hex } from 'viem';
+import { describe, it, expect, vi } from 'vitest';
+import {
+  Abi,
+  BaseError,
+  decodeErrorResult,
+  encodeErrorResult,
+  Hex,
+} from 'viem';
 import { AccountingAbi } from '../../src/abi/Accounting';
-import { decodeRevertData } from '../../src/common/utils/decode-revert-data';
+import {
+  buildCombinedErrorAbi,
+  decodeRevertData,
+} from '../../src/common/utils/decode-revert-data';
 import { SDKError } from '../../src/common/utils/sdk-error';
 
 const encodeKnownError = (name: string, args?: unknown[]): Hex =>
@@ -79,6 +88,65 @@ describe('decodeRevertData', () => {
   it('returns undefined for empty data', () => {
     const error = Object.assign(new BaseError('reverted'), { data: '0x' });
     expect(decodeRevertData(error)).toBeUndefined();
+  });
+});
+
+describe('buildCombinedErrorAbi (selector dedup)', () => {
+  const errorAbi = (
+    name: string,
+    inputs: ReadonlyArray<{ name: string; type: string }>,
+  ): Abi =>
+    [
+      {
+        type: 'error',
+        name,
+        inputs,
+      },
+    ] as Abi;
+
+  it('keeps both items when names collide but signatures differ, and warns once', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    const abiA = errorAbi('Collide', [{ name: 'a', type: 'uint256' }]);
+    const abiB = errorAbi('Collide', [{ name: 'b', type: 'address' }]);
+
+    const combined = buildCombinedErrorAbi([abiA, abiB]);
+    const errorEntries = combined.filter((x) => x.type === 'error');
+    expect(errorEntries).toHaveLength(2);
+
+    // Both selectors are still decodable, picking up distinct argument tuples.
+    const dataA = encodeErrorResult({
+      abi: abiA,
+      errorName: 'Collide',
+      args: [123n],
+    });
+    const dataB = encodeErrorResult({
+      abi: abiB,
+      errorName: 'Collide',
+      args: ['0x0000000000000000000000000000000000000001'],
+    });
+    expect(decodeErrorResult({ abi: combined, data: dataA }).args).toEqual([
+      123n,
+    ]);
+    expect(decodeErrorResult({ abi: combined, data: dataB }).args).toEqual([
+      '0x0000000000000000000000000000000000000001',
+    ]);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0]?.[0]).toContain('Collide');
+    warn.mockRestore();
+  });
+
+  it('silently dedupes identical signatures across multiple ABIs', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    const abiA = errorAbi('Same', [{ name: 'a', type: 'uint256' }]);
+    const abiB = errorAbi('Same', [{ name: 'b', type: 'uint256' }]); // same signature, different param names
+
+    const combined = buildCombinedErrorAbi([abiA, abiB]);
+    expect(combined.filter((x) => x.type === 'error')).toHaveLength(1);
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
   });
 });
 

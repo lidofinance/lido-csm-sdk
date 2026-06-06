@@ -13,6 +13,14 @@ export enum ERROR_CODE {
   INSUFFICIENT_FUNDS = 'INSUFFICIENT_FUNDS', // viem InsufficientFundsError
   WALLET_RPC_ERROR = 'WALLET_RPC_ERROR', // viem InternalRpcError (-32603) / InvalidInputRpcError (-32000)
   BUNDLE_NOT_FOUND = 'BUNDLE_NOT_FOUND', // viem UnknownBundleIdError (EIP-5792 code 5730)
+  // Transient transport failures. Retryable from the consumer's perspective:
+  // viem HttpRequestError, TimeoutError, WaitForCallsStatusTimeoutError,
+  // WebSocketRequestError, RpcRequestError, SocketClosedError.
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  // Wallet is connected to the wrong / unsupported chain — consumer should
+  // prompt a chain switch: viem ChainMismatchError, ChainDisconnectedError,
+  // ProviderDisconnectedError, SwitchChainError, UnsupportedChainIdError.
+  CHAIN_MISMATCH = 'CHAIN_MISMATCH',
 
   // Contract / execution
   CONTRACT_REVERT = 'CONTRACT_REVERT', // revert with decodable selector — see SDKError.decodedRevert

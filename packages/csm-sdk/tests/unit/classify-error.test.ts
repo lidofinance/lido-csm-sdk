@@ -1,14 +1,25 @@
 import { describe, it, expect } from 'vitest';
 import {
   BaseError,
+  ChainDisconnectedError,
+  ChainMismatchError,
   encodeErrorResult,
   ExecutionRevertedError,
   Hex,
+  HttpRequestError,
   InsufficientFundsError,
   InternalRpcError,
   InvalidInputRpcError,
+  ProviderDisconnectedError,
+  RpcRequestError,
+  SocketClosedError,
+  SwitchChainError,
+  TimeoutError,
   UnknownBundleIdError,
+  UnsupportedChainIdError,
   UserRejectedRequestError,
+  WaitForCallsStatusTimeoutError,
+  WebSocketRequestError,
 } from 'viem';
 
 // viem doesn't re-export TransactionReceiptRevertedError from its top-level
@@ -83,6 +94,97 @@ describe('classifyError', () => {
   it('WALLET_RPC_ERROR from InvalidInputRpcError', () => {
     const err = wrap(new InvalidInputRpcError(new Error('-32000')));
     expect(classifyError(err, undefined)).toBe(ERROR_CODE.WALLET_RPC_ERROR);
+  });
+
+  it('NETWORK_ERROR from HttpRequestError', () => {
+    const err = wrap(new HttpRequestError({ url: 'https://rpc.example/' }));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NETWORK_ERROR);
+  });
+
+  it('NETWORK_ERROR from TimeoutError', () => {
+    const err = wrap(
+      new TimeoutError({
+        body: { method: 'eth_call' },
+        url: 'https://rpc.example/',
+      }),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NETWORK_ERROR);
+  });
+
+  it('NETWORK_ERROR from WaitForCallsStatusTimeoutError', () => {
+    const err = wrap(new WaitForCallsStatusTimeoutError({ id: '0xdead' }));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NETWORK_ERROR);
+  });
+
+  it('NETWORK_ERROR from WebSocketRequestError', () => {
+    const err = wrap(new WebSocketRequestError({ url: 'wss://rpc.example/' }));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NETWORK_ERROR);
+  });
+
+  it('NETWORK_ERROR from RpcRequestError', () => {
+    const err = wrap(
+      new RpcRequestError({
+        body: { method: 'eth_call' },
+        error: { code: -32_000, message: 'rpc' },
+        url: 'https://rpc.example/',
+      }),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NETWORK_ERROR);
+  });
+
+  it('NETWORK_ERROR from SocketClosedError', () => {
+    const err = wrap(new SocketClosedError({ url: 'wss://rpc.example/' }));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NETWORK_ERROR);
+  });
+
+  it('CHAIN_MISMATCH from ChainMismatchError', () => {
+    const chain = {
+      id: 1,
+      name: 'mainnet',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: { default: { http: [] } },
+    };
+    const err = wrap(
+      new ChainMismatchError({
+        chain: chain as ConstructorParameters<
+          typeof ChainMismatchError
+        >[0]['chain'],
+        currentChainId: 5,
+      }),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.CHAIN_MISMATCH);
+  });
+
+  it('CHAIN_MISMATCH from ChainDisconnectedError', () => {
+    const err = wrap(new ChainDisconnectedError(new Error('4901')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.CHAIN_MISMATCH);
+  });
+
+  it('CHAIN_MISMATCH from ProviderDisconnectedError', () => {
+    const err = wrap(new ProviderDisconnectedError(new Error('4900')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.CHAIN_MISMATCH);
+  });
+
+  it('CHAIN_MISMATCH from SwitchChainError', () => {
+    const err = wrap(new SwitchChainError(new Error('4902')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.CHAIN_MISMATCH);
+  });
+
+  it('CHAIN_MISMATCH from UnsupportedChainIdError', () => {
+    const err = wrap(new UnsupportedChainIdError(new Error('5710')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.CHAIN_MISMATCH);
+  });
+
+  // Intent beats transport: a rejection surfaced through a transient
+  // HttpRequestError must classify as USER_REJECTED, not NETWORK_ERROR.
+  it('USER_REJECTED wins when wrapped inside HttpRequestError', () => {
+    const inner = new UserRejectedRequestError(new Error('cancelled'));
+    const outer = new HttpRequestError({
+      cause: inner,
+      url: 'https://rpc.example/',
+    });
+    const wrapped = wrap(outer);
+    expect(classifyError(wrapped, undefined)).toBe(ERROR_CODE.USER_REJECTED);
   });
 
   // Wallets often wrap a 4001 inside a -32603. USER_REJECTED must win over

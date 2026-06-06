@@ -224,6 +224,79 @@ if (!result.allowed) disableButton(result.reason);
 - `common/decorators/access.ts` — `@Access` decorator, `ACCESS` symbol
 - `common/utils/can-perform.ts` — `resolveAccess()`, `CanPerformContext`, `CanPerformResult`
 
+### Error Handling (SDKError)
+
+Every error thrown by the SDK is an `SDKError`. Consumers branch on `code` for wallet/network conditions and narrow on `decodedRevert.name` for typed contract revert args.
+
+#### Shape
+
+```typescript
+class SDKError extends Error {
+  code: ERROR_CODE;                       // always set
+  decodedRevert?: DecodedRevert;          // present iff revert selector decoded
+  cause?: unknown;                        // original upstream error (viem BaseError)
+}
+```
+
+- `code` defaults to `ERROR_CODE.UNKNOWN_ERROR`.
+- `cause` preserves the full upstream error — walk via `e.cause` to reach the original viem `BaseError` and its `walk()` chain.
+- `decodedRevert` is a discriminated union typed via abitype; narrowing on `name` types the `args` tuple.
+
+#### Classification
+
+`classifyError()` maps viem error classes to `ERROR_CODE`. The classifier wins over any caller-supplied `code` because viem class detection is strictly more specific than a context hint (e.g. `TRANSACTION_ERROR`).
+
+| `ERROR_CODE` | Source |
+|---|---|
+| `USER_REJECTED` | viem `UserRejectedRequestError` (EIP-1193 code 4001) |
+| `INSUFFICIENT_FUNDS` | viem `InsufficientFundsError` |
+| `WALLET_RPC_ERROR` | viem `InternalRpcError` / `InvalidInputRpcError` |
+| `NETWORK_ERROR` | viem transport / connectivity errors |
+| `CHAIN_MISMATCH` | viem `ChainMismatchError` / `SwitchChainError` |
+| `BUNDLE_NOT_FOUND` | viem `UnknownBundleIdError` (EIP-5792 code 5730) |
+| `TRANSACTION_REVERTED` | tx mined, receipt status `reverted` (gas spent) |
+| `EXECUTION_REVERTED` | `eth_call` simulation reverted without decodable selector |
+| `CONTRACT_REVERT` | revert with decodable selector — see `decodedRevert` |
+
+#### Narrowing Pattern
+
+```typescript
+try {
+  await sdk.bond.claimBondStETH(...);
+} catch (e) {
+  if (!(e instanceof SDKError)) throw e;
+  if (e.code === ERROR_CODE.USER_REJECTED) return;       // wallet closed
+  if (e.code === ERROR_CODE.NETWORK_ERROR) return retryWithBackoff();
+  if (e.decodedRevert?.name === 'AccessControlUnauthorizedAccount') {
+    const [account, role] = e.decodedRevert.args;        // typed tuple
+    showRoleErrorToast(account, role);
+  }
+}
+```
+
+#### Cause Chain
+
+`cause` is set via the standard `Error.cause` slot. Walk it to inspect the original viem error and its own `cause` chain:
+
+```typescript
+let current: unknown = e.cause;
+while (current instanceof BaseError) {
+  console.log(current.shortMessage);
+  current = current.cause;
+}
+```
+
+#### `formatDecodedRevert(decoded)`
+
+Exported helper that turns a `DecodedRevert` into the canonical `Name(arg1, arg2, ...)` label used as `SDKError.message`. Useful for consumers that hold a raw `decodedRevert` (from a log, a queue, a structured error report) and want the same human-readable string.
+
+#### Key Files
+
+- `common/utils/sdk-error.ts` — `SDKError`, `invariant`, `invariantArgument`, `withSDKError`, `formatDecodedRevert`
+- `common/utils/sdk-error-code.ts` — `ERROR_CODE` enum
+- `common/utils/decode-revert-data.ts` — `DecodedRevert` discriminated union, `decodeRevertData()`
+- `common/utils/classify-error.ts` — viem class → `ERROR_CODE` mapping
+
 ### Key Dependencies
 
 - **@lidofinance/lido-ethereum-sdk** - Core Lido SDK (peer dependency)

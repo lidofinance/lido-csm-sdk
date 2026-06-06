@@ -21,6 +21,7 @@ import {
 import { isCapabilitySupported } from '../common/utils/is-capability-supported';
 import { BindedContract } from '../core-sdk/types';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts';
+import { BatchTransactionRevertedError } from './errors';
 import {
   PerformCallOptions,
   PerformTransactionOptions,
@@ -256,20 +257,28 @@ export class TxSDK extends CsmSDKModule {
       | undefined;
 
     if (receipts.some((r) => r.status === 'reverted')) {
+      const batchErr = new BatchTransactionRevertedError(
+        'Some operations were reverted. Check your wallet for details.',
+        { receipts, callStatus },
+      );
       throw new SDKError({
         code: ERROR_CODE.TRANSACTION_ERROR,
-        message:
-          'Some operations were reverted. Check your wallet for details.',
+        error: batchErr,
+        message: batchErr.message,
       });
     }
 
     if (!receipt?.transactionHash) {
+      const batchErr = new BatchTransactionRevertedError(
+        callStatus.status === 'failure'
+          ? 'Transaction failed. Check your wallet for details.'
+          : 'Transaction hash is missing. Check your wallet for details.',
+        { receipts, callStatus },
+      );
       throw new SDKError({
         code: ERROR_CODE.TRANSACTION_ERROR,
-        message:
-          callStatus.status === 'failure'
-            ? 'Transaction failed. Check your wallet for details.'
-            : 'Transaction hash is missing. Check your wallet for details.',
+        error: batchErr,
+        message: batchErr.message,
       });
     }
 
