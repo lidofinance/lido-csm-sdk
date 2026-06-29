@@ -232,15 +232,17 @@ Every error thrown by the SDK is an `SDKError`. Consumers branch on `code` for w
 
 ```typescript
 class SDKError extends Error {
-  code: ERROR_CODE;                       // always set
-  decodedRevert?: DecodedRevert;          // present iff revert selector decoded
-  cause?: unknown;                        // original upstream error (viem BaseError)
+  code: ERROR_CODE;                        // always set
+  decodedRevert?: DecodedRevert;           // present iff revert selector decoded
+  cause?: unknown;                         // original upstream error (viem BaseError)
+  get errorMessage(): string | undefined;  // @deprecated alias of `message` (pre-refactor compat)
 }
 ```
 
 - `code` defaults to `ERROR_CODE.UNKNOWN_ERROR`.
 - `cause` preserves the full upstream error — walk via `e.cause` to reach the original viem `BaseError` and its `walk()` chain.
 - `decodedRevert` is a discriminated union typed via abitype; narrowing on `name` types the `args` tuple.
+- `errorMessage` is a deprecated backward-compat alias for `message` (returns `undefined` when the message is empty). Kept for pre-refactor consumers; prefer `message`. Slated for removal in the next major.
 
 #### Classification
 

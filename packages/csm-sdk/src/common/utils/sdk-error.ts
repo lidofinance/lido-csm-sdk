@@ -104,6 +104,16 @@ export class SDKError extends Error {
     this.code = code ?? ERROR_CODE.UNKNOWN_ERROR;
     this.decodedRevert = decodedRevert;
   }
+
+  /**
+   * @deprecated Use `message` (the idiomatic `Error` field) instead — this is
+   * a thin alias kept for pre-refactor consumers and will be removed in the
+   * next major. For structured access to a decoded contract revert, read
+   * `decodedRevert` ({ name, args }).
+   */
+  public get errorMessage(): string | undefined {
+    return this.message || undefined;
+  }
 }
 
 /**
