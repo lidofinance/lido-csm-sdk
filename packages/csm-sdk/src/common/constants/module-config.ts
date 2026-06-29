@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { Address } from 'viem';
+import { Address, zeroAddress } from 'viem';
 
 import { CONTRACT_NAMES } from './contract-names';
 import { MODULE_NAME, PerModule } from './module-name';
@@ -104,7 +104,26 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
 
   [MODULE_NAME.CM]: {
     [CHAINS.Mainnet]: {
-      contractAddresses: {},
+      contractAddresses: {
+        [CONTRACT_NAMES.curatedModule]: zeroAddress,
+        [CONTRACT_NAMES.accounting]: zeroAddress,
+        [CONTRACT_NAMES.ejector]: zeroAddress,
+        [CONTRACT_NAMES.exitPenalties]: zeroAddress,
+        [CONTRACT_NAMES.feeDistributor]: zeroAddress,
+        [CONTRACT_NAMES.feeOracle]: zeroAddress,
+        [CONTRACT_NAMES.parametersRegistry]: zeroAddress,
+        [CONTRACT_NAMES.validatorStrikes]: zeroAddress,
+        [CONTRACT_NAMES.verifier]: zeroAddress,
+        [CONTRACT_NAMES.hashConsensus]: zeroAddress,
+        [CONTRACT_NAMES.metaRegistry]: zeroAddress,
+        [CONTRACT_NAMES.curatedGatePO]: zeroAddress,
+        [CONTRACT_NAMES.curatedGatePTO]: zeroAddress,
+        [CONTRACT_NAMES.curatedGatePGO]: zeroAddress,
+        [CONTRACT_NAMES.curatedGateDO]: zeroAddress,
+        [CONTRACT_NAMES.curatedGateEEO]: zeroAddress,
+        [CONTRACT_NAMES.curatedGateIODC]: zeroAddress,
+        [CONTRACT_NAMES.curatedGateIODCP]: zeroAddress,
+      },
       moduleId: 4n,
     },
     [CHAINS.Hoodi]: {
