@@ -68,6 +68,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.permissionlessGate]:
           '0xcF33a38111d0B1246A3F38a838fb41D626B454f0',
         [CONTRACT_NAMES.icsGate]: '0xB314D4A76C457c93150d308787939063F4Cc67E0',
+        [CONTRACT_NAMES.idvtcGate]: zeroAddress,
       },
       moduleId: 3n,
       deploymentBlockNumber: BigInt('0x13f7326'),
