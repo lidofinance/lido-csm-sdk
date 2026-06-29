@@ -309,6 +309,7 @@ Exported helper that turns a `DecodedRevert` into the canonical `Name(arg1, arg2
 - **viem** - Ethereum client library (peer dependency)
 - **@openzeppelin/merkle-tree** - Merkle tree operations
 - **zod** - Runtime type validation
+- **abitype** - ABI-level types powering the typed `DecodedRevert` union (direct dependency)
 
 ### ABI Management
 
@@ -466,24 +467,26 @@ return this.bus.tx.perform({
     amount,
     permit           // Optional permit preferences
   },
-  call: ({ permit }) => prepCall(contract, 'method', [args]),
+  call: ({ permit }) => contract.encode.method([args]),
   decodeResult: (receipt) => parseReceiptData(receipt),
 });
 ```
 
-#### Helper Utilities
+> `decodeResult` runs **after** the tx is mined and confirmed. If it throws, `tx.perform` rejects with `ERROR_CODE.DECODE_RESULT_ERROR` (cause carries `hash` + `receipt` + `confirmations`) — the tx still succeeded on-chain. See the Error Handling section.
 
-**prepCall**: Type-safe utility for preparing contract calls
+#### Preparing Calls
+
+Calls are encoded with viem's built-in `contract.encode` proxy (the former `prepCall` helper was removed — `encode` infers arg tuples and the payable `value` shape directly from the ABI):
 
 ```typescript
 // Non-payable function
-prepCall(contract, 'transfer', [address, amount])
+contract.encode.transfer([address, amount])
 
-// Payable function (value required as 3rd argument)
-prepCall(contract, 'deposit', [operatorId], value)
+// Payable function (value passed via options object)
+contract.encode.deposit([operatorId], { value })
 ```
 
-**Other helpers**:
+**Helper utilities**:
 
 - `allowance(account, spender, token)` - Check ERC20 token allowance
 - `checkAllowance(account, spender, amount, token)` - Determine if approval needed
@@ -509,7 +512,8 @@ The tx-sdk provides detailed transaction lifecycle tracking via callbacks:
 
 - **tx-sdk.ts**: Main TxSDK class with perform() method and helpers
 - **types.ts**: Type definitions for transaction operations
-- **utils/**: Helper functions including prepCall and event parsing utilities
+- **errors.ts**: Transaction-layer error helpers (incl. EIP-5792 batch error handling)
+- **utils/**: Helper functions including event parsing utilities
 
 ### Keys Cache System
 

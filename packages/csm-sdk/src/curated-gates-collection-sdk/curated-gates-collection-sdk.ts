@@ -27,11 +27,6 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
     super(props, name);
 
     for (const gateName of CURATED_GATES) {
-      invariant(
-        this.core.contractAddresses[gateName],
-        `Curated gate ${gateName} address is not configured`,
-        ERROR_CODE.NOT_SUPPORTED,
-      );
       this.gates.set(gateName, new CuratedGateSDK(props, gateName));
     }
   }

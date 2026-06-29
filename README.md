@@ -17,6 +17,8 @@
 
 ## Installation
 
+Requires **Node.js >= 24**, `@lidofinance/lido-ethereum-sdk >= 4.8.0`, and `viem >= 2.46.0` (peer dependencies).
+
 You can install the Lido CSM SDK using npm or yarn:
 
 ```bash
@@ -170,4 +172,4 @@ The SDK's ABIs and addresses are sourced from the following upstream repositorie
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the GPL-3.0-or-later License. See the [LICENSE.txt](LICENSE.txt) file for details.

@@ -16,6 +16,8 @@
 
 ## Installation
 
+Requires **Node.js >= 24**, `@lidofinance/lido-ethereum-sdk >= 4.8.0`, and `viem >= 2.46.0` (peer dependencies).
+
 Install via npm or yarn:
 
 ```bash
@@ -118,7 +120,7 @@ The SDK is designed for extensibility. You can instantiate individual modules di
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the GPL-3.0-or-later License. See the [LICENSE.txt](LICENSE.txt) file for details.
 
 ## Changelog
 
