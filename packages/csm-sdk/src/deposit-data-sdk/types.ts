@@ -1,7 +1,7 @@
 import { Hex } from 'viem';
 import { SUPPORTED_CHAINS } from '../common/index';
 
-export type DepositDataCommon = {
+export type DepositData = {
   pubkey: Hex;
   withdrawal_credentials: Hex;
   amount: number;
@@ -9,18 +9,9 @@ export type DepositDataCommon = {
   deposit_message_root: Hex;
   deposit_data_root: Hex;
   fork_version: Hex;
+  network_name: string;
   deposit_cli_version: string;
 };
-
-export type DepositDataV2 = DepositDataCommon & {
-  network_name: string;
-};
-
-export type DepositDataV1 = DepositDataCommon & {
-  eth2_network_name: string;
-};
-
-export type DepositData = DepositDataV2 | DepositDataV1;
 
 export enum ValidationErrorCode {
   INVALID_PUBKEY = 'INVALID_PUBKEY',

@@ -9,6 +9,21 @@ const normalizeHexInJson = (text: string): string => {
   return text.replaceAll(/"0x/gm, '"');
 };
 
+// Convert a present value to Hex, leaving falsy values untouched for the
+// required-field check below to report.
+const toHexIfPresent = (value: any) => (value ? toHexString(value) : value);
+
+const requiredFields: Array<keyof DepositData> = [
+  'pubkey',
+  'withdrawal_credentials',
+  'amount',
+  'signature',
+  'deposit_message_root',
+  'deposit_data_root',
+  'fork_version',
+  'network_name',
+];
+
 /**
  * Validates and parses JSON string into DepositData array
  * This function combines validation and parsing logic
@@ -31,7 +46,7 @@ const parseAndValidateJson = (
   if (data.length > MAX_JSON_LENGTH) {
     return {
       depositData: [],
-      error: `Deposit data is too big (max ${Math.round(MAX_JSON_LENGTH / 1024 / 1024)}MB)`,
+      error: `Deposit data is too large (max ${Math.round(MAX_JSON_LENGTH / 1024 / 1024)}MB)`,
     };
   }
 
@@ -48,54 +63,40 @@ const parseAndValidateJson = (
 
   // Ensure we have an array and convert hex fields to Hex type
   const rawItems = Array.isArray(parsed) ? parsed : [parsed];
-  const depositData: DepositData[] = rawItems.map((item: any) => ({
-    ...item,
-    pubkey: item.pubkey ? toHexString(item.pubkey) : item.pubkey,
-    withdrawal_credentials: item.withdrawal_credentials
-      ? toHexString(item.withdrawal_credentials)
-      : item.withdrawal_credentials,
-    signature: item.signature ? toHexString(item.signature) : item.signature,
-    deposit_message_root: item.deposit_message_root
-      ? toHexString(item.deposit_message_root)
-      : item.deposit_message_root,
-    deposit_data_root: item.deposit_data_root
-      ? toHexString(item.deposit_data_root)
-      : item.deposit_data_root,
-    fork_version: item.fork_version
-      ? toHexString(item.fork_version)
-      : item.fork_version,
-  }));
-
-  // Validate array is not empty
-  if (depositData.length === 0) {
-    return {
-      depositData: [],
-      error: 'Should have at least 1 key',
-    };
-  }
 
   // Basic validation of each item
-  for (const [index, item] of depositData.entries()) {
+  for (const [index, item] of rawItems.entries()) {
     if (!item || typeof item !== 'object') {
       return {
         depositData: [],
         error: `Item at index ${index} should be an object`,
       };
     }
+  }
 
-    // Check for required fields
-    const requiredFields = [
-      'pubkey',
-      'withdrawal_credentials',
-      'amount',
-      'signature',
-      'deposit_message_root',
-      'deposit_data_root',
-      'fork_version',
-    ];
+  const depositData: DepositData[] = rawItems.map((item: any) => ({
+    ...item,
+    pubkey: toHexIfPresent(item.pubkey),
+    withdrawal_credentials: toHexIfPresent(item.withdrawal_credentials),
+    signature: toHexIfPresent(item.signature),
+    deposit_message_root: toHexIfPresent(item.deposit_message_root),
+    deposit_data_root: toHexIfPresent(item.deposit_data_root),
+    fork_version: toHexIfPresent(item.fork_version),
+    network_name: item.network_name || item.eth2_network_name, // Support both v1 and v2 field names
+  }));
 
+  // Validate array is not empty
+  if (depositData.length === 0) {
+    return {
+      depositData: [],
+      error: 'Deposit data should contain at least 1 key',
+    };
+  }
+
+  // Check for required fields
+  for (const [index, item] of depositData.entries()) {
     for (const field of requiredFields) {
-      if (!(field in item)) {
+      if (item[field] === undefined || item[field] === null) {
         return {
           depositData: [],
           error: `Item at index ${index} is missing required field: ${field}`,

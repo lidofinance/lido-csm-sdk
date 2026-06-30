@@ -151,7 +151,7 @@ export class DepositDataSDK extends CsmSDKModule<{
       if (exists) {
         errors.push({
           index,
-          message: `pubkey already exists as validator on CL`,
+          message: `pubkey already exists as a validator on CL`,
           field: 'pubkey',
           code: ValidationErrorCode.VALIDATOR_EXISTS,
         });

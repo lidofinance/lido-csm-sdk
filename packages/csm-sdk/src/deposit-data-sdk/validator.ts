@@ -17,8 +17,6 @@ import {
 import { verifyDepositSignature } from './signature';
 import {
   DepositData,
-  DepositDataV1,
-  DepositDataV2,
   DuplicateProcessingConfig,
   ValidationError,
   ValidationErrorCode,
@@ -38,7 +36,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'pubkey',
-      message: 'pubkey is not a valid string',
+      message: 'pubkey is not a valid hex string',
       code: ValidationErrorCode.INVALID_PUBKEY,
     });
   }
@@ -48,7 +46,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'signature',
-      message: 'signature is not a valid string',
+      message: 'signature is not a valid hex string',
       code: ValidationErrorCode.INVALID_SIGNATURE,
     });
   }
@@ -58,7 +56,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'deposit_message_root',
-      message: 'deposit_message_root is not a valid string',
+      message: 'deposit_message_root is not a valid hex string',
       code: ValidationErrorCode.INVALID_DEPOSIT_ROOT,
     });
   }
@@ -68,7 +66,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'deposit_data_root',
-      message: 'deposit_data_root is not a valid string',
+      message: 'deposit_data_root is not a valid hex string',
       code: ValidationErrorCode.INVALID_DEPOSIT_ROOT,
     });
   }
@@ -83,7 +81,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'withdrawal_credentials',
-      message: 'withdrawal_credentials is not a valid string',
+      message: 'withdrawal_credentials is not a valid hex string',
       code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
     });
   } else {
@@ -115,22 +113,20 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'amount',
-      message: 'amount is not equal to 32 eth',
+      message: 'amount is not equal to 32 ETH',
       code: ValidationErrorCode.INVALID_AMOUNT,
     });
   }
 
   // Validate network name
   const requiredNetworkName = FIXED_NETWORK[config.chainId];
-  const networkName =
-    (data as DepositDataV2).network_name ||
-    (data as DepositDataV1).eth2_network_name;
+  const networkName = data.network_name;
 
   if (!(networkName === requiredNetworkName)) {
     errors.push({
       index,
       field: 'network_name',
-      message: `network_name or eth2_network_name is not equal to ${requiredNetworkName}`,
+      message: `network_name is not equal to ${requiredNetworkName}`,
       code: ValidationErrorCode.INVALID_NETWORK,
     });
   }
@@ -244,7 +240,7 @@ export const validateDepositData = async (
       errors.push({
         index,
         field: 'signature',
-        message: 'invalid signature',
+        message: 'signature failed BLS verification',
         code: ValidationErrorCode.INVALID_BLS_SIGNATURE,
       });
     }

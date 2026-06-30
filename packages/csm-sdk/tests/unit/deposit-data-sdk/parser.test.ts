@@ -79,7 +79,7 @@ describe('parseDepositData', () => {
     const huge = 'x'.repeat(1_048_576 + 1);
     const result = parseDepositData(huge);
     expect(result.success).toBe(false);
-    expect(result.error).toContain('too big');
+    expect(result.error).toContain('too large');
   });
 });
 
