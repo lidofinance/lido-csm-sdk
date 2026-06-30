@@ -22,7 +22,15 @@ export type DecodedRevert = {
   [K in ContractErrorName]: { name: K; args: ArgsOf<K> };
 }[ContractErrorName];
 
-const HEX_DATA_RE = /(?:custom error |reason: )(0x[0-9a-fA-F]{8,})/;
+// viem surfaces estimateGas custom-error reverts as a formatted message:
+//   "custom error 0x<selector>: <abi-encoded-args-hex>"
+// The args trail the selector after ": " WITHOUT a 0x prefix. Capture both and
+// rejoin so errors WITH args decode — a selector alone fails decodeErrorResult
+// for any error that has inputs (e.g. AccessControlUnauthorizedAccount(address,bytes32)).
+// Arg-less errors and full-data "reason: 0x..." strings keep their old value
+// (group 2 simply doesn't match).
+const HEX_DATA_RE =
+  /(?:custom error |reason: )(0x[0-9a-fA-F]+)(?::\s*([0-9a-fA-F]+))?/;
 
 // Dedup by 4-byte selector, not by name: two ABIs may declare distinct errors
 // that happen to share a name but encode different argument tuples. Dropping
@@ -72,7 +80,8 @@ const tryHex = (value: unknown): Hex | undefined =>
 const tryHexFromString = (value: unknown): Hex | undefined => {
   if (typeof value !== 'string') return undefined;
   const match = HEX_DATA_RE.exec(value);
-  return match ? (match[1] as Hex) : undefined;
+  if (!match) return undefined;
+  return `${match[1]}${match[2] ?? ''}` as Hex;
 };
 
 const extractFromNode = (node: Record<string, unknown>): Hex | undefined => {
