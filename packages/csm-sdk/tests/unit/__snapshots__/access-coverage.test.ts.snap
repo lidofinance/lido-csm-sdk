@@ -1,0 +1,157 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SDK @Access coverage > annotated methods across all SDK modules match snapshot 1`] = `
+{
+  "BondSDK": {
+    "addBond": {
+      "level": "ANYONE",
+    },
+    "addBondETH": {
+      "level": "ANYONE",
+    },
+    "addBondStETH": {
+      "level": "ANYONE",
+    },
+    "addBondWstETH": {
+      "level": "ANYONE",
+    },
+    "claimBond": {
+      "level": "CLAIMER",
+    },
+    "claimBondStETH": {
+      "level": "CLAIMER",
+    },
+    "claimBondUnstETH": {
+      "level": "CLAIMER",
+    },
+    "claimBondWstETH": {
+      "level": "CLAIMER",
+    },
+    "compensateLockedBond": {
+      "level": "MANAGER",
+    },
+    "pullRewards": {
+      "level": "ANYONE",
+    },
+    "unlockExpiredLock": {
+      "level": "ANYONE",
+    },
+  },
+  "CuratedGateSDK": {
+    "createNodeOperator": {
+      "level": "ANYONE",
+    },
+  },
+  "CuratedGatesCollectionSDK": {
+    "createNodeOperator": {
+      "level": "ANYONE",
+    },
+  },
+  "DelayedPenaltySDK": {
+    "cancel": {
+      "level": "PROTOCOL_ROLE",
+      "protocolRole": "REPORT_GENERAL_DELAYED_PENALTY_ROLE",
+    },
+    "report": {
+      "level": "PROTOCOL_ROLE",
+      "protocolRole": "REPORT_GENERAL_DELAYED_PENALTY_ROLE",
+    },
+  },
+  "DepositQueueSDK": {
+    "clean": {
+      "level": "ANYONE",
+    },
+    "normalize": {
+      "level": "ANYONE",
+    },
+  },
+  "KeysSDK": {
+    "addKeys": {
+      "level": "MANAGER",
+    },
+    "addKeysETH": {
+      "level": "MANAGER",
+    },
+    "addKeysStETH": {
+      "level": "MANAGER",
+    },
+    "addKeysWstETH": {
+      "level": "MANAGER",
+    },
+    "ejectKeys": {
+      "level": "OWNER",
+    },
+    "removeKeys": {
+      "level": "MANAGER",
+    },
+  },
+  "MetaRegistrySDK": {
+    "setOperatorInfo": {
+      "level": "OWNER",
+    },
+  },
+  "PermissionlessGateSDK": {
+    "addNodeOperator": {
+      "level": "ANYONE",
+    },
+    "addNodeOperatorETH": {
+      "level": "ANYONE",
+    },
+    "addNodeOperatorStETH": {
+      "level": "ANYONE",
+    },
+    "addNodeOperatorWstETH": {
+      "level": "ANYONE",
+    },
+  },
+  "RolesSDK": {
+    "changeRewardsAddress": {
+      "condition": {
+        "extendedManagerPermissions": true,
+      },
+      "level": "MANAGER",
+    },
+    "confirmManagerAddress": {
+      "level": "PROPOSED_MANAGER",
+    },
+    "confirmRewardsAddress": {
+      "level": "PROPOSED_REWARDS",
+    },
+    "proposeManagerAddress": {
+      "level": "MANAGER",
+    },
+    "proposeRewardsAddress": {
+      "level": "REWARDS",
+    },
+    "resetManagerAddress": {
+      "condition": {
+        "extendedManagerPermissions": false,
+      },
+      "level": "REWARDS",
+    },
+    "setCustomRewardsClaimer": {
+      "level": "OWNER",
+    },
+    "setFeeSplits": {
+      "level": "OWNER",
+    },
+  },
+  "VettedGateSDK": {
+    "addNodeOperator": {
+      "level": "ANYONE",
+    },
+    "addNodeOperatorETH": {
+      "level": "ANYONE",
+    },
+    "addNodeOperatorStETH": {
+      "level": "ANYONE",
+    },
+    "addNodeOperatorWstETH": {
+      "level": "ANYONE",
+    },
+    "claimCurve": {
+      "level": "OWNER",
+    },
+  },
+}
+`;

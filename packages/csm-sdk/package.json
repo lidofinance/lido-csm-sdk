@@ -36,7 +36,9 @@
   "scripts": {
     "build": "tsdown",
     "types": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:all": "vitest run",
     "lint": "eslint --max-warnings 0"
   },
   "peerDependencies": {
@@ -46,9 +48,12 @@
   "devDependencies": {
     "@arethetypeswrong/core": "^0.18.3",
     "@lidofinance/lido-ethereum-sdk": "^4.8.0",
+    "@types/node": "^25.9.1",
+    "@viem/anvil": "^0.0.10",
     "@vitest/eslint-plugin": "^1.6.16",
     "dotenv": "^17.4.2",
     "esbuild": "^0.27.0",
+    "prool": "^0.2.4",
     "publint": "^0.3.21",
     "tsdown": "^0.21.9",
     "typescript": "^6.0.2",

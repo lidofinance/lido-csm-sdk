@@ -79,6 +79,29 @@ describe('decodeRevertData', () => {
     expect(decodeRevertData(error)?.name).toBe('FailedToSendEther');
   });
 
+  // Regression: viem surfaces estimateGas custom-error reverts WITH args as a
+  // single message where the abi-encoded args trail the selector after ": "
+  // (no 0x prefix), e.g. "custom error 0xe2517d3f: 0000...". A decoder that
+  // captured the selector alone failed decodeErrorResult for every error that
+  // has inputs. Pin the rejoin so typed-tuple errors decode from this format.
+  it('reconstructs selector + args from a "custom error SELECTOR: args" message', () => {
+    const full = encodeKnownError('AccessControlUnauthorizedAccount', [
+      '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      '0x0000000000000000000000000000000000000000000000000000000000000001',
+    ]);
+    const selector = full.slice(0, 10); // 0x + 4-byte selector
+    const argsHex = full.slice(10); // abi-encoded args, no 0x prefix
+    const error = new BaseError(
+      `Execution reverted with reason: custom error ${selector}: ${argsHex}.`,
+    );
+    const result = decodeRevertData(error);
+    expect(result?.name).toBe('AccessControlUnauthorizedAccount');
+    expect(result?.args).toEqual([
+      '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      '0x0000000000000000000000000000000000000000000000000000000000000001',
+    ]);
+  });
+
   it('returns undefined for non-object errors', () => {
     expect(decodeRevertData('string')).toBeUndefined();
     expect(decodeRevertData(null)).toBeUndefined();

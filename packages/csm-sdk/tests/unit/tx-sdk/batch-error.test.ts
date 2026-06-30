@@ -6,6 +6,7 @@ import {
   type BatchCallStatus,
 } from '../../../src/tx-sdk/errors';
 import { ERROR_CODE, SDKError } from '../../../src/common/utils/sdk-error';
+import type { ReceiptLike } from '../../../src/tx-sdk/types';
 
 type FakeReceipt = WalletCallReceipt<bigint, 'success' | 'reverted'>;
 
@@ -114,7 +115,9 @@ describe('BatchTransactionRevertedError', () => {
 
 describe('DecodeResultError', () => {
   const HASH = '0xabc' as Hash;
-  const receipt = makeReceipt('success', HASH);
+  // DecodeResultError receives a full mined receipt (ReceiptLike), not a batch
+  // sub-receipt — widen the fake to the type the error class actually accepts.
+  const receipt = makeReceipt('success', HASH) as unknown as ReceiptLike;
 
   it('stores hash, receipt, confirmations and preserves cause', () => {
     const inner = new Error('bad parse');

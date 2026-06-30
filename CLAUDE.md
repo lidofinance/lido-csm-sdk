@@ -565,6 +565,16 @@ const result = await sdk.depositData.validateDepositData(depositData);
 
 ### Testing
 
-- Vitest configuration in `vitest.config.ts`
-- Tests located in `tests/unit/` (explicit imports from `vitest`, no globals)
-- Tests can be run with `yarn test`
+Two Vitest projects share `packages/csm-sdk/vitest.config.ts`:
+
+- **`unit`** — `tests/unit/**/*.test.ts`. Pure logic only. Run with `yarn test`. Fast (~1.5s, 400 tests).
+- **`integration`** — `tests/integration/**/*.test.ts`. Anvil-backed SDK calls against a hoodi fork. Run with `yarn test:integration`. Requires `.env` (see `.env.example`).
+- `yarn test:all` runs both. Tests use explicit imports from `vitest` (no globals).
+
+**Fixtures (`tests/helpers/`)** follow a cached `use*()` pattern: `useCsmSdk()`, `useCmSdk()`, `useWalletClient()`, `useTestClient()`, `useAccount()`, `useAltAccount()`. Each helper memoizes and returns the same instance per test process. See `packages/csm-sdk/tests/README.md` for the full guide.
+
+**File naming convention**: `tests/integration/*-wallet.test.ts` for tests that sign + broadcast; plain `tests/integration/*.test.ts` for read-only SDK calls. Mirrors lido-ethereum-sdk's separation.
+
+**Snapshot tests**: `tests/unit/access-coverage.test.ts` pins the `@Access` annotation across every SDK module — any accidental annotation loss becomes a visible snapshot diff in PR review. Refresh deliberately with `yarn test -u` when changing access levels.
+
+**AA testing strategy**: see `tests/README.md` § AA. Unit-level capability mocking covers TxSDK routing; the integration test exercises routing + callback contract + receipt handling by faking `getCapabilities` (atomic: supported) and relying on viem's `experimental_fallback`. How the batch lands on-chain is **anvil-version dependent**: newer anvil implements `wallet_sendCalls` and runs the batch atomically (nonce +1), while older anvil makes the fallback fan out to sequential `eth_sendTransaction` (nonce +2). The AA test therefore asserts **version-invariant** behavior — the approve is required (zero starting allowance) and the deposit still succeeds (impossible without the in-batch approve) — never an exact tx count. No 4337 bundler is involved.
