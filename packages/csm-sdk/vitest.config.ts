@@ -9,5 +9,28 @@ export default defineConfig({
     poolOptions: {
       forks: { execArgv: ['--no-deprecation'] },
     },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          environment: 'node',
+          include: ['tests/unit/**/*.test.ts'],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'integration',
+          environment: 'node',
+          include: ['tests/integration/**/*.test.ts'],
+          globalSetup: ['./tests/global-setup.ts'],
+          testTimeout: 120_000,
+          hookTimeout: 60_000,
+          pool: 'forks',
+          poolOptions: { forks: { singleFork: true } },
+        },
+      },
+    ],
   },
 });

@@ -27,5 +27,43 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Test
+      - name: Unit tests
         run: yarn test
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Integration tests need a forkable RPC + Foundry. Skip on forks (secrets are unavailable),
+    # run on internal PRs and on develop/main pushes.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    needs: check-all
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Integration tests
+        run: yarn workspace @lidofinance/lido-csm-sdk test:integration
+        env:
+          TEST_RPC_URL: ${{ secrets.TEST_RPC_URL }}
+          TEST_CHAIN_ID: ${{ vars.TEST_CHAIN_ID || '560048' }}
+          # Pin the fork to a known-good block. Leave the var unset to fork
+          # at tip — accept the flake risk only when intentionally tracking
+          # latest state (e.g. nightly drift detection).
+          TEST_FORK_BLOCK: ${{ vars.TEST_FORK_BLOCK }}
+          # TEST_PRIVATE_KEY defaults to anvil dev account #0 in the SDK; override
+          # only if a specific funded address is required for a test scenario.
+          TEST_PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}
