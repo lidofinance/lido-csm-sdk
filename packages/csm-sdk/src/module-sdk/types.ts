@@ -13,6 +13,11 @@ export const ShareLimitStatus = {
 } as const;
 export type ShareLimitStatus = keyof typeof ShareLimitStatus;
 
+export const WCType = {
+  TYPE_01: 1,
+  TYPE_02: 2,
+} as const;
+
 export type ShareLimitInfo = {
   active: bigint;
   activeLeft: bigint;
@@ -39,6 +44,7 @@ export type ModuleDigest = {
     maxDepositsPerBlock: bigint;
     minDepositBlockDistance: bigint;
     withdrawalCredentialsType: number;
+    validatorsBalanceGwei: bigint;
   };
   summary: {
     totalExitedValidators: bigint;

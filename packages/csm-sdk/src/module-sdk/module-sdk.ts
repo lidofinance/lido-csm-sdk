@@ -5,7 +5,7 @@ import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index';
 import { calculateShareLimit } from './calculate-share-limit';
 import { findModuleDigest } from './find-module-digest';
 import { findUsedOtherModule } from './find-used-other-module';
-import { CsmStatus, ModuleDigest, ShareLimitInfo } from './types';
+import { CsmStatus, ModuleDigest, ShareLimitInfo, WCType } from './types';
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -88,7 +88,7 @@ export class ModuleSDK extends CsmSDKModule {
   public async getMaxEffectiveBalance(): Promise<bigint> {
     const wcType = await this.getWithdrawalCredentialsType();
     const method =
-      wcType === 1
+      wcType === WCType.TYPE_01
         ? 'MAX_EFFECTIVE_BALANCE_WC_TYPE_01'
         : 'MAX_EFFECTIVE_BALANCE_WC_TYPE_02';
     return this.stakingRouterContract.read[method]();

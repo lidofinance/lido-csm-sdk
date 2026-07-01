@@ -1,4 +1,5 @@
 import { PERCENT_BASIS } from '../common/index';
+import { activeStakeEquivalent } from './active-stake-equivalent';
 import { findModuleDigest } from './find-module-digest';
 import { ModuleDigest, ShareLimitInfo } from './types';
 
@@ -9,15 +10,12 @@ export const calculateShareLimit = (
   const moduleDigest = findModuleDigest(digests, moduleId);
   const shareLimit = moduleDigest.state.stakeShareLimit;
 
-  const active =
-    moduleDigest.summary.totalDepositedValidators -
-    moduleDigest.summary.totalExitedValidators;
+  const active = activeStakeEquivalent(moduleDigest);
 
   const queue = moduleDigest.summary.depositableValidatorsCount;
 
   const totalActive = digests.reduce(
-    (acc, { summary }) =>
-      acc + summary.totalDepositedValidators - summary.totalExitedValidators,
+    (acc, digest) => acc + activeStakeEquivalent(digest),
     0n,
   );
 
