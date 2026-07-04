@@ -1,5 +1,6 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { CONTRACT_NAMES } from './contract-names';
+import { MODULE_NAME, PerModule } from './module-name';
 import { PerSupportedChain } from './supported-chains';
 
 export const DEFAULT_IPFS_GATEWAYS = [
@@ -7,40 +8,53 @@ export const DEFAULT_IPFS_GATEWAYS = [
   'https://gateway.pinata.cloud/ipfs/{cid}',
 ];
 
-export const MERKLE_TREE_FALLBACKS: PerSupportedChain<
-  Partial<Record<CONTRACT_NAMES, string>>
+// Fallback tree URLs are resolved per module: gate contracts are
+// module-specific by nature, and feeDistributor is a distinct contract (with a
+// distinct rewards tree) in each module. Mainnet artifacts for idvtc/curated
+// gates live on the `develop` branch of staking-modules until released; switch
+// to `main` once merged.
+export const MERKLE_TREE_FALLBACKS: PerModule<
+  PerSupportedChain<Partial<Record<CONTRACT_NAMES, string>>>
 > = {
-  [CHAINS.Mainnet]: {
-    [CONTRACT_NAMES.icsGate]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/main/artifacts/mainnet/ics/merkle-tree.json',
-    [CONTRACT_NAMES.idvtcGate]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/idvtc/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGatePTO]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/pto/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGatePGO]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/pgo/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGateIODC]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/iodvtc/merkle-tree.json',
-    [CONTRACT_NAMES.feeDistributor]:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
+  [MODULE_NAME.CSM]: {
+    [CHAINS.Mainnet]: {
+      [CONTRACT_NAMES.icsGate]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/main/artifacts/mainnet/ics/merkle-tree.json',
+      [CONTRACT_NAMES.idvtcGate]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/idvtc/merkle-tree.json',
+      [CONTRACT_NAMES.feeDistributor]:
+        'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
+    },
+    [CHAINS.Hoodi]: {
+      [CONTRACT_NAMES.icsGate]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/main/artifacts/hoodi/ics/merkle-tree.json',
+      [CONTRACT_NAMES.feeDistributor]:
+        'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
+    },
   },
-  [CHAINS.Hoodi]: {
-    [CONTRACT_NAMES.icsGate]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/main/artifacts/hoodi/ics/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGatePTO]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/PTO/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGatePGO]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/PGO/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGateDO]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/DO/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGateEEO]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/EE/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGateIODC]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC/merkle-tree.json',
-    [CONTRACT_NAMES.curatedGateIODCP]:
-      'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC%2B/merkle-tree.json',
-    [CONTRACT_NAMES.feeDistributor]:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
+  [MODULE_NAME.CM]: {
+    [CHAINS.Mainnet]: {
+      [CONTRACT_NAMES.curatedGatePTO]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/pto/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGatePGO]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/pgo/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGateIODC]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/iodvtc/merkle-tree.json',
+    },
+    [CHAINS.Hoodi]: {
+      [CONTRACT_NAMES.curatedGatePTO]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/PTO/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGatePGO]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/PGO/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGateDO]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/DO/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGateEEO]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/EE/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGateIODC]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC/merkle-tree.json',
+      [CONTRACT_NAMES.curatedGateIODCP]:
+        'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC%2B/merkle-tree.json',
+    },
   },
 };
 

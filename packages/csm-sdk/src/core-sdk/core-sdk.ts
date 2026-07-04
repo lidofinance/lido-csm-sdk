@@ -137,7 +137,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public get merkleTreeFallbacks() {
-    return MERKLE_TREE_FALLBACKS[this.chainId];
+    return MERKLE_TREE_FALLBACKS[this.moduleName][this.chainId];
   }
 
   public get apiUrls() {

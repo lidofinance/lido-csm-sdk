@@ -397,7 +397,4 @@ const CSModuleExtrasAbi = [
   },
 ] as const;
 
-export const CSModuleAbi = [
-  ...BaseModuleAbi,
-  ...CSModuleExtrasAbi,
-] as const;
+export const CSModuleAbi = [...BaseModuleAbi, ...CSModuleExtrasAbi] as const;
