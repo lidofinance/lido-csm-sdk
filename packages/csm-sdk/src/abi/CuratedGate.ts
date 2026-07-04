@@ -560,7 +560,7 @@ export const CuratedGateAbi = [
     name: 'setName',
     inputs: [
       {
-        name: 'name_',
+        name: 'name',
         type: 'string',
         internalType: 'string',
       },

@@ -336,32 +336,7 @@ const CSModuleExtrasAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidSigningKey',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidTopUpOrder',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'NoQueuedKeysToMigrate',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'NotEligibleForPriorityQueue',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'PriorityQueueAlreadyUsed',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'PriorityQueueMaxDepositsUsed',
     inputs: [],
   },
   {
@@ -422,4 +397,7 @@ const CSModuleExtrasAbi = [
   },
 ] as const;
 
-export const CSModuleAbi = [...BaseModuleAbi, ...CSModuleExtrasAbi] as const;
+export const CSModuleAbi = [
+  ...BaseModuleAbi,
+  ...CSModuleExtrasAbi,
+] as const;

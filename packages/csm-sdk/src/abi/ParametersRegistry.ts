@@ -653,7 +653,7 @@ export const ParametersRegistryAbi = [
     ],
     outputs: [
       {
-        name: 'queuePriority',
+        name: 'priority',
         type: 'uint32',
         internalType: 'uint32',
       },
@@ -1046,7 +1046,7 @@ export const ParametersRegistryAbi = [
     name: 'setDefaultExitDelayFee',
     inputs: [
       {
-        name: 'penalty',
+        name: 'fee',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1201,7 +1201,7 @@ export const ParametersRegistryAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'penalty',
+        name: 'fee',
         type: 'uint256',
         internalType: 'uint256',
       },

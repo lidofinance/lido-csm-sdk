@@ -250,7 +250,7 @@ export const MetaRegistryAbi = [
     name: 'getNodeOperatorWeight',
     inputs: [
       {
-        name: 'noId',
+        name: 'nodeOperatorId',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -269,7 +269,7 @@ export const MetaRegistryAbi = [
     name: 'getNodeOperatorWeightAndExternalStake',
     inputs: [
       {
-        name: 'noId',
+        name: 'nodeOperatorId',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1006,6 +1006,11 @@ export const MetaRegistryAbi = [
   {
     type: 'error',
     name: 'AlreadyUsedAsExternalOperator',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'InvalidBondCurveId',
     inputs: [],
   },
   {

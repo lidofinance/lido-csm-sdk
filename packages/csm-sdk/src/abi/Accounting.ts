@@ -723,6 +723,25 @@ export const AccountingAbi = [
   },
   {
     type: 'function',
+    name: 'getBondLockNonce',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'getBondLockPeriod',
     inputs: [],
     outputs: [
@@ -1741,14 +1760,14 @@ export const AccountingAbi = [
         internalType: 'uint256',
       },
       {
-        name: 'maxAmount',
+        name: 'bondLockNonce',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
     outputs: [
       {
-        name: 'amountSettled',
+        name: '',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -2241,6 +2260,25 @@ export const AccountingAbi = [
   },
   {
     type: 'event',
+    name: 'BondLockNonceIncremented',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'newNonce',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'BondLockPeriodChanged',
     inputs: [
       {
@@ -2392,19 +2430,6 @@ export const AccountingAbi = [
         name: 'amount',
         type: 'uint256',
         indexed: false,
-        internalType: 'uint256',
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'ExpiredBondLockRemoved',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        indexed: true,
         internalType: 'uint256',
       },
     ],
@@ -2640,6 +2665,11 @@ export const AccountingAbi = [
   {
     type: 'error',
     name: 'InvalidBondLockAmount',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'InvalidBondLockNonce',
     inputs: [],
   },
   {

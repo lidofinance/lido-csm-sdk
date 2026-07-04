@@ -760,7 +760,7 @@ export const VettedGateAbi = [
     name: 'setName',
     inputs: [
       {
-        name: 'name_',
+        name: 'name',
         type: 'string',
         internalType: 'string',
       },

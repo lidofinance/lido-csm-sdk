@@ -79,6 +79,19 @@ export const BaseModuleAbi = [
   },
   {
     type: 'function',
+    name: 'OPERATOR_ADDRESSES_ADMIN_ROLE',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'PARAMETERS_REGISTRY',
     inputs: [],
     outputs: [
@@ -467,6 +480,29 @@ export const BaseModuleAbi = [
         name: 'amount',
         type: 'uint256',
         internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'changeNodeOperatorAddresses',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'newManagerAddress',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: 'newRewardAddress',
+        type: 'address',
+        internalType: 'address',
       },
     ],
     outputs: [],
@@ -1297,7 +1333,7 @@ export const BaseModuleAbi = [
         internalType: 'uint256',
       },
       {
-        name: '',
+        name: 'proofSlotTimestamp',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1745,7 +1781,7 @@ export const BaseModuleAbi = [
         internalType: 'uint256',
       },
       {
-        name: '',
+        name: 'proofSlotTimestamp',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -1836,7 +1872,7 @@ export const BaseModuleAbi = [
         internalType: 'uint256[]',
       },
       {
-        name: 'maxAmounts',
+        name: 'bondLockNonces',
         type: 'uint256[]',
         internalType: 'uint256[]',
       },
@@ -2890,11 +2926,6 @@ export const BaseModuleAbi = [
   {
     type: 'error',
     name: 'PausedExpected',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'PubkeyMismatch',
     inputs: [],
   },
   {

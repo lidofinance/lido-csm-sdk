@@ -52,42 +52,6 @@ const CuratedModuleExtrasAbi = [
   },
   {
     type: 'function',
-    name: 'OPERATOR_ADDRESSES_ADMIN_ROLE',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-        internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'changeNodeOperatorAddresses',
-    inputs: [
-      {
-        name: 'nodeOperatorId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'newManagerAddress',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: 'newRewardAddress',
-        type: 'address',
-        internalType: 'address',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     name: 'getDepositAllocationTargets',
     inputs: [],
     outputs: [

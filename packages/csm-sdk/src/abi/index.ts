@@ -1,4 +1,5 @@
 export * from './Accounting';
+export * from './AccountingV1Events';
 export * from './BaseModule';
 export * from './CSModule';
 export * from './CSModuleV1Events';

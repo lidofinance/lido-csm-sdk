@@ -1,4 +1,5 @@
 import { Address, Hex } from 'viem';
+import { AccountingV1EventsAbi } from '../abi/AccountingV1Events';
 import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { ErrorHandler, Logger } from '../common/decorators/index';
@@ -18,6 +19,7 @@ import {
 import { BindedContract } from '../core-sdk/types';
 import { ChangeAddressLog, reconstructInvites } from './reconstruct-invites';
 import { NodeOperatorLog, reconstructOperators } from './reconstruct-operators';
+import { resolveExpiredRecords } from './resolve-expired-records';
 import {
   EventRangeProps,
   OperatorCurveIdChange,
@@ -53,6 +55,15 @@ export class EventsSDK extends CsmSDKModule {
 
   private get accountingContract() {
     return this.core.getContract(CONTRACT_NAMES.accounting);
+  }
+
+  private get accountingContractV1(): BindedContract<
+    typeof AccountingV1EventsAbi
+  > {
+    return this.core.getContractWithAbi(
+      CONTRACT_NAMES.accounting,
+      AccountingV1EventsAbi,
+    );
   }
 
   @Logger('Events:')
@@ -380,9 +391,12 @@ export class EventsSDK extends CsmSDKModule {
           }),
         );
       },
+      // Legacy expiry signal from the pre-upgrade contract. `ExpiredBondLockRemoved`
+      // was removed as redundant (community-staking-module #805), but historical
+      // logs still carry it and it was emitted only on genuine expiry.
       async (s) => {
         const logs =
-          await this.accountingContract.getEvents.ExpiredBondLockRemoved(
+          await this.accountingContractV1.getEvents.ExpiredBondLockRemoved(
             { nodeOperatorId },
             s,
           );
@@ -393,9 +407,26 @@ export class EventsSDK extends CsmSDKModule {
           }),
         );
       },
+      // Forward expiry signal. `BondLockRemoved` fires on every full lock removal
+      // (expiry, cancel, settle, compensate); the coinciding-tx ones are pruned in
+      // resolveExpiredRecords, leaving only genuine expiries.
+      async (s) => {
+        const logs = await this.accountingContract.getEvents.BondLockRemoved(
+          { nodeOperatorId },
+          s,
+        );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'expired',
+          }),
+        );
+      },
     );
 
-    return this.withTimestamps(records) as Promise<PenaltyRecord[]>;
+    return this.withTimestamps(resolveExpiredRecords(records)) as Promise<
+      PenaltyRecord[]
+    >;
   }
 
   private async withTimestamps<T extends { blockNumber: bigint }>(

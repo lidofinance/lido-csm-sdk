@@ -1012,11 +1012,6 @@ export const FeeDistributorAbi = [
   },
   {
     type: 'error',
-    name: 'InvalidReportData',
-    inputs: [],
-  },
-  {
-    type: 'error',
     name: 'InvalidShares',
     inputs: [],
   },
