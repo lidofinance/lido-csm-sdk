@@ -56,7 +56,7 @@ export const SUPPORTED_CONTRACT_VERSIONS: Partial<
 > = {
   [CONTRACT_NAMES.accounting]: [3n, 3n],
   [CONTRACT_NAMES.feeDistributor]: [3n, 3n],
-  [CONTRACT_NAMES.parametersRegistry]: [1n, 1n],
+  [CONTRACT_NAMES.parametersRegistry]: [3n, 3n],
   [CONTRACT_NAMES.validatorStrikes]: [1n, 1n],
   [CONTRACT_NAMES.csModule]: [3n, 3n],
   [CONTRACT_NAMES.icsGate]: [1n, 1n],

@@ -37,20 +37,13 @@ describe('getCurveIdByOperatorType', () => {
     ).toBeUndefined();
   });
 
-  it('is chain-specific: curves not registered on mainnet are undefined', () => {
+  it('is chain-specific: same operator type maps to different curve ids', () => {
     expect(
       getCurveIdByOperatorType(CHAINS.Hoodi, OPERATOR_TYPE.CSM_IDVTC),
     ).toBe(4n);
     expect(
       getCurveIdByOperatorType(CHAINS.Mainnet, OPERATOR_TYPE.CSM_IDVTC),
-    ).toBeUndefined();
-
-    expect(getCurveIdByOperatorType(CHAINS.Hoodi, OPERATOR_TYPE.CM_PO)).toBe(
-      0n,
-    );
-    expect(
-      getCurveIdByOperatorType(CHAINS.Mainnet, OPERATOR_TYPE.CM_PO),
-    ).toBeUndefined();
+    ).toBe(3n);
   });
 });
 
@@ -91,10 +84,12 @@ describe('getOperatorTypeByCurveId', () => {
     ).toBeUndefined();
   });
 
-  it('is chain-specific: mainnet has no CM curves yet', () => {
-    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, 'CM', 0n)).toBeUndefined();
-    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, 'CSM', 0n)).toBe(
-      OPERATOR_TYPE.CSM_DEF,
+  it('is chain-specific: curve 3 resolves differently per chain', () => {
+    // mainnet curve 3 is IDVTC; on hoodi IDVTC is curve 4 and CSM curve 3
+    // does not exist
+    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, 'CSM', 3n)).toBe(
+      OPERATOR_TYPE.CSM_IDVTC,
     );
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CSM', 3n)).toBeUndefined();
   });
 });

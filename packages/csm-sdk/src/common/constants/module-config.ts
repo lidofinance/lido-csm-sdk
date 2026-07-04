@@ -142,6 +142,8 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.curatedGateIODCP]:
           '0x773933F9db8964A17d62fb808f2EC7A2de4247CC',
       },
+      // CM is not registered in StakingRouter yet (3 modules as of 2026-07) —
+      // confirm the assigned id once the DAO vote executes
       moduleId: 4n,
       deploymentBlockNumber: BigInt('0x1845a2b'),
     },
