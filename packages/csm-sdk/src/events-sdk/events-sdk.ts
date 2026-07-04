@@ -392,7 +392,7 @@ export class EventsSDK extends CsmSDKModule {
         );
       },
       // Legacy expiry signal from the pre-upgrade contract. `ExpiredBondLockRemoved`
-      // was removed as redundant (community-staking-module #805), but historical
+      // was removed as redundant (staking-modules #805), but historical
       // logs still carry it and it was emitted only on genuine expiry.
       async (s) => {
         const logs =

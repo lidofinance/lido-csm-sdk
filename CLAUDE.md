@@ -319,13 +319,15 @@ Exported helper that turns a `DecodedRevert` into the canonical `Name(arg1, arg2
 
 ### Contract References (External Repositories)
 
-**community-staking-module** (main CSM contracts):
+**staking-modules** (main CSM + Curated Module contracts; formerly `community-staking-module`):
 
-- Sources: `community-staking-module/src`
-- ABI: `community-staking-module/out`
-- Deployed addresses:
-  - Mainnet: `community-staking-module/artifacts/mainnet/deploy-mainnet.json`
-  - Hoodi: `community-staking-module/artifacts/hoodi/deploy-hoodi.json`
+- Sources: `staking-modules/src`
+- ABI: `staking-modules/out`
+- Deployed addresses (split into `csm/` and `curated/` subdirs per network):
+  - Mainnet CSM: `staking-modules/artifacts/mainnet/csm/deploy-mainnet.json`
+  - Mainnet CM: `staking-modules/artifacts/mainnet/curated/deploy-mainnet.json`
+  - Hoodi CSM: `staking-modules/artifacts/hoodi/csm/deploy-hoodi.json`
+  - Hoodi CM: `staking-modules/artifacts/hoodi/curated/deploy-hoodi.json`
 
 **csm-satellite** (satellite contracts):
 

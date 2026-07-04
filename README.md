@@ -13,7 +13,7 @@
 </div>
 <br/>
 
-**Lido CSM SDK** is a TypeScript/JavaScript library that provides a comprehensive set of tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/community-staking-module) and Curated Module (CM) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido staking modules.
+**Lido CSM SDK** is a TypeScript/JavaScript library that provides a comprehensive set of tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/staking-modules) and Curated Module (CM) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido staking modules.
 
 ## Installation
 
@@ -166,7 +166,7 @@ For detailed documentation, see [packages/csm-sdk/README.md](packages/csm-sdk/RE
 
 The SDK's ABIs and addresses are sourced from the following upstream repositories:
 
-- [lidofinance/community-staking-module](https://github.com/lidofinance/community-staking-module) — CSM and Curated Module contracts (`CSModule`, `CSAccounting`, `CSFeeDistributor`, gates, etc.)
+- [lidofinance/staking-modules](https://github.com/lidofinance/staking-modules) — CSM and Curated Module contracts (`CSModule`, `CSAccounting`, `CSFeeDistributor`, gates, etc.)
 - [lidofinance/csm-satellite](https://github.com/lidofinance/csm-satellite) — Satellite contracts (`SMDiscovery`)
 - [lidofinance/core](https://github.com/lidofinance/core) — Lido protocol core (`StakingRouter`, `WithdrawalVault`, `ValidatorsExitBusOracle`)
 

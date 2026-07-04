@@ -6,7 +6,7 @@
 
 ## Overview
 
-**Lido CSM SDK** is a TypeScript/JavaScript library that provides comprehensive tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/community-staking-module) and Curated Module (CM) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido staking modules.
+**Lido CSM SDK** is a TypeScript/JavaScript library that provides comprehensive tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/staking-modules) and Curated Module (CM) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido staking modules.
 
 ## Features
 - Modular SDKs for all major Lido staking module contract domains
