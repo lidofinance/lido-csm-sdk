@@ -13,6 +13,14 @@ export const MERKLE_TREE_FALLBACKS: PerSupportedChain<
   [CHAINS.Mainnet]: {
     [CONTRACT_NAMES.icsGate]:
       'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/main/artifacts/mainnet/ics/merkle-tree.json',
+    [CONTRACT_NAMES.idvtcGate]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/mainnet/idvtc/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGatePTO]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/mainnet/curated/gates/pto/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGatePGO]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/mainnet/curated/gates/pgo/merkle-tree.json',
+    [CONTRACT_NAMES.curatedGateIODC]:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/refs/heads/develop/artifacts/mainnet/curated/gates/iodvtc/merkle-tree.json',
     [CONTRACT_NAMES.feeDistributor]:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
   },

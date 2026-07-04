@@ -1,5 +1,5 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { Address, zeroAddress } from 'viem';
+import { Address } from 'viem';
 
 import { CONTRACT_NAMES } from './contract-names';
 import { MODULE_NAME, PerModule } from './module-name';
@@ -51,7 +51,7 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.csModule]: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
         [CONTRACT_NAMES.accounting]:
           '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
-        [CONTRACT_NAMES.ejector]: '0xc72b58aa02E0e98cF8A4a0E9Dce75e763800802C',
+        [CONTRACT_NAMES.ejector]: '0x610B517D380f287c239C93F8eF6FfBd567AA4bA5',
         [CONTRACT_NAMES.exitPenalties]:
           '0x06cd61045f958A209a0f8D746e103eCc625f4193',
         [CONTRACT_NAMES.feeDistributor]:
@@ -62,13 +62,14 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
           '0x9D28ad303C90DF524BA960d7a2DAC56DcC31e428',
         [CONTRACT_NAMES.validatorStrikes]:
           '0xaa328816027F2D32B9F56d190BC9Fa4A5C07637f',
-        [CONTRACT_NAMES.verifier]: '0xdC5FE1782B6943f318E05230d688713a560063DC',
+        [CONTRACT_NAMES.verifier]: '0xfce7aB839e55de77730716D05b3553e45ab3A5Ba',
         [CONTRACT_NAMES.hashConsensus]:
           '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
         [CONTRACT_NAMES.permissionlessGate]:
-          '0xcF33a38111d0B1246A3F38a838fb41D626B454f0',
+          '0xb8cd8F059Ad7a5dB8CAfDe34aAb007317F7156C8',
         [CONTRACT_NAMES.icsGate]: '0xB314D4A76C457c93150d308787939063F4Cc67E0',
-        [CONTRACT_NAMES.idvtcGate]: zeroAddress,
+        [CONTRACT_NAMES.idvtcGate]:
+          '0xa12760721A72A7199aB38059DA6690b9Cd4ed7B8',
       },
       moduleId: 3n,
       deploymentBlockNumber: BigInt('0x13f7326'),
@@ -106,26 +107,43 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
   [MODULE_NAME.CM]: {
     [CHAINS.Mainnet]: {
       contractAddresses: {
-        [CONTRACT_NAMES.curatedModule]: zeroAddress,
-        [CONTRACT_NAMES.accounting]: zeroAddress,
-        [CONTRACT_NAMES.ejector]: zeroAddress,
-        [CONTRACT_NAMES.exitPenalties]: zeroAddress,
-        [CONTRACT_NAMES.feeDistributor]: zeroAddress,
-        [CONTRACT_NAMES.feeOracle]: zeroAddress,
-        [CONTRACT_NAMES.parametersRegistry]: zeroAddress,
-        [CONTRACT_NAMES.validatorStrikes]: zeroAddress,
-        [CONTRACT_NAMES.verifier]: zeroAddress,
-        [CONTRACT_NAMES.hashConsensus]: zeroAddress,
-        [CONTRACT_NAMES.metaRegistry]: zeroAddress,
-        [CONTRACT_NAMES.curatedGatePO]: zeroAddress,
-        [CONTRACT_NAMES.curatedGatePTO]: zeroAddress,
-        [CONTRACT_NAMES.curatedGatePGO]: zeroAddress,
-        [CONTRACT_NAMES.curatedGateDO]: zeroAddress,
-        [CONTRACT_NAMES.curatedGateEEO]: zeroAddress,
-        [CONTRACT_NAMES.curatedGateIODC]: zeroAddress,
-        [CONTRACT_NAMES.curatedGateIODCP]: zeroAddress,
+        [CONTRACT_NAMES.curatedModule]:
+          '0xDa5F930cE326EB5205085D66c72A4E79d60cB8C1',
+        [CONTRACT_NAMES.accounting]:
+          '0x2F91e3A8C5d6593bf4F8403fCfeCcd62dF59f6F6',
+        [CONTRACT_NAMES.ejector]: '0xe181A377A2d2BDE9A83f1474BC3DB7A412de091E',
+        [CONTRACT_NAMES.exitPenalties]:
+          '0x004aFb7DAA7dEA20EbAaB75c9F4892C879FaCCe0',
+        [CONTRACT_NAMES.feeDistributor]:
+          '0x367d23c756599c20DCc8D6943F4976E8F88D60d7',
+        [CONTRACT_NAMES.feeOracle]:
+          '0x8EeFCdbD984c30E472BcbF545783D051CB5114e5',
+        [CONTRACT_NAMES.parametersRegistry]:
+          '0xffC1C5d59CeAC6F6c27E701F04a70cb50474607C',
+        [CONTRACT_NAMES.validatorStrikes]:
+          '0xf4618370a1fBf46905B16C10817c8CFaD924D6db',
+        [CONTRACT_NAMES.verifier]: '0xC392F457960f1B13Ebaf1aa6C065479dD507E1E3',
+        [CONTRACT_NAMES.hashConsensus]:
+          '0x902D64c93F6595339aA46105627a085591051aFb',
+        [CONTRACT_NAMES.metaRegistry]:
+          '0xA64b339eebD3dC3De848298B6a140955932901d8',
+        [CONTRACT_NAMES.curatedGatePO]:
+          '0x6093EFA6B5E2FF3be54d1c895c9deA932805c49F',
+        [CONTRACT_NAMES.curatedGatePTO]:
+          '0x8c002c6eE10cf8adb78D1F9EB2e134FdaF8A7C1a',
+        [CONTRACT_NAMES.curatedGatePGO]:
+          '0x207798e6fD1aa7Ee8a63782A64c959cD6727b78C',
+        [CONTRACT_NAMES.curatedGateDO]:
+          '0xeF273Ca4A21Ba7B414Ae3C9f9b443038cb133F72',
+        [CONTRACT_NAMES.curatedGateEEO]:
+          '0x3BbBb175f7F07954DE00052b20E1c5572223F24D',
+        [CONTRACT_NAMES.curatedGateIODC]:
+          '0x86A8d4E0db5938D21d98047544668FCCB1A9ADc8',
+        [CONTRACT_NAMES.curatedGateIODCP]:
+          '0x773933F9db8964A17d62fb808f2EC7A2de4247CC',
       },
       moduleId: 4n,
+      deploymentBlockNumber: BigInt('0x1845a2b'),
     },
     [CHAINS.Hoodi]: {
       contractAddresses: {
