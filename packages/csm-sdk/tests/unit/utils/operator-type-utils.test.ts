@@ -5,6 +5,7 @@ import {
   getOperatorTypeByCurveId,
 } from '../../../src/common/utils/operator-type-utils';
 import { OPERATOR_TYPE } from '../../../src/common/constants/operator-types';
+import { MODULE_NAME } from '../../../src/common/constants/module-name';
 
 describe('getCurveIdByOperatorType', () => {
   it('returns correct curve ID for CSM types', () => {
@@ -28,15 +29,6 @@ describe('getCurveIdByOperatorType', () => {
     );
   });
 
-  it('returns undefined for CC type', () => {
-    expect(
-      getCurveIdByOperatorType(CHAINS.Hoodi, OPERATOR_TYPE.CC),
-    ).toBeUndefined();
-    expect(
-      getCurveIdByOperatorType(CHAINS.Mainnet, OPERATOR_TYPE.CC),
-    ).toBeUndefined();
-  });
-
   it('is chain-specific: same operator type maps to different curve ids', () => {
     expect(
       getCurveIdByOperatorType(CHAINS.Hoodi, OPERATOR_TYPE.CSM_IDVTC),
@@ -49,47 +41,69 @@ describe('getCurveIdByOperatorType', () => {
 
 describe('getOperatorTypeByCurveId', () => {
   it('returns CSM operator type for CSM module', () => {
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CSM', 0n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 0n)).toBe(
       OPERATOR_TYPE.CSM_DEF,
     );
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CSM', 1n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 1n)).toBe(
       OPERATOR_TYPE.CSM_LEA,
     );
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CSM', 2n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 2n)).toBe(
       OPERATOR_TYPE.CSM_ICS,
     );
   });
 
   it('returns CM operator type for CM module', () => {
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CM', 0n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CM, 0n)).toBe(
       OPERATOR_TYPE.CM_PO,
     );
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CM', 1n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CM, 1n)).toBe(
       OPERATOR_TYPE.CM_PTO,
     );
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CM', 2n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CM, 2n)).toBe(
       OPERATOR_TYPE.CM_PGO,
     );
   });
 
-  it('returns undefined for unknown curveId', () => {
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CSM', 999n)).toBeUndefined();
+  it('is module-specific: colliding curve ids resolve per module', () => {
+    // Curve 0 exists in both modules on every chain and must resolve to the
+    // module's own type, never leak across modules.
+    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, MODULE_NAME.CSM, 0n)).toBe(
+      OPERATOR_TYPE.CSM_DEF,
+    );
+    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, MODULE_NAME.CM, 0n)).toBe(
+      OPERATOR_TYPE.CM_PO,
+    );
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 0n)).toBe(
+      OPERATOR_TYPE.CSM_DEF,
+    );
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CM, 0n)).toBe(
+      OPERATOR_TYPE.CM_PO,
+    );
   });
 
-  it('returns undefined for undefined curveId (never matches unregistered types)', () => {
-    // Unregistered types hold `undefined` in the map; an undefined input must
-    // not accidentally match them.
+  it('returns undefined for unknown curveId', () => {
     expect(
-      getOperatorTypeByCurveId(CHAINS.Mainnet, 'CM', undefined),
+      getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 999n),
+    ).toBeUndefined();
+  });
+
+  it('returns undefined for undefined curveId', () => {
+    expect(
+      getOperatorTypeByCurveId(CHAINS.Mainnet, MODULE_NAME.CM, undefined),
     ).toBeUndefined();
   });
 
   it('is chain-specific: curve 3 resolves differently per chain', () => {
     // mainnet curve 3 is IDVTC; on hoodi IDVTC is curve 4 and CSM curve 3
     // does not exist
-    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, 'CSM', 3n)).toBe(
+    expect(getOperatorTypeByCurveId(CHAINS.Mainnet, MODULE_NAME.CSM, 3n)).toBe(
       OPERATOR_TYPE.CSM_IDVTC,
     );
-    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, 'CSM', 3n)).toBeUndefined();
+    expect(
+      getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 3n),
+    ).toBeUndefined();
+    expect(getOperatorTypeByCurveId(CHAINS.Hoodi, MODULE_NAME.CSM, 4n)).toBe(
+      OPERATOR_TYPE.CSM_IDVTC,
+    );
   });
 });
