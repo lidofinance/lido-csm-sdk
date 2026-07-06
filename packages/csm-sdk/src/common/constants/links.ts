@@ -40,6 +40,8 @@ export const MERKLE_TREE_FALLBACKS: PerModule<
         'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/pgo/merkle-tree.json',
       [CONTRACT_NAMES.curatedGateIODC]:
         'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/mainnet/curated/gates/iodvtc/merkle-tree.json',
+      [CONTRACT_NAMES.feeDistributor]:
+        'https://raw.githubusercontent.com/lidofinance/cm-v2-rewards/mainnet/tree.json',
     },
     [CHAINS.Hoodi]: {
       [CONTRACT_NAMES.curatedGatePTO]:
@@ -54,6 +56,8 @@ export const MERKLE_TREE_FALLBACKS: PerModule<
         'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC/merkle-tree.json',
       [CONTRACT_NAMES.curatedGateIODCP]:
         'https://raw.githubusercontent.com/lidofinance/staking-modules/refs/heads/develop/artifacts/hoodi/curated/gates/IDVC%2B/merkle-tree.json',
+      [CONTRACT_NAMES.feeDistributor]:
+        'https://raw.githubusercontent.com/lidofinance/cm-v2-rewards/hoodi/tree.json',
     },
   },
 };
