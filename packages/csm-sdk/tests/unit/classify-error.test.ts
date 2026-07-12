@@ -1,22 +1,39 @@
 import { describe, it, expect } from 'vitest';
 import {
+  AtomicityNotSupportedError,
+  AtomicReadyWalletRejectedUpgradeError,
   BaseError,
+  BundleTooLargeError,
   ChainDisconnectedError,
   ChainMismatchError,
+  DuplicateIdError,
   encodeErrorResult,
   ExecutionRevertedError,
+  FeeCapTooHighError,
+  FeeCapTooLowError,
   Hex,
   HttpRequestError,
   InsufficientFundsError,
+  IntrinsicGasTooHighError,
+  IntrinsicGasTooLowError,
   InternalRpcError,
   InvalidInputRpcError,
+  LimitExceededRpcError,
+  NonceMaxValueError,
+  NonceTooHighError,
+  NonceTooLowError,
   ProviderDisconnectedError,
   RpcRequestError,
   SocketClosedError,
   SwitchChainError,
   TimeoutError,
+  TipAboveFeeCapError,
+  TransactionExecutionError,
+  TransactionTypeNotSupportedError,
+  UnauthorizedProviderError,
   UnknownBundleIdError,
   UnsupportedChainIdError,
+  UnsupportedProviderMethodError,
   UserRejectedRequestError,
   WaitForCallsStatusTimeoutError,
   WebSocketRequestError,
@@ -71,9 +88,94 @@ describe('classifyError', () => {
     expect(classifyError(err, undefined)).toBe(ERROR_CODE.BUNDLE_NOT_FOUND);
   });
 
+  it('DUPLICATE_BUNDLE_ID from DuplicateIdError', () => {
+    const err = wrap(new DuplicateIdError(new Error('5720')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.DUPLICATE_BUNDLE_ID);
+  });
+
+  it('BATCH_NOT_ATOMIC from BundleTooLargeError', () => {
+    const err = wrap(new BundleTooLargeError(new Error('5740')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.BATCH_NOT_ATOMIC);
+  });
+
+  it('BATCH_NOT_ATOMIC from AtomicityNotSupportedError', () => {
+    const err = wrap(new AtomicityNotSupportedError(new Error('5760')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.BATCH_NOT_ATOMIC);
+  });
+
+  it('BATCH_NOT_ATOMIC from AtomicReadyWalletRejectedUpgradeError', () => {
+    const err = wrap(
+      new AtomicReadyWalletRejectedUpgradeError(new Error('5750')),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.BATCH_NOT_ATOMIC);
+  });
+
+  it('WALLET_UNAUTHORIZED from UnauthorizedProviderError', () => {
+    const err = wrap(new UnauthorizedProviderError(new Error('4100')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.WALLET_UNAUTHORIZED);
+  });
+
+  it('METHOD_NOT_SUPPORTED from UnsupportedProviderMethodError', () => {
+    const err = wrap(new UnsupportedProviderMethodError(new Error('4200')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.METHOD_NOT_SUPPORTED);
+  });
+
+  it('RATE_LIMITED from LimitExceededRpcError', () => {
+    const err = wrap(new LimitExceededRpcError(new Error('-32005')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.RATE_LIMITED);
+  });
+
   it('INSUFFICIENT_FUNDS from InsufficientFundsError', () => {
     const err = wrap(new InsufficientFundsError({}));
     expect(classifyError(err, undefined)).toBe(ERROR_CODE.INSUFFICIENT_FUNDS);
+  });
+
+  // viem parses these directly from geth/erigon/anvil node messages (see
+  // viem/errors/node.ts) — same spec-stable footing as InsufficientFundsError
+  // above, just not wired up until now.
+  it('NONCE_ERROR from NonceTooLowError', () => {
+    const err = wrap(new NonceTooLowError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NONCE_ERROR);
+  });
+
+  it('NONCE_ERROR from NonceTooHighError', () => {
+    const err = wrap(new NonceTooHighError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NONCE_ERROR);
+  });
+
+  it('NONCE_ERROR from NonceMaxValueError', () => {
+    const err = wrap(new NonceMaxValueError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NONCE_ERROR);
+  });
+
+  it('FEE_ERROR from FeeCapTooHighError', () => {
+    const err = wrap(new FeeCapTooHighError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.FEE_ERROR);
+  });
+
+  it('FEE_ERROR from FeeCapTooLowError', () => {
+    const err = wrap(new FeeCapTooLowError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.FEE_ERROR);
+  });
+
+  it('FEE_ERROR from TipAboveFeeCapError', () => {
+    const err = wrap(new TipAboveFeeCapError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.FEE_ERROR);
+  });
+
+  it('GAS_ERROR from IntrinsicGasTooHighError', () => {
+    const err = wrap(new IntrinsicGasTooHighError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.GAS_ERROR);
+  });
+
+  it('GAS_ERROR from IntrinsicGasTooLowError', () => {
+    const err = wrap(new IntrinsicGasTooLowError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.GAS_ERROR);
+  });
+
+  it('NOT_SUPPORTED from TransactionTypeNotSupportedError', () => {
+    const err = wrap(new TransactionTypeNotSupportedError({}));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.NOT_SUPPORTED);
   });
 
   it('TRANSACTION_REVERTED from TransactionReceiptRevertedError', () => {
@@ -86,9 +188,71 @@ describe('classifyError', () => {
     expect(classifyError(err, undefined)).toBe(ERROR_CODE.EXECUTION_REVERTED);
   });
 
+  // ERC-4337 EntryPoint reverts aren't ABI-decodable against our known
+  // contract ABIs (see decode-revert-data.ts), so they'd otherwise collapse
+  // to the generic EXECUTION_REVERTED. The "AAxx" prefix is defined by the
+  // ERC itself, not a wallet vendor — firmer ground than a typical heuristic.
+  it('AA_VALIDATION_ERROR from an ExecutionRevertedError with an AA2x reason', () => {
+    const err = wrap(
+      new ExecutionRevertedError({
+        message: "execution reverted: AA21 didn't pay prefund",
+      }),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.AA_VALIDATION_ERROR);
+  });
+
+  it('AA_PAYMASTER_ERROR from an ExecutionRevertedError with an AA3x reason', () => {
+    const err = wrap(
+      new ExecutionRevertedError({
+        message: 'execution reverted: AA31 paymaster deposit too low',
+      }),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.AA_PAYMASTER_ERROR);
+  });
+
+  // Non-conforming / non-AA revert reasons fall through to the generic
+  // bucket — this is the documented trade-off of a best-effort match.
+  it('EXECUTION_REVERTED when the reason has no AAxx prefix', () => {
+    const err = wrap(
+      new ExecutionRevertedError({
+        message: 'execution reverted: ERC20: transfer amount exceeds balance',
+      }),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.EXECUTION_REVERTED);
+  });
+
   it('WALLET_RPC_ERROR from InternalRpcError', () => {
     const err = wrap(new InternalRpcError(new Error('-32603')));
     expect(classifyError(err, undefined)).toBe(ERROR_CODE.WALLET_RPC_ERROR);
+  });
+
+  // Real-world shape: a wallet's own internal timeout still surfaces as a
+  // generic -32603 (EIP-1474 has no dedicated "wallet timed out" code), not
+  // as viem's transport-level TimeoutError — NETWORK_ERROR is reserved for
+  // viem's own transport never getting a response, a different failure than
+  // the wallet responding with an error object. The vendor-specific "request
+  // timed out" wording in `details` is enough to earn the more specific
+  // WALLET_TIMEOUT over the generic WALLET_RPC_ERROR bucket.
+  it('WALLET_TIMEOUT from a wallet-timeout InternalRpcError wrapped in TransactionExecutionError', () => {
+    const inner = new InternalRpcError(
+      new Error('CSM Dev Wallet: request timed out'),
+    );
+    const err = new TransactionExecutionError(inner, { account: null });
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.WALLET_TIMEOUT);
+  });
+
+  // Differently-worded wallet timeout messages aren't caught by the regex —
+  // this is the documented trade-off of a best-effort, non-spec-stable match.
+  it('WALLET_RPC_ERROR when the timeout wording does not match the pattern', () => {
+    const err = wrap(
+      new InternalRpcError(new Error('operation did not complete in time')),
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.WALLET_RPC_ERROR);
+  });
+
+  it('WALLET_TIMEOUT from InvalidInputRpcError with timeout wording', () => {
+    const err = wrap(new InvalidInputRpcError(new Error('Request Timeout')));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.WALLET_TIMEOUT);
   });
 
   it('WALLET_RPC_ERROR from InvalidInputRpcError', () => {

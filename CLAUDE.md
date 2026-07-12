@@ -251,15 +251,29 @@ class SDKError extends Error {
 | `ERROR_CODE` | Source |
 |---|---|
 | `USER_REJECTED` | viem `UserRejectedRequestError` (EIP-1193 code 4001) |
-| `INSUFFICIENT_FUNDS` | viem `InsufficientFundsError` |
-| `WALLET_RPC_ERROR` | viem `InternalRpcError` / `InvalidInputRpcError` |
-| `NETWORK_ERROR` | viem transport / connectivity errors |
-| `CHAIN_MISMATCH` | viem `ChainMismatchError` / `SwitchChainError` |
 | `BUNDLE_NOT_FOUND` | viem `UnknownBundleIdError` (EIP-5792 code 5730) |
+| `DUPLICATE_BUNDLE_ID` | viem `DuplicateIdError` (EIP-5792 code 5720) — bundle id already in flight, retry with a fresh one |
+| `BATCH_NOT_ATOMIC` | viem `BundleTooLargeError` (5740) / `AtomicityNotSupportedError` (5760) / `AtomicReadyWalletRejectedUpgradeError` (5750) — wallet can't/won't send the batch atomically; fall back to sequential calls |
+| `WALLET_UNAUTHORIZED` | viem `UnauthorizedProviderError` (EIP-1193 code 4100) — wallet not unlocked/connected, distinct from `USER_REJECTED` |
+| `METHOD_NOT_SUPPORTED` | viem `UnsupportedProviderMethodError` (code 4200) |
+| `CHAIN_MISMATCH` | viem `ChainMismatchError` / `SwitchChainError` |
+| `NETWORK_ERROR` | viem transport / connectivity errors |
+| `RATE_LIMITED` | viem `LimitExceededRpcError` (EIP-1474 code -32005) |
+| `INSUFFICIENT_FUNDS` | viem `InsufficientFundsError` |
+| `NONCE_ERROR` | viem `NonceTooLowError` / `NonceTooHighError` / `NonceMaxValueError` |
+| `FEE_ERROR` | viem `FeeCapTooHighError` / `FeeCapTooLowError` / `TipAboveFeeCapError` |
+| `GAS_ERROR` | viem `IntrinsicGasTooHighError` / `IntrinsicGasTooLowError` |
+| `NOT_SUPPORTED` | viem `TransactionTypeNotSupportedError`, or explicit context throws (e.g. unsupported contract version) |
 | `TRANSACTION_REVERTED` | tx mined, receipt status `reverted` (gas spent) |
-| `EXECUTION_REVERTED` | `eth_call` simulation reverted without decodable selector |
+| `AA_VALIDATION_ERROR` | `ExecutionRevertedError` whose reason carries an ERC-4337 `AA1x`/`AA2x` prefix (sender/factory deployment, account validation) — best-effort, matched by the ERC's own conventional revert-string prefix, not a wallet vendor's wording |
+| `AA_PAYMASTER_ERROR` | `ExecutionRevertedError` whose reason carries an ERC-4337 `AA3x` prefix (paymaster validation/execution) — same best-effort caveat |
+| `EXECUTION_REVERTED` | `eth_call` simulation reverted without a decodable selector or recognized `AAxx` prefix |
 | `CONTRACT_REVERT` | revert with decodable selector — see `decodedRevert` |
+| `WALLET_TIMEOUT` | viem `InternalRpcError`/`InvalidInputRpcError` whose `details` matches timeout wording — best-effort, not spec-stable (EIP-1474 has no dedicated timeout code) |
+| `WALLET_RPC_ERROR` | viem `InternalRpcError` / `InvalidInputRpcError` (anything not matched as `WALLET_TIMEOUT`) |
 | `DECODE_RESULT_ERROR` | tx mined & confirmed, but `decodeResult` callback threw — see `cause` (`DecodeResultError` with `hash` + `receipt` + `confirmations`) |
+
+Most of this table is class-based and spec-stable (viem maintains the class ↔ RPC/EIP code mapping). `WALLET_TIMEOUT`, `AA_VALIDATION_ERROR`, and `AA_PAYMASTER_ERROR` are the exceptions — they additionally regex-match message text because the EIP they classify against has no dedicated machine-readable code for that case. `AA_*` codes lean on the ERC-4337 spec's own `AAxx` revert-string convention rather than wallet-vendor wording, so they're on firmer ground than `WALLET_TIMEOUT`, but all three are documented as best-effort in `classify-error.ts` and will silently fall through to their generic sibling bucket for non-conforming wording.
 
 #### Narrowing Pattern
 
