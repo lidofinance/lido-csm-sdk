@@ -46,7 +46,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   @Logger('Utils:')
   public async validateDepositData(
     depositData: DepositData[],
-    options?: { skipPending?: boolean },
+    options?: { skipPending?: boolean; skipSignature?: boolean },
   ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
     const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
@@ -60,6 +60,7 @@ export class DepositDataSDK extends CsmSDKModule<{
       withdrawalCredentials: wc,
       wcPrefix,
       currentBlockNumber: Number(blockNumber),
+      skipSignature: options?.skipSignature,
     });
 
     if (errors.length) {

@@ -222,6 +222,10 @@ export const validateDepositData = async (
     wcPrefix: options.wcPrefix,
   });
 
+  if (options.skipSignature) {
+    return errors;
+  }
+
   // Parallel signature verification for valid items only
   const signatureVerificationPromises = depositData.map((data, index) => {
     if (!data) {

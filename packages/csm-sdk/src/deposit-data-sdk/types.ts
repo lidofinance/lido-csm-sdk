@@ -60,6 +60,7 @@ export type ValidationProps = {
 
 export type ValidationExtendedProps = ValidationProps & {
   currentBlockNumber?: number;
+  skipSignature?: boolean;
 };
 
 export type DuplicateProcessingConfig = {
