@@ -1,6 +1,10 @@
 import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { CONTRACT_NAMES } from '../common/constants/index';
+import {
+  CONTRACT_NAMES,
+  OPERATOR_TYPE,
+  OPERATOR_TYPE_MODULE,
+} from '../common/constants/index';
 import { ROLES } from '../common/constants/roles';
 import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
@@ -8,7 +12,9 @@ import {
   NodeOperatorInviteInfo,
   NodeOperatorShortInfo,
 } from '../common/types';
+import { getCurveIdByOperatorType } from '../common/utils/operator-type-utils';
 import { onRevertEmptyList } from '../common/utils/on-error';
+import { invariantArgument } from '../common/utils/sdk-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { byTotalCount, iteratePages, onePage } from './iterate-pages';
 import {
@@ -89,11 +95,51 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
       pagination,
     );
 
-    return operators.map((operator) => ({
-      ...operator,
-      rewardsAddress: operator.rewardAddress,
-      nodeOperatorId: operator.id,
-    }));
+    return operators.map(toShortInfo);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorsByCurveId(
+    curveId: bigint,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorShortInfo[]> {
+    const operators = await this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getOperatorsByCurveId([
+          this.core.moduleId,
+          curveId,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+    );
+
+    return operators.map(toShortInfo);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorsByType(
+    operatorType: OPERATOR_TYPE,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorShortInfo[]> {
+    invariantArgument(
+      OPERATOR_TYPE_MODULE[operatorType] === this.core.moduleName,
+      `Operator type "${operatorType}" does not belong to the current module (${this.core.moduleName})`,
+    );
+
+    const curveId = getCurveIdByOperatorType(this.core.chainId, operatorType);
+
+    // Belt-and-suspenders: with the module check above this should always be
+    // defined, but guard against a chain/type combo missing from the curve
+    // id table (e.g. a newly added OPERATOR_TYPE not yet backfilled).
+    invariantArgument(
+      curveId !== undefined,
+      `Operator type "${operatorType}" has no curve id for the current chain`,
+    );
+
+    return this.getOperatorsByCurveId(curveId, pagination);
   }
 
   @Logger('Views:')
@@ -167,3 +213,18 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     }));
   }
 }
+
+/** Shape of the `NodeOperatorShort` struct shared by SMDiscovery ABI methods. */
+type NodeOperatorShort = {
+  id: bigint;
+  managerAddress: Address;
+  rewardAddress: Address;
+  extendedManagerPermissions: boolean;
+  curveId: bigint;
+};
+
+const toShortInfo = (operator: NodeOperatorShort): NodeOperatorShortInfo => ({
+  ...operator,
+  rewardsAddress: operator.rewardAddress,
+  nodeOperatorId: operator.id,
+});
