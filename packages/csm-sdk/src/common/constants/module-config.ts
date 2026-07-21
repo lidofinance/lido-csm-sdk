@@ -13,7 +13,7 @@ type ModuleChainConfig = {
   deploymentBlockNumber?: bigint;
 };
 
-export type ModuleConfig = PerSupportedChain<ModuleChainConfig>;
+export type ModuleConfig = Partial<PerSupportedChain<ModuleChainConfig>>;
 
 export const COMMON_ADDRESSES: PerSupportedChain<ContractAddressMap> = {
   [CHAINS.Mainnet]: {
@@ -188,4 +188,8 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
       deploymentBlockNumber: BigInt('0x28a0f0'),
     },
   },
+
+  // Not deployed on any network yet — addresses are filled in per chain as
+  // CSM 0x02 deploys.
+  [MODULE_NAME.CSM_02]: {},
 };
