@@ -16,6 +16,7 @@ const ALLOWED_KEYS: Record<MODULE_NAME, ReadonlySet<string>> = {
     CONTRACT_NAMES.feeDistributor,
   ]),
   [MODULE_NAME.CM]: new Set([...CURATED_GATES, CONTRACT_NAMES.feeDistributor]),
+  [MODULE_NAME.CSM_02]: new Set(),
 };
 
 describe('MERKLE_TREE_FALLBACKS', () => {

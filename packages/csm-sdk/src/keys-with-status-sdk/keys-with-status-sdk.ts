@@ -111,7 +111,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
     const isCM = this.core.moduleName === MODULE_NAME.CM;
-    const hasQueue = this.core.moduleName === MODULE_NAME.CSM;
+    const hasQueue = this.core.moduleName !== MODULE_NAME.CM;
 
     const [
       info,
