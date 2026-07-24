@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 import { LOG_MODE } from '@lidofinance/lido-ethereum-sdk';
-import { ConsoleCss } from './constants.js';
-import { HeadMessage } from './types.js';
+import { ConsoleCss } from './constants';
+import { HeadMessage } from './types';
 
 type CoreLog = {
   logMode: LOG_MODE;
 };
 
 const getLogMode = function <This>(this: This): LOG_MODE {
-  let logMode: LOG_MODE = 'info';
+  let logMode: LOG_MODE = 'none';
 
   if (isCore(this)) {
     logMode = this.logMode;

@@ -1,0 +1,230 @@
+import { Address, isAddressEqual } from 'viem';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import {
+  CONTRACT_NAMES,
+  OPERATOR_TYPE,
+  OPERATOR_TYPE_MODULE,
+} from '../common/constants/index';
+import { ROLES } from '../common/constants/roles';
+import { ErrorHandler, Logger } from '../common/decorators/index';
+import {
+  NodeOperatorId,
+  NodeOperatorInviteInfo,
+  NodeOperatorShortInfo,
+} from '../common/types';
+import { getCurveIdByOperatorType } from '../common/utils/operator-type-utils';
+import { onRevertEmptyList } from '../common/utils/on-error';
+import { invariantArgument } from '../common/utils/sdk-error';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { byTotalCount, iteratePages, onePage } from './iterate-pages';
+import {
+  NodeOperatorDiscoveryInfo,
+  NodeOperatorLockedBond,
+  Pagination,
+  SearchMode,
+} from './types';
+
+export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
+  private get discoveryContract() {
+    return this.core.getContract(CONTRACT_NAMES.smDiscovery);
+  }
+
+  /**
+   * Paginates through operators using the provided fetch function.
+   *
+   * Behavior:
+   * - Without pagination parameter: Fetches ALL operators by querying total count and iterating through all pages
+   * - With pagination parameter: Fetches ONLY ONE PAGE at the specified offset/limit
+   *
+   * @param fetchPage - Function to fetch a page of operators
+   * @param pagination - Optional pagination parameters (offset, limit)
+   * @param defaultLimit - Optional default limit when pagination is not provided (defaults to 1000)
+   * @returns Array of all fetched operators
+   */
+  private async paginateOperators<T>(
+    fetchPage: (p: Pagination) => Promise<readonly T[] | T[]>,
+    pagination?: Pagination,
+    defaultLimit = 1000n,
+  ): Promise<T[]> {
+    const limit = pagination?.limit ?? defaultLimit;
+    const offset = pagination?.offset ?? 0n;
+
+    const getNextOffset = pagination
+      ? onePage
+      : byTotalCount(await this.bus.module.getOperatorsCount());
+
+    return iteratePages(fetchPage, { offset, limit }, getNextOffset).catch(
+      onRevertEmptyList<T>,
+    );
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getNodeOperatorIds(
+    address: Address,
+    searchMode: SearchMode = SearchMode.CURRENT_ADDRESSES,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorId[]> {
+    return this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.findNodeOperatorsByAddress([
+          this.core.moduleId,
+          address,
+          p.offset,
+          p.limit,
+          searchMode,
+        ]),
+      pagination,
+    );
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getNodeOperatorsByAddress(
+    address: Address,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorShortInfo[]> {
+    const operators = await this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getNodeOperatorsByAddress([
+          this.core.moduleId,
+          address,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+    );
+
+    return operators.map(toShortInfo);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorsByCurveId(
+    curveId: bigint,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorShortInfo[]> {
+    const operators = await this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getOperatorsByCurveId([
+          this.core.moduleId,
+          curveId,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+    );
+
+    return operators.map(toShortInfo);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorsByType(
+    operatorType: OPERATOR_TYPE,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorShortInfo[]> {
+    invariantArgument(
+      OPERATOR_TYPE_MODULE[operatorType] === this.core.moduleName,
+      `Operator type "${operatorType}" does not belong to the current module (${this.core.moduleName})`,
+    );
+
+    const curveId = getCurveIdByOperatorType(this.core.chainId, operatorType);
+
+    // Belt-and-suspenders: with the module check above this should always be
+    // defined, but guard against a chain/type combo missing from the curve
+    // id table (e.g. a newly added OPERATOR_TYPE not yet backfilled).
+    invariantArgument(
+      curveId !== undefined,
+      `Operator type "${operatorType}" has no curve id for the current chain`,
+    );
+
+    return this.getOperatorsByCurveId(curveId, pagination);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getNodeOperatorsByProposedAddress(
+    address: Address,
+    pagination?: Pagination,
+  ): Promise<NodeOperatorInviteInfo[]> {
+    const operators = await this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getNodeOperatorsByProposedAddress([
+          this.core.moduleId,
+          address,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+    );
+
+    return operators.flatMap((operator) =>
+      [
+        { address: operator.proposedManagerAddress, role: ROLES.MANAGER },
+        { address: operator.proposedRewardAddress, role: ROLES.REWARDS },
+      ]
+        .filter((item) => isAddressEqual(item.address, address))
+        .map((item) => ({
+          nodeOperatorId: operator.id,
+          extendedManagerPermissions: operator.extendedManagerPermissions,
+          curveId: operator.curveId,
+          role: item.role,
+        })),
+    );
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getAllNodeOperators(
+    pagination?: Pagination,
+  ): Promise<NodeOperatorDiscoveryInfo[]> {
+    return this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getAllNodeOperators([
+          this.core.moduleId,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+      500n, // Custom default limit for bulk fetching
+    ) as Promise<NodeOperatorDiscoveryInfo[]>;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getOperatorsWithLockedBond(
+    pagination?: Pagination,
+  ): Promise<NodeOperatorLockedBond[]> {
+    const entries = await this.paginateOperators(
+      (p) =>
+        this.discoveryContract.read.getOperatorsWithLockedBond([
+          this.core.moduleId,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+    );
+
+    return entries.map((e) => ({
+      nodeOperatorId: e.id,
+      locked: e.amount,
+      until: Number(e.until),
+    }));
+  }
+}
+
+/** Shape of the `NodeOperatorShort` struct shared by SMDiscovery ABI methods. */
+type NodeOperatorShort = {
+  id: bigint;
+  managerAddress: Address;
+  rewardAddress: Address;
+  extendedManagerPermissions: boolean;
+  curveId: bigint;
+};
+
+const toShortInfo = (operator: NodeOperatorShort): NodeOperatorShortInfo => ({
+  ...operator,
+  rewardsAddress: operator.rewardAddress,
+  nodeOperatorId: operator.id,
+});

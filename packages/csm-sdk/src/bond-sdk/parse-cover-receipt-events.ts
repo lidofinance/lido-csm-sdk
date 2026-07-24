@@ -1,10 +1,10 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { decodeEventLog, getAbiItem, Hex, toEventHash } from 'viem';
-import { CSAccountingAbi } from '../abi/CSAccounting.js';
-import { ReceiptLike } from '../tx-sdk/types.js';
+import { AccountingAbi } from '../abi/Accounting';
+import { ERROR_CODE, SDKError } from '../common/index';
+import { ReceiptLike } from '../tx-sdk/types';
 
 const BOND_LOCK_CHANGED_EVENT = getAbiItem({
-  abi: CSAccountingAbi,
+  abi: AccountingAbi,
   name: 'BondLockChanged',
 });
 

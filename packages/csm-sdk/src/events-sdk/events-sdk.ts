@@ -1,50 +1,69 @@
-/* eslint-disable sonarjs/no-identical-functions */
-import { Address, GetContractReturnType, Hex, WalletClient } from 'viem';
-import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events.js';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { Address, Hex } from 'viem';
+import { AccountingV1EventsAbi } from '../abi/AccountingV1Events';
+import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  CSM_CONTRACT_NAMES,
+  CONTRACT_NAMES,
   NodeOperator,
   NodeOperatorId,
   NodeOperatorInvite,
-} from '../common/index.js';
+} from '../common/index';
 import {
   isDefined,
   isPropsDefined,
   isUnique,
   requestWithBlockStep,
-  sortEventsByBlockNumber,
-} from '../common/utils/index.js';
-import { reconstructInvites } from './reconstruct-invites.js';
-import { reconstructOperators } from './reconstruct-operators.js';
-import { EventRangeProps, OperatorCurveIdChange } from './types.js';
+  sortByBlockNumber,
+} from '../common/utils/index';
+import { BindedContract } from '../core-sdk/types';
+import { ChangeAddressLog, reconstructInvites } from './reconstruct-invites';
+import { NodeOperatorLog, reconstructOperators } from './reconstruct-operators';
+import { resolveExpiredRecords } from './resolve-expired-records';
+import {
+  EventRangeProps,
+  OperatorCurveIdChange,
+  PenaltyRecord,
+  PenaltyRecordWithoutTimestamp,
+} from './types';
+
+type StepProps = { fromBlock: bigint; toBlock: bigint };
 
 export class EventsSDK extends CsmSDKModule {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
-  private get moduleContractV1(): GetContractReturnType<
-    typeof CSModulev1EventsAbi,
-    WalletClient
-  > {
-    return this.core.getContract(
-      CSM_CONTRACT_NAMES.csModule,
+  private get moduleContractV1(): BindedContract<typeof CSModulev1EventsAbi> {
+    return this.core.getContractWithAbi(
+      this.core.moduleContract,
       CSModulev1EventsAbi,
     );
   }
 
   private get oracleContract() {
-    return this.core.contractCSFeeOracle;
+    return this.core.getContract(CONTRACT_NAMES.feeOracle);
   }
 
-  private get distributorContract() {
-    return this.core.contractCSFeeDistributor;
+  private get exitBusOracleContract() {
+    return this.core.getContract(CONTRACT_NAMES.validatorsExitBusOracle);
+  }
+
+  private get ejectorContract() {
+    return this.core.getContract(CONTRACT_NAMES.ejector);
   }
 
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
+  }
+
+  private get accountingContractV1(): BindedContract<
+    typeof AccountingV1EventsAbi
+  > {
+    return this.core.getContractWithAbi(
+      CONTRACT_NAMES.accounting,
+      AccountingV1EventsAbi,
+    );
   }
 
   @Logger('Events:')
@@ -53,62 +72,49 @@ export class EventsSDK extends CsmSDKModule {
     address: Address,
     options?: EventRangeProps,
   ): Promise<NodeOperator[]> {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all([
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+    const logs = await this.queryEvents<NodeOperatorLog>(
+      options,
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorAdded(
           { managerAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorAdded(
           { rewardAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContractV1.getEvents.NodeOperatorAdded(
           { managerAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContractV1.getEvents.NodeOperatorAdded(
           { rewardAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
           { oldAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
           { newAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
           { oldAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
           { newAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-    ]);
-
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
+    );
 
     return reconstructOperators(logs, address);
   }
@@ -119,50 +125,39 @@ export class EventsSDK extends CsmSDKModule {
     address: Address,
     options?: EventRangeProps,
   ): Promise<NodeOperatorInvite[]> {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all([
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+    const logs = await this.queryEvents<ChangeAddressLog>(
+      options,
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
           { newAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
           { newAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorManagerAddressChangeProposed(
           { oldProposedAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorRewardAddressChangeProposed(
           { oldProposedAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorManagerAddressChangeProposed(
           { newProposedAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-      ...requestWithBlockStep(stepConfig, (stepProps) =>
+      (s) =>
         this.moduleContract.getEvents.NodeOperatorRewardAddressChangeProposed(
           { newProposedAddress: address },
-          stepProps,
+          s,
         ),
-      ),
-    ]);
-
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
+    );
 
     return reconstructInvites(logs, address);
   }
@@ -170,37 +165,9 @@ export class EventsSDK extends CsmSDKModule {
   @Logger('Events:')
   @ErrorHandler()
   public async getRewardsReports(options?: EventRangeProps) {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.oracleContract.getEvents.ProcessingStarted(undefined, stepProps),
-      ),
+    return this.queryEvents(options, (s) =>
+      this.oracleContract.getEvents.ProcessingStarted(undefined, s),
     );
-
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
-
-    return logs;
-  }
-
-  @Logger('Events:')
-  @ErrorHandler()
-  public async getDistributionLogUpdated(options?: EventRangeProps) {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.distributorContract.getEvents.DistributionLogUpdated(stepProps),
-      ),
-    );
-
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
-
-    return logs;
   }
 
   @Logger('Events:')
@@ -209,20 +176,11 @@ export class EventsSDK extends CsmSDKModule {
     nodeOperatorId: NodeOperatorId,
     options?: EventRangeProps,
   ): Promise<Hex[]> {
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.moduleContract.getEvents.WithdrawalSubmitted(
-          { nodeOperatorId },
-          stepProps,
-        ),
-      ),
+    const logs = await this.queryEvents(options, (s) =>
+      this.moduleContract.getEvents.ValidatorWithdrawn({ nodeOperatorId }, s),
     );
 
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
-
-    return logs.map((e) => e.args.pubkey).filter((k) => k !== undefined);
+    return logs.map((e) => e.args.pubkey).filter(isDefined);
   }
 
   @Logger('Events:')
@@ -231,22 +189,40 @@ export class EventsSDK extends CsmSDKModule {
     nodeOperatorId: NodeOperatorId,
     options?: EventRangeProps,
   ): Promise<Hex[]> {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.core.contractValidatorsExitBusOracle.getEvents.ValidatorExitRequest(
-          { nodeOperatorId, stakingModuleId: BigInt(this.core.moduleId) },
-          stepProps,
-        ),
+    const logs = await this.queryEvents(options, (s) =>
+      this.exitBusOracleContract.getEvents.ValidatorExitRequest(
+        { nodeOperatorId, stakingModuleId: this.core.moduleId },
+        s,
       ),
     );
 
-    const logs = logResults.flat().sort(sortEventsByBlockNumber);
-
     return logs.map((e) => e.args.validatorPubkey).filter(isDefined);
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getTriggeredEjectionKeys(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<Hex[]> {
+    const logs = await this.queryEvents<{
+      blockNumber: bigint;
+      args: { pubkey?: Hex };
+    }>(
+      options,
+      (s) =>
+        this.ejectorContract.getEvents.VoluntaryEjectionRequested(
+          { nodeOperatorId },
+          s,
+        ),
+      (s) =>
+        this.ejectorContract.getEvents.BadPerformerEjectionRequested(
+          { nodeOperatorId },
+          s,
+        ),
+    );
+
+    return logs.map((e) => e.args.pubkey).filter(isDefined);
   }
 
   @Logger('Events:')
@@ -254,20 +230,9 @@ export class EventsSDK extends CsmSDKModule {
   public async getOperatorsWithPenalties(
     options?: EventRangeProps,
   ): Promise<NodeOperatorId[]> {
-    if (this.disabled) return [];
-
-    const stepConfig = await this.parseEventsProps(options);
-
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.core.contractCSModule.getEvents.ELRewardsStealingPenaltyReported(
-          {},
-          stepProps,
-        ),
-      ),
+    const logs = await this.queryEvents(options, (s) =>
+      this.accountingContract.getEvents.BondLockChanged({}, s),
     );
-
-    const logs = logResults.flat();
 
     return logs
       .map((e) => e.args.nodeOperatorId)
@@ -282,24 +247,234 @@ export class EventsSDK extends CsmSDKModule {
     nodeOperatorId: NodeOperatorId,
     options?: EventRangeProps,
   ): Promise<OperatorCurveIdChange[]> {
+    const logs = await this.queryEvents(options, (s) =>
+      this.accountingContract.getEvents.BondCurveSet({ nodeOperatorId }, s),
+    );
+
+    return logs
+      .map(({ args: { curveId }, blockNumber }) => ({ curveId, blockNumber }))
+      .filter(isPropsDefined('curveId'));
+  }
+
+  @Logger('Events:')
+  @ErrorHandler()
+  public async getPenalties(
+    nodeOperatorId: NodeOperatorId,
+    options?: EventRangeProps,
+  ): Promise<PenaltyRecord[]> {
+    const base = ({
+      args,
+      blockNumber,
+      transactionHash,
+    }: {
+      args: { nodeOperatorId?: bigint };
+      blockNumber: bigint;
+      transactionHash: Hex;
+    }) => ({
+      nodeOperatorId: args.nodeOperatorId!,
+      blockNumber,
+      transactionHash,
+    });
+
+    const records = await this.queryEvents<Omit<PenaltyRecord, 'timestamp'>>(
+      options,
+      async (s) => {
+        const logs =
+          await this.moduleContract.getEvents.GeneralDelayedPenaltyReported(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'reported',
+            amount: e.args.amount!,
+            penaltyType: e.args.penaltyType!,
+            additionalFine: e.args.additionalFine!,
+            details: e.args.details!,
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContractV1.getEvents.ELRewardsStealingPenaltyReported(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'reported',
+            amount: e.args.stolenAmount!,
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContract.getEvents.GeneralDelayedPenaltyCancelled(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'cancelled',
+            amount: e.args.amount!,
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContractV1.getEvents.ELRewardsStealingPenaltyCancelled(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'cancelled',
+            amount: e.args.amount!,
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContract.getEvents.GeneralDelayedPenaltyCompensated(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'compensated',
+            amount: e.args.amount!,
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContractV1.getEvents.ELRewardsStealingPenaltyCompensated(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'compensated',
+            amount: e.args.amount!,
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContract.getEvents.GeneralDelayedPenaltySettled(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'settled',
+          }),
+        );
+      },
+      async (s) => {
+        const logs =
+          await this.moduleContractV1.getEvents.ELRewardsStealingPenaltySettled(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'settled',
+          }),
+        );
+      },
+      // Legacy expiry signal from the pre-upgrade contract. `ExpiredBondLockRemoved`
+      // was removed as redundant (staking-modules #805), but historical
+      // logs still carry it and it was emitted only on genuine expiry.
+      async (s) => {
+        const logs =
+          await this.accountingContractV1.getEvents.ExpiredBondLockRemoved(
+            { nodeOperatorId },
+            s,
+          );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'expired',
+          }),
+        );
+      },
+      // Forward expiry signal. `BondLockRemoved` fires on every full lock removal
+      // (expiry, cancel, settle, compensate); the coinciding-tx ones are pruned in
+      // resolveExpiredRecords, leaving only genuine expiries.
+      async (s) => {
+        const logs = await this.accountingContract.getEvents.BondLockRemoved(
+          { nodeOperatorId },
+          s,
+        );
+        return logs.map(
+          (e): PenaltyRecordWithoutTimestamp => ({
+            ...base(e),
+            type: 'expired',
+          }),
+        );
+      },
+    );
+
+    return this.withTimestamps(resolveExpiredRecords(records)) as Promise<
+      PenaltyRecord[]
+    >;
+  }
+
+  private async withTimestamps<T extends { blockNumber: bigint }>(
+    records: T[],
+  ): Promise<(T & { timestamp: number })[]> {
+    const uniqueBlocks = [...new Set(records.map((r) => r.blockNumber))];
+    const blocks = await Promise.all(
+      uniqueBlocks.map(async (blockNumber) => {
+        const block = await this.core.publicClient.getBlock({ blockNumber });
+        return [blockNumber, Number(block.timestamp)] as const;
+      }),
+    );
+    const timestamps = new Map(blocks);
+    return records.map((r) => ({
+      ...r,
+      timestamp: timestamps.get(r.blockNumber)!,
+    }));
+  }
+
+  // -- Private helpers --
+
+  // Single query: T inferred from query return type
+  private queryEvents<T extends { blockNumber: bigint }>(
+    options: EventRangeProps | undefined,
+    query: (s: StepProps) => Promise<T[]>,
+  ): Promise<T[]>;
+
+  // Multiple queries: T must be specified explicitly
+  private queryEvents<T extends { blockNumber: bigint }>(
+    options: EventRangeProps | undefined,
+    ...queries: Array<(s: StepProps) => Promise<NoInfer<T>[]>>
+  ): Promise<T[]>;
+
+  private async queryEvents<T extends { blockNumber: bigint }>(
+    options: EventRangeProps | undefined,
+    ...queries: Array<(s: StepProps) => Promise<T[]>>
+  ): Promise<T[]> {
     if (this.disabled) return [];
 
     const stepConfig = await this.parseEventsProps(options);
 
-    const logResults = await Promise.all(
-      requestWithBlockStep(stepConfig, (stepProps) =>
-        this.accountingContract.getEvents.BondCurveSet(
-          { nodeOperatorId },
-          stepProps,
-        ),
+    const resultSets = await Promise.all(
+      queries.map((query) =>
+        Promise.all(requestWithBlockStep(stepConfig, query)),
       ),
     );
 
-    return logResults
-      .flat()
-      .map(({ args: { curveId }, blockNumber }) => ({ curveId, blockNumber }))
-      .filter(isPropsDefined('curveId'))
-      .sort(sortEventsByBlockNumber);
+    return resultSets.flat(2).sort(sortByBlockNumber);
   }
 
   @Logger('Utils:')

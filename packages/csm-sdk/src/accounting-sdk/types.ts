@@ -1,4 +1,4 @@
-import { NodeOperatorId, PerToken } from '../common/types.js';
+import { NodeOperatorId, PerToken } from '../common/types';
 
 export type AmountByKeys = PerToken<bigint>;
 

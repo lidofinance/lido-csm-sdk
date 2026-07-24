@@ -1,6 +1,7 @@
-import { NodeOperatorId } from '../common/types.js';
-import { isRewardsReportV1, isRewardsReportV2 } from './parse-report.js';
-import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types.js';
+import { ERROR_CODE, SDKError } from '../common/index';
+import { NodeOperatorId } from '../common/types';
+import { isRewardsReportV1, isRewardsReportV2 } from './parse-report';
+import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types';
 
 const DEFAULT_REWARD_SHARE = 1;
 
@@ -79,6 +80,9 @@ export const getValidatorsRewards = (
   } else if (isRewardsReportV2(report)) {
     return getValidatorsRewardsV2(nodeOperatorId, report);
   } else {
-    throw new Error('Unknown rewards report version');
+    throw new SDKError({
+      code: ERROR_CODE.NOT_SUPPORTED,
+      message: 'Unknown rewards report version',
+    });
   }
 };

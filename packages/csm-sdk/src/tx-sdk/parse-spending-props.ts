@@ -1,5 +1,5 @@
-import { STETH_ROUNDING_THRESHOLD, TOKENS } from '../common/index.js';
-import { SpendOptions } from './types.js';
+import { STETH_ROUNDING_THRESHOLD, TOKENS } from '../common/index';
+import { SpendOptions } from './types';
 
 const DEFAULT_DEADLINE_SEC = 3600;
 
@@ -14,7 +14,8 @@ export const parseSpendingProps = <T extends SpendOptions>(
   props: T,
 ): T & { amount: bigint; deadline: bigint } => {
   let { amount } = props;
-  if (props.token === TOKENS.steth && amount > 0) {
+  const { token } = props;
+  if (token === TOKENS.steth && amount > 0) {
     amount += STETH_ROUNDING_THRESHOLD;
   }
 
@@ -22,4 +23,3 @@ export const parseSpendingProps = <T extends SpendOptions>(
 
   return { ...props, amount, deadline };
 };
-

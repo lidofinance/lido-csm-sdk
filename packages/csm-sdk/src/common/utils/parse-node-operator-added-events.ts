@@ -1,7 +1,7 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { decodeEventLog, getAbiItem, Hex, toEventHash } from 'viem';
-import { CSModuleAbi } from '../../abi/index.js';
-import { ReceiptLike } from '../../tx-sdk/types.js';
+import { CSModuleAbi } from '../../abi/index';
+import { ReceiptLike } from '../../tx-sdk/types';
+import { ERROR_CODE, SDKError } from './sdk-error';
 
 const NODE_OPERATOR_ADDED_EVENT = getAbiItem({
   abi: CSModuleAbi,

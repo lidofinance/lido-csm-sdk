@@ -1,6 +1,24 @@
-import { KEY_STATUS } from '../common/index.js';
-import { compareLowercase } from '../common/utils/index.js';
-import { StatusContext } from './types.js';
+import { Hex } from 'viem';
+import { KEY_STATUS } from '../common/index';
+import { compareLowercase } from '../common/utils/index';
+import { NodeOperatorInfo } from '../operator-sdk/types';
+import { ClPreparedKey } from './parse-cl-response';
+
+export type StatusContext = {
+  pubkey: Hex;
+  keyIndex: number;
+  info: NodeOperatorInfo;
+  prefilled?: ClPreparedKey;
+  ejectableEpoch: bigint;
+  unboundCount: number;
+  duplicates: Hex[] | null;
+  withdrawalSubmitted: Hex[] | null;
+  requestedToExit: Hex[];
+  triggeredEjection: Hex[];
+  hasCLStatuses: boolean;
+  hasStrikes: boolean;
+  hasQueue: boolean;
+};
 
 // Range predicates
 const isDeposited = (ctx: StatusContext) =>
@@ -21,7 +39,10 @@ const getUnvettedStatus = (ctx: StatusContext): KEY_STATUS | null => {
 
 const getVettedStatus = (ctx: StatusContext): KEY_STATUS | null => {
   if (isDeposited(ctx)) return null;
-  if (ctx.info.enqueuedCount < ctx.info.depositableValidatorsCount) {
+  if (
+    ctx.hasQueue &&
+    ctx.info.enqueuedCount < ctx.info.depositableValidatorsCount
+  ) {
     return KEY_STATUS.NON_QUEUED;
   }
   return KEY_STATUS.DEPOSITABLE;
@@ -55,9 +76,13 @@ const checkExitRequested = (ctx: StatusContext): boolean =>
   isDeposited(ctx) &&
   ctx.requestedToExit.some((key) => compareLowercase(ctx.pubkey, key));
 
+const checkTriggeredEjection = (ctx: StatusContext): boolean =>
+  isDeposited(ctx) &&
+  ctx.triggeredEjection.some((key) => compareLowercase(ctx.pubkey, key));
+
 const checkUnbonded = (ctx: StatusContext): boolean =>
   ctx.unboundCount > 0 &&
-  ctx.info.totalAddedKeys - ctx.keyIndex < ctx.unboundCount;
+  ctx.info.totalAddedKeys - ctx.keyIndex <= ctx.unboundCount;
 
 export const computeStatuses = (ctx: StatusContext): KEY_STATUS[] => {
   const statuses: KEY_STATUS[] = [];
@@ -78,7 +103,11 @@ export const computeStatuses = (ctx: StatusContext): KEY_STATUS[] => {
     if (!isSlashed && checkExitRequested(ctx))
       statuses.push(KEY_STATUS.EXIT_REQUESTED);
 
-    if (!isSlashed && checkEjectable(ctx)) statuses.push(KEY_STATUS.EJECTABLE);
+    const isTriggeredEjection = !isSlashed && checkTriggeredEjection(ctx);
+    if (isTriggeredEjection) statuses.push(KEY_STATUS.TRIGGERED_EJECTION);
+
+    if (!isSlashed && !isTriggeredEjection && checkEjectable(ctx))
+      statuses.push(KEY_STATUS.EJECTABLE);
 
     if (checkWithStrikes(ctx)) statuses.push(KEY_STATUS.WITH_STRIKES);
 

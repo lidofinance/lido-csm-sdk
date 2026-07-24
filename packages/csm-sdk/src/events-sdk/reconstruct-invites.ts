@@ -1,53 +1,19 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Address, GetAbiItemReturnType, isAddressEqual, Log } from 'viem';
-import { CSModuleAbi } from '../abi/CSModule.js';
-import { ROLES } from '../common/index.js';
-import { NodeOperatorInvite } from '../common/types.js';
+import { Address, isAddressEqual } from 'viem';
+import { ROLES } from '../common/index';
+import { NodeOperatorInvite } from '../common/types';
 
-type ChangeAddressLogs =
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<
-        typeof CSModuleAbi,
-        'NodeOperatorManagerAddressChangeProposed'
-      >,
-      false
-    >
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<
-        typeof CSModuleAbi,
-        'NodeOperatorRewardAddressChangeProposed'
-      >,
-      false
-    >
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<
-        typeof CSModuleAbi,
-        'NodeOperatorManagerAddressChanged'
-      >,
-      false
-    >
-  | Log<
-      bigint,
-      number,
-      false,
-      GetAbiItemReturnType<
-        typeof CSModuleAbi,
-        'NodeOperatorRewardAddressChanged'
-      >,
-      false
-    >;
+export type ChangeAddressLog = {
+  blockNumber: bigint;
+  eventName: string;
+  args: {
+    nodeOperatorId?: bigint;
+    newProposedAddress?: Address;
+    newAddress?: Address;
+  };
+};
 
 export const reconstructInvites = (
-  logs: ChangeAddressLogs[],
+  logs: ChangeAddressLog[],
   address: Address,
 ): NodeOperatorInvite[] =>
   logs
@@ -106,7 +72,7 @@ const mergeInvites = (
   invite: NodeOperatorInvite,
   add = true,
 ) => {
-  const list = Array.from(_list);
+  const list = [..._list];
   const index = list.findIndex(
     (item) => item.id === invite.id && item.role === invite.role,
   );

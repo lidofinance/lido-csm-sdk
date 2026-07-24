@@ -1,15 +1,9 @@
-import { SUPPORTED_VERSION_BY_CONTRACT } from '../common/index.js';
 import { Address } from 'viem';
 
 export type CsmStatus = {
   isPausedModule: boolean;
   isPausedAccounting: boolean;
 };
-
-export type CsmContractsWithVersion =
-  keyof typeof SUPPORTED_VERSION_BY_CONTRACT;
-
-export type CsmVersions = Record<CsmContractsWithVersion, bigint>;
 
 export const ShareLimitStatus = {
   FAR: 'FAR',
@@ -18,6 +12,11 @@ export const ShareLimitStatus = {
   REACHED: 'REACHED',
 } as const;
 export type ShareLimitStatus = keyof typeof ShareLimitStatus;
+
+export const WCType = {
+  TYPE_01: 1,
+  TYPE_02: 2,
+} as const;
 
 export type ShareLimitInfo = {
   active: bigint;
@@ -31,7 +30,7 @@ export type ModuleDigest = {
   nodeOperatorsCount: bigint;
   activeNodeOperatorsCount: bigint;
   state: {
-    id: number;
+    id: bigint;
     stakingModuleAddress: Address;
     stakingModuleFee: bigint;
     treasuryFee: number;
@@ -44,6 +43,8 @@ export type ModuleDigest = {
     priorityExitShareThreshold: number;
     maxDepositsPerBlock: bigint;
     minDepositBlockDistance: bigint;
+    withdrawalCredentialsType: number;
+    validatorsBalanceGwei: bigint;
   };
   summary: {
     totalExitedValidators: bigint;
@@ -73,18 +74,16 @@ export type ModulesResponse = {
 
 export type ModuleOperatorsResponse = {
   data: {
-    operators: [
-      {
-        index: number;
-        active: boolean;
-        name: string;
-        rewardAddress: string;
-        stakingLimit: number;
-        stoppedValidators: number;
-        totalSigningKeys: number;
-        usedSigningKeys: number;
-        moduleAddress: string;
-      },
-    ];
+    operators: {
+      index: number;
+      active: boolean;
+      name: string;
+      rewardAddress: string;
+      stakingLimit: number;
+      stoppedValidators: number;
+      totalSigningKeys: number;
+      usedSigningKeys: number;
+      moduleAddress: string;
+    }[];
   };
 };

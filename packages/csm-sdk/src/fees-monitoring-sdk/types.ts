@@ -1,5 +1,5 @@
 import { Hash, Hex } from 'viem';
-import { NodeOperatorId } from '../common/types.js';
+import { NodeOperatorId } from '../common/types';
 
 export type ValidatorInfo = Pick<
   ValidatorRegistration,
@@ -15,7 +15,7 @@ export type ValidatorInfoIssues = ValidatorInfo & {
 // API Request params
 
 export type CheckOperatorKeysProps = {
-  moduleId: number;
+  moduleId: bigint;
   nodeOperatorId?: NodeOperatorId;
   limit?: number;
   start?: number;

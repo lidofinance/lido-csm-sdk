@@ -1,6 +1,11 @@
-export type KeysRecord = Record<string, number>; // pubkey -> timestamp
+export type KeyCacheEntry = {
+  ts: number;
+  confirmed: boolean;
+};
 
-export interface KeysCacheResult {
-  success: boolean;
-  error?: string;
+export type KeysRecord = Record<string, KeyCacheEntry>;
+
+export enum KeyCacheStatus {
+  CONFIRMED = 'confirmed',
+  PENDING = 'pending',
 }

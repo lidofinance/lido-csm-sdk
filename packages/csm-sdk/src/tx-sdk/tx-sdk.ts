@@ -1,39 +1,34 @@
 import {
   AccountValue,
   CheckAllowanceResult,
-  ERROR_CODE,
   NOOP,
   TransactionOptions,
   TransactionResult,
-  withSDKError,
 } from '@lidofinance/lido-ethereum-sdk';
+import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { ErrorHandler } from '../common/decorators/error-handler';
+import { Logger } from '../common/decorators/logger';
 import {
-  Address,
-  Call,
-  erc20Abi,
-  GetContractReturnType,
-  WalletCallReceipt,
-  WalletClient,
-} from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
-import {
-  CSM_CONTRACT_NAMES,
+  CONTRACT_NAMES,
   EMPTY_PERMIT,
   Erc20Tokens,
+  ERROR_CODE,
   PermitSignatureShort,
-} from '../common/index.js';
-import { isCapabilitySupported } from '../common/utils/is-capability-supported.js';
-import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts.js';
+  SDKError,
+  withSDKError,
+} from '../common/index';
+import { isCapabilitySupported } from '../common/utils/is-capability-supported';
+import { BindedContract } from '../core-sdk/types';
+import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts';
+import { BatchTransactionRevertedError, DecodeResultError } from './errors';
 import {
   PerformCallOptions,
   PerformTransactionOptions,
   SignPermitOrApproveProps,
-} from './internal-types.js';
-import { parseSpendingProps } from './parse-spending-props.js';
-import { prepCall } from './prep-call.js';
-import { stripPermit } from './strip-permit.js';
+} from './internal-types';
+import { parseSpendingProps } from './parse-spending-props';
+import { stripPermit } from './strip-permit';
 import {
   AllowanceProps,
   AmountAndTokenProps,
@@ -46,17 +41,19 @@ import {
   ReceiptLike,
   TransactionCallback,
   TransactionCallbackStage,
-} from './types.js';
+} from './types';
 
 export class TxSDK extends CsmSDKModule {
   protected get spender(): Address {
-    return this.core.getContractAddress(CSM_CONTRACT_NAMES.csAccounting);
+    return this.core.getContractAddress(CONTRACT_NAMES.accounting);
   }
 
   private getTokenContract(
     token: Erc20Tokens,
-  ): GetContractReturnType<typeof erc20Abi, WalletClient> {
-    return this.core.getContract(token, erc20Abi);
+  ): BindedContract<typeof erc20Abi> {
+    return this.core.getContract(
+      token as unknown as CONTRACT_NAMES.stETH | CONTRACT_NAMES.wstETH,
+    );
   }
 
   @Logger('Views:')
@@ -75,6 +72,56 @@ export class TxSDK extends CsmSDKModule {
   public async isMultisig(_account?: AccountValue): Promise<boolean> {
     const account = await this.core.core.useAccount(_account);
     return this.core.core.isContract(account.address);
+  }
+
+  // Both internalTransaction (EOA) and internalCall (AA) reach this helper
+  // only after the tx is mined and confirmed. If the caller-supplied
+  // decodeResult throws, the on-chain state already changed — surface that
+  // via DecodeResultError so consumers can recover hash/receipt instead of
+  // collapsing a successful tx into a bare UNKNOWN_ERROR.
+  private async runDecodeResult<TDecodedResult>(opts: {
+    decodeResult:
+      | ((receipt: ReceiptLike) => Promise<TDecodedResult>)
+      | undefined;
+    receipt: ReceiptLike;
+    hash: `0x${string}`;
+    confirmations: bigint;
+  }): Promise<TDecodedResult | undefined> {
+    const { decodeResult, receipt, hash, confirmations } = opts;
+    if (!decodeResult) return undefined;
+    try {
+      return await decodeResult(receipt);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to decode transaction result';
+      const decodeErr = new DecodeResultError(message, {
+        hash,
+        receipt,
+        confirmations,
+        cause: error,
+      });
+      throw new SDKError({
+        code: ERROR_CODE.DECODE_RESULT_ERROR,
+        error: decodeErr,
+        message: decodeErr.message,
+      });
+    }
+  }
+
+  @Logger('Utils:')
+  private async checkVersion(callResult: CallResult): Promise<void> {
+    const contractName = this.core.getContractNameByAddress(callResult.to);
+    if (!contractName) return;
+
+    const result = await this.core.checkContractVersion(contractName);
+    if (!result.supported) {
+      throw new SDKError({
+        code: ERROR_CODE.NOT_SUPPORTED,
+        message: `Contract ${contractName} version ${result.version} not supported`,
+      });
+    }
   }
 
   private async internalTransaction<TDecodedResult = undefined>(
@@ -102,7 +149,7 @@ export class TxSDK extends CsmSDKModule {
       // passing these stub params prevent unnecessary possibly errorish RPC calls
       overrides = {
         ...overrides,
-        gas: 21000n,
+        gas: 21_000n,
         maxFeePerGas: 1n,
         maxPriorityFeePerGas: 1n,
         nonce: 1,
@@ -124,7 +171,7 @@ export class TxSDK extends CsmSDKModule {
           }),
           ERROR_CODE.TRANSACTION_ERROR,
         );
-        throw this.core.core.error({
+        throw new SDKError({
           code: ERROR_CODE.TRANSACTION_ERROR,
           message: 'Not enough ether for gas',
         });
@@ -156,7 +203,7 @@ export class TxSDK extends CsmSDKModule {
     });
 
     const receipt = await withSDKError(
-      this.core.core.rpcProvider.waitForTransactionReceipt({
+      this.core.core.publicClient.waitForTransactionReceipt({
         hash,
         timeout: 120_000,
         ...waitForTransactionReceiptParameters,
@@ -170,11 +217,16 @@ export class TxSDK extends CsmSDKModule {
     });
 
     const confirmations =
-      await this.core.core.rpcProvider.getTransactionConfirmations({
+      await this.core.core.publicClient.getTransactionConfirmations({
         hash: receipt.transactionHash,
       });
 
-    const result = await decodeResult?.(receipt);
+    const result = await this.runDecodeResult({
+      decodeResult,
+      receipt,
+      hash,
+      confirmations,
+    });
 
     await callback({
       stage: TransactionCallbackStage.DONE,
@@ -236,41 +288,55 @@ export class TxSDK extends CsmSDKModule {
       ERROR_CODE.TRANSACTION_ERROR,
     );
 
-    if (callStatus.status === 'failure') {
-      throw this.core.core.error({
-        code: ERROR_CODE.TRANSACTION_ERROR,
-        message: 'Transaction failed. Check your wallet for details.',
-      });
-    }
-
-    if (callStatus.receipts?.find((receipt) => receipt.status === 'reverted')) {
-      throw this.core.core.error({
-        code: ERROR_CODE.TRANSACTION_ERROR,
-        message:
-          'Some operations were reverted. Check your wallet for details.',
-      });
-    }
-
-    // extract last receipt if there was no atomic batch
-    const receipt = callStatus.receipts?.[callStatus.receipts.length - 1] as
-      | WalletCallReceipt<bigint, 'success'>
+    // On-chain receipt is the source of truth. Some smart-account wallets
+    // (e.g. ERC-4337 with paymasters whose post-op reverts) report a batch
+    // failure even when the user's call succeeded on-chain — trust the
+    // receipt over `callStatus.status`.
+    const receipts = callStatus.receipts ?? [];
+    const receipt = receipts.at(-1) as
+      | WalletCallReceipt<bigint, 'success' | 'reverted'>
       | undefined;
-    const txHash = receipt?.transactionHash;
 
-    if (!txHash) {
-      throw this.core.core.error({
+    if (receipts.some((r) => r.status === 'reverted')) {
+      const batchErr = new BatchTransactionRevertedError(
+        'Some operations were reverted. Check your wallet for details.',
+        { receipts, callStatus },
+      );
+      throw new SDKError({
         code: ERROR_CODE.TRANSACTION_ERROR,
-        message: 'Transaction hash is missing. Check your wallet for details.',
+        error: batchErr,
+        message: batchErr.message,
       });
     }
 
-    const result = await decodeResult?.(receipt as any);
+    if (!receipt?.transactionHash) {
+      const batchErr = new BatchTransactionRevertedError(
+        callStatus.status === 'failure'
+          ? 'Transaction failed. Check your wallet for details.'
+          : 'Transaction hash is missing. Check your wallet for details.',
+        { receipts, callStatus },
+      );
+      throw new SDKError({
+        code: ERROR_CODE.TRANSACTION_ERROR,
+        error: batchErr,
+        message: batchErr.message,
+      });
+    }
+
+    const txHash = receipt.transactionHash;
 
     const confirmations = txHash
       ? await this.core.publicClient.getTransactionConfirmations({
           hash: txHash,
         })
       : 0n;
+
+    const result = await this.runDecodeResult({
+      decodeResult,
+      receipt: receipt as ReceiptLike,
+      hash: txHash,
+      confirmations,
+    });
 
     await callback({
       stage: TransactionCallbackStage.DONE,
@@ -299,6 +365,9 @@ export class TxSDK extends CsmSDKModule {
   public async perform<TDecodedResult = undefined>(
     props: PerformOptionsNoSpend<TDecodedResult>,
   ): Promise<TransactionResult<TDecodedResult>>;
+
+  @Logger('Call:')
+  @ErrorHandler()
   public async perform<TDecodedResult = undefined>(
     props: PerformOptions<TDecodedResult>,
   ): Promise<TransactionResult<TDecodedResult>> {
@@ -321,6 +390,7 @@ export class TxSDK extends CsmSDKModule {
     }
 
     const call = await this.prepareCall(props);
+    await this.checkVersion(call);
     calls.push(call);
 
     return this.internalCall({
@@ -336,7 +406,7 @@ export class TxSDK extends CsmSDKModule {
     if (hash) return { hash };
 
     const call = await this.prepareCall(props, { permit });
-
+    await this.checkVersion(call);
     return this.internalTransaction({
       ...props,
       ...this.callToInternalTransaction(call),
@@ -484,10 +554,7 @@ export class TxSDK extends CsmSDKModule {
 
   private async getApproveCall(props: AmountAndTokenProps) {
     const { amount, token } = parseSpendingProps(props);
-    return prepCall(this.getTokenContract(token), 'approve', [
-      this.spender,
-      amount,
-    ]);
+    return this.getTokenContract(token).encode.approve([this.spender, amount]);
   }
 
   @Logger('Utils:')

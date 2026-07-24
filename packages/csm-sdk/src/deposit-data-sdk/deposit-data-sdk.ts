@@ -1,94 +1,84 @@
 import { Hex } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, CSM_CONTRACT_NAMES } from '../common/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
+import { CACHE_MID, CONTRACT_NAMES } from '../common/index';
 import {
   compareLowercase,
   isHexadecimalString,
   toHexString,
-} from '../common/utils/index.js';
-import { PUBKEY_LENGTH } from './constants.js';
-import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk.js';
-import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { parseDepositData, removeKey } from './parser.js';
+} from '../common/utils/index';
+import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk';
+import { KeyCacheStatus } from '../keys-cache-sdk/types';
+import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { PUBKEY_LENGTH } from './constants';
+import { parseDepositData, removeKey } from './parser';
 import {
   DepositData,
   ParseResult,
   RemoveKeyResult,
   ValidationError,
   ValidationErrorCode,
-} from './types.js';
-import { validateDepositData, validateDepositDataSync } from './validator.js';
+} from './types';
+import { validateDepositData } from './validator';
 
 export class DepositDataSDK extends CsmSDKModule<{
+  module: ModuleSDK;
   keysWithStatus?: KeysWithStatusSDK;
   keysCache?: KeysCacheSDK;
 }> {
-  /**
-   * Parse deposit data JSON with enhanced error handling
-   */
   @Logger('Utils:')
   public parseDepositData(json: string): ParseResult {
     return parseDepositData(json);
   }
 
-  /**
-   * Remove key at specified index with comprehensive validation
-   */
   @Logger('Utils:')
   public removeKey(json: string, index: number): RemoveKeyResult {
     return removeKey(json, index);
   }
 
-  /**
-   * Validation of deposit data including signature verification
-   */
+  @Logger('Utils:')
+  private async getWcPrefix(): Promise<string> {
+    const wcType = await this.bus.module.getWithdrawalCredentialsType();
+    return wcType.toString(16).padStart(2, '0').padEnd(24, '0');
+  }
+
   @Logger('Utils:')
   public async validateDepositData(
     depositData: DepositData[],
+    options?: { skipPending?: boolean; skipSignature?: boolean },
   ): Promise<ValidationError[]> {
     const chainId = this.core.chainId;
-    const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
-    const blockNumber = await this.core.publicClient.getBlockNumber();
+    const wc = this.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
+    const [blockNumber, wcPrefix] = await Promise.all([
+      this.core.publicClient.getBlockNumber(),
+      this.getWcPrefix(),
+    ]);
 
     const errors = await validateDepositData(depositData, {
       chainId,
       withdrawalCredentials: wc,
+      wcPrefix,
       currentBlockNumber: Number(blockNumber),
+      skipSignature: options?.skipSignature,
     });
 
-    // Extract pubkeys for additional checks
+    if (errors.length) {
+      return [...errors];
+    }
+
     const pubkeys = depositData.map((data) => data.pubkey);
 
-    // Check for cached duplicates
-    const duplicateErrors = this.checkCachedKeys(pubkeys);
-
-    // Check for previously uploaded keys
-    const uploadedDuplicateErrors = await this.checkUploadedKeys(
-      pubkeys.map(toHexString),
-    );
-
-    // Check for keys already known on CL
+    const duplicateErrors = this.checkCachedKeys(pubkeys, options);
+    const uploadedDuplicateErrors = await this.checkUploadedKeys(pubkeys);
     const clErrors = await this.checkClKeys(pubkeys.map(toHexString));
 
-    // Merge all errors
-    return [...errors, ...duplicateErrors, ...uploadedDuplicateErrors, ...clErrors];
-  }
-
-  /**
-   * Quick synchronous validation without signature verification
-   */
-  @Logger('Utils:')
-  public validateDepositDataSync(
-    depositData: DepositData[],
-  ): ValidationError[] {
-    const chainId = this.core.chainId;
-    const wc = this.core.getContractAddress(CSM_CONTRACT_NAMES.withdrawalVault);
-
-    return validateDepositDataSync(depositData, {
-      chainId,
-      withdrawalCredentials: wc,
-    });
+    return [
+      ...errors,
+      ...duplicateErrors,
+      ...uploadedDuplicateErrors,
+      ...clErrors,
+    ];
   }
 
   @Logger('API:')
@@ -118,21 +108,29 @@ export class DepositDataSDK extends CsmSDKModule<{
 
   @Logger('Utils:')
   @ErrorHandler()
-  public checkCachedKeys(pubkeys: string[]): ValidationError[] {
+  public checkCachedKeys(
+    pubkeys: Hex[],
+    options?: { skipPending?: boolean },
+  ): ValidationError[] {
     const keysCache = this.bus.keysCache;
     const errors: ValidationError[] = [];
 
     if (!keysCache) return errors;
 
     pubkeys.forEach((pubkey, index) => {
-      if (keysCache.isDuplicate(pubkey)) {
-        errors.push({
-          index,
-          message: `pubkey already exists in cache`,
-          field: 'pubkey',
-          code: ValidationErrorCode.DUPLICATE_PUBKEY,
-        });
-      }
+      const status = keysCache.getCacheStatus(pubkey);
+      if (!status) return;
+      if (status === KeyCacheStatus.PENDING && options?.skipPending) return;
+
+      errors.push({
+        index,
+        field: 'pubkey',
+        message: `pubkey already submitted`,
+        code:
+          status === KeyCacheStatus.CONFIRMED
+            ? ValidationErrorCode.CACHED_PUBKEY_CONFIRMED
+            : ValidationErrorCode.CACHED_PUBKEY_PENDING,
+      });
     });
 
     return errors;
@@ -154,7 +152,7 @@ export class DepositDataSDK extends CsmSDKModule<{
       if (exists) {
         errors.push({
           index,
-          message: `pubkey already exists as validator on CL`,
+          message: `pubkey already exists as a validator on CL`,
           field: 'pubkey',
           code: ValidationErrorCode.VALIDATOR_EXISTS,
         });

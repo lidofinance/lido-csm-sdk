@@ -1,17 +1,37 @@
-import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
-import type { Address } from 'viem';
-import { CSM_CONTRACT_NAMES, Erc20Tokens } from '../common/index.js';
+import { EncodableContract, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
+import type { Abi, Address, GetContractReturnType, WalletClient } from 'viem';
+import { CONTRACT_NAMES, MODULE_NAME } from '../common/index';
 
-export type CSM_ADDRESSES = {
-  [key2 in CSM_CONTRACT_NAMES | Erc20Tokens]?: Address;
+export type ContractAddresses = {
+  [contract in CONTRACT_NAMES]?: Address;
 };
 
-export type CsmCoreProps = {
+export type CoreProps = {
   core: LidoSDKCore;
-  overridedAddresses?: CSM_ADDRESSES;
+  contractAddresses: ContractAddresses;
+  moduleId: bigint;
+  moduleName?: MODULE_NAME;
+  deploymentBlockNumber?: bigint;
   maxEventBlocksRange?: number;
   clApiUrl?: string;
   keysApiUrl?: string;
   feesMonitoringApiUrl?: string;
   skipHistoricalCalls?: boolean;
+  ipfsGateways?: string[];
+};
+
+export type SdkProps = Omit<
+  CoreProps,
+  'contractAddresses' | 'moduleId' | 'deploymentBlockNumber'
+> & {
+  overridedAddresses?: ContractAddresses;
+};
+
+export type BindedContract<abi extends Abi = Abi> = EncodableContract<
+  GetContractReturnType<abi, WalletClient>
+>;
+
+export type VersionCheckResult = {
+  version: bigint;
+  supported: boolean;
 };

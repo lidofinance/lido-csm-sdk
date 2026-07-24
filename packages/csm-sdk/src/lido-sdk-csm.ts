@@ -1,27 +1,29 @@
-import { AccountingSDK } from './accounting-sdk/accounting-sdk.js';
-import { BondSDK } from './bond-sdk/bond-sdk.js';
-import { BusRegistry } from './common/class-primitives/bus-registry.js';
-import { CoreSDK } from './core-sdk/core-sdk.js';
-import { CsmCoreProps } from './core-sdk/types.js';
-import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk.js';
-import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk.js';
-import { EventsSDK } from './events-sdk/events-sdk.js';
-import { FeesMonitoringSDK } from './fees-monitoring-sdk/fees-monitoring-sdk.js';
-import { IcsGateSDK } from './ics-gate-sdk/ics-gate-sdk.js';
-import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk.js';
-import { KeysSDK } from './keys-sdk/keys-sdk.js';
-import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk.js';
-import { ModuleSDK } from './module-sdk/module-sdk.js';
-import { OperatorSDK } from './operator-sdk/operator-sdk.js';
-import { ParametersSDK } from './parameters-sdk/parameters-sdk.js';
-import { PermissionlessGateSDK } from './permissionless-gate-sdk/permissionless-gate-sdk.js';
-import { RewardsSDK } from './rewards-sdk/rewards-sdk.js';
-import { RolesSDK } from './roles-sdk/roles-sdk.js';
-import { StrikesSDK } from './strikes-sdk/strikes-sdk.js';
-import { FrameSDK } from './frame-sdk/frame-sdk.js';
-import { StealingSDK } from './stealing-sdk/stealing-sdk.js';
-import { SatelliteSDK } from './satellite-sdk/satellite-sdk.js';
-import { TxSDK } from './tx-sdk/tx-sdk.js';
+import { AccountingSDK } from './accounting-sdk/accounting-sdk';
+import { BondSDK } from './bond-sdk/bond-sdk';
+import { BusRegistry } from './common/class-primitives/bus-registry';
+import { CONTRACT_NAMES } from './common/constants/contract-names';
+import { MODULE_NAME } from './common/index';
+import { CoreSDK } from './core-sdk/core-sdk';
+import { prepareCoreProps, SdkProps } from './core-sdk/index';
+import { DepositDataSDK } from './deposit-data-sdk/deposit-data-sdk';
+import { DelayedPenaltySDK } from './delayed-penalty-sdk/delayed-penalty-sdk';
+import { DepositQueueSDK } from './deposit-queue-sdk/deposit-queue-sdk';
+import { DiscoverySDK } from './discovery-sdk/discovery-sdk';
+import { EventsSDK } from './events-sdk/events-sdk';
+import { FeesMonitoringSDK } from './fees-monitoring-sdk/fees-monitoring-sdk';
+import { FrameSDK } from './frame-sdk/frame-sdk';
+import { KeysCacheSDK } from './keys-cache-sdk/keys-cache-sdk';
+import { KeysSDK } from './keys-sdk/keys-sdk';
+import { KeysWithStatusSDK } from './keys-with-status-sdk/keys-with-status-sdk';
+import { ModuleSDK } from './module-sdk/module-sdk';
+import { OperatorSDK } from './operator-sdk/operator-sdk';
+import { ParametersSDK } from './parameters-sdk/parameters-sdk';
+import { PermissionlessGateSDK } from './permissionless-gate-sdk/permissionless-gate-sdk';
+import { RewardsSDK } from './rewards-sdk/rewards-sdk';
+import { RolesSDK } from './roles-sdk/roles-sdk';
+import { StrikesSDK } from './strikes-sdk/strikes-sdk';
+import { TxSDK } from './tx-sdk/tx-sdk';
+import { VettedGateSDK } from './vetted-gate-sdk/vetted-gate-sdk';
 
 export class LidoSDKCsm {
   readonly core: CoreSDK;
@@ -37,26 +39,28 @@ export class LidoSDKCsm {
   readonly bond: BondSDK;
   readonly roles: RolesSDK;
   readonly permissionlessGate: PermissionlessGateSDK;
-  readonly icsGate: IcsGateSDK;
+  readonly icsGate: VettedGateSDK;
+  readonly idvtcGate: VettedGateSDK;
   readonly strikes: StrikesSDK;
   readonly events: EventsSDK;
   readonly frame: FrameSDK;
   readonly depositQueue: DepositQueueSDK;
   readonly depositData: DepositDataSDK;
-  readonly stealing: StealingSDK;
-  readonly satellite: SatelliteSDK;
+  readonly delayedPenalty: DelayedPenaltySDK;
+  readonly discovery: DiscoverySDK;
   readonly feesMonitoring: FeesMonitoringSDK;
 
-  constructor(props: CsmCoreProps) {
+  constructor(props: SdkProps) {
     const bus = new BusRegistry();
-    this.core = new CoreSDK(props);
+    this.core = new CoreSDK(prepareCoreProps(props, MODULE_NAME.CSM));
 
     const commonProps = { ...props, core: this.core, bus };
     this.tx = new TxSDK(commonProps, 'tx');
     this.module = new ModuleSDK(commonProps, 'module');
     this.accounting = new AccountingSDK(commonProps, 'accounting');
     this.permissionlessGate = new PermissionlessGateSDK(commonProps);
-    this.icsGate = new IcsGateSDK(commonProps);
+    this.icsGate = new VettedGateSDK(commonProps, CONTRACT_NAMES.icsGate);
+    this.idvtcGate = new VettedGateSDK(commonProps, CONTRACT_NAMES.idvtcGate);
     this.parameters = new ParametersSDK(commonProps, 'parameters');
     this.operator = new OperatorSDK(commonProps, 'operator');
     this.keys = new KeysSDK(commonProps);
@@ -67,11 +71,11 @@ export class LidoSDKCsm {
     this.strikes = new StrikesSDK(commonProps, 'strikes');
     this.rewards = new RewardsSDK(commonProps);
     this.frame = new FrameSDK(commonProps, 'frame');
-    this.satellite = new SatelliteSDK(commonProps, 'satellite');
     this.events = new EventsSDK(commonProps, 'events');
     this.depositQueue = new DepositQueueSDK(commonProps);
     this.depositData = new DepositDataSDK(commonProps);
-    this.stealing = new StealingSDK(commonProps);
+    this.delayedPenalty = new DelayedPenaltySDK(commonProps);
     this.feesMonitoring = new FeesMonitoringSDK(commonProps);
+    this.discovery = new DiscoverySDK(commonProps, 'discovery');
   }
 }

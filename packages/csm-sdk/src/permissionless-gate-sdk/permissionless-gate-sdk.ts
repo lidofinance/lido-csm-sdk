@@ -1,20 +1,35 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { TOKENS, WithToken } from '../common/index.js';
-import { parseNodeOperatorAddedEvents } from '../common/utils/index.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { ReceiptLike } from '../tx-sdk/types.js';
-import { parseAddOperatorProps } from './parse-add-operator-props.js';
-import { AddNodeOperatorProps } from './types.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
+import {
+  CONTRACT_NAMES,
+  ERROR_CODE,
+  NodeOperatorShortInfo,
+  SDKError,
+  TOKENS,
+  WithToken,
+} from '../common/index';
+import {
+  parseAddOperatorProps,
+  parseNodeOperatorAddedEvents,
+} from '../common/utils/index';
+import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { TxSDK } from '../tx-sdk/index';
+import { ReceiptLike } from '../tx-sdk/types';
+import { AddNodeOperatorProps } from './types';
 
 export class PermissionlessGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
+  keysCache?: KeysCacheSDK;
 }> {
   private get permissionlessContract() {
-    return this.core.contractPermissionlessGate;
+    return this.core.getContract(CONTRACT_NAMES.permissionlessGate);
   }
 
   private async parseOperatorFromReceipt(receipt: ReceiptLike) {
@@ -22,9 +37,11 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorETH(props: AddNodeOperatorProps) {
+    const { depositData } = props;
     const {
       amount,
       keysCount,
@@ -32,26 +49,30 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       signatures,
       managementProperties,
       referrer,
-      permit,
       ...rest
-    } = await parseAddOperatorProps(props);
+    } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        depositData,
+        rest.callback,
+      ),
       call: () =>
-        prepCall(
-          this.permissionlessContract,
-          'addNodeOperatorETH',
+        this.permissionlessContract.encode.addNodeOperatorETH(
           [keysCount, publicKeys, signatures, managementProperties, referrer],
-          amount,
+          { value: amount },
         ),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorStETH(props: AddNodeOperatorProps) {
+    const { depositData } = props;
     const {
       amount,
       keysCount,
@@ -61,27 +82,34 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       referrer,
       permit,
       ...rest
-    } = await parseAddOperatorProps(props);
+    } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.steth, amount, permit },
-      call: ({ permit }) =>
-        prepCall(this.permissionlessContract, 'addNodeOperatorStETH', [
+      call: ({ permit: signedPermit }) =>
+        this.permissionlessContract.encode.addNodeOperatorStETH([
           keysCount,
           publicKeys,
           signatures,
           managementProperties,
-          permit,
+          signedPermit,
           referrer,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addNodeOperatorWstETH(props: AddNodeOperatorProps) {
+    const { depositData } = props;
     const {
       amount,
       keysCount,
@@ -91,24 +119,30 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       referrer,
       permit,
       ...rest
-    } = await parseAddOperatorProps(props);
+    } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform({
+    return this.bus.tx.perform<NodeOperatorShortInfo>({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.wsteth, amount, permit },
-      call: ({ permit }) =>
-        prepCall(this.permissionlessContract, 'addNodeOperatorWstETH', [
+      call: ({ permit: signedPermit }) =>
+        this.permissionlessContract.encode.addNodeOperatorWstETH([
           keysCount,
           publicKeys,
           signatures,
           managementProperties,
-          permit,
+          signedPermit,
           referrer,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   public async addNodeOperator(props: WithToken<AddNodeOperatorProps>) {
     const { token } = props;
     switch (token) {

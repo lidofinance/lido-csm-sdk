@@ -1,9 +1,9 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
-import { ModuleDigest } from './types.js';
+import { ERROR_CODE, invariant } from '../common/index';
+import { ModuleDigest } from './types';
 
 export const findModuleDigest = (
   digests: ModuleDigest[],
-  moduleId: number,
+  moduleId: bigint,
 ): ModuleDigest => {
   const moduleDigest = digests.find((digest) => digest.state.id === moduleId);
   invariant(

@@ -1,33 +1,46 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
 import { zeroAddress } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
+import {
+  CONTRACT_NAMES,
   EJECT_FEE_MIN_LIMIT,
   EJECT_FEE_MULTIPLIEER,
+  ERROR_CODE,
+  SDKError,
   TOKENS,
   WithToken,
-} from '../common/index.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { parseAddKeysProps } from './parse-add-keys-props.js';
+} from '../common/index';
 import {
-  AddKeysProps,
-  EjectKeysByArrayProps,
-  EjectKeysProps,
-  MigrateKeysProps,
-  NormalizeQueueProps,
-  RemoveKeysProps,
-} from './types.js';
+  KeysCacheSDK,
+  withKeysCacheCallback,
+  withKeysRemovalCacheCallback,
+} from '../keys-cache-sdk/index';
+import { TxSDK } from '../tx-sdk/index';
+import { parseAddKeysProps } from './parse-add-keys-props';
+import { AddKeysProps, EjectKeysByArrayProps, RemoveKeysProps } from './types';
 
-export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
+export class KeysSDK extends CsmSDKModule<{
+  tx: TxSDK;
+  keysCache?: KeysCacheSDK;
+}> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   private get ejectorContract() {
-    return this.core.contractCSEjector;
+    return this.core.getContract(CONTRACT_NAMES.ejector);
   }
 
+  private get withdrawalVaultContract() {
+    return this.core.getContract(CONTRACT_NAMES.withdrawalVault);
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async addKeysETH(props: AddKeysProps) {
@@ -43,16 +56,20 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       call: ({ from }) =>
-        prepCall(
-          this.moduleContract,
-          'addValidatorKeysETH',
+        this.moduleContract.encode.addValidatorKeysETH(
           [from, nodeOperatorId, keysCount, publicKeys, signatures],
-          amount,
+          { value: amount },
         ),
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async addKeysStETH(props: AddKeysProps) {
@@ -68,9 +85,14 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ from, permit }) =>
-        prepCall(this.moduleContract, 'addValidatorKeysStETH', [
+        this.moduleContract.encode.addValidatorKeysStETH([
           from,
           nodeOperatorId,
           keysCount,
@@ -81,6 +103,7 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async addKeysWstETH(props: AddKeysProps) {
@@ -96,9 +119,14 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysCacheCallback(
+        this.bus.keysCache,
+        props.depositData,
+        rest.callback,
+      ),
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ from, permit }) =>
-        prepCall(this.moduleContract, 'addValidatorKeysWstETH', [
+        this.moduleContract.encode.addValidatorKeysWstETH([
           from,
           nodeOperatorId,
           keysCount,
@@ -109,10 +137,11 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   public async addKeys(props: WithToken<AddKeysProps>) {
-    const { token } = props;
+    const { token, amount } = props;
 
-    if (props.amount === 0n) {
+    if (amount === 0n) {
       return this.addKeysStETH(props);
     }
 
@@ -131,15 +160,21 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     }
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
   public async removeKeys(props: RemoveKeysProps) {
-    const { nodeOperatorId, startIndex, keysCount, ...rest } = props;
+    const { nodeOperatorId, startIndex, keysCount, pubkeys, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
+      callback: withKeysRemovalCacheCallback(
+        this.bus.keysCache,
+        pubkeys,
+        rest.callback,
+      ),
       call: () =>
-        prepCall(this.moduleContract, 'removeKeys', [
+        this.moduleContract.encode.removeKeys([
           nodeOperatorId,
           startIndex,
           keysCount,
@@ -147,33 +182,10 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
-  public async ejectKeys(props: EjectKeysProps) {
-    const {
-      nodeOperatorId,
-      startIndex,
-      keysCount,
-      amount,
-      refundRecipient = zeroAddress,
-      ...rest
-    } = props;
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        prepCall(
-          this.ejectorContract,
-          'voluntaryEject',
-          [nodeOperatorId, startIndex, keysCount, refundRecipient],
-          amount,
-        ),
-    });
-  }
-
-  @Logger('Call:')
-  @ErrorHandler()
-  public async ejectKeysByArray(props: EjectKeysByArrayProps) {
+  public async ejectKeys(props: EjectKeysByArrayProps) {
     const {
       nodeOperatorId,
       keyIndices,
@@ -185,11 +197,9 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.ejectorContract,
-          'voluntaryEjectByArray',
+        this.ejectorContract.encode.voluntaryEject(
           [nodeOperatorId, keyIndices, refundRecipient],
-          amount,
+          { value: amount },
         ),
     });
   }
@@ -198,38 +208,10 @@ export class KeysSDK extends CsmSDKModule<{ tx: TxSDK }> {
   @ErrorHandler()
   public async getEjectFeePerKey() {
     const fee =
-      await this.core.contractWithdrawalVault.read.getWithdrawalRequestFee();
+      await this.withdrawalVaultContract.read.getWithdrawalRequestFee();
     const correctedFee = fee * EJECT_FEE_MULTIPLIEER;
     return correctedFee < EJECT_FEE_MIN_LIMIT
       ? EJECT_FEE_MIN_LIMIT
       : correctedFee;
-  }
-
-  @Logger('Call:')
-  @ErrorHandler()
-  public async migrateToPriorityQueue(props: MigrateKeysProps) {
-    const { nodeOperatorId, ...rest } = props;
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        prepCall(this.moduleContract, 'migrateToPriorityQueue', [
-          nodeOperatorId,
-        ]),
-    });
-  }
-
-  @Logger('Call:')
-  @ErrorHandler()
-  public async normalizeQueue(props: NormalizeQueueProps) {
-    const { nodeOperatorId, ...rest } = props;
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        prepCall(this.moduleContract, 'updateDepositableValidatorsCount', [
-          nodeOperatorId,
-        ]),
-    });
   }
 }

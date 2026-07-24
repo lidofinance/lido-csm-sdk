@@ -1,2753 +1,400 @@
-export const CSModuleAbi = [
+import { BaseModuleAbi } from './BaseModule';
+
+const CSModuleExtrasAbi = [
   {
-    "type": "constructor",
-    "inputs": [
+    type: 'constructor',
+    inputs: [
       {
-        "name": "moduleType",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        name: 'moduleType',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
       {
-        "name": "lidoLocator",
-        "type": "address",
-        "internalType": "address"
+        name: 'lidoLocator',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "parametersRegistry",
-        "type": "address",
-        "internalType": "address"
+        name: 'parametersRegistry',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "_accounting",
-        "type": "address",
-        "internalType": "address"
+        name: 'accounting',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "exitPenalties",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "ACCOUNTING",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSAccounting"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "CREATE_NODE_OPERATOR_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "DEFAULT_ADMIN_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "DEPOSIT_SIZE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "EXIT_PENALTIES",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSExitPenalties"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "FEE_DISTRIBUTOR",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "LIDO_LOCATOR",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ILidoLocator"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "PARAMETERS_REGISTRY",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSParametersRegistry"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "PAUSE_INFINITELY",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "PAUSE_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "QUEUE_LEGACY_PRIORITY",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "QUEUE_LOWEST_PRIORITY",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "RECOVERER_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "REPORT_EL_REWARDS_STEALING_PENALTY_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "RESUME_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "SETTLE_EL_REWARDS_STEALING_PENALTY_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "STAKING_ROUTER_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "STETH",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IStETH"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "VERIFIER_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "accounting",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract ICSAccounting"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "addValidatorKeysETH",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "addValidatorKeysStETH",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
-        "components": [
-          {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "addValidatorKeysWstETH",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "permit",
-        "type": "tuple",
-        "internalType": "struct ICSAccounting.PermitInput",
-        "components": [
-          {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "deadline",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "v",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "r",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "s",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "cancelELRewardsStealingPenalty",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "changeNodeOperatorRewardAddress",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "newAddress",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "cleanDepositQueue",
-    "inputs": [
-      {
-        "name": "maxItems",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "removed",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "lastRemovedAtDepth",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "compensateELRewardsStealingPenalty",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "confirmNodeOperatorManagerAddressChange",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "confirmNodeOperatorRewardAddressChange",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "createNodeOperator",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "managementProperties",
-        "type": "tuple",
-        "internalType": "struct NodeOperatorManagementProperties",
-        "components": [
-          {
-            "name": "managerAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "rewardAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "extendedManagerPermissions",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
-      },
-      {
-        "name": "referrer",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "decreaseVettedSigningKeysCount",
-    "inputs": [
-      {
-        "name": "nodeOperatorIds",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "vettedSigningKeysCounts",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "depositQueueItem",
-    "inputs": [
-      {
-        "name": "queuePriority",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "index",
-        "type": "uint128",
-        "internalType": "uint128"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "Batch"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "depositQueuePointers",
-    "inputs": [
-      {
-        "name": "queuePriority",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "head",
-        "type": "uint128",
-        "internalType": "uint128"
-      },
-      {
-        "name": "tail",
-        "type": "uint128",
-        "internalType": "uint128"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "exitDeadlineThreshold",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "finalizeUpgradeV2",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "getActiveNodeOperatorsCount",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getInitializedVersion",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperator",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct NodeOperator",
-        "components": [
-          {
-            "name": "totalAddedKeys",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "totalWithdrawnKeys",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "totalDepositedKeys",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "totalVettedKeys",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "stuckValidatorsCount",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "depositableValidatorsCount",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "targetLimit",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "targetLimitMode",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "totalExitedKeys",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "enqueuedCount",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "managerAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "proposedManagerAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "rewardAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "proposedRewardAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "extendedManagerPermissions",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "usedPriorityQueue",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorIds",
-    "inputs": [
-      {
-        "name": "offset",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "limit",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "nodeOperatorIds",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorIsActive",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorManagementProperties",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct NodeOperatorManagementProperties",
-        "components": [
-          {
-            "name": "managerAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "rewardAddress",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "extendedManagerPermissions",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorNonWithdrawnKeys",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorOwner",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorSummary",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "targetLimitMode",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "targetValidatorsCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "stuckValidatorsCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "refundedValidatorsCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "stuckPenaltyEndTimestamp",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "totalExitedValidators",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "totalDepositedValidators",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "depositableValidatorsCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorTotalDepositedKeys",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "totalDepositedKeys",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNodeOperatorsCount",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getNonce",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getResumeSinceTimestamp",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getRoleAdmin",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getRoleMember",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "index",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getRoleMemberCount",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getSigningKeys",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "startIndex",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getSigningKeysWithSignatures",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "startIndex",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "keys",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getStakingModuleSummary",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "totalExitedValidators",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "totalDepositedValidators",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "depositableValidatorsCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getType",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "grantRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "hasRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
-      {
-        "name": "admin",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "isPaused",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isValidatorExitDelayPenaltyApplicable",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "eligibleToExitInSec",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isValidatorWithdrawn",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keyIndex",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "migrateToPriorityQueue",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "obtainDepositData",
-    "inputs": [
-      {
-        "name": "depositsCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "publicKeys",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "signatures",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "onExitedAndStuckValidatorsCountsUpdated",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "onRewardsMinted",
-    "inputs": [
-      {
-        "name": "totalShares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "onValidatorExitTriggered",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "withdrawalRequestPaidFee",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "exitType",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "onWithdrawalCredentialsChanged",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "pauseFor",
-    "inputs": [
-      {
-        "name": "duration",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "proposeNodeOperatorManagerAddressChange",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "proposedAddress",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "proposeNodeOperatorRewardAddressChange",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "proposedAddress",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "recoverERC1155",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "recoverERC20",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "recoverERC721",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "recoverEther",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "removeKeys",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "startIndex",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "renounceRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "callerConfirmation",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "reportELRewardsStealingPenalty",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "blockHash",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "reportValidatorExitDelay",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "publicKey",
-        "type": "bytes",
-        "internalType": "bytes"
-      },
-      {
-        "name": "eligibleToExitInSec",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "resetNodeOperatorManagerAddress",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "resume",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "revokeRole",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "settleELRewardsStealingPenalty",
-    "inputs": [
-      {
-        "name": "nodeOperatorIds",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "submitWithdrawals",
-    "inputs": [
-      {
-        "name": "withdrawalsInfo",
-        "type": "tuple[]",
-        "internalType": "struct ValidatorWithdrawalInfo[]",
-        "components": [
-          {
-            "name": "nodeOperatorId",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "keyIndex",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "amount",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "isSlashed",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "supportsInterface",
-    "inputs": [
-      {
-        "name": "interfaceId",
-        "type": "bytes4",
-        "internalType": "bytes4"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "unsafeUpdateValidatorsCount",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: 'exitPenalties',
+        type: 'address',
+        internalType: 'address',
       },
-      {
-        "name": "exitedValidatorsKeysCount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "updateDepositableValidatorsCount",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "function",
-    "name": "updateExitedValidatorsCount",
-    "inputs": [
+    type: 'function',
+    name: 'MANAGE_TOP_UP_QUEUE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "nodeOperatorIds",
-        "type": "bytes",
-        "internalType": "bytes"
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
-      {
-        "name": "exitedValidatorsCounts",
-        "type": "bytes",
-        "internalType": "bytes"
-      }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    stateMutability: 'view',
   },
   {
-    "type": "function",
-    "name": "updateTargetValidatorsLimits",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
+    type: 'function',
+    name: 'REWIND_TOP_UP_QUEUE_ROLE',
+    inputs: [],
+    outputs: [
       {
-        "name": "targetLimitMode",
-        "type": "uint256",
-        "internalType": "uint256"
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
       },
-      {
-        "name": "targetLimit",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "BatchEnqueued",
-    "inputs": [
-      {
-        "name": "queuePriority",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
+    type: 'function',
+    name: 'cleanDepositQueue',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'maxItems',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "count",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "DepositableSigningKeysCountChanged",
-    "inputs": [
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'removed',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "depositableKeysCount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "DepositedSigningKeysCountChanged",
-    "inputs": [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'lastRemovedAtDepth',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "depositedKeysCount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltyCancelled",
-    "inputs": [
+    type: 'function',
+    name: 'depositQueueItem',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'queuePriority',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltyCompensated",
-    "inputs": [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'index',
+        type: 'uint128',
+        internalType: 'uint128',
       },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltyReported",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
+    outputs: [
       {
-        "name": "proposedBlockHash",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
+        name: '',
+        type: 'uint256',
+        internalType: 'Batch',
       },
-      {
-        "name": "stolenAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ELRewardsStealingPenaltySettled",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "ERC1155Recovered",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
+    type: 'function',
+    name: 'depositQueuePointers',
+    inputs: [
       {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'queuePriority',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ERC20Recovered",
-    "inputs": [
+    outputs: [
       {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'head',
+        type: 'uint128',
+        internalType: 'uint128',
       },
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'tail',
+        type: 'uint128',
+        internalType: 'uint128',
       },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "ERC721Recovered",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
+    type: 'function',
+    name: 'finalizeUpgradeV3',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "EtherRecovered",
-    "inputs": [
+    type: 'function',
+    name: 'getKeysForTopUp',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'maxKeyCount',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ExitedSigningKeysCountChanged",
-    "inputs": [
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'pubkeys',
+        type: 'bytes[]',
+        internalType: 'bytes[]',
       },
-      {
-        "name": "exitedKeysCount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Initialized",
-    "inputs": [
-      {
-        "name": "version",
-        "type": "uint64",
-        "indexed": false,
-        "internalType": "uint64"
-      }
     ],
-    "anonymous": false
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "KeyRemovalChargeApplied",
-    "inputs": [
+    type: 'function',
+    name: 'getTopUpQueue',
+    inputs: [],
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "NodeOperatorAdded",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'enabled',
+        type: 'bool',
+        internalType: 'bool',
       },
       {
-        "name": "managerAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'limit',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "rewardAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "extendedManagerPermissions",
-        "type": "bool",
-        "indexed": false,
-        "internalType": "bool"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "NodeOperatorManagerAddressChangeProposed",
-    "inputs": [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'length',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "oldProposedAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'head',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "newProposedAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
     ],
-    "anonymous": false
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "NodeOperatorManagerAddressChanged",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
+    type: 'function',
+    name: 'getTopUpQueueItem',
+    inputs: [
       {
-        "name": "oldAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "newAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "NodeOperatorRewardAddressChangeProposed",
-    "inputs": [
+    outputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
-        "name": "oldProposedAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'keyIndex',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "newProposedAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
     ],
-    "anonymous": false
+    stateMutability: 'view',
   },
   {
-    "type": "event",
-    "name": "NodeOperatorRewardAddressChanged",
-    "inputs": [
+    type: 'function',
+    name: 'initialize',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'admin',
+        type: 'address',
+        internalType: 'address',
       },
       {
-        "name": "oldAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'topUpQueueLimit',
+        type: 'uint8',
+        internalType: 'uint8',
       },
-      {
-        "name": "newAddress",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "NonceChanged",
-    "inputs": [
-      {
-        "name": "nonce",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "Paused",
-    "inputs": [
-      {
-        "name": "duration",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
+    type: 'function',
+    name: 'rebuildTotalWithdrawnValidators',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "ReferrerSet",
-    "inputs": [
+    type: 'function',
+    name: 'rewindTopUpQueue',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'to',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "referrer",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Resumed",
-    "inputs": [],
-    "anonymous": false
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "RoleAdminChanged",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
+    type: 'function',
+    name: 'setTopUpQueueLimit',
+    inputs: [
       {
-        "name": "previousAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'limit',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "newAdminRole",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      }
     ],
-    "anonymous": false
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    "type": "event",
-    "name": "RoleGranted",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
+    type: 'event',
+    name: 'BatchEnqueued',
+    inputs: [
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'queuePriority',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "RoleRevoked",
-    "inputs": [
-      {
-        "name": "role",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'count',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
-      {
-        "name": "sender",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "SigningKeyAdded",
-    "inputs": [
+    type: 'event',
+    name: 'TopUpQueueItemProcessed',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
       },
-      {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "SigningKeyRemoved",
-    "inputs": [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'keyIndex',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
-      {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
-      }
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "StETHSharesRecovered",
-    "inputs": [
+    type: 'event',
+    name: 'TopUpQueueLimitSet',
+    inputs: [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        name: 'limit',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
-      {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "TargetValidatorsCountChanged",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
+    type: 'event',
+    name: 'TopUpQueueRewound',
+    inputs: [
       {
-        "name": "targetLimitMode",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'to',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
-      {
-        "name": "targetValidatorsCount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
     ],
-    "anonymous": false
+    anonymous: false,
   },
   {
-    "type": "event",
-    "name": "TotalSigningKeysCountChanged",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "totalKeysCount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
+    type: 'error',
+    name: 'DepositQueueIsEmpty',
+    inputs: [],
   },
   {
-    "type": "event",
-    "name": "VettedSigningKeysCountChanged",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "vettedKeysCount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
+    type: 'error',
+    name: 'InvalidTopUpOrder',
+    inputs: [],
   },
   {
-    "type": "event",
-    "name": "VettedSigningKeysCountDecreased",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
+    type: 'error',
+    name: 'RewindForward',
+    inputs: [],
   },
   {
-    "type": "event",
-    "name": "WithdrawalSubmitted",
-    "inputs": [
+    type: 'error',
+    name: 'SafeCastOverflowedUintDowncast',
+    inputs: [
       {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        name: 'bits',
+        type: 'uint8',
+        internalType: 'uint8',
       },
       {
-        "name": "keyIndex",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
+        name: 'value',
+        type: 'uint256',
+        internalType: 'uint256',
       },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
-      }
     ],
-    "anonymous": false
-  },
-  {
-    "type": "error",
-    "name": "AccessControlBadConfirmation",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "AccessControlUnauthorizedAccount",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "neededRole",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "AlreadyProposed",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "AlreadyWithdrawn",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "CannotAddKeys",
-    "inputs": []
   },
   {
-    "type": "error",
-    "name": "EmptyKey",
-    "inputs": []
+    type: 'error',
+    name: 'SameTopUpQueueLimit',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ExitedKeysDecrease",
-    "inputs": []
+    type: 'error',
+    name: 'TopUpQueueDisabled',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "ExitedKeysHigherThanTotalDeposited",
-    "inputs": []
+    type: 'error',
+    name: 'TopUpQueueIsEmpty',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "FailedToSendEther",
-    "inputs": []
+    type: 'error',
+    name: 'TopUpQueueIsFull',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidAmount",
-    "inputs": []
+    type: 'error',
+    name: 'UnexpectedExtraKey',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInitialization",
-    "inputs": []
+    type: 'error',
+    name: 'UpgradeIsNotFinalized',
+    inputs: [],
   },
   {
-    "type": "error",
-    "name": "InvalidInput",
-    "inputs": []
+    type: 'error',
+    name: 'ZeroTopUpQueueLimit',
+    inputs: [],
   },
-  {
-    "type": "error",
-    "name": "InvalidKeysCount",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InvalidLength",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InvalidReportData",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InvalidVetKeysPointer",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "KeysLimitExceeded",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "MethodCallIsNotAllowed",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NoQueuedKeysToMigrate",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NodeOperatorDoesNotExist",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotAllowedToRecover",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotEligibleForPriorityQueue",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotEnoughKeys",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "NotInitializing",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "PauseUntilMustBeInFuture",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "PausedExpected",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "PriorityQueueAlreadyUsed",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "PriorityQueueMaxDepositsUsed",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "QueueIsEmpty",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "QueueLookupNoLimit",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ResumedExpected",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SameAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SenderIsNotEligible",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SenderIsNotManagerAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SenderIsNotProposedAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SenderIsNotRewardAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SigningKeysInvalidOffset",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroAccountingAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroAdminAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroExitPenaltiesAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroLocatorAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroParametersRegistryAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroPauseDuration",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroRewardAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "ZeroSenderAddress",
-    "inputs": []
-  }
 ] as const;
+
+export const CSModuleAbi = [...BaseModuleAbi, ...CSModuleExtrasAbi] as const;

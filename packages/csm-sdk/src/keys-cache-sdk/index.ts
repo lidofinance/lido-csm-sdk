@@ -1,3 +1,4 @@
-export { KeysCacheSDK } from './keys-cache-sdk.js';
-export * from './types.js';
-export * from './constants.js';
+export * from './keys-cache-sdk';
+export * from './with-keys-cache-callback';
+export * from './types';
+export * from './constants';

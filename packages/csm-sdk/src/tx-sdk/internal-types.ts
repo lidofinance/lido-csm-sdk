@@ -7,7 +7,7 @@ import type {
   CommonTransactionProps,
   PerformOptionsDecodePartial,
   PerformOptionsSpend,
-} from './types.js';
+} from './types';
 
 // Internal Transaction Types
 

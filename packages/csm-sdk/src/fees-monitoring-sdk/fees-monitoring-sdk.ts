@@ -1,12 +1,16 @@
-import { ERROR_CODE, invariant } from '@lidofinance/lido-ethereum-sdk';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_MID, NodeOperatorId } from '../common/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  fetchValidatorRegistrations,
+  CACHE_MID,
+  ERROR_CODE,
+  invariant,
+  NodeOperatorId,
+} from '../common/index';
+import {
+  fetchAllValidatorRegistrations,
   isValidatorWithIssue,
-} from './fetch-validator-registrations.js';
-import { ValidatorInfoIssues } from './types.js';
+} from './fetch-validator-registrations';
+import { ValidatorInfoIssues } from './types';
 
 export class FeesMonitoringSDK extends CsmSDKModule {
   @Logger('Call:')
@@ -23,7 +27,7 @@ export class FeesMonitoringSDK extends CsmSDKModule {
       ERROR_CODE.NOT_SUPPORTED,
     );
 
-    const registrations = await fetchValidatorRegistrations(baseUrl, {
+    const registrations = await fetchAllValidatorRegistrations(baseUrl, {
       moduleId: this.core.moduleId,
       nodeOperatorId,
       withIssuesOnly: true,

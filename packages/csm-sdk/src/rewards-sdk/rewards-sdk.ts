@@ -2,16 +2,17 @@ import {
   AccountingSDK,
   convertSharesToEth,
   StethPoolData,
-} from '../accounting-sdk/index.js';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+} from '../accounting-sdk/index';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_LONG,
   CACHE_MID,
+  CONTRACT_NAMES,
   NodeOperatorId,
   PERCENT_BASIS,
   RewardProof,
-} from '../common/index.js';
+} from '../common/index';
 import {
   bigIntRange,
   fetchOneOf,
@@ -19,24 +20,25 @@ import {
   isDefined,
   isUnique,
   sortRewardsByRefSlot,
-} from '../common/utils/index.js';
-import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { FrameSDK } from '../frame-sdk/frame-sdk.js';
-import { epochToTimestamp } from '../frame-sdk/utils.js';
-import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk.js';
-import { ModuleSDK } from '../module-sdk/module-sdk.js';
-import { ParametersSDK } from '../parameters-sdk/index.js';
-import { REPORT_V1_LOG_CIDS } from './consts.js';
-import { findOperatorRewards } from './find-operator-rewards.js';
-import { findProofAndAmount } from './find-proof.js';
-import { getValidatorsRewards } from './get-validators-rewards.js';
-import { parseReport } from './parse-report.js';
-import { parseRewardsTree } from './parse-rewards-tree.js';
+} from '../common/utils/index';
+import { EventsSDK } from '../events-sdk/events-sdk';
+import { FrameSDK } from '../frame-sdk/frame-sdk';
+import { epochToTimestamp } from '../frame-sdk/utils';
+import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { ParametersSDK } from '../parameters-sdk/index';
+import { REPORT_V1_LOG_CIDS } from './consts';
+import { findOperatorRewards } from './find-operator-rewards';
+import { findProofAndAmount } from './find-proof';
+import { getValidatorsRewards } from './get-validators-rewards';
+import { parseReport } from './parse-report';
+import { parseRewardsTree } from './parse-rewards-tree';
 import {
   OperatorRewards,
   OperatorRewardsHistory,
+  ReportTimestamps,
   RewardsReport,
-} from './types.js';
+} from './types';
 
 export class RewardsSDK extends CsmSDKModule<{
   accounting: AccountingSDK;
@@ -47,14 +49,15 @@ export class RewardsSDK extends CsmSDKModule<{
   module: ModuleSDK;
 }> {
   private get distributorContract() {
-    return this.core.contractCSFeeDistributor;
+    return this.core.getContract(CONTRACT_NAMES.feeDistributor);
   }
 
   @Logger('Utils:')
   public getProofTreeUrls(cid: string): string[] {
-    return [...this.core.getIpfsUrls(cid), this.core.rewardsTreeLink].filter(
-      isDefined,
-    );
+    return [
+      ...this.core.getIpfsUrls(cid),
+      this.core.getMerkleTreeFallback(CONTRACT_NAMES.feeDistributor),
+    ].filter(isDefined);
   }
 
   @Logger('Utils:')
@@ -114,12 +117,14 @@ export class RewardsSDK extends CsmSDKModule<{
   ) {
     if (proof.length === 0) return 0n;
 
-    const available = await this.distributorContract.read.getFeesToDistribute([
-      nodeOperatorId,
-      shares,
-      proof,
-    ]);
-    return await this.bus.accounting.sharesToEth(available);
+    try {
+      const available = await this.distributorContract.read.getFeesToDistribute(
+        [nodeOperatorId, shares, proof],
+      );
+      return await this.bus.accounting.sharesToEth(available);
+    } catch {
+      return 0n;
+    }
   }
 
   @Logger('Utils:')
@@ -185,7 +190,9 @@ export class RewardsSDK extends CsmSDKModule<{
   }
 
   @Logger('Utils:')
-  public async getLastReportTimestamps() {
+  public async getLastReportTimestamps(): Promise<
+    ReportTimestamps | undefined
+  > {
     const [report, config] = await Promise.all([
       this.getLastReport(),
       this.bus.frame.getConfig(),
@@ -203,7 +210,8 @@ export class RewardsSDK extends CsmSDKModule<{
   public async getAllReports() {
     const reportsCount = await this.getHistoryCount();
 
-    const oldReportLogCids = REPORT_V1_LOG_CIDS[this.core.chainId];
+    const oldReportLogCids =
+      REPORT_V1_LOG_CIDS[this.core.moduleName]?.[this.core.chainId] ?? [];
 
     const reports = await Promise.all([
       ...oldReportLogCids.map((cid) => this.getReportByCid(cid)),

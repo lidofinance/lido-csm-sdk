@@ -1,31 +1,36 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
+import { AccountingSDK } from '../accounting-sdk/accounting-sdk';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache } from '../common/decorators/cache';
+import { ErrorHandler } from '../common/decorators/error-handler';
+import { Logger } from '../common/decorators/logger';
 import {
   BondBalance,
+  CACHE_MID,
   CACHE_SHORT,
+  CONTRACT_NAMES,
   NodeOperatorId,
   NodeOperatorShortInfo,
-} from '../common/index.js';
-import { clearEmptyAddress } from '../common/utils/clear-empty-address.js';
-import { splitKeys } from '../common/utils/split-keys.js';
-import { ParametersSDK } from '../parameters-sdk/parameters-sdk.js';
-import { calcBondBalance } from './calc-bond-balance.js';
-import { NodeOperatorInfo } from './types.js';
+} from '../common/index';
+import { clearEmptyAddress } from '../common/utils/clear-empty-address';
+import { splitKeys } from '../common/utils/split-keys';
+import { calcBondBalance } from './calc-bond-balance';
+import { FeeSplit, NodeOperatorInfo } from './types';
 
-export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
+export class OperatorSDK extends CsmSDKModule<{
+  accounting: AccountingSDK;
+}> {
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_SHORT)
   public async getCurveId(id: NodeOperatorId): Promise<bigint> {
     return this.accountingContract.read.getBondCurveId([id]);
   }
@@ -33,23 +38,32 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   @Logger('Views:')
   @ErrorHandler()
   public async getBondBalance(id: NodeOperatorId): Promise<BondBalance> {
-    const [[current, required], locked] = await Promise.all([
-      this.accountingContract.read.getBondSummary([id]),
-      this.accountingContract.read.getActualLockedBond([id]),
+    const bond = await this.accountingContract.read.getNodeOperatorBondInfo([
+      id,
     ]);
 
-    return calcBondBalance({ current, required, locked });
+    const pendingToSplit = await this.bus.accounting.sharesToEth(
+      bond.pendingSharesToSplit,
+    );
+
+    return calcBondBalance({
+      current: bond.currentBond,
+      required: bond.requiredBond,
+      locked: bond.lockedBond,
+      debt: bond.bondDebt,
+      pendingToSplit,
+    });
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getLockedBond(id: NodeOperatorId): Promise<bigint> {
-    return this.accountingContract.read.getActualLockedBond([id]);
+  public async isLockExpired(id: NodeOperatorId): Promise<boolean> {
+    return this.accountingContract.read.isLockExpired([id]);
   }
 
+  @Logger('Views:')
+  @ErrorHandler()
   @Cache(CACHE_SHORT)
-  @Logger('Views:')
-  @ErrorHandler()
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
     const info = await this.moduleContract.read.getNodeOperator([id]);
 
@@ -81,24 +95,18 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getKeysCountToMigrate(id: NodeOperatorId) {
-    const [info, curveId] = await Promise.all([
-      this.getInfo(id),
-      this.getCurveId(id),
-    ]);
-    if (info.usedPriorityQueue) return 0;
+  @Cache(CACHE_MID)
+  public async getKeyAllocatedBalances(
+    id: NodeOperatorId,
+    start = 0n,
+    count?: bigint,
+  ): Promise<readonly bigint[]> {
+    if (count === undefined) {
+      const info = await this.getInfo(id);
+      count = BigInt(info.totalAddedKeys) - start;
+    }
 
-    const [{ priority, maxDeposits }, legacyQueue] = await Promise.all([
-      this.bus.parameters.getQueueConfig(curveId),
-      this.moduleContract.read.QUEUE_LEGACY_PRIORITY(),
-    ]);
-
-    if (BigInt(priority) >= legacyQueue) return 0;
-
-    const deposited = info.totalDepositedKeys;
-
-    if (maxDeposits <= deposited) return 0;
-    return Math.min(maxDeposits - deposited, info.enqueuedCount);
+    return this.moduleContract.read.getKeyAllocatedBalances([id, start, count]);
   }
 
   @Logger('Views:')
@@ -126,14 +134,37 @@ export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
   public async getManagementProperties(
     id: NodeOperatorId,
   ): Promise<NodeOperatorShortInfo> {
-    const properties =
-      await this.moduleContract.read.getNodeOperatorManagementProperties([id]);
+    const [properties, curveId] = await Promise.all([
+      this.moduleContract.read.getNodeOperatorManagementProperties([id]),
+      this.getCurveId(id),
+    ]);
 
     return {
       nodeOperatorId: id,
       managerAddress: properties.managerAddress,
       rewardsAddress: properties.rewardAddress,
       extendedManagerPermissions: properties.extendedManagerPermissions,
+      curveId,
     };
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getCustomRewardsClaimer(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<Address> {
+    return this.accountingContract.read.getCustomRewardsClaimer([
+      nodeOperatorId,
+    ]);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getFeeSplits(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<FeeSplit[]> {
+    return this.accountingContract.read.getFeeSplits([
+      nodeOperatorId,
+    ]) as Promise<FeeSplit[]>;
   }
 }

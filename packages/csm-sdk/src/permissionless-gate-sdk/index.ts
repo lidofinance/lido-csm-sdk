@@ -1,2 +1,2 @@
-export * from './permissionless-gate-sdk.js';
-export * from './types.js';
+export * from './permissionless-gate-sdk';
+export * from './types';

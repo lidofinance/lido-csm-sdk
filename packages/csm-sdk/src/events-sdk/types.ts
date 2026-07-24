@@ -1,4 +1,5 @@
-import { BlockNumber, BlockTag } from 'viem';
+import { BlockNumber, BlockTag, Hex } from 'viem';
+import { NodeOperatorId } from '../common/index';
 
 // Events Props
 
@@ -16,3 +17,53 @@ export type OperatorCurveIdChange = {
   curveId: bigint;
   blockNumber: bigint;
 };
+
+// Penalty Records
+
+type PenaltyBase = {
+  nodeOperatorId: NodeOperatorId;
+  blockNumber: bigint;
+  transactionHash: Hex;
+  timestamp: number;
+};
+
+export type PenaltyReported = PenaltyBase & {
+  type: 'reported';
+  amount: bigint;
+  // V2 fields (GeneralDelayedPenalty) — absent for V1 events
+  penaltyType?: Hex;
+  additionalFine?: bigint;
+  details?: string;
+};
+
+export type PenaltyCancelled = PenaltyBase & {
+  type: 'cancelled';
+  amount: bigint;
+};
+
+export type PenaltyCompensated = PenaltyBase & {
+  type: 'compensated';
+  amount: bigint;
+};
+
+export type PenaltySettled = PenaltyBase & {
+  type: 'settled';
+};
+
+export type PenaltyExpiredLockRemoved = PenaltyBase & {
+  type: 'expired';
+};
+
+export type PenaltyRecord =
+  | PenaltyReported
+  | PenaltyCancelled
+  | PenaltyCompensated
+  | PenaltySettled
+  | PenaltyExpiredLockRemoved;
+
+export type PenaltyRecordWithoutTimestamp =
+  | Omit<PenaltyReported, 'timestamp'>
+  | Omit<PenaltyCancelled, 'timestamp'>
+  | Omit<PenaltyCompensated, 'timestamp'>
+  | Omit<PenaltySettled, 'timestamp'>
+  | Omit<PenaltyExpiredLockRemoved, 'timestamp'>;

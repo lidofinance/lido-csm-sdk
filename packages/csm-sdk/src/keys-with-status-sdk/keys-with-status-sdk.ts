@@ -1,32 +1,29 @@
 import { Hex, isAddressEqual } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_MID,
-  CSM_CONTRACT_NAMES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
-} from '../common/index.js';
-import { NodeOperatorId } from '../common/types.js';
-import { fetchJson, isNotUnique, isUnique } from '../common/utils/index.js';
-import { EventsSDK } from '../events-sdk/events-sdk.js';
-import { FrameSDK } from '../frame-sdk/frame-sdk.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { StrikesSDK } from '../strikes-sdk/strikes-sdk.js';
-import { getClUrls, prepareKey } from './cl-chunks.js';
-import { computeStatuses } from './compute-statuses.js';
-import {
-  ClPreparedKey,
-  ClValidatorsResponse,
-  FindKeysResponse,
-  KeyWithStatus,
-} from './types.js';
+  MODULE_NAME,
+} from '../common/index';
+import { NodeOperatorId } from '../common/types';
+import { fetchJson, isNotUnique, isUnique } from '../common/utils/index';
+import { EventsSDK } from '../events-sdk/events-sdk';
+import { FrameSDK } from '../frame-sdk/frame-sdk';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { StrikesSDK } from '../strikes-sdk/strikes-sdk';
+import { getClUrls } from './cl-chunks';
+import { computeStatuses } from './compute-statuses';
+import { ClPreparedKey, parseClResponse } from './parse-cl-response';
+import { resolveEffectiveBalance } from './resolve-effective-balance';
+import { FindKeysResponse, KeyWithStatus } from './types';
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
-  strikes: StrikesSDK;
   frame: FrameSDK;
   events: EventsSDK;
+  strikes?: StrikesSDK;
 }> {
   @Logger('API:')
   @ErrorHandler()
@@ -64,9 +61,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     const keys = await this.getApiKeys(pubkeys);
     if (!keys) return null;
 
-    const csmAddress = this.core.getContractAddress(
-      CSM_CONTRACT_NAMES.csModule,
-    );
+    const moduleAddress = this.core.contractBaseModule.address;
 
     const duplicates = [
       ...keys.map(({ key }) => key).filter(isNotUnique),
@@ -74,7 +69,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         .filter(
           (key) =>
             key.operatorIndex !== Number(nodeOperatorId) ||
-            !isAddressEqual(key.moduleAddress, csmAddress),
+            !isAddressEqual(key.moduleAddress, moduleAddress),
         )
         .map(({ key }) => key),
     ].filter(isUnique);
@@ -92,10 +87,10 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
     const urls = getClUrls(pubkeys, this.core.clApiUrl);
     const results = await Promise.all(
-      urls.map((url) => fetchJson<ClValidatorsResponse>(url)),
+      urls.map((url) => fetchJson(url, undefined, parseClResponse)),
     );
 
-    return results.flatMap(({ data }) => data.map(prepareKey));
+    return results.flat().filter(Boolean);
   }
 
   @Logger('API:')
@@ -111,35 +106,52 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
-    const [info, unboundCount, keys, currentEpoch] = await Promise.all([
-      this.bus.operator.getInfo(id),
-      this.bus.operator.getUnboundKeysCount(id),
-      this.bus.operator.getKeys(id),
-      this.bus.frame.getCurrentEpoch(),
-    ]);
+    const isCM = this.core.moduleName === MODULE_NAME.CM;
+    const hasQueue = this.core.moduleName === MODULE_NAME.CSM;
+
     const [
+      info,
+      unboundCount,
+      keys,
+      currentEpoch,
       withdrawalSubmitted,
       requestedToExit,
+      triggeredEjection,
       duplicates,
       clKeysStatus,
       keysWithStrikes,
     ] = await Promise.all([
+      this.bus.operator.getInfo(id),
+      this.bus.operator.getUnboundKeysCount(id),
+      this.bus.operator.getKeys(id),
+      this.bus.frame.getCurrentEpoch(),
       this.bus.events.getWithdrawalSubmittedKeys(id, {
         maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
       }),
       this.bus.events.getRequestedToExitKeys(id, {
         maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
       }),
+      this.bus.events.getTriggeredEjectionKeys(id, {
+        maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
+      }),
       this.getApiKeysDuplicates(id),
       this.getClKeysStatus(id),
-      this.bus.strikes.getKeysWithStrikes(id),
+      this.bus.strikes?.getKeysWithStrikes(id) ?? Promise.resolve([]),
     ]);
+
+    const allocatedBalances =
+      isCM && keys.length > 0
+        ? await this.bus.operator.getKeyAllocatedBalances(id)
+        : undefined;
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
 
+    const clStatusMap = new Map(clKeysStatus?.map((k) => [k.pubkey, k]));
+    const strikesMap = new Map(keysWithStrikes.map((k) => [k.pubkey, k]));
+
     return keys.map((pubkey, index) => {
-      const prefilled = clKeysStatus?.find((item) => item.pubkey === pubkey);
-      const keyStrikes = keysWithStrikes.find((item) => item.pubkey === pubkey);
+      const prefilled = clStatusMap.get(pubkey);
+      const keyStrikes = strikesMap.get(pubkey);
 
       const statuses = computeStatuses({
         pubkey,
@@ -151,8 +163,16 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         duplicates,
         withdrawalSubmitted,
         requestedToExit,
+        triggeredEjection,
         hasCLStatuses: !!clKeysStatus,
         hasStrikes: !!keyStrikes?.strikes.reduce((a, b) => a + b, 0),
+        hasQueue,
+      });
+
+      const effectiveBalance = resolveEffectiveBalance({
+        statuses,
+        prefilled,
+        allocatedBalance: allocatedBalances?.[index],
       });
 
       return {
@@ -160,6 +180,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         index,
         statuses,
         validatorIndex: prefilled?.validatorIndex,
+        effectiveBalance,
         strikes: keyStrikes?.strikes,
       };
     });

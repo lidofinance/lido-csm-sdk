@@ -3,8 +3,8 @@ import {
   DepositDataKey,
   NodeOperatorId,
   PermitSignatureShort,
-} from '../common/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
+} from '../common/index';
+import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type AddKeysProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
@@ -27,14 +27,7 @@ export type RemoveKeysProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
   startIndex: bigint;
   keysCount: bigint;
-};
-
-export type EjectKeysProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
-  amount: bigint;
-  startIndex: bigint;
-  keysCount: bigint;
-  refundRecipient?: Address;
+  pubkeys?: Hex[];
 };
 
 export type EjectKeysByArrayProps = CommonTransactionProps & {
@@ -42,12 +35,4 @@ export type EjectKeysByArrayProps = CommonTransactionProps & {
   amount: bigint;
   keyIndices: bigint[];
   refundRecipient?: Address;
-};
-
-export type MigrateKeysProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
-};
-
-export type NormalizeQueueProps = CommonTransactionProps & {
-  nodeOperatorId: NodeOperatorId;
 };

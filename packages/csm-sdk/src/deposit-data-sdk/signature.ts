@@ -15,9 +15,9 @@
 import { ByteVectorType, ContainerType, UintBigintType } from '@chainsafe/ssz';
 import bls from 'bls-eth-wasm';
 import { hexToBytes, toHex, type Hex } from 'viem';
-import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
-import { DepositData } from './types.js';
-import { DOMAIN_DEPOSIT, FIXED_FORK_VERSION } from './constants.js';
+import { SUPPORTED_CHAINS } from '../common/index';
+import { DepositData } from './types';
+import { DOMAIN_DEPOSIT, FIXED_FORK_VERSION } from './constants';
 
 /**
  * SSZ Types following Ethereum consensus spec
@@ -85,7 +85,7 @@ const ensureHex = (value: string): Hex => {
  * Get fork version for the chain
  * @throws {Error} If fork version is not found
  */
-const getForkVersion = (chainId: CSM_SUPPORTED_CHAINS): Uint8Array => {
+const getForkVersion = (chainId: SUPPORTED_CHAINS): Uint8Array => {
   const version = FIXED_FORK_VERSION[chainId];
   if (!version) {
     throw new Error(`Fork version not found for chain ${chainId}`);
@@ -186,22 +186,24 @@ const computeDepositMessageRoot = (message: DepositMessage): Uint8Array => {
  */
 export const verifyDepositSignature = async (
   data: DepositData,
-  chainId: CSM_SUPPORTED_CHAINS,
+  chainId: SUPPORTED_CHAINS,
 ): Promise<boolean> => {
   try {
     // Initialize BLS library
     await ensureBLSInit();
 
-    // Parse input data
-    const pubkey = hexToBytes(ensureHex(data.pubkey));
-    const signature = hexToBytes(ensureHex(data.signature));
-    const withdrawalCredentials = hexToBytes(
-      ensureHex(data.withdrawal_credentials),
-    );
+    // Parse input data (fields are already Hex type)
+    const pubkey = hexToBytes(data.pubkey);
+    const signature = hexToBytes(data.signature);
+    const withdrawalCredentials = hexToBytes(data.withdrawal_credentials);
     const amount = BigInt(data.amount);
 
     // Validate input sizes
-    if (pubkey.length !== 48 || signature.length !== 96 || withdrawalCredentials.length !== 32) {
+    if (
+      pubkey.length !== 48 ||
+      signature.length !== 96 ||
+      withdrawalCredentials.length !== 32
+    ) {
       return false;
     }
 
@@ -216,8 +218,10 @@ export const verifyDepositSignature = async (
     const messageRoot = computeDepositMessageRoot(depositMessage);
 
     // Verify deposit_message_root matches
-    const providedMessageRoot = ensureHex(data.deposit_message_root);
-    if (toHex(messageRoot).toLowerCase() !== providedMessageRoot.toLowerCase()) {
+    if (
+      toHex(messageRoot).toLowerCase() !==
+      data.deposit_message_root.toLowerCase()
+    ) {
       return false;
     }
 

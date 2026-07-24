@@ -1,2 +1,2 @@
-export * from './deposit-data-sdk.js';
-export * from './types.js';
+export * from './deposit-data-sdk';
+export * from './types';

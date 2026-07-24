@@ -6,15 +6,17 @@
 
 ## Overview
 
-**Lido CSM SDK** is a TypeScript/JavaScript library that provides a comprehensive set of tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/community-staking-module) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido CSM.
+**Lido CSM SDK** is a TypeScript/JavaScript library that provides comprehensive tools for interacting with [Lido Community Staking Module (CSM)](https://github.com/lidofinance/staking-modules) and Curated Module (CM) contracts on the Ethereum network. The SDK abstracts the complexity of direct contract interaction, offering a modular, extensible, and developer-friendly interface for building applications on top of Lido staking modules.
 
 ## Features
-- Modular SDKs for all major Lido CSM contract domains
-- Unified entry point via the `LidoSDKCsm` class
+- Modular SDKs for all major Lido staking module contract domains
+- Dual SDK classes: `LidoSDKCsm` for CSM and `LidoSDKCm` for Curated Module
 - TypeScript support and type safety
 - Extensible architecture for advanced integrations
 
 ## Installation
+
+Requires **Node.js >= 24**, `@lidofinance/lido-ethereum-sdk >= 4.8.0`, and `viem >= 2.46.0` (peer dependencies).
 
 Install via npm or yarn:
 
@@ -30,46 +32,85 @@ npm install @lidofinance/lido-csm-sdk @lidofinance/lido-ethereum-sdk viem
 
 ## Usage Example
 
+### Community Staking Module (CSM)
+
 ```typescript
 import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 
 const core = new LidoSDKCore({
   // Provide required core properties, e.g. provider, network, etc.
 })
 
-const sdk = new LidoSDKCsm({ core });
+const csmSdk = new LidoSDKCsm({ core });
 
 // Access different modules
-const operatorsCount = await sdk.module.getOperatorsCount();
-const operator = await sdk.operator.getInfo(69n);
+const operatorsCount = await csmSdk.module.getOperatorsCount();
+const operator = await csmSdk.operator.getInfo(69n);
+
+// CSM-specific features
+await csmSdk.permissionlessGate.createNodeOperator(...);
+```
+
+### Curated Module (CM)
+
+```typescript
+import { LidoSDKCm } from '@lidofinance/lido-csm-sdk';
+
+const cmSdk = new LidoSDKCm({ core });
+
+// Access different modules (same interface as CSM)
+const operatorsCount = await cmSdk.module.getOperatorsCount();
+const operator = await cmSdk.operator.getInfo(69n);
+
+// CM-specific features
+await cmSdk.curatedGates.createNodeOperator(gateIndex, proof, ...);
+await cmSdk.metaRegistry.setMetadata({ nodeOperatorId, name, description, account });
 ```
 
 ## SDK Modules
 
-The `LidoSDKCsm` class aggregates the following modules, each responsible for a specific domain of the Lido CSM ecosystem:
+The SDK provides two classes: **`LidoSDKCsm`** for Community Staking Module and **`LidoSDKCm`** for Curated Module. Each class aggregates modules tailored to their specific module type, with many modules shared between both.
 
-- **core**: Core SDK for shared logic, configuration, and utilities.
-- **tx**: Unified transaction handling with multi-wallet support (EOA, multisig, Abstract Accounts), permit/approve flow, and batch operations.
-- **module**: Query CSM status, share limit.
-- **accounting**: Access accounting data such as balances and supply.
-- **parameters**: Read a curve parameters.
-- **frame**: Query protocol frame config and state.
-- **operator**: Query operator data.
-- **rewards**: Query reward distribution and queries.
-- **strikes**: Query operator strikes.
-- **keysWithStatus**: Query operator keys with status tracking.
-- **keys**: Manage operator keys.
-- **keysCache**: Pubkey caching to prevent double-submission with 2-week TTL and manual key management.
-- **bond**: Manage operator bond balance.
-- **roles**: Manage operator roles.
-- **permissionlessGate**: Permissionless entry points for create a new operator.
-- **icsGate**: ICS (Independent Community Staker) vetted entry point for create a new operations with some benefits.
-- **events**: Query protocol events.
-- **depositQueue**: Query deposit queue pointers, batches.
-- **depositData**: Parse and validate deposit data JSON, check for duplicates and previously submitted keys.
-- **stealing**: Manage execution layer rewards stealing penalties - report and cancel penalties.
-- **satellite**: Helper to simplify query operator IDs by address and read deposit queue batches.
-- **feeRecipient**: Manage fee recipient addresses for operators.
+### Shared Modules
+
+These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
+
+- **core**: Core SDK for shared logic, configuration, and utilities
+- **tx**: Unified transaction handling with multi-wallet support (EOA, multisig, Abstract Accounts), permit/approve flow, and batch operations
+- **module**: Query module status, share limit
+- **accounting**: Access accounting data such as balances and supply
+- **parameters**: Read curve parameters
+- **frame**: Query protocol frame config and state
+- **operator**: Query operator data
+- **rewards**: Query reward distribution
+- **keysWithStatus**: Query operator keys with status tracking
+- **keys**: Manage operator keys
+- **keysCache**: Pubkey caching to prevent double-submission with 2-week TTL and manual key management
+- **bond**: Manage operator bond balance
+- **events**: Query protocol events
+- **depositQueue**: Query deposit queue pointers, batches
+- **depositData**: Parse and validate deposit data JSON, check for duplicates and previously submitted keys
+- **feesMonitoring**: Validator fee recipient monitoring and issue detection
+- **discovery**: Operator discovery and pagination using SMDiscovery contract (renamed from satellite-sdk)
+- **delayedPenalty**: General delayed penalty management — report, cancel, and settle delayed penalties (renamed from stealing-sdk, generalized to match contract `GeneralDelayedPenalty` surface)
+
+### CSM-Specific Modules
+
+Only available in `LidoSDKCsm`:
+
+- **strikes**: Query operator penalties
+- **permissionlessGate**: Permissionless entry point for creating new operators
+- **icsGate**: ICS (Independent Community Staker) vetted entry point for creating new operators with benefits
+- **roles**: Standard role management for CSM operators
+
+### CM-Specific Modules
+
+Only available in `LidoSDKCm`:
+
+- **curatedGates**: Collection of curated gates for allowlist-based operator creation using merkle proofs
+- **metaRegistry**: Operator metadata management (name, description) via MetaRegistry contract
+- **roles**: Curated-specific role management (CuratedRolesSDK) with extended functionality
 
 Each module exposes a set of methods tailored to its domain. Refer to the source code or generated API documentation for detailed method signatures and usage.
 
@@ -79,7 +120,7 @@ The SDK is designed for extensibility. You can instantiate individual modules di
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the GPL-3.0-or-later License. See the [LICENSE.txt](LICENSE.txt) file for details.
 
 ## Changelog
 

@@ -1,6 +1,6 @@
-import { CsmSDKCacheable } from '../class-primitives/csm-sdk-cacheable.js';
-import { isBigint } from '../utils/index.js';
-import { callConsoleMessage } from './utils.js';
+import { CsmSDKCacheable } from '../class-primitives/csm-sdk-cacheable';
+import { isBigint } from '../utils/index';
+import { callConsoleMessage } from './utils';
 
 const serializeArgs = (args: any[]) =>
   args
@@ -80,17 +80,12 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         'Cache:',
         `Cache for ${kind} '${methodName}' set.`,
       );
-      const callVersion = isImmutable
-        ? undefined
-        : instance.cacheVersion;
+      const callVersion = isImmutable ? undefined : instance.cacheVersion;
       const result = execute();
       if (result instanceof Promise) {
         const wrapped = result
           .then((resolvedResult) => {
-            if (
-              isImmutable ||
-              cache.get(cacheKey)?.version === callVersion
-            ) {
+            if (isImmutable || cache.get(cacheKey)?.version === callVersion) {
               cache.set(cacheKey, {
                 data: resolvedResult,
                 timestamp: Date.now(),
@@ -100,10 +95,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
             return resolvedResult;
           })
           .catch((error) => {
-            if (
-              isImmutable ||
-              cache.get(cacheKey)?.version === callVersion
-            ) {
+            if (isImmutable || cache.get(cacheKey)?.version === callVersion) {
               cache.delete(cacheKey);
             }
             throw error;

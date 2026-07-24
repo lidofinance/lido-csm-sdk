@@ -1,10 +1,14 @@
-import { callConsoleMessage } from './utils.js';
-import { type HeadMessage } from './types.js';
+import { callConsoleMessage } from './utils';
+import { type HeadMessage } from './types';
 
 export const Logger = function (headMessage: HeadMessage = 'LOG:') {
   return function LoggerDecorator<This, Value>(
-    target: (This extends object ? This[keyof This] : never) | ((this: This, ...args: any[]) => Value),
-    context: ClassMethodDecoratorContext<This, any> | ClassGetterDecoratorContext<This, Value>,
+    target:
+      | (This extends object ? This[keyof This] : never)
+      | ((this: This, ...args: any[]) => Value),
+    context:
+      | ClassMethodDecoratorContext<This, any>
+      | ClassGetterDecoratorContext<This, Value>,
   ) {
     const methodName = String(context.name);
 

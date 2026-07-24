@@ -1,39 +1,59 @@
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   CACHE_LONG,
+  CONTRACT_NAMES,
   DEFAULT_CLEAN_MAX_ITEMS,
-} from '../common/constants/index.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { bigIntRange } from '../common/utils/bigint-range.js';
+} from '../common/constants/index';
 import {
-  byNextBatchIndex,
+  Access,
+  AccessLevel,
+  Cache,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
+import { NodeOperatorId } from '../common/types';
+import { bigIntRange } from '../common/utils/bigint-range';
+import {
+  byTotalCount,
   iteratePages,
-  SatelliteSDK,
-} from '../satellite-sdk/index.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
-import { filterEmptyBatches } from './filter-batches.js';
-import { parseBatch } from './parse-batch.js';
+  onePage,
+  Pagination,
+} from '../discovery-sdk/index';
+import { ModuleSDK } from '../module-sdk/module-sdk';
+import { TxSDK } from '../tx-sdk/index';
+import { CommonTransactionProps } from '../tx-sdk/types';
+import { filterEmptyBatches } from './filter-batches';
+import { byNextBatchIndex } from './next-batch-index';
+import { parseBatch } from './parse-batch';
 import {
   DepositQueueBatch,
   DepositQueuePointer,
+  QueueBatchesPagination,
   RawDepositQueueBatch,
   RawDepositQueueBatchWithIndex,
-} from './types.js';
+} from './types';
 
 export class DepositQueueSDK extends CsmSDKModule<{
   tx: TxSDK;
-  satellite: SatelliteSDK;
+  module: ModuleSDK;
 }> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.getContract(CONTRACT_NAMES.csModule);
+  }
+
+  private get parametersRegistryContract() {
+    return this.core.getContract(CONTRACT_NAMES.parametersRegistry);
+  }
+
+  private get discoveryContract() {
+    return this.core.getContract(CONTRACT_NAMES.smDiscovery);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   @Cache(CACHE_LONG)
   public async getLowestPriorityQueue(): Promise<bigint> {
-    return this.moduleContract.read.QUEUE_LOWEST_PRIORITY();
+    return this.parametersRegistryContract.read.QUEUE_LOWEST_PRIORITY();
   }
 
   @Logger('Views:')
@@ -60,6 +80,43 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  private async getNodeOperatorsDepositableKeysCount(
+    pagination?: Pagination,
+  ): Promise<number[]> {
+    const getNextOffset = pagination
+      ? onePage
+      : byTotalCount(await this.bus.module.getOperatorsCount());
+
+    return iteratePages(
+      (p) =>
+        this.discoveryContract.read.getNodeOperatorsDepositableValidatorsCount([
+          this.core.moduleId,
+          p.offset,
+          p.limit,
+        ]),
+      pagination,
+      getNextOffset,
+    );
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  private async getQueueBatchesPage(
+    queuePriority: number,
+    pagination?: QueueBatchesPagination,
+  ): Promise<bigint[]> {
+    const result = await this.discoveryContract.read.getDepositQueueBatches([
+      this.core.moduleId,
+      BigInt(queuePriority),
+      pagination?.cursorIndex ?? 0n,
+      pagination?.limit ?? 1000n,
+    ]);
+
+    return result as bigint[];
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getBatchInQueue(
     queuePriority: number,
     batchIndex: bigint,
@@ -82,10 +139,10 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
     return iteratePages(
       async ({ offset: cursorIndex, limit }) => {
-        const batches = await this.bus.satellite.getQueueBatchesPage(
-          queuePriority,
-          { cursorIndex, limit },
-        );
+        const batches = await this.getQueueBatchesPage(queuePriority, {
+          cursorIndex,
+          limit,
+        });
         return batches.map(parseBatch);
       },
       undefined,
@@ -105,11 +162,12 @@ export class DepositQueueSDK extends CsmSDKModule<{
     );
 
     const depositableKeysCount =
-      await this.bus.satellite.getNodeOperatorsDepositableKeysCount();
+      await this.getNodeOperatorsDepositableKeysCount();
 
     return filterEmptyBatches(queueBatches, depositableKeysCount);
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async clean(
@@ -122,8 +180,27 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'cleanDepositQueue', [
+        this.moduleContract.encode.cleanDepositQueue([
           BigInt(maxItems ?? DEFAULT_CLEAN_MAX_ITEMS),
+        ]),
+    });
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async normalize(
+    props: CommonTransactionProps & {
+      nodeOperatorId: NodeOperatorId;
+    },
+  ) {
+    const { nodeOperatorId, ...rest } = props;
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        this.moduleContract.encode.updateDepositableValidatorsCount([
+          nodeOperatorId,
         ]),
     });
   }

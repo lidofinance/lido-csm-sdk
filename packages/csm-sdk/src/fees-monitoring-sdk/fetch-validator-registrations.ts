@@ -1,12 +1,12 @@
 import { Hex } from 'viem';
-import { fetchJson } from '../common/utils/fetch-json.js';
-import { API_REQUEST_TIMEOUT, DEFAULT_PAGE_LIMIT } from './constants.js';
+import { fetchJson } from '../common/utils/fetch-json';
+import { API_REQUEST_TIMEOUT, DEFAULT_PAGE_LIMIT } from './constants';
 import {
   CheckOperatorKeysProps,
   ValidatorInfo,
   ValidatorInfoIssues,
   ValidatorRegistrationResponse,
-} from './types.js';
+} from './types';
 
 export const fetchValidatorRegistrations = async (
   baseUrl: string,
@@ -49,6 +49,34 @@ const extractValidators = (
     status: reg.status,
     lastPolledAt: reg.lastPolledAt,
   }));
+};
+
+export const fetchAllValidatorRegistrations = async (
+  baseUrl: string,
+  props: Omit<CheckOperatorKeysProps, 'start'>,
+): Promise<ValidatorInfo[]> => {
+  const { limit = DEFAULT_PAGE_LIMIT, ...rest } = props;
+  const allResults: ValidatorInfo[] = [];
+  let start = 0;
+
+  let hasMore = true;
+  while (hasMore) {
+    const page = await fetchValidatorRegistrations(baseUrl, {
+      ...rest,
+      limit,
+      start,
+    });
+
+    allResults.push(...page);
+
+    if (page.length < limit) {
+      hasMore = false;
+    } else {
+      start += limit;
+    }
+  }
+
+  return allResults;
 };
 
 export const isValidatorWithIssue = (

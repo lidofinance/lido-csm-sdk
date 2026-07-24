@@ -1,33 +1,48 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { ROLES } from '../common/index.js';
-import { OperatorSDK } from '../operator-sdk/operator-sdk.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
+import { CONTRACT_NAMES, ERROR_CODE, ROLES, SDKError } from '../common/index';
+import { parseClaimProps } from '../common/utils/parse-claim-props';
+import { OperatorSDK } from '../operator-sdk/operator-sdk';
+import { TxSDK } from '../tx-sdk/index';
 import {
   ChangeRoleProps,
   ConfirmRoleProps,
   ResetRoleProps,
+  SetCustomClaimerProps,
+  SetFeeSplitsProps,
   WithRole,
-} from './types.js';
+} from './types';
 
 export class RolesSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
 }> {
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
+  private get accountingContract() {
+    return this.core.getContract(CONTRACT_NAMES.accounting);
+  }
+
+  @Access({
+    level: AccessLevel.MANAGER,
+    condition: { extendedManagerPermissions: true },
+  })
   @Logger('Call:')
   @ErrorHandler()
-  public async changeRewardsRole(props: ChangeRoleProps) {
+  public async changeRewardsAddress(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'changeNodeOperatorRewardAddress', [
+        this.moduleContract.encode.changeNodeOperatorRewardAddress([
           nodeOperatorId,
           address,
         ]),
@@ -35,97 +50,99 @@ export class RolesSDK extends CsmSDKModule<{
     });
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
-  public async proposeManagerRole(props: ChangeRoleProps) {
+  public async proposeManagerAddress(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'proposeNodeOperatorManagerAddressChange',
-          [nodeOperatorId, address],
-        ),
+        this.moduleContract.encode.proposeNodeOperatorManagerAddressChange([
+          nodeOperatorId,
+          address,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
+  @Access({ level: AccessLevel.REWARDS })
   @Logger('Call:')
   @ErrorHandler()
-  public async proposeRewardsRole(props: ChangeRoleProps) {
+  public async proposeRewardsAddress(props: ChangeRoleProps) {
     const { nodeOperatorId, address, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'proposeNodeOperatorRewardAddressChange',
-          [nodeOperatorId, address],
-        ),
+        this.moduleContract.encode.proposeNodeOperatorRewardAddressChange([
+          nodeOperatorId,
+          address,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
+  @Access({
+    level: AccessLevel.REWARDS,
+    condition: { extendedManagerPermissions: false },
+  })
   @Logger('Call:')
   @ErrorHandler()
-  public async resetManagerRole(props: ResetRoleProps) {
+  public async resetManagerAddress(props: ResetRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.moduleContract, 'resetNodeOperatorManagerAddress', [
+        this.moduleContract.encode.resetNodeOperatorManagerAddress([
           nodeOperatorId,
         ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
+  @Access({ level: AccessLevel.PROPOSED_REWARDS })
   @Logger('Call:')
   @ErrorHandler()
-  public async confirmRewardsRole(props: ConfirmRoleProps) {
+  public async confirmRewardsAddress(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'confirmNodeOperatorRewardAddressChange',
-          [nodeOperatorId],
-        ),
+        this.moduleContract.encode.confirmNodeOperatorRewardAddressChange([
+          nodeOperatorId,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
+  @Access({ level: AccessLevel.PROPOSED_MANAGER })
   @Logger('Call:')
   @ErrorHandler()
-  public async confirmManagerRole(props: ConfirmRoleProps) {
+  public async confirmManagerAddress(props: ConfirmRoleProps) {
     const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'confirmNodeOperatorManagerAddressChange',
-          [nodeOperatorId],
-        ),
+        this.moduleContract.encode.confirmNodeOperatorManagerAddressChange([
+          nodeOperatorId,
+        ]),
       decodeResult: () => this.prepareRoleResult(nodeOperatorId),
     });
   }
 
-  public async confirmRole(props: WithRole<ConfirmRoleProps>) {
+  public async confirmAddress(props: WithRole<ConfirmRoleProps>) {
     const { role } = props;
 
     switch (role) {
       case ROLES.MANAGER:
-        return this.confirmManagerRole(props);
+        return this.confirmManagerAddress(props);
       case ROLES.REWARDS:
-        return this.confirmRewardsRole(props);
+        return this.confirmRewardsAddress(props);
       default:
         throw new SDKError({
           message: 'unsupported role',
@@ -134,7 +151,46 @@ export class RolesSDK extends CsmSDKModule<{
     }
   }
 
-  private prepareRoleResult(nodeOperatorId: bigint) {
+  protected prepareRoleResult(nodeOperatorId: bigint) {
     return this.bus.operator.getManagementProperties(nodeOperatorId);
+  }
+
+  // Custom Claimer
+
+  @Access({ level: AccessLevel.OWNER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async setCustomRewardsClaimer(props: SetCustomClaimerProps) {
+    const { nodeOperatorId, claimerAddress, ...rest } = props;
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        this.accountingContract.encode.setCustomRewardsClaimer([
+          nodeOperatorId,
+          claimerAddress,
+        ]),
+    });
+  }
+
+  // Fee Splits
+
+  @Access({ level: AccessLevel.OWNER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async setFeeSplits(props: SetFeeSplitsProps) {
+    const { nodeOperatorId, feeSplits, shares, proof, ...rest } =
+      parseClaimProps(props);
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        this.accountingContract.encode.updateFeeSplits([
+          nodeOperatorId,
+          feeSplits,
+          shares,
+          proof,
+        ]),
+    });
   }
 }

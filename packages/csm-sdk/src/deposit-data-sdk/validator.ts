@@ -1,26 +1,28 @@
-import { compareLowercase } from '../common/utils/compare-lowercase.js';
-import { isHexadecimalString, trimHexPrefix } from '../common/utils/index.js';
+import { Hex } from 'viem';
+import { compareLowercase } from '../common/utils/compare-lowercase';
 import {
-  DepositData,
-  DepositDataV1,
-  DepositDataV2,
-  DuplicateProcessingConfig,
-  ValidationProps,
-  ValidationError,
-  ValidationErrorCode,
-  ValidationExtendedProps,
-} from './types.js';
+  isHexadecimalString,
+  toHexString,
+  trimHexPrefix,
+} from '../common/utils/index';
 import {
   DEPOSIT_ROOT_LENGTH,
   FIXED_AMOUNT,
   FIXED_FORK_VERSION,
   FIXED_NETWORK,
-  FIXED_WC_PREFIX,
   PUBKEY_LENGTH,
   SIGNATURE_LENGTH,
   WITHDRAWAL_CREDENTIALS_LENGTH,
-} from './constants.js';
-import { verifyDepositSignature } from './signature.js';
+} from './constants';
+import { verifyDepositSignature } from './signature';
+import {
+  DepositData,
+  DuplicateProcessingConfig,
+  ValidationError,
+  ValidationErrorCode,
+  ValidationExtendedProps,
+  ValidationProps,
+} from './types';
 
 const validateBasicFields = (
   data: DepositData,
@@ -34,7 +36,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'pubkey',
-      message: 'pubkey is not valid string',
+      message: 'pubkey is not a valid hex string',
       code: ValidationErrorCode.INVALID_PUBKEY,
     });
   }
@@ -44,7 +46,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'signature',
-      message: 'signature is not valid string',
+      message: 'signature is not a valid hex string',
       code: ValidationErrorCode.INVALID_SIGNATURE,
     });
   }
@@ -54,7 +56,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'deposit_message_root',
-      message: 'deposit_message_root is not a valid string',
+      message: 'deposit_message_root is not a valid hex string',
       code: ValidationErrorCode.INVALID_DEPOSIT_ROOT,
     });
   }
@@ -64,7 +66,7 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'deposit_data_root',
-      message: 'deposit_data_root is not a valid string',
+      message: 'deposit_data_root is not a valid hex string',
       code: ValidationErrorCode.INVALID_DEPOSIT_ROOT,
     });
   }
@@ -79,25 +81,31 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'withdrawal_credentials',
-      message: 'withdrawal_credentials is not a valid string',
+      message: 'withdrawal_credentials is not a valid hex string',
       code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
     });
-  } else if (
-    !compareLowercase(
-      trimHexPrefix(data.withdrawal_credentials),
-      `${FIXED_WC_PREFIX}${trimHexPrefix(config.withdrawalCredentials)}`,
-    ) &&
-    !compareLowercase(
-      trimHexPrefix(data.withdrawal_credentials),
-      trimHexPrefix(config.withdrawalCredentials),
-    )
-  ) {
-    errors.push({
-      index,
-      field: 'withdrawal_credentials',
-      message: `withdrawal_credentials is not the Lido Withdrawal Vault`,
-      code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
-    });
+  } else {
+    const wcHex = trimHexPrefix(data.withdrawal_credentials);
+    const expectedAddress = trimHexPrefix(config.withdrawalCredentials);
+
+    const wcTypeHex = toHexString(config.wcPrefix.replace(/0+$/, ''));
+    if (!wcHex.toLowerCase().startsWith(config.wcPrefix.toLowerCase())) {
+      errors.push({
+        index,
+        field: 'withdrawal_credentials',
+        message: `wrong key type: only ${wcTypeHex} withdrawal credentials are supported`,
+        code: ValidationErrorCode.UNSUPPORTED_WC_TYPE,
+      });
+    } else if (
+      !compareLowercase(wcHex, `${config.wcPrefix}${expectedAddress}`)
+    ) {
+      errors.push({
+        index,
+        field: 'withdrawal_credentials',
+        message: 'withdrawal_credentials is not the Lido Withdrawal Vault',
+        code: ValidationErrorCode.INVALID_WITHDRAWAL_CREDENTIALS,
+      });
+    }
   }
 
   // Validate amount
@@ -105,29 +113,30 @@ const validateBasicFields = (
     errors.push({
       index,
       field: 'amount',
-      message: 'amount is not equal to 32 eth',
+      message: 'amount is not equal to 32 ETH',
       code: ValidationErrorCode.INVALID_AMOUNT,
     });
   }
 
   // Validate network name
   const requiredNetworkName = FIXED_NETWORK[config.chainId];
-  const networkName =
-    (data as DepositDataV2).network_name ||
-    (data as DepositDataV1).eth2_network_name;
+  const networkName = data.network_name;
 
   if (!(networkName === requiredNetworkName)) {
     errors.push({
       index,
       field: 'network_name',
-      message: `network_name or eth2_network_name is not equal to ${requiredNetworkName}`,
+      message: `network_name is not equal to ${requiredNetworkName}`,
       code: ValidationErrorCode.INVALID_NETWORK,
     });
   }
 
   // Validate fork version
   const forkVersion = FIXED_FORK_VERSION[config.chainId];
-  if (data.fork_version !== forkVersion) {
+  if (
+    data.fork_version !== forkVersion &&
+    data.fork_version !== toHexString(forkVersion)
+  ) {
     errors.push({
       index,
       field: 'fork_version',
@@ -171,7 +180,7 @@ const performBasicValidation = (
   config: ValidationProps,
 ): ValidationError[] => {
   const errors: ValidationError[] = [];
-  const pubkeyMap = new Map<string, number[]>();
+  const pubkeyMap = new Map<Hex, number[]>();
 
   // Single pass: basic validation + duplicate detection
   for (const [i, data] of depositData.entries()) {
@@ -189,7 +198,7 @@ const performBasicValidation = (
     errors.push(...basicErrors);
 
     // Efficient duplicate detection using Map
-    const pubkey = data.pubkey?.toLowerCase();
+    const pubkey = data.pubkey?.toLowerCase() as Hex;
     if (pubkey) {
       processDuplicatePubkey({
         pubkey,
@@ -210,7 +219,12 @@ export const validateDepositData = async (
   const errors = performBasicValidation(depositData, {
     chainId: options.chainId,
     withdrawalCredentials: options.withdrawalCredentials,
+    wcPrefix: options.wcPrefix,
   });
+
+  if (options.skipSignature) {
+    return errors;
+  }
 
   // Parallel signature verification for valid items only
   const signatureVerificationPromises = depositData.map((data, index) => {
@@ -230,21 +244,11 @@ export const validateDepositData = async (
       errors.push({
         index,
         field: 'signature',
-        message: 'invalid signature',
+        message: 'signature failed BLS verification',
         code: ValidationErrorCode.INVALID_BLS_SIGNATURE,
       });
     }
   });
 
   return errors;
-};
-
-/**
- * Quick validation that only checks basic fields without async operations
- */
-export const validateDepositDataSync = (
-  depositData: DepositData[],
-  config: ValidationProps,
-): ValidationError[] => {
-  return performBasicValidation(depositData, config);
 };

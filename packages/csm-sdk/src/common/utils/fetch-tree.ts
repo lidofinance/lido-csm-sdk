@@ -1,7 +1,7 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { StandardMerkleTreeData } from './create-merkle-tree-schema.js';
-import { compareLowercase } from './compare-lowercase.js';
-import { fetchOneOf, ParseFn } from './fetch-json.js';
+import { StandardMerkleTreeData } from './create-merkle-tree-schema';
+import { compareLowercase } from './compare-lowercase';
+import { fetchOneOf, ParseFn } from './fetch-json';
 
 export const parseTree =
   <T extends any[]>(parse: ParseFn<StandardMerkleTreeData<T>> = JSON.parse) =>

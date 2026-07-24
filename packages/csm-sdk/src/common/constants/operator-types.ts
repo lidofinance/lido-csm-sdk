@@ -1,14 +1,70 @@
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { PerSupportedChain } from './supported-chains';
+import { MODULE_NAME, PerModule } from './module-name';
+
 export enum OPERATOR_TYPE {
-  DEF = 'DEF',
-  LEA = 'LEA',
-  ICS = 'ICS',
-  CC = 'CC',
+  CSM_DEF = 'CSM_DEF',
+  CSM_LEA = 'CSM_LEA',
+  CSM_ICS = 'CSM_ICS',
+  CSM_IDVTC = 'CSM_IDVTC',
+  CM_PO = 'CM_PO',
+  CM_PTO = 'CM_PTO',
+  CM_PGO = 'CM_PGO',
+  CM_DO = 'CM_DO',
+  CM_EEO = 'CM_EEO',
+  CM_IODC = 'CM_IODC',
+  CM_IODCP = 'CM_IODCP',
 }
 
-// TODO: read from gates
-export const OPERATOR_TYPE_CURVE_ID = {
-  [OPERATOR_TYPE.DEF]: 0n,
-  [OPERATOR_TYPE.LEA]: 1n,
-  [OPERATOR_TYPE.ICS]: 2n,
-  [OPERATOR_TYPE.CC]: undefined,
-} as const;
+export const OPERATOR_TYPE_MODULE: Record<OPERATOR_TYPE, MODULE_NAME> = {
+  [OPERATOR_TYPE.CSM_DEF]: MODULE_NAME.CSM,
+  [OPERATOR_TYPE.CSM_LEA]: MODULE_NAME.CSM,
+  [OPERATOR_TYPE.CSM_ICS]: MODULE_NAME.CSM,
+  [OPERATOR_TYPE.CSM_IDVTC]: MODULE_NAME.CSM,
+  [OPERATOR_TYPE.CM_PO]: MODULE_NAME.CM,
+  [OPERATOR_TYPE.CM_PTO]: MODULE_NAME.CM,
+  [OPERATOR_TYPE.CM_PGO]: MODULE_NAME.CM,
+  [OPERATOR_TYPE.CM_DO]: MODULE_NAME.CM,
+  [OPERATOR_TYPE.CM_EEO]: MODULE_NAME.CM,
+  [OPERATOR_TYPE.CM_IODC]: MODULE_NAME.CM,
+  [OPERATOR_TYPE.CM_IODCP]: MODULE_NAME.CM,
+};
+
+export const OPERATOR_TYPE_CURVE_ID: PerSupportedChain<
+  PerModule<Partial<Record<OPERATOR_TYPE, bigint>>>
+> = {
+  [CHAINS.Mainnet]: {
+    [MODULE_NAME.CSM]: {
+      [OPERATOR_TYPE.CSM_DEF]: 0n,
+      [OPERATOR_TYPE.CSM_LEA]: 1n,
+      [OPERATOR_TYPE.CSM_ICS]: 2n,
+      [OPERATOR_TYPE.CSM_IDVTC]: 3n,
+    },
+    [MODULE_NAME.CM]: {
+      [OPERATOR_TYPE.CM_PO]: 0n,
+      [OPERATOR_TYPE.CM_PTO]: 1n,
+      [OPERATOR_TYPE.CM_PGO]: 2n,
+      [OPERATOR_TYPE.CM_DO]: 3n,
+      [OPERATOR_TYPE.CM_EEO]: 4n,
+      [OPERATOR_TYPE.CM_IODC]: 5n,
+      [OPERATOR_TYPE.CM_IODCP]: 6n,
+    },
+  },
+  [CHAINS.Hoodi]: {
+    [MODULE_NAME.CSM]: {
+      [OPERATOR_TYPE.CSM_DEF]: 0n,
+      [OPERATOR_TYPE.CSM_LEA]: 1n,
+      [OPERATOR_TYPE.CSM_ICS]: 2n,
+      [OPERATOR_TYPE.CSM_IDVTC]: 4n,
+    },
+    [MODULE_NAME.CM]: {
+      [OPERATOR_TYPE.CM_PO]: 0n,
+      [OPERATOR_TYPE.CM_PTO]: 1n,
+      [OPERATOR_TYPE.CM_PGO]: 2n,
+      [OPERATOR_TYPE.CM_DO]: 3n,
+      [OPERATOR_TYPE.CM_EEO]: 4n,
+      [OPERATOR_TYPE.CM_IODC]: 5n,
+      [OPERATOR_TYPE.CM_IODCP]: 6n,
+    },
+  },
+};

@@ -1,35 +1,30 @@
-import { CSM_SUPPORTED_CHAINS } from '../common/index.js';
+import { Hex } from 'viem';
+import { SUPPORTED_CHAINS } from '../common/index';
 
-export type DepositDataCommon = {
-  pubkey: string;
-  withdrawal_credentials: string;
+export type DepositData = {
+  pubkey: Hex;
+  withdrawal_credentials: Hex;
   amount: number;
-  signature: string;
-  deposit_message_root: string;
-  deposit_data_root: string;
-  fork_version: string;
+  signature: Hex;
+  deposit_message_root: Hex;
+  deposit_data_root: Hex;
+  fork_version: Hex;
+  network_name: string;
   deposit_cli_version: string;
 };
-
-export type DepositDataV2 = DepositDataCommon & {
-  network_name: string;
-};
-
-export type DepositDataV1 = DepositDataCommon & {
-  eth2_network_name: string;
-};
-
-export type DepositData = DepositDataV2 | DepositDataV1;
 
 export enum ValidationErrorCode {
   INVALID_PUBKEY = 'INVALID_PUBKEY',
   INVALID_SIGNATURE = 'INVALID_SIGNATURE',
   INVALID_WITHDRAWAL_CREDENTIALS = 'INVALID_WITHDRAWAL_CREDENTIALS',
+  UNSUPPORTED_WC_TYPE = 'UNSUPPORTED_WC_TYPE',
   INVALID_AMOUNT = 'INVALID_AMOUNT',
   INVALID_NETWORK = 'INVALID_NETWORK',
   INVALID_FORK_VERSION = 'INVALID_FORK_VERSION',
   INVALID_DEPOSIT_ROOT = 'INVALID_DEPOSIT_ROOT',
   DUPLICATE_PUBKEY = 'DUPLICATE_PUBKEY',
+  CACHED_PUBKEY_CONFIRMED = 'CACHED_PUBKEY_CONFIRMED',
+  CACHED_PUBKEY_PENDING = 'CACHED_PUBKEY_PENDING',
   PREVIOUSLY_SUBMITTED = 'PREVIOUSLY_SUBMITTED',
   INVALID_BLS_SIGNATURE = 'INVALID_BLS_SIGNATURE',
   MISSING_FIELD = 'MISSING_FIELD',
@@ -58,17 +53,19 @@ export type ParseResult = {
 };
 
 export type ValidationProps = {
-  chainId: CSM_SUPPORTED_CHAINS;
+  chainId: SUPPORTED_CHAINS;
   withdrawalCredentials: string;
+  wcPrefix: string;
 };
 
 export type ValidationExtendedProps = ValidationProps & {
   currentBlockNumber?: number;
+  skipSignature?: boolean;
 };
 
 export type DuplicateProcessingConfig = {
-  pubkey: string;
+  pubkey: Hex;
   index: number;
-  pubkeyMap: Map<string, number[]>;
+  pubkeyMap: Map<Hex, number[]>;
   errors: ValidationError[];
 };

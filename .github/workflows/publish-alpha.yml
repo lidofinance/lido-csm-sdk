@@ -1,6 +1,9 @@
 name: Publish Beta version to registry
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'develop'
 
 permissions:
   contents: write # to be able to publish a GitHub release
@@ -29,7 +32,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: 'yarn'
 
       - name: Install dependencies

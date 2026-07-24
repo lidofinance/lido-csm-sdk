@@ -1,8 +1,4 @@
-import {
-  AccountValue,
-  PerformTransactionGasLimit,
-  PerformTransactionSendTransaction,
-} from '@lidofinance/lido-ethereum-sdk';
+import { AccountValue } from '@lidofinance/lido-ethereum-sdk';
 import type {
   Address,
   Hash,
@@ -11,10 +7,7 @@ import type {
   WaitForTransactionReceiptParameters,
   WalletCallReceipt,
 } from 'viem';
-import { Erc20Tokens, PermitSignatureShort } from '../common/index.js';
-
-// Re-export types from lido-ethereum-sdk for convenience
-export type { PerformTransactionGasLimit, PerformTransactionSendTransaction };
+import { Erc20Tokens, PermitSignatureShort, SDKError } from '../common/index';
 
 // Core Transaction Props
 
@@ -87,7 +80,7 @@ export type TransactionCallbackProps<TDecodedResult = undefined> =
   | { stage: TransactionCallbackStage.MULTISIG_DONE; payload?: undefined }
   | {
       stage: TransactionCallbackStage.ERROR;
-      payload: { error: any }; // SDKError
+      payload: { error: SDKError };
     };
 
 export type TransactionCallback<TDecodedResult = undefined> = (
@@ -137,3 +130,8 @@ export type PerformOptionsSpend<TDecodedResult = undefined> =
 export type PerformOptions<TDecodedResult = undefined> =
   | PerformOptionsNoSpend<TDecodedResult>
   | PerformOptionsSpend<TDecodedResult>;
+
+export {
+  type PerformTransactionGasLimit,
+  type PerformTransactionSendTransaction,
+} from '@lidofinance/lido-ethereum-sdk';

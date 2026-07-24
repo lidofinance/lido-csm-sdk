@@ -1,36 +1,31 @@
 import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache } from '../common/decorators/cache.js';
-import { ErrorHandler } from '../common/decorators/error-handler.js';
-import { Logger } from '../common/decorators/logger.js';
-import {
-  CACHE_LONG,
-  CACHE_MID,
-  CSM_CONTRACT_NAMES,
-  TOKENS,
-} from '../common/index.js';
-import { convertEthToShares, convertSharesToEth } from './convert-shares.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache } from '../common/decorators/cache';
+import { ErrorHandler } from '../common/decorators/error-handler';
+import { Logger } from '../common/decorators/logger';
+import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES, TOKENS } from '../common/index';
+import { convertEthToShares, convertSharesToEth } from './convert-shares';
 import {
   AmountByKeys,
   BondAmountByKeysCountProps,
   BondForNextKeysProps,
   KeysCountByBondAmountProps,
   StethPoolData,
-} from './types.js';
+} from './types';
 
 export class AccountingSDK extends CsmSDKModule {
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   @Cache(CACHE_LONG)
   private get stethContract() {
-    return this.core.getContract(CSM_CONTRACT_NAMES.stETH, stethSharesAbi);
+    return this.core.getContractWithAbi(CONTRACT_NAMES.stETH, stethSharesAbi);
   }
 
   @Logger('Views:')
-  @Cache(CACHE_MID)
   @ErrorHandler()
+  @Cache(CACHE_MID)
   public async getStethPoolData(blockNumber?: bigint): Promise<StethPoolData> {
     const effectiveBlockNumber = this.core.skipHistoricalCalls
       ? undefined
@@ -119,12 +114,6 @@ export class AccountingSDK extends CsmSDKModule {
       [TOKENS.steth]: eth,
       [TOKENS.wsteth]: wsteth,
     };
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async getCurve(curveId: bigint) {
-    return this.accountingContract.read.getCurveInfo([curveId]);
   }
 
   @Logger('Views:')

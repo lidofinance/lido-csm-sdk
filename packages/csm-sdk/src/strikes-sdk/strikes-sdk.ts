@@ -1,19 +1,20 @@
 import { Hex } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index.js';
-import { CACHE_LONG, NodeOperatorId, Proof } from '../common/index.js';
-import { fetchTree, isDefined, onError } from '../common/utils/index.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  filterLeafsByNodeOperator,
-  findLeaf,
-  findProof,
-} from './find-proof.js';
-import { parseStrikesTree } from './parse-tree.js';
-import { KeyWithStrikes, StrikesTreeLeaf } from './types.js';
+  CACHE_LONG,
+  CONTRACT_NAMES,
+  NodeOperatorId,
+  Proof,
+} from '../common/index';
+import { fetchTree, isDefined, onError } from '../common/utils/index';
+import { filterLeafsByNodeOperator, findLeaf, findProof } from './find-proof';
+import { parseStrikesTree } from './parse-tree';
+import { KeyWithStrikes, StrikesTreeLeaf } from './types';
 
 export class StrikesSDK extends CsmSDKModule {
   private get strikesContract() {
-    return this.core.contractCSStrikes;
+    return this.core.getContract(CONTRACT_NAMES.validatorStrikes);
   }
 
   @Logger('Views:')

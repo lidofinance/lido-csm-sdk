@@ -1,35 +1,49 @@
-import { ERROR_CODE, SDKError } from '@lidofinance/lido-ethereum-sdk';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module.js';
-import { ErrorHandler, Logger } from '../common/decorators/index.js';
-import { NodeOperatorId, TOKENS, WithToken } from '../common/index.js';
-import { prepCall, TxSDK } from '../tx-sdk/index.js';
-import { parseClaimProps } from './parse-claim-props.js';
-import { parseCoverReceiptEvents } from './parse-cover-receipt-events.js';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
+import {
+  Access,
+  AccessLevel,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
+import {
+  CONTRACT_NAMES,
+  ERROR_CODE,
+  NodeOperatorId,
+  SDKError,
+  TOKENS,
+  WithToken,
+} from '../common/index';
+import { parseClaimProps } from '../common/utils/parse-claim-props';
+import { TxSDK } from '../tx-sdk/index';
+import { parseCoverReceiptEvents } from './parse-cover-receipt-events';
 import {
   AddBondProps,
   AddBondResult,
   ClaimBondProps,
-  CoverLockedBondProps,
+  CompensateLockedBondProps,
   PullRewardsProps,
-} from './types.js';
+  UnlockExpiredLockProps,
+} from './types';
 
 export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
   private get accountingContract() {
-    return this.core.contractCSAccounting;
+    return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
   private get moduleContract() {
-    return this.core.contractCSModule;
+    return this.core.contractBaseModule;
   }
 
   @Logger('Views:')
   @ErrorHandler()
   private async getBondSummary(id: NodeOperatorId): Promise<AddBondResult> {
+    // TODO: review for CM
     const [current, required] =
       await this.accountingContract.read.getBondSummary([id]);
     return { current, required };
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addBondETH(props: AddBondProps) {
@@ -38,16 +52,14 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.accountingContract,
-          'depositETH',
-          [nodeOperatorId],
-          amount,
-        ),
+        this.accountingContract.encode.depositETH([nodeOperatorId], {
+          value: amount,
+        }),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addBondStETH(props: AddBondProps) {
@@ -57,7 +69,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
-        prepCall(this.accountingContract, 'depositStETH', [
+        this.accountingContract.encode.depositStETH([
           nodeOperatorId,
           amount,
           permit,
@@ -66,6 +78,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async addBondWstETH(props: AddBondProps) {
@@ -75,7 +88,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
-        prepCall(this.accountingContract, 'depositWstETH', [
+        this.accountingContract.encode.depositWstETH([
           nodeOperatorId,
           amount,
           permit,
@@ -84,6 +97,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
   public async addBond(props: WithToken<AddBondProps>) {
     const { token } = props;
     switch (token) {
@@ -101,24 +115,36 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     }
   }
 
+  @Access({ level: AccessLevel.MANAGER })
   @Logger('Call:')
   @ErrorHandler()
-  public async coverLockedBond(props: CoverLockedBondProps) {
-    const { nodeOperatorId, amount, ...rest } = props;
+  public async compensateLockedBond(props: CompensateLockedBondProps) {
+    const { nodeOperatorId, ...rest } = props;
 
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(
-          this.moduleContract,
-          'compensateELRewardsStealingPenalty',
-          [nodeOperatorId],
-          amount,
-        ),
+        this.moduleContract.encode.compensateGeneralDelayedPenalty([
+          nodeOperatorId,
+        ]),
       decodeResult: (receipt) => parseCoverReceiptEvents(receipt),
     });
   }
 
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async unlockExpiredLock(props: UnlockExpiredLockProps) {
+    const { nodeOperatorId, ...rest } = props;
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        this.accountingContract.encode.unlockExpiredLock([nodeOperatorId]),
+    });
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
   @Logger('Call:')
   @ErrorHandler()
   public async pullRewards(props: PullRewardsProps) {
@@ -127,7 +153,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'pullFeeRewards', [
+        this.accountingContract.encode.pullAndSplitFeeRewards([
           nodeOperatorId,
           shares,
           proof,
@@ -135,6 +161,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimBondUnstETH(props: ClaimBondProps) {
@@ -144,7 +171,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'claimRewardsUnstETH', [
+        this.accountingContract.encode.claimRewardsUnstETH([
           nodeOperatorId,
           amount,
           shares,
@@ -153,6 +180,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimBondStETH(props: ClaimBondProps) {
@@ -162,7 +190,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'claimRewardsStETH', [
+        this.accountingContract.encode.claimRewardsStETH([
           nodeOperatorId,
           amount,
           shares,
@@ -171,6 +199,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimBondWstETH(props: ClaimBondProps) {
@@ -180,7 +209,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return this.bus.tx.perform({
       ...rest,
       call: () =>
-        prepCall(this.accountingContract, 'claimRewardsWstETH', [
+        this.accountingContract.encode.claimRewardsWstETH([
           nodeOperatorId,
           amount,
           shares,
@@ -189,6 +218,7 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     });
   }
 
+  @Access({ level: AccessLevel.CLAIMER })
   public async claimBond(props: WithToken<ClaimBondProps>) {
     const { token, amount } = props;
 

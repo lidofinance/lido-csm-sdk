@@ -1,47 +1,34 @@
 import {
-  ERROR_CODE,
-  invariant,
+  getEncodableContract,
   LidoSDKCore,
 } from '@lidofinance/lido-ethereum-sdk';
+import { Abi, Address, Chain, getContract } from 'viem';
+import { BaseModuleAbi, VersionCheckAbi } from '../abi/index';
+import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
+import { Cache, Logger } from '../common/decorators/index';
 import {
-  Abi,
-  Address,
-  Chain,
-  getContract,
-  GetContractReturnType,
-  WalletClient,
-} from 'viem';
-import {
-  CSAccountingAbi,
-  CSEjectorAbi,
-  CSExitPenaltiesAbi,
-  CSFeeDistributorAbi,
-  CSFeeOracleAbi,
-  CSModuleAbi,
-  CSMSatelliteAbi,
-  CSParametersRegistryAbi,
-  CSStrikesAbi,
-  HashConsensusAbi,
-  PermissionlessGateAbi,
-  StakingRouterAbi,
-  ValidatorsExitBusOracleAbi,
-  VettedGateAbi,
-  WithdrawalVaultAbi,
-} from '../abi/index.js';
-import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable.js';
-import { Cache, Logger } from '../common/decorators/index.js';
-import {
+  API_NAME,
+  API_URLS,
   CACHE_IMMUTABLE,
-  CSM_CONTRACT_ADDRESSES,
-  CSM_CONTRACT_NAMES,
-  CSM_SUPPORTED_CHAINS,
-  DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN,
-  Erc20Tokens,
-  EXTERNAL_LINKS,
-  LINK_TYPE,
-  MODULE_ID_BY_CHAIN,
-} from '../common/index.js';
-import { CSM_ADDRESSES, CsmCoreProps } from './types.js';
+  CONTRACT_BASE_ABI,
+  CONTRACT_NAMES,
+  DEFAULT_IPFS_GATEWAYS,
+  ERROR_CODE,
+  invariant,
+  MERKLE_TREE_FALLBACKS,
+  MODULE_CONTRACT,
+  MODULE_NAME,
+  SUPPORTED_CHAINS,
+  SUPPORTED_CONTRACT_VERSIONS,
+} from '../common/index';
+import { isValidIpfsCid } from '../common/utils/index';
+import { onVersionError } from '../common/utils/on-error';
+import {
+  BindedContract,
+  ContractAddresses,
+  CoreProps,
+  VersionCheckResult,
+} from './types';
 
 export class CoreSDK extends CsmSDKCacheable {
   private _cacheVersion = 0;
@@ -51,26 +38,34 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   readonly core: LidoSDKCore;
-  readonly overridedAddresses?: CSM_ADDRESSES;
+  readonly contractAddresses: ContractAddresses;
+  readonly moduleId: bigint;
+  readonly deploymentBlockNumber: bigint;
   readonly clApiUrl?: string;
   readonly keysApiUrl?: string;
   readonly feesMonitoringApiUrl?: string;
   readonly maxEventBlocksRange?: number;
   readonly skipHistoricalCalls: boolean;
+  readonly moduleName: MODULE_NAME;
+  readonly ipfsGateways: string[];
 
-  constructor(props: CsmCoreProps) {
+  constructor(props: CoreProps) {
     super();
     this.core = props.core;
-    this.overridedAddresses = props.overridedAddresses;
+    this.contractAddresses = props.contractAddresses;
+    this.moduleId = props.moduleId;
     this.clApiUrl = props.clApiUrl;
     this.keysApiUrl = props.keysApiUrl;
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
+    this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
+    this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
+    this.ipfsGateways = props.ipfsGateways ?? [];
   }
 
-  public get chainId(): CSM_SUPPORTED_CHAINS {
-    return this.core.chain.id as CSM_SUPPORTED_CHAINS;
+  public get chainId(): SUPPORTED_CHAINS {
+    return this.core.chain.id as SUPPORTED_CHAINS;
   }
 
   public get chain(): Chain {
@@ -82,229 +77,111 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public get publicClient() {
-    return this.core.rpcProvider;
+    return this.core.publicClient;
   }
 
   public get walletClient() {
-    return this.core.useWeb3Provider();
+    return this.core.useWalletClient();
+  }
+
+  public get moduleContract() {
+    return MODULE_CONTRACT[this.moduleName];
   }
 
   @Logger('Utils:')
   @Cache(CACHE_IMMUTABLE)
-  public getContractAddress(
-    contract: CSM_CONTRACT_NAMES | Erc20Tokens,
-  ): Address {
-    const address =
-      this.overridedAddresses?.[contract] ??
-      CSM_CONTRACT_ADDRESSES[this.chainId]?.[contract];
+  public getContractAddress(contract: CONTRACT_NAMES): Address {
+    const address = this.contractAddresses[contract];
     invariant(
       address,
-      `CSM contract [${contract}] are not supported for ${this.core.chain.name}(${this.core.chain.id})`,
+      `Contract [${contract}] not configured`,
       ERROR_CODE.NOT_SUPPORTED,
     );
     return address;
   }
 
-  public getContract<TAbi extends Abi>(
-    contractName: CSM_CONTRACT_NAMES | Erc20Tokens,
+  @Logger('Utils:')
+  public getContractNameByAddress(
+    address: Address,
+  ): CONTRACT_NAMES | undefined {
+    const normalizedAddress = address.toLowerCase();
+    return Object.entries(this.contractAddresses).find(
+      ([_, addr]) => addr?.toLowerCase() === normalizedAddress,
+    )?.[0] as CONTRACT_NAMES | undefined;
+  }
+
+  @Logger('Contracts:')
+  @Cache(CACHE_IMMUTABLE)
+  public getContractWithAbi<TAbi extends Abi>(
+    contractName: CONTRACT_NAMES,
     abi: TAbi,
-  ): GetContractReturnType<TAbi, WalletClient> {
-    return getContract({
-      address: this.getContractAddress(contractName),
-      abi,
-      client: {
-        public: this.publicClient,
-        wallet: this.core.web3Provider as WalletClient,
-      },
-    });
+  ): BindedContract<TAbi> {
+    return getEncodableContract(
+      getContract({
+        address: this.getContractAddress(contractName),
+        abi,
+        client: this.core.keyedClient,
+      }),
+    ) as BindedContract<TAbi>;
   }
 
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSAccounting(): GetContractReturnType<
-    typeof CSAccountingAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.csAccounting, CSAccountingAbi);
+  public getContract<TName extends keyof typeof CONTRACT_BASE_ABI>(
+    contractName: TName,
+  ): BindedContract<(typeof CONTRACT_BASE_ABI)[TName]> {
+    const abi = CONTRACT_BASE_ABI[contractName];
+    return this.getContractWithAbi(contractName as any, abi as any) as any;
   }
 
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSEjector(): GetContractReturnType<
-    typeof CSEjectorAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.csEjector, CSEjectorAbi);
+  public get contractBaseModule(): BindedContract<typeof BaseModuleAbi> {
+    return this.getContractWithAbi(this.moduleContract, BaseModuleAbi);
   }
 
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSFeeDistributor(): GetContractReturnType<
-    typeof CSFeeDistributorAbi,
-    WalletClient
-  > {
-    return this.getContract(
-      CSM_CONTRACT_NAMES.csFeeDistributor,
-      CSFeeDistributorAbi,
-    );
+  public get merkleTreeFallbacks() {
+    return MERKLE_TREE_FALLBACKS[this.moduleName][this.chainId];
   }
 
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSFeeOracle(): GetContractReturnType<
-    typeof CSFeeOracleAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.csFeeOracle, CSFeeOracleAbi);
+  public get apiUrls() {
+    return API_URLS[this.chainId];
   }
 
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSModule(): GetContractReturnType<
-    typeof CSModuleAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.csModule, CSModuleAbi);
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSParametersRegistry(): GetContractReturnType<
-    typeof CSParametersRegistryAbi,
-    WalletClient
-  > {
-    return this.getContract(
-      CSM_CONTRACT_NAMES.csParametersRegistry,
-      CSParametersRegistryAbi,
-    );
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSStrikes(): GetContractReturnType<
-    typeof CSStrikesAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.csStrikes, CSStrikesAbi);
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSExitPenalties(): GetContractReturnType<
-    typeof CSExitPenaltiesAbi,
-    WalletClient
-  > {
-    return this.getContract(
-      CSM_CONTRACT_NAMES.csExitPenalties,
-      CSExitPenaltiesAbi,
-    );
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractHashConsensus(): GetContractReturnType<
-    typeof HashConsensusAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.hashConsensus, HashConsensusAbi);
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractPermissionlessGate(): GetContractReturnType<
-    typeof PermissionlessGateAbi,
-    WalletClient
-  > {
-    return this.getContract(
-      CSM_CONTRACT_NAMES.permissionlessGate,
-      PermissionlessGateAbi,
-    );
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractVettedGate(): GetContractReturnType<
-    typeof VettedGateAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.vettedGate, VettedGateAbi);
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractStakingRouter(): GetContractReturnType<
-    typeof StakingRouterAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.stakingRouter, StakingRouterAbi);
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractValidatorsExitBusOracle(): GetContractReturnType<
-    typeof ValidatorsExitBusOracleAbi,
-    WalletClient
-  > {
-    return this.getContract(
-      CSM_CONTRACT_NAMES.validatorsExitBusOracle,
-      ValidatorsExitBusOracleAbi,
-    );
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractWithdrawalVault(): GetContractReturnType<
-    typeof WithdrawalVaultAbi,
-    WalletClient
-  > {
-    return this.getContract(
-      CSM_CONTRACT_NAMES.withdrawalVault,
-      WithdrawalVaultAbi,
-    );
-  }
-
-  @Logger('Contracts:')
-  @Cache(CACHE_IMMUTABLE)
-  get contractCSMSatellite(): GetContractReturnType<
-    typeof CSMSatelliteAbi,
-    WalletClient
-  > {
-    return this.getContract(CSM_CONTRACT_NAMES.CSMSatellite, CSMSatelliteAbi);
-  }
-
-  public get moduleId(): number {
-    return MODULE_ID_BY_CHAIN[this.chainId];
-  }
-
-  public get deploymentBlockNumber(): bigint {
-    return DEPLOYMENT_BLOCK_NUMBER_BY_CHAIN[this.chainId];
-  }
-
-  public get externalLinks() {
-    return EXTERNAL_LINKS[this.chainId];
-  }
-
-  public getExternalLink(type: LINK_TYPE) {
-    return this.externalLinks[type];
+  public getMerkleTreeFallback(
+    contractName: CONTRACT_NAMES,
+  ): string | undefined {
+    return this.merkleTreeFallbacks[contractName];
   }
 
   public get keysApiLink() {
-    return this.keysApiUrl ?? this.getExternalLink(LINK_TYPE.keysApi);
-  }
-
-  public get rewardsTreeLink() {
-    return this.getExternalLink(LINK_TYPE.rewardsTree);
-  }
-
-  public get icsTreeLink() {
-    return this.getExternalLink(LINK_TYPE.icsTree);
+    return this.keysApiUrl ?? this.apiUrls[API_NAME.keys];
   }
 
   public get feesMonitoringApiLink() {
-    return (
-      this.feesMonitoringApiUrl ??
-      this.getExternalLink(LINK_TYPE.feesMonitoringApi)
-    );
+    return this.feesMonitoringApiUrl ?? this.apiUrls[API_NAME.feesMonitoring];
+  }
+
+  @Logger('Utils:')
+  public async checkContractVersion(
+    contractName: CONTRACT_NAMES,
+  ): Promise<VersionCheckResult> {
+    const versionRange = SUPPORTED_CONTRACT_VERSIONS[contractName];
+    if (!versionRange) {
+      return { version: 0n, supported: true };
+    }
+
+    let actualVersion: bigint;
+    try {
+      actualVersion = await this.getContractWithAbi(
+        contractName,
+        VersionCheckAbi,
+      ).read.getInitializedVersion();
+    } catch (error) {
+      actualVersion = onVersionError(error);
+    }
+
+    const [min, max] = versionRange;
+    return {
+      version: actualVersion,
+      supported: actualVersion >= min && actualVersion <= max,
+    };
   }
 
   public invalidateCache() {
@@ -312,9 +189,14 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public getIpfsUrls(cid: string): string[] {
-    return [
-      `https://ipfs.io/ipfs/${cid}`,
-      `https://gateway.pinata.cloud/ipfs/${cid}`,
-    ];
+    if (!isValidIpfsCid(cid)) return [];
+
+    const gateways = [...this.ipfsGateways, ...DEFAULT_IPFS_GATEWAYS];
+
+    return gateways.map((gateway) =>
+      gateway.includes('{cid}')
+        ? gateway.replace('{cid}', cid)
+        : `${gateway}${cid}`,
+    );
   }
 }

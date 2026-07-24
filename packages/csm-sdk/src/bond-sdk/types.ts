@@ -2,8 +2,8 @@ import {
   NodeOperatorId,
   PermitSignatureShort,
   RewardProof,
-} from '../common/index.js';
-import { CommonTransactionProps } from '../tx-sdk/types.js';
+} from '../common/index';
+import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type AddBondResult = {
   current: bigint;
@@ -16,9 +16,8 @@ export type AddBondProps = CommonTransactionProps<AddBondResult> & {
   permit?: PermitSignatureShort;
 };
 
-export type CoverLockedBondProps = CommonTransactionProps<bigint> & {
+export type CompensateLockedBondProps = CommonTransactionProps<bigint> & {
   nodeOperatorId: NodeOperatorId;
-  amount: bigint;
 };
 
 export type ClaimBondProps = CommonTransactionProps &
@@ -28,3 +27,7 @@ export type ClaimBondProps = CommonTransactionProps &
   };
 
 export type PullRewardsProps = Omit<ClaimBondProps, 'amount'>;
+
+export type UnlockExpiredLockProps = CommonTransactionProps & {
+  nodeOperatorId: NodeOperatorId;
+};
