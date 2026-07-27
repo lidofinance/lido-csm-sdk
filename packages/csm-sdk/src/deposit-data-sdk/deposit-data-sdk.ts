@@ -44,6 +44,7 @@ export class DepositDataSDK extends CsmSDKModule<{
   }
 
   @Logger('Utils:')
+  @ErrorHandler()
   public async validateDepositData(
     depositData: DepositData[],
     options?: { skipPending?: boolean; skipSignature?: boolean },

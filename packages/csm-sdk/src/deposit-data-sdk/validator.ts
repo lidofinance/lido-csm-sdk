@@ -1,4 +1,5 @@
 import { Hex } from 'viem';
+import { chunkArray } from '../common/utils/chunk-array';
 import { compareLowercase } from '../common/utils/compare-lowercase';
 import {
   isHexadecimalString,
@@ -6,6 +7,7 @@ import {
   trimHexPrefix,
 } from '../common/utils/index';
 import {
+  BLS_VERIFICATION_CHUNK_SIZE,
   DEPOSIT_ROOT_LENGTH,
   FIXED_AMOUNT,
   FIXED_FORK_VERSION,
@@ -226,29 +228,55 @@ export const validateDepositData = async (
     return errors;
   }
 
-  // Parallel signature verification for valid items only
-  const signatureVerificationPromises = depositData.map((data, index) => {
-    if (!data) {
-      return Promise.resolve({ index, isValid: false });
-    }
-    return verifyDepositSignature(data, options.chainId)
-      .then((isValid) => ({ index, isValid }))
-      .catch(() => ({ index, isValid: false }));
-  });
+  // Items that already failed basic validation are skipped: their fields
+  // can't be trusted to build a meaningful signing root, and re-verifying
+  // them wastes BLS cycles for a result that's already invalid.
+  const invalidIndices = new Set(errors.map((e) => e.index));
+  const itemsToVerify = depositData
+    .map((data, index) => ({ data, index }))
+    .filter(
+      (item): item is { data: DepositData; index: number } =>
+        !!item.data && !invalidIndices.has(item.index),
+    );
 
-  const signatureResults = await Promise.all(signatureVerificationPromises);
+  const chunks = chunkArray(itemsToVerify, BLS_VERIFICATION_CHUNK_SIZE);
 
-  // Process signature verification results
-  signatureResults.forEach(({ index, isValid }) => {
-    if (!isValid) {
-      errors.push({
-        index,
-        field: 'signature',
-        message: 'signature failed BLS verification',
-        code: ValidationErrorCode.INVALID_BLS_SIGNATURE,
-      });
+  for (const [chunkIndex, chunk] of chunks.entries()) {
+    // A rejected verifyDepositSignature means BLS verification couldn't run
+    // at all (e.g. WASM init/verify throwing in a CSP-restricted browser) —
+    // the item's data may well be fine, so it's reported per-item as
+    // BLS_VERIFICATION_UNAVAILABLE rather than rejecting the whole batch.
+    const signatureResults = await Promise.all(
+      chunk.map(({ data, index }) =>
+        verifyDepositSignature(data, options.chainId).then(
+          (isValid) => ({ index, isValid, unavailable: false }),
+          () => ({ index, isValid: false, unavailable: true }),
+        ),
+      ),
+    );
+
+    signatureResults.forEach(({ index, isValid, unavailable }) => {
+      if (unavailable) {
+        errors.push({
+          index,
+          field: 'signature',
+          message: 'BLS signature verification is unavailable',
+          code: ValidationErrorCode.BLS_VERIFICATION_UNAVAILABLE,
+        });
+      } else if (!isValid) {
+        errors.push({
+          index,
+          field: 'signature',
+          message: 'signature failed BLS verification',
+          code: ValidationErrorCode.INVALID_BLS_SIGNATURE,
+        });
+      }
+    });
+
+    if (chunkIndex < chunks.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 0));
     }
-  });
+  }
 
   return errors;
 };
