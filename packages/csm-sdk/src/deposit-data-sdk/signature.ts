@@ -64,15 +64,19 @@ type SigningData = {
 
 /**
  * BLS initialization
+ *
+ * Memoized so concurrent verifications share a single `bls.init()` call —
+ * `bls.init()` has no internal guard and allocates a fresh, non-growable WASM
+ * memory on every call, so firing it once per item in a batch OOMs. The memo
+ * resets on rejection so a transient init failure can be retried.
  */
-let blsInitialized = false;
+let blsInitPromise: Promise<void> | undefined;
 
-const ensureBLSInit = async (): Promise<void> => {
-  if (!blsInitialized) {
-    await bls.init(bls.BLS12_381);
-    blsInitialized = true;
-  }
-};
+const ensureBLSInit = (): Promise<void> =>
+  (blsInitPromise ??= bls.init(bls.BLS12_381).catch((error) => {
+    blsInitPromise = undefined;
+    throw error;
+  }));
 
 /**
  * Helper to ensure hex strings have 0x prefix
@@ -178,6 +182,13 @@ const computeDepositMessageRoot = (message: DepositMessage): Uint8Array => {
  * @param chainId - Chain ID (mainnet or testnet)
  * @returns Promise<boolean> - True if signature is valid
  *
+ * Returns `false` only for genuinely invalid deposit data (malformed hex,
+ * undeserializable curve points, mismatched deposit_message_root). Throws on
+ * infrastructure failures (WASM init, verify-time throws, unexpected library
+ * errors) instead of misreporting them as an invalid signature — callers are
+ * expected to handle the rejection per-item (`validateDepositData` maps it to
+ * `BLS_VERIFICATION_UNAVAILABLE`).
+ *
  * @example
  * const isValid = await verifyDepositSignature(depositData, CHAINS.Mainnet);
  * if (!isValid) {
@@ -188,15 +199,19 @@ export const verifyDepositSignature = async (
   data: DepositData,
   chainId: SUPPORTED_CHAINS,
 ): Promise<boolean> => {
-  try {
-    // Initialize BLS library
-    await ensureBLSInit();
+  await ensureBLSInit();
 
+  let pubkey: Uint8Array;
+  let signature: Uint8Array;
+  let withdrawalCredentials: Uint8Array;
+  let amount: bigint;
+
+  try {
     // Parse input data (fields are already Hex type)
-    const pubkey = hexToBytes(data.pubkey);
-    const signature = hexToBytes(data.signature);
-    const withdrawalCredentials = hexToBytes(data.withdrawal_credentials);
-    const amount = BigInt(data.amount);
+    pubkey = hexToBytes(data.pubkey);
+    signature = hexToBytes(data.signature);
+    withdrawalCredentials = hexToBytes(data.withdrawal_credentials);
+    amount = BigInt(data.amount);
 
     // Validate input sizes
     if (
@@ -206,52 +221,63 @@ export const verifyDepositSignature = async (
     ) {
       return false;
     }
-
-    // Build DepositMessage
-    const depositMessage: DepositMessage = {
-      pubkey,
-      withdrawal_credentials: withdrawalCredentials,
-      amount,
-    };
-
-    // Step 1: Compute deposit message root
-    const messageRoot = computeDepositMessageRoot(depositMessage);
-
-    // Verify deposit_message_root matches
-    if (
-      toHex(messageRoot).toLowerCase() !==
-      data.deposit_message_root.toLowerCase()
-    ) {
-      return false;
-    }
-
-    // Step 2: Get chain-specific parameters
-    const forkVersion = getForkVersion(chainId);
-    // IMPORTANT: Per Ethereum spec, deposit signatures use ZERO genesis_validators_root
-    // "The sole exception to the mixing-in of the fork version is signatures on deposits"
-    // Reference: staking-deposit-cli uses ZERO_BYTES32 for deposits
-    const genesisValidatorsRoot = new Uint8Array(32); // All zeros
-
-    // Step 3: Compute domain
-    const domainType = hexToBytes(DOMAIN_DEPOSIT as Hex);
-    const domain = computeDomain(
-      domainType,
-      forkVersion,
-      genesisValidatorsRoot,
-    );
-
-    // Step 4: Compute signing root
-    const signingRoot = computeSigningRoot(messageRoot, domain);
-
-    // Step 5: Verify BLS signature
-    const publicKey = new bls.PublicKey();
-    publicKey.deserialize(pubkey);
-
-    const sig = new bls.Signature();
-    sig.deserialize(signature);
-
-    return publicKey.verify(sig, signingRoot);
   } catch {
     return false;
+  }
+
+  // Build DepositMessage
+  const depositMessage: DepositMessage = {
+    pubkey,
+    withdrawal_credentials: withdrawalCredentials,
+    amount,
+  };
+
+  // Step 1: Compute deposit message root
+  const messageRoot = computeDepositMessageRoot(depositMessage);
+
+  // Verify deposit_message_root matches
+  if (
+    toHex(messageRoot).toLowerCase() !== data.deposit_message_root.toLowerCase()
+  ) {
+    return false;
+  }
+
+  // Step 2: Get chain-specific parameters
+  const forkVersion = getForkVersion(chainId);
+  // IMPORTANT: Per Ethereum spec, deposit signatures use ZERO genesis_validators_root
+  // "The sole exception to the mixing-in of the fork version is signatures on deposits"
+  // Reference: staking-deposit-cli uses ZERO_BYTES32 for deposits
+  const genesisValidatorsRoot = new Uint8Array(32); // All zeros
+
+  // Step 3: Compute domain
+  const domainType = hexToBytes(DOMAIN_DEPOSIT as Hex);
+  const domain = computeDomain(domainType, forkVersion, genesisValidatorsRoot);
+
+  // Step 4: Compute signing root
+  const signingRoot = computeSigningRoot(messageRoot, domain);
+
+  // Step 5: Verify BLS signature
+  let publicKey: InstanceType<typeof bls.PublicKey>;
+  let sig: InstanceType<typeof bls.Signature>;
+
+  try {
+    publicKey = new bls.PublicKey();
+    publicKey.deserialize(pubkey);
+
+    sig = new bls.Signature();
+    sig.deserialize(signature);
+  } catch {
+    return false;
+  }
+
+  try {
+    return publicKey.verify(sig, signingRoot);
+  } catch (error) {
+    // A verify-time throw means the WASM instance is in a bad state (the
+    // fixed, non-growable heap leaks stack allocations on throw). Reset the
+    // init memo so the next call re-inits a fresh instance instead of
+    // failing for the rest of the session.
+    blsInitPromise = undefined;
+    throw error;
   }
 };
