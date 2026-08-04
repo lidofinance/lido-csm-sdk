@@ -1,11 +1,22 @@
 import { ERROR_CODE, SDKError } from '../common/index';
 import { NodeOperatorId } from '../common/types';
-import { isRewardsReportV1, isRewardsReportV2 } from './parse-report';
-import { RewardsReportV1, RewardsReportV2, ValidatorRewards } from './types';
+import {
+  isRewardsReportV1,
+  isRewardsReportV2,
+  isRewardsReportV3,
+} from './parse-report';
+import {
+  RewardsReportV1,
+  RewardsReportV2,
+  RewardsReportV3,
+  ValidatorRewards,
+} from './types';
 
 const DEFAULT_REWARD_SHARE = 1;
 
-const getBaseFields = (report: RewardsReportV1 | RewardsReportV2) => ({
+const getBaseFields = (
+  report: RewardsReportV1 | RewardsReportV2 | RewardsReportV3,
+) => ({
   blockNumber: report.blockstamp.block_number,
   refSlot: report.blockstamp.ref_slot,
   frame: report.frame,
@@ -71,14 +82,37 @@ export const getValidatorsRewardsV2 = (
   );
 };
 
+export const getValidatorsRewardsV3 = (
+  nodeOperatorId: NodeOperatorId,
+  report: RewardsReportV3,
+): ValidatorRewards[] => {
+  const operator = report.operators[`${nodeOperatorId}`];
+  if (!operator) return [];
+
+  return Object.entries(operator.validators).map(
+    ([validatorIndex, validatorData], indexInReport) => ({
+      ...getBaseFields(report),
+      indexInReport,
+      validatorIndex: validatorIndex as `${number}`,
+      performance: validatorData.performance,
+      threshold: validatorData.threshold,
+      slashed: validatorData.slashed,
+      receivedShares: validatorData.distributed_rewards,
+      rewardShare: validatorData.reward_share,
+    }),
+  );
+};
+
 export const getValidatorsRewards = (
   nodeOperatorId: NodeOperatorId,
-  report: RewardsReportV1 | RewardsReportV2,
+  report: RewardsReportV1 | RewardsReportV2 | RewardsReportV3,
 ) => {
   if (isRewardsReportV1(report)) {
     return getValidatorsRewardsV1(nodeOperatorId, report);
   } else if (isRewardsReportV2(report)) {
     return getValidatorsRewardsV2(nodeOperatorId, report);
+  } else if (isRewardsReportV3(report)) {
+    return getValidatorsRewardsV3(nodeOperatorId, report);
   } else {
     throw new SDKError({
       code: ERROR_CODE.NOT_SUPPORTED,

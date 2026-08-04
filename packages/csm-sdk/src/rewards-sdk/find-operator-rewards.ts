@@ -3,12 +3,14 @@ import {
   isRewardsReportV1,
   isRewardsReportV2,
   isRewardsReportV2Array,
+  isRewardsReportV3,
 } from './parse-report';
 import {
   OperatorRewards,
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
+  RewardsReportV3,
 } from './types';
 
 const EMPTY_REWARDS: Omit<OperatorRewards, 'distributed'> = {
@@ -44,7 +46,7 @@ const findOperatorRewardsV1 = (
 
 const findOperatorRewardsV2 = (
   nodeOperatorId: NodeOperatorId,
-  reports: RewardsReportV2[],
+  reports: (RewardsReportV2 | RewardsReportV3)[],
 ) => {
   const report = reports.at(-1);
   const operator = report?.operators[`${nodeOperatorId}`];
@@ -76,6 +78,8 @@ export const findOperatorRewards = (
     return findOperatorRewardsV2(nodeOperatorId, [report]);
   } else if (isRewardsReportV2Array(report)) {
     return findOperatorRewardsV2(nodeOperatorId, report);
+  } else if (isRewardsReportV3(report)) {
+    return findOperatorRewardsV2(nodeOperatorId, [report]);
   } else {
     throw new Error('Unknown rewards report version');
   }

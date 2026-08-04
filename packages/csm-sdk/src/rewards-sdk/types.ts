@@ -6,6 +6,7 @@ export type {
   RewardsReport,
   RewardsReportV1,
   RewardsReportV2,
+  RewardsReportV3,
 } from './parse-report';
 
 export type OperatorRewards = {
