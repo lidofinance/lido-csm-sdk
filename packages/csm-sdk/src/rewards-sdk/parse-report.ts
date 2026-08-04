@@ -4,6 +4,7 @@ import { z } from 'zod';
 export type RewardsReport = z.infer<typeof RewardsReportSchema>;
 export type RewardsReportV1 = z.infer<typeof RewardsReportV1Schema>;
 export type RewardsReportV2 = z.infer<typeof RewardsReportV2Schema>;
+export type RewardsReportV3 = z.infer<typeof RewardsReportV3Schema>;
 
 const BlockstampSchema = z.object({
   block_hash: z.string(),
@@ -79,10 +80,57 @@ const RewardsReportV2Schema = z.object({
 
 const RewardsReportV2ArraySchema = z.array(RewardsReportV2Schema);
 
+const RewardsReportV3Schema = z.object({
+  blockstamp: BlockstampSchema,
+  distributable: z.coerce.bigint(),
+  distributed_rewards: z.coerce.bigint(),
+  rebate_to_protocol: z.coerce.bigint(),
+  frame: z.tuple([z.number(), z.number()]),
+  operators: z.record(
+    z.templateLiteral([z.bigint()]),
+    z.object({
+      distributed_rewards: z.coerce.bigint(),
+      performance_coefficients: z.object({
+        attestations_weight: z.number(),
+        blocks_weight: z.number(),
+        sync_weight: z.number(),
+      }),
+      validators: z.record(
+        z.templateLiteral([z.bigint()]),
+        z.object({
+          attestation_duty: z.object({
+            assigned: z.number(),
+            included: z.number(),
+          }),
+          distributed_rewards: z.coerce.bigint(),
+          participation_share_multiplier: z.number(),
+          performance: z.number(),
+          proposal_duty: z.object({
+            assigned: z.number(),
+            included: z.number(),
+          }),
+          reward_share: z.number(),
+          slashed: z.boolean(),
+          strikes: z.number(),
+          sync_duty: z.object({ assigned: z.number(), included: z.number() }),
+          threshold: z.number(),
+        }),
+      ),
+    }),
+  ),
+});
+
+// The V3 log wraps the frames array; unwrap it so it behaves like a V2 array.
+const RewardsReportV3LogSchema = z
+  .object({ _ver: z.number(), frames: z.array(RewardsReportV3Schema) })
+  .transform(({ frames }) => frames);
+
 const RewardsReportSchema = z.union([
   RewardsReportV1Schema,
   RewardsReportV2Schema,
   RewardsReportV2ArraySchema,
+  RewardsReportV3Schema,
+  RewardsReportV3LogSchema,
 ]);
 
 export const parseReport = (data: string): RewardsReport =>
@@ -104,4 +152,10 @@ export const isRewardsReportV2Array = (
   report: RewardsReport,
 ): report is RewardsReportV2[] => {
   return RewardsReportV2ArraySchema.safeParse(report).success;
+};
+
+export const isRewardsReportV3 = (
+  report: RewardsReport,
+): report is RewardsReportV3 => {
+  return RewardsReportV3Schema.safeParse(report).success;
 };
