@@ -22,4 +22,6 @@ export const FIXED_FORK_VERSION: Record<SUPPORTED_CHAINS, string> = {
 
 export const MAX_JSON_LENGTH = 1_048_576; // 1MB
 
+export const BLS_VERIFICATION_CHUNK_SIZE = 25;
+
 export const DOMAIN_DEPOSIT = '0x03000000';

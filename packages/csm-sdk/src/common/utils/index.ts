@@ -1,5 +1,6 @@
 export * from './bigint-range';
 export * from './can-perform';
+export * from './chunk-array';
 export * from './clear-empty-address';
 export * from './is-bigint';
 export * from './parse-deposit-data';

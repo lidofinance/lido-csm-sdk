@@ -4,8 +4,10 @@ import {
   isRewardsReportV1,
   isRewardsReportV2,
   isRewardsReportV2Array,
+  isRewardsReportV3,
 } from '../../../src/rewards-sdk/parse-report';
 import { findOperatorRewards } from '../../../src/rewards-sdk/find-operator-rewards';
+import { getValidatorsRewards } from '../../../src/rewards-sdk/get-validators-rewards';
 import {
   findProofAndAmount,
   EMPTY_PROOF,
@@ -81,6 +83,52 @@ const V2_REPORT = {
   },
 };
 
+const V3_FRAME = {
+  blockstamp: BLOCKSTAMP,
+  distributable: 1000,
+  distributed_rewards: 800,
+  rebate_to_protocol: 200,
+  frame: [0, 100],
+  operators: {
+    '0': {
+      distributed_rewards: 400,
+      performance_coefficients: {
+        attestations_weight: 54,
+        blocks_weight: 8,
+        sync_weight: 2,
+      },
+      validators: {
+        '0': {
+          attestation_duty: { assigned: 10, included: 10 },
+          distributed_rewards: 200,
+          participation_share_multiplier: 32,
+          performance: 0.95,
+          proposal_duty: { assigned: 1, included: 1 },
+          reward_share: 0.5,
+          slashed: false,
+          strikes: 0,
+          sync_duty: { assigned: 5, included: 5 },
+          threshold: 0.8,
+        },
+        '1': {
+          attestation_duty: { assigned: 10, included: 5 },
+          distributed_rewards: 100,
+          participation_share_multiplier: 32,
+          performance: 0.5,
+          proposal_duty: { assigned: 0, included: 0 },
+          reward_share: 0.25,
+          slashed: false,
+          strikes: 1,
+          sync_duty: { assigned: 0, included: 0 },
+          threshold: 0.8,
+        },
+      },
+    },
+  },
+};
+
+const V3_REPORT = { _ver: 1, frames: [V3_FRAME] };
+
 describe('parseReport', () => {
   it('parses V1 report', () => {
     const result = parseReport(JSON.stringify(V1_REPORT));
@@ -95,6 +143,12 @@ describe('parseReport', () => {
   it('parses V2 array', () => {
     const result = parseReport(JSON.stringify([V2_REPORT]));
     expect(isRewardsReportV2Array(result)).toBe(true);
+  });
+
+  it('parses V3 report (log unwraps to frames)', () => {
+    const result = parseReport(JSON.stringify(V3_REPORT));
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(1);
   });
 
   it('throws for invalid data', () => {
@@ -121,6 +175,13 @@ describe('isRewardsReportV1 / V2 / V2Array', () => {
     expect(isRewardsReportV2Array(report)).toBe(true);
     expect(isRewardsReportV1(report)).toBe(false);
     expect(isRewardsReportV2(report)).toBe(false);
+  });
+
+  it('V3 type guard works', () => {
+    const frame = parseReport(JSON.stringify(V3_FRAME));
+    expect(isRewardsReportV3(frame)).toBe(true);
+    expect(isRewardsReportV1(frame)).toBe(false);
+    expect(isRewardsReportV2(frame)).toBe(false);
   });
 });
 
@@ -162,6 +223,14 @@ describe('findOperatorRewards', () => {
     expect(result.validatorsCount).toBe(2);
   });
 
+  it('finds V3 operator rewards', () => {
+    const report = parseReport(JSON.stringify(V3_FRAME));
+    const result = findOperatorRewards(0n, report);
+    expect(result.shares).toBe(400n);
+    expect(result.validatorsCount).toBe(2);
+    expect(result.validatorsOverThresholdCount).toBe(1);
+  });
+
   it('returns empty for missing V2 operator', () => {
     const report = parseReport(JSON.stringify(V2_REPORT));
     const result = findOperatorRewards(99n, report);
@@ -173,6 +242,15 @@ describe('findOperatorRewards', () => {
     expect(() => findOperatorRewards(0n, 'invalid' as any)).toThrow(
       'Unknown rewards report version',
     );
+  });
+});
+
+describe('getValidatorsRewards', () => {
+  it('maps reward_share from a V3 frame', () => {
+    const report = parseReport(JSON.stringify(V3_FRAME));
+    const result = getValidatorsRewards(0n, report as any);
+
+    expect(result.map((v) => v.rewardShare)).toEqual([0.5, 0.25]);
   });
 });
 
