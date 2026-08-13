@@ -13,9 +13,9 @@ import { EventsSDK } from '../events-sdk/events-sdk';
 import { FrameSDK } from '../frame-sdk/frame-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { StrikesSDK } from '../strikes-sdk/strikes-sdk';
-import { getClUrls } from './cl-chunks';
 import { computeStatuses } from './compute-statuses';
-import { ClPreparedKey, parseClResponse } from './parse-cl-response';
+import { ClPreparedKey } from './parse-cl-response';
+import { readClValidators } from './read-cl-validators';
 import { resolveEffectiveBalance } from './resolve-effective-balance';
 import { FindKeysResponse, KeyWithStatus } from './types';
 
@@ -77,20 +77,24 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     return duplicates;
   }
 
+  /**
+   * Validator data from the CL for the given pubkeys.
+   *
+   * `null` means there was nothing to ask: no `clApiUrl`, or no pubkeys.
+   * Throws when the CL was asked but could not answer completely — a partial
+   * result would be indistinguishable from "these keys are not on the CL yet"
+   * and would mislabel active validators as pending.
+   */
   @Logger('API:')
   @ErrorHandler()
   @Cache(CACHE_MID)
   public async getClKeys(pubkeys: Hex[]): Promise<ClPreparedKey[] | null> {
-    if (!this.core.clApiUrl || pubkeys.length === 0) {
+    const { clApiUrl } = this.core;
+    if (!clApiUrl || pubkeys.length === 0) {
       return null;
     }
 
-    const urls = getClUrls(pubkeys, this.core.clApiUrl);
-    const results = await Promise.all(
-      urls.map((url) => fetchJson(url, undefined, parseClResponse)),
-    );
-
-    return results.flat().filter(Boolean);
+    return readClValidators({ baseUrl: clApiUrl, pubkeys });
   }
 
   @Logger('API:')
@@ -135,7 +139,13 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         maxBlocksDepth: MAX_BLOCKS_DEPTH_TWO_WEEKS,
       }),
       this.getApiKeysDuplicates(id),
-      this.getClKeysStatus(id),
+      // CL data is optional: on a total outage fall back to `null` so
+      // `hasCLStatuses` goes false and statuses compute without it, exactly
+      // as when `clApiUrl` is unset. Partial data never reaches here — the
+      // client throws instead. Note `hasCLStatuses: false` is permissive:
+      // compute-statuses then marks every deposited key ejectable, so a CL
+      // outage degrades toward showing more actions, not fewer.
+      this.getClKeysStatus(id).catch(() => null),
       this.bus.strikes?.getKeysWithStrikes(id) ?? Promise.resolve([]),
     ]);
 

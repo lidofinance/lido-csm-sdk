@@ -143,7 +143,11 @@ export class DepositDataSDK extends CsmSDKModule<{
     const validPubkeys = pubkeys.filter((p) =>
       isHexadecimalString(p, PUBKEY_LENGTH),
     );
-    const clKeys = await this.bus.keysWithStatus?.getClKeys(validPubkeys);
+    // A CL outage must not block the upload: this check is an extra guard,
+    // and `clKeys == null` already means "could not check" below.
+    const clKeys = await this.bus.keysWithStatus
+      ?.getClKeys(validPubkeys)
+      .catch(() => null);
     const errors: ValidationError[] = [];
 
     if (!clKeys) return errors;

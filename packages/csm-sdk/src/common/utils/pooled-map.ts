@@ -1,11 +1,8 @@
 import { invariantArgument } from './sdk-error';
 
 /**
- * Map `fn` over `items` with at most `limit` calls in flight.
- *
- * Results keep input order. On the first rejection no further items are
- * scheduled and the returned promise rejects with that error — callers get
- * all-or-nothing semantics rather than a partially populated array.
+ * Map `fn` over `items`, at most `limit` in flight, results in input order.
+ * All-or-nothing: the first rejection stops scheduling and rejects.
  */
 export const pooledMap = async <T, R>(
   items: T[],

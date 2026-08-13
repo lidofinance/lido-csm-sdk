@@ -231,7 +231,9 @@ export class RewardsSDK extends CsmSDKModule<{
   ): Promise<OperatorRewardsHistory> {
     const [reports, keys, frameConfig, digest] = await Promise.all([
       this.getAllReports(),
-      this.bus.keysWithStatus.getClKeysStatus(nodeOperatorId),
+      // CL data is optional here — `keys` is only an optional pubkey lookup.
+      // Degrade on a total CL outage rather than failing the whole history.
+      this.bus.keysWithStatus.getClKeysStatus(nodeOperatorId).catch(() => null),
       this.bus.frame.getConfig(),
       this.bus.module.getDigest(),
     ]);

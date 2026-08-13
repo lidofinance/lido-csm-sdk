@@ -44,11 +44,8 @@ describe('pooledMap', () => {
 
   it('stops scheduling new work after a failure', async () => {
     const started: number[] = [];
-    // Item 1 fails on the first microtask turn while every survivor is parked
-    // on a real timer, so the failure is guaranteed to land before the pool
-    // can drain. Gating the *failing* item instead would prove nothing: the
-    // other worker would race through items 2-6 on the microtask queue long
-    // before any timer callback ran.
+    // Item 1 fails synchronously while survivors wait on a real timer, so
+    // failure lands before the pool can drain.
     await expect(
       pooledMap([1, 2, 3, 4, 5, 6], 2, async (n) => {
         started.push(n);
@@ -58,8 +55,6 @@ describe('pooledMap', () => {
       }),
     ).rejects.toThrow('boom');
 
-    // Both workers start synchronously; item 1 then fails, so no slot is
-    // ever refilled.
     expect(started).toEqual([1, 2]);
   });
 
