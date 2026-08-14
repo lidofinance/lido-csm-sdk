@@ -14,6 +14,7 @@ export * from './fetch-tree';
 export * from './is-defined';
 export * from './is-hexadecimal-string';
 export * from './on-error';
+export * from './pooled-map';
 export * from './is-capability-supported';
 export * from './parse-node-operator-added-events';
 export * from './parse-curated-module-node-operator-added-events';
