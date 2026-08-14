@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { KEY_STATUS } from '../../../src/common/constants/keys';
 import {
   getKeysPerChunk,
-  getChunks,
   getClUrls,
 } from '../../../src/keys-with-status-sdk/cl-chunks';
 import {
@@ -33,26 +32,10 @@ describe('getKeysPerChunk', () => {
     const longKeys = getKeysPerChunk('http://a', 100);
     expect(shortKeys).toBeGreaterThan(longKeys);
   });
-});
 
-describe('getChunks', () => {
-  it('splits array into chunks of max size', () => {
-    const arr = ['a', 'b', 'c', 'd', 'e'];
-    const result = getChunks(arr, 2);
-    expect(result).toEqual([['a', 'b'], ['c', 'd'], ['e']]);
-  });
-
-  it('returns single chunk when array fits', () => {
-    const result = getChunks(['a', 'b'], 5);
-    expect(result).toEqual([['a', 'b']]);
-  });
-
-  it('handles empty array', () => {
-    expect(getChunks([], 5)).toEqual([]);
-  });
-
-  it('handles undefined input', () => {
-    expect(getChunks(undefined, 5)).toEqual([]);
+  it('never returns a chunk size below 1, even for an over-long base URL', () => {
+    const absurdUrl = 'http://a' + '/very-long-path-segment'.repeat(200);
+    expect(getKeysPerChunk(absurdUrl, 98)).toBe(1);
   });
 });
 
@@ -73,6 +56,14 @@ describe('getClUrls', () => {
 
   it('handles undefined keys', () => {
     expect(getClUrls(undefined, 'http://localhost:5052')).toEqual([]);
+  });
+
+  it('splits into one URL per key when the base URL exhausts the budget', () => {
+    const absurdBase = 'http://a' + '/very-long-path-segment'.repeat(200);
+    const urls = getClUrls(['0xaa', '0xbb'], absurdBase);
+    expect(urls).toHaveLength(2);
+    expect(urls[0]).toContain('0xaa');
+    expect(urls[1]).toContain('0xbb');
   });
 });
 
