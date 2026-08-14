@@ -1,6 +1,8 @@
 import {
   getEncodableContract,
   LidoSDKCore,
+  type LidoSdkPublicClient,
+  type LidoSdkWalletClient,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Abi, Address, Chain, getContract } from 'viem';
 import { BaseModuleAbi, VersionCheckAbi } from '../abi/index';
@@ -76,11 +78,11 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.core.logMode;
   }
 
-  public get publicClient() {
+  public get publicClient(): LidoSdkPublicClient {
     return this.core.publicClient;
   }
 
-  public get walletClient() {
+  public get walletClient(): LidoSdkWalletClient {
     return this.core.useWalletClient();
   }
 
