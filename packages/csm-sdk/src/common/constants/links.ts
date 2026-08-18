@@ -60,6 +60,12 @@ export const MERKLE_TREE_FALLBACKS: PerModule<
         'https://raw.githubusercontent.com/lidofinance/cm-v2-rewards/hoodi/tree.json',
     },
   },
+  [MODULE_NAME.CSM_02]: {
+    // feeDistributor rewards tree is read on-chain, and the single
+    // permissionless gate has no merkle tree — nothing to fall back to.
+    [CHAINS.Mainnet]: {},
+    [CHAINS.Hoodi]: {},
+  },
 };
 
 export enum API_NAME {
