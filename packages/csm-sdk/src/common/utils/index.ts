@@ -28,3 +28,5 @@ export * from './sdk-error';
 export * from './sdk-error-code';
 export * from './classify-error';
 export * from './decode-revert-data';
+export * from './to-cid-v1-base32';
+export * from './get-retry-delay';

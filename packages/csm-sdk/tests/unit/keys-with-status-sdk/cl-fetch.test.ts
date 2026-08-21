@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   ClRequestError,
   fetchClValidators,
-  getRetryDelay,
 } from '../../../src/keys-with-status-sdk/cl-fetch';
 
 const VALIDATOR = {
@@ -35,33 +34,6 @@ const errorResponse = (status: number, headers?: Record<string, string>) =>
   new Response('nope', { status, headers });
 
 const noSleep = async () => {};
-
-describe('getRetryDelay', () => {
-  it('honors a numeric Retry-After header, in seconds', () => {
-    expect(getRetryDelay(0, '2')).toBe(2000);
-  });
-
-  it('caps Retry-After at 5s', () => {
-    expect(getRetryDelay(0, '600')).toBe(5000);
-  });
-
-  it('backs off exponentially without a header', () => {
-    expect(getRetryDelay(0, null)).toBe(500);
-    expect(getRetryDelay(1, null)).toBe(1500);
-  });
-
-  it('ignores a non-numeric Retry-After header', () => {
-    expect(getRetryDelay(0, 'Wed, 21 Oct 2015 07:28:00 GMT')).toBe(500);
-  });
-
-  it('ignores an empty Retry-After header', () => {
-    expect(getRetryDelay(0, '')).toBe(500);
-  });
-
-  it('ignores a whitespace-only Retry-After header', () => {
-    expect(getRetryDelay(1, '   ')).toBe(1500);
-  });
-});
 
 describe('fetchClValidators', () => {
   let fetchMock: ReturnType<typeof vi.fn>;
