@@ -4,7 +4,8 @@ import { MODULE_NAME, PerModule } from './module-name';
 import { PerSupportedChain } from './supported-chains';
 
 export const DEFAULT_IPFS_GATEWAYS = [
-  'https://ipfs.io/ipfs/{cid}',
+  'https://{cid}.ipfs.dweb.link/',
+  'https://{cid}.ipfs.w3s.link/',
   'https://gateway.pinata.cloud/ipfs/{cid}',
 ];
 

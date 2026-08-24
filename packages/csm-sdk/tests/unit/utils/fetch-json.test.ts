@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import {
   fetchWithFallback,
   fetchOneOf,
+  HttpStatusError,
 } from '../../../src/common/utils/fetch-json';
 
 describe('fetchWithFallback', () => {
@@ -60,6 +61,66 @@ describe('fetchWithFallback', () => {
 
     expect(result).toBeUndefined();
   });
+
+  it('retries only the throttled url in the next round', async () => {
+    const fetchFn = vi
+      .fn<(url: string) => Promise<string | null>>()
+      .mockRejectedValueOnce(new HttpStatusError(429, null))
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce('ok');
+
+    const result = await fetchWithFallback(['url1', 'url2'], fetchFn, {
+      sleep: async () => {},
+    });
+
+    expect(result).toBe('ok');
+    expect(fetchFn).toHaveBeenCalledTimes(3);
+    expect(fetchFn).toHaveBeenNthCalledWith(1, 'url1');
+    expect(fetchFn).toHaveBeenNthCalledWith(2, 'url2');
+    expect(fetchFn).toHaveBeenNthCalledWith(3, 'url1');
+  });
+
+  it('sleeps with the Retry-After-derived delay before the next round', async () => {
+    const fetchFn = vi
+      .fn<(url: string) => Promise<string | null>>()
+      .mockRejectedValueOnce(new HttpStatusError(429, '3'))
+      .mockResolvedValueOnce('ok');
+    const sleep = vi.fn(async () => {});
+
+    await fetchWithFallback(['url1'], fetchFn, { sleep });
+
+    expect(sleep).toHaveBeenCalledWith(3000);
+  });
+
+  it('does not retry a non-retryable status', async () => {
+    const fetchFn = vi
+      .fn<(url: string) => Promise<string | null>>()
+      .mockRejectedValueOnce(new HttpStatusError(404, null))
+      .mockResolvedValueOnce('ok');
+    const sleep = vi.fn(async () => {});
+
+    const result = await fetchWithFallback(['url1'], fetchFn, { sleep });
+
+    expect(result).toBeUndefined();
+    expect(sleep).not.toHaveBeenCalled();
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+  });
+
+  it('gives up after the retry budget and returns undefined', async () => {
+    const fetchFn = vi
+      .fn<(url: string) => Promise<string | null>>()
+      .mockRejectedValue(new HttpStatusError(503, null));
+    const sleep = vi.fn(async () => {});
+
+    const result = await fetchWithFallback(['url1'], fetchFn, {
+      retries: 2,
+      sleep,
+    });
+
+    expect(result).toBeUndefined();
+    expect(fetchFn).toHaveBeenCalledTimes(3);
+    expect(sleep).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe('fetchOneOf', () => {
@@ -98,5 +159,51 @@ describe('fetchOneOf', () => {
     const result = await fetchOneOf({ urls: ['url1'], fetch: fetchFn });
 
     expect(result).toBeUndefined();
+  });
+
+  // real fetch rejects once its signal aborts; the stub must do the same to
+  // exercise the timeout path instead of hanging forever
+  const hangUntilAborted = (init?: RequestInit) =>
+    new Promise<Response>((_, reject) => {
+      init?.signal?.addEventListener('abort', () =>
+        reject(init.signal!.reason),
+      );
+    });
+
+  it('times out a hanging default fetch and falls back to the next url', async () => {
+    const fetchSpy = vi.fn((url: string, init?: RequestInit) => {
+      if (url === 'url1') return hangUntilAborted(init);
+      return Promise.resolve(new Response(JSON.stringify({ ok: true })));
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const result = await fetchOneOf({
+      urls: ['url1', 'url2'],
+      parse: JSON.parse,
+      timeout: 20,
+    });
+
+    expect(result).toEqual({ ok: true });
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+
+    vi.unstubAllGlobals();
+  });
+
+  it('does not retry a timed-out url in a later round', async () => {
+    const fetchSpy = vi.fn((_url: string, init?: RequestInit) =>
+      hangUntilAborted(init),
+    );
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const result = await fetchOneOf({
+      urls: ['url1'],
+      parse: JSON.parse,
+      timeout: 20,
+    });
+
+    expect(result).toBeUndefined();
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+
+    vi.unstubAllGlobals();
   });
 });

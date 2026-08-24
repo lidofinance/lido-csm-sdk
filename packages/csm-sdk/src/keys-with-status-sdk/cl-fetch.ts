@@ -1,3 +1,4 @@
+import { defaultSleep, getRetryDelay } from '../common/utils/index';
 import { CL_RETRY_ATTEMPTS } from './consts';
 import { ClPreparedKey, parseClResponse } from './parse-cl-response';
 
@@ -5,9 +6,6 @@ import { ClPreparedKey, parseClResponse } from './parse-cl-response';
 const NON_FALLBACK_STATUSES = new Set([429, 503]);
 
 const RETRYABLE_STATUSES = new Set([429, 503]);
-
-const MAX_RETRY_DELAY_MS = 5000;
-const BASE_RETRY_DELAY_MS = 500;
 
 export class ClRequestError extends Error {
   constructor(
@@ -25,26 +23,6 @@ export class ClRequestError extends Error {
     this.name = 'ClRequestError';
   }
 }
-
-/** Delay before the next attempt. `attempt` is 0-based. */
-export const getRetryDelay = (
-  attempt: number,
-  retryAfter: string | null,
-): number => {
-  // Digits only: `Number('')` and `Number('  ')` are 0, i.e. "retry now"
-  // against an endpoint that just throttled us. Also excludes HTTP-dates.
-  const seconds =
-    retryAfter !== null && /^\d+$/.test(retryAfter.trim())
-      ? Number(retryAfter)
-      : Number.NaN;
-  if (Number.isFinite(seconds)) {
-    return Math.min(seconds * 1000, MAX_RETRY_DELAY_MS);
-  }
-  return Math.min(BASE_RETRY_DELAY_MS * 3 ** attempt, MAX_RETRY_DELAY_MS);
-};
-
-const defaultSleep = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 export type ClFetchOptions = {
   init?: RequestInit;
