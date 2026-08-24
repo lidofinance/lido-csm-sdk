@@ -189,7 +189,32 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
     },
   },
 
-  // Not deployed on any network yet — addresses are filled in per chain as
-  // CSM 0x02 deploys.
-  [MODULE_NAME.CSM_02]: {},
+  [MODULE_NAME.CSM_02]: {
+    // Not deployed on Mainnet yet.
+    [CHAINS.Hoodi]: {
+      contractAddresses: {
+        [CONTRACT_NAMES.csModule]: '0xbb7dd81FAC80f3Effa10eA8b973c15AE65a4CAf9',
+        [CONTRACT_NAMES.accounting]:
+          '0x04A0294bF3306532309D7DD776D4A7eF502313e0',
+        [CONTRACT_NAMES.ejector]: '0xf8a71C08DBe7D2efaD76D3951a3065B8cE20e4f0',
+        [CONTRACT_NAMES.exitPenalties]:
+          '0x3A2a355a27478f4f043e4206b7e1301611642801',
+        [CONTRACT_NAMES.feeDistributor]:
+          '0x7E875b0cb3725Ff58AF903679d1bF807A3089496',
+        [CONTRACT_NAMES.feeOracle]:
+          '0x9B8bBA11bbE1a351CC8dD1CFCa6719FF7274A208',
+        [CONTRACT_NAMES.parametersRegistry]:
+          '0x81c92Ca47255F1Ab31206b423Af33Ee47c0aE416',
+        [CONTRACT_NAMES.validatorStrikes]:
+          '0x543Fbc220A1dAb7f41C62a793D7157Ab6Bd44AA6',
+        [CONTRACT_NAMES.verifier]: '0xFdE0FD9aDa4E898D3b34Dd4EA3433b75f0B6dd30',
+        [CONTRACT_NAMES.hashConsensus]:
+          '0x41142D077860906B0A7Debb270f1B8e7d1c8BF34',
+        [CONTRACT_NAMES.permissionlessGate]:
+          '0x5AD784cD0A3291e083b015a81E53c6ec70bd5Ef7',
+      },
+      moduleId: 6n,
+      deploymentBlockNumber: BigInt('0x34a392'),
+    },
+  },
 };
