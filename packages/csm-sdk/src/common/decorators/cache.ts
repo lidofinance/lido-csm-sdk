@@ -1,4 +1,7 @@
-import { CsmSDKCacheable } from '../class-primitives/csm-sdk-cacheable';
+import {
+  CacheEntry,
+  CsmSDKCacheable,
+} from '../class-primitives/csm-sdk-cacheable';
 import { isBigint } from '../utils/index';
 import { callConsoleMessage } from './utils';
 
@@ -43,14 +46,11 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
 
     const resolveCache = function (
       instance: This,
-      cache: Map<string, { data: any; timestamp: number; version?: number }>,
+      cache: Map<string, CacheEntry>,
       cacheKey: string,
       execute: () => any,
     ): any {
-      const isEntryValid = (
-        entry: { data: any; timestamp: number; version?: number },
-        now: number,
-      ) =>
+      const isEntryValid = (entry: CacheEntry, now: number) =>
         (isImmutable || entry.version === instance.cacheVersion) &&
         (entry.data instanceof Promise
           ? now - entry.timestamp <= IN_FLIGHT_TIMEOUT_MS
@@ -64,7 +64,10 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
             'Cache:',
             `Using cache for ${kind} '${methodName}'.`,
           );
-          return cachedEntry.data;
+          // re-wrap async results: a settled entry's `data` is the resolved value, not a Promise
+          return cachedEntry.async
+            ? Promise.resolve(cachedEntry.data)
+            : cachedEntry.data;
         } else {
           callConsoleMessage.call(
             instance,
@@ -90,6 +93,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
                 data: resolvedResult,
                 timestamp: Date.now(),
                 version: callVersion,
+                async: true,
               });
             }
             return resolvedResult;
@@ -104,6 +108,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
           data: wrapped,
           timestamp: Date.now(),
           version: callVersion,
+          async: true,
         });
         return wrapped;
       } else {

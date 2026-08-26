@@ -198,4 +198,30 @@ describe('Cache decorator', () => {
     expect(second).toBe(2);
     expect(service.getterImpl).toHaveBeenCalledTimes(2);
   });
+
+  it('returns a thenable on a cache hit for async methods', async () => {
+    await service.getValue();
+    const second = service.getValue();
+
+    expect(second).toBeInstanceOf(Promise);
+    expect(typeof second.catch).toBe('function');
+    expect(await second).toBe('result');
+  });
+
+  it('returns a thenable on a cache hit for async getters', async () => {
+    await service.computed;
+    const second = service.computed;
+
+    expect(second).toBeInstanceOf(Promise);
+    expect(typeof second.catch).toBe('function');
+    expect(await second).toBe(42);
+  });
+
+  it('keeps returning the raw value on a cache hit for sync methods', () => {
+    service.getSyncValue();
+    const second = service.getSyncValue();
+
+    expect(second).not.toBeInstanceOf(Promise);
+    expect(second).toBe('sync-result');
+  });
 });
