@@ -31,9 +31,9 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   public async getApiKeys(pubkeys: Hex[]) {
     const keysApi = this.core.keysApiLink;
 
-    if (!keysApi) {
-      throw new Error('Keys API link is not configured');
-    }
+    // Unconfigured API degrades to "could not check", like a network failure
+    // below and like `getClKeys` — callers treat null as inconclusive.
+    if (!keysApi) return null;
 
     if (pubkeys.length === 0) return [];
 

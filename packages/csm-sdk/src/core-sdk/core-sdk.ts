@@ -152,12 +152,14 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.merkleTreeFallbacks[contractName];
   }
 
+  // `||` not `??`: env pipelines bake an unset var as '' (JSON.stringify keeps
+  // '' but drops undefined), and an empty URL must fall back to the default.
   public get keysApiLink() {
-    return this.keysApiUrl ?? this.apiUrls[API_NAME.keys];
+    return this.keysApiUrl || this.apiUrls[API_NAME.keys];
   }
 
   public get feesMonitoringApiLink() {
-    return this.feesMonitoringApiUrl ?? this.apiUrls[API_NAME.feesMonitoring];
+    return this.feesMonitoringApiUrl || this.apiUrls[API_NAME.feesMonitoring];
   }
 
   @Logger('Utils:')
