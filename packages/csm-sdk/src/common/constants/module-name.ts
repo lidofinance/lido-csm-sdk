@@ -15,3 +15,5 @@ export const MODULE_CONTRACT: PerModule<CONTRACT_NAMES> = {
   [MODULE_NAME.CM]: CONTRACT_NAMES.curatedModule,
   [MODULE_NAME.CSM_02]: CONTRACT_NAMES.csModule,
 };
+
+export const TOP_UP_MODULES: Set<MODULE_NAME> = new Set([MODULE_NAME.CSM_02]);

@@ -6,9 +6,11 @@ import {
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
   MODULE_NAME,
+  TOP_UP_MODULES,
 } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { fetchJson, isNotUnique, isUnique } from '../common/utils/index';
+import { DepositQueueSDK } from '../deposit-queue-sdk/deposit-queue-sdk';
 import { EventsSDK } from '../events-sdk/events-sdk';
 import { FrameSDK } from '../frame-sdk/frame-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
@@ -19,11 +21,21 @@ import { readClValidators } from './read-cl-validators';
 import { resolveEffectiveBalance } from './resolve-effective-balance';
 import { FindKeysResponse, KeyWithStatus } from './types';
 
+const QUEUE_MODULES: Set<MODULE_NAME> = new Set([
+  MODULE_NAME.CSM,
+  MODULE_NAME.CSM_02,
+]);
+const BALANCE_MODULES: Set<MODULE_NAME> = new Set([
+  MODULE_NAME.CM,
+  MODULE_NAME.CSM_02,
+]);
+
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
   frame: FrameSDK;
   events: EventsSDK;
   strikes?: StrikesSDK;
+  depositQueue?: DepositQueueSDK;
 }> {
   @Logger('API:')
   @ErrorHandler()
@@ -110,8 +122,8 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
-    const isCM = this.core.moduleName === MODULE_NAME.CM;
-    const hasQueue = this.core.moduleName !== MODULE_NAME.CM;
+    const hasBalance = BALANCE_MODULES.has(this.core.moduleName);
+    const hasQueue = QUEUE_MODULES.has(this.core.moduleName);
 
     const [
       info,
@@ -150,8 +162,17 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     ]);
 
     const allocatedBalances =
-      isCM && keys.length > 0
+      hasBalance && keys.length > 0
         ? await this.bus.operator.getKeyAllocatedBalances(id)
+        : undefined;
+
+    const hasTopUpQueue = TOP_UP_MODULES.has(this.core.moduleName);
+
+    const topUpPositions =
+      hasTopUpQueue && keys.length > 0
+        ? await this.bus.depositQueue
+            ?.getTopUpPositions()
+            .catch(() => undefined)
         : undefined;
 
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
@@ -192,6 +213,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         validatorIndex: prefilled?.validatorIndex,
         effectiveBalance,
         strikes: keyStrikes?.strikes,
+        topUpPosition: topUpPositions?.get(pubkey.toLowerCase() as Hex),
       };
     });
   }
