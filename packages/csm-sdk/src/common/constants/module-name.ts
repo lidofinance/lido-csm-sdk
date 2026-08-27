@@ -16,4 +16,19 @@ export const MODULE_CONTRACT: PerModule<CONTRACT_NAMES> = {
   [MODULE_NAME.CSM_02]: CONTRACT_NAMES.csModule,
 };
 
-export const TOP_UP_MODULES: Set<MODULE_NAME> = new Set([MODULE_NAME.CSM_02]);
+/** Modules whose keys wait in a deposit queue before activation. */
+export const DEPOSIT_QUEUE_MODULES: Set<MODULE_NAME> = new Set([
+  MODULE_NAME.CSM,
+  MODULE_NAME.CSM_02,
+]);
+
+/** Modules with per-key allocated balances (0x02 variable effective balance). */
+export const ALLOCATED_BALANCE_MODULES: Set<MODULE_NAME> = new Set([
+  MODULE_NAME.CM,
+  MODULE_NAME.CSM_02,
+]);
+
+/** Modules with a separate top-up queue for already-deposited 0x02 keys. */
+export const TOPUP_QUEUE_MODULES: Set<MODULE_NAME> = new Set([
+  MODULE_NAME.CSM_02,
+]);

@@ -1,4 +1,5 @@
 import { Hex } from 'viem';
+import { NodeOperatorId } from '../common/types';
 
 export type DepositQueuePointer = {
   head: bigint;
@@ -47,6 +48,15 @@ export type TopUpQueueEntry = {
   /** 0-based position from the head. 0 = next to be topped up. */
   position: number;
   pubkey: Hex;
+};
+
+/** Queue slot identity — what the contract actually stores per entry. */
+export type TopUpQueueItem = {
+  /** 0-based position from the head. */
+  position: number;
+  nodeOperatorId: NodeOperatorId;
+  /** Key index within that operator. */
+  keyIndex: number;
 };
 
 export type OperatorTopUpQueueKey = {

@@ -2,11 +2,12 @@ import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
+  ALLOCATED_BALANCE_MODULES,
   CACHE_MID,
+  DEPOSIT_QUEUE_MODULES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
-  MODULE_NAME,
-  TOP_UP_MODULES,
+  TOPUP_QUEUE_MODULES,
 } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { fetchJson, isNotUnique, isUnique } from '../common/utils/index';
@@ -20,15 +21,6 @@ import { ClPreparedKey } from './parse-cl-response';
 import { readClValidators } from './read-cl-validators';
 import { resolveEffectiveBalance } from './resolve-effective-balance';
 import { FindKeysResponse, KeyWithStatus } from './types';
-
-const QUEUE_MODULES: Set<MODULE_NAME> = new Set([
-  MODULE_NAME.CSM,
-  MODULE_NAME.CSM_02,
-]);
-const BALANCE_MODULES: Set<MODULE_NAME> = new Set([
-  MODULE_NAME.CM,
-  MODULE_NAME.CSM_02,
-]);
 
 export class KeysWithStatusSDK extends CsmSDKModule<{
   operator: OperatorSDK;
@@ -122,8 +114,8 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
-    const hasBalance = BALANCE_MODULES.has(this.core.moduleName);
-    const hasQueue = QUEUE_MODULES.has(this.core.moduleName);
+    const hasBalance = ALLOCATED_BALANCE_MODULES.has(this.core.moduleName);
+    const hasQueue = DEPOSIT_QUEUE_MODULES.has(this.core.moduleName);
 
     const [
       info,
@@ -166,12 +158,12 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         ? await this.bus.operator.getKeyAllocatedBalances(id)
         : undefined;
 
-    const hasTopUpQueue = TOP_UP_MODULES.has(this.core.moduleName);
+    const hasTopUpQueue = TOPUP_QUEUE_MODULES.has(this.core.moduleName);
 
     const topUpPositions =
       hasTopUpQueue && keys.length > 0
         ? await this.bus.depositQueue
-            ?.getTopUpPositions()
+            ?.getOperatorTopUpPositions(id)
             .catch(() => undefined)
         : undefined;
 
@@ -213,7 +205,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         validatorIndex: prefilled?.validatorIndex,
         effectiveBalance,
         strikes: keyStrikes?.strikes,
-        topUpPosition: topUpPositions?.get(pubkey.toLowerCase() as Hex),
+        topUpPosition: topUpPositions?.get(index),
       };
     });
   }

@@ -1,4 +1,3 @@
-import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   CACHE_LONG,
@@ -12,7 +11,7 @@ import {
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
-import { TOP_UP_MODULES } from '../common/index';
+import { TOPUP_QUEUE_MODULES } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { bigIntRange } from '../common/utils/bigint-range';
 import {
@@ -25,11 +24,11 @@ import { ModuleSDK } from '../module-sdk/module-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
 import { CommonTransactionProps } from '../tx-sdk/types';
-import { buildTopUpPositions } from './build-top-up-positions';
+import { buildOperatorQueueKeys } from './build-operator-queue-keys';
 import { filterEmptyBatches } from './filter-batches';
 import { byNextBatchIndex } from './next-batch-index';
 import { parseBatch } from './parse-batch';
-import { selectOperatorQueueKeys } from './select-operator-queue-keys';
+import { selectQueueCandidates } from './select-queue-candidates';
 import {
   DepositQueueBatch,
   DepositQueuePointer,
@@ -39,6 +38,7 @@ import {
   RawDepositQueueBatchWithIndex,
   TopUpQueueEntry,
   TopUpQueueInfo,
+  TopUpQueueItem,
 } from './types';
 
 export class DepositQueueSDK extends CsmSDKModule<{
@@ -218,31 +218,45 @@ export class DepositQueueSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getTopUpQueueSize(): Promise<number> {
-    if (!TOP_UP_MODULES.has(this.core.moduleName)) return 0;
+    if (!TOPUP_QUEUE_MODULES.has(this.core.moduleName)) return 0;
 
     const { enabled, length } = await this.getTopUpQueueInfo();
     return enabled ? Number(length) : 0;
   }
 
-  /** pubkey (lowercased) → 0-based queue position. Duplicate pubkey keeps the earliest position. */
+  /** Identity of the entry at `position`, which the bulk pubkey read can't provide. */
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getTopUpQueueItem(position: number): Promise<TopUpQueueItem> {
+    const [nodeOperatorId, keyIndex] =
+      await this.moduleContract.read.getTopUpQueueItem([BigInt(position)]);
+
+    return { position, nodeOperatorId, keyIndex: Number(keyIndex) };
+  }
+
+  /** This operator's key index → 0-based queue position. Empty when none are queued. */
   @Logger('Utils:')
   @ErrorHandler()
-  public async getTopUpPositions(): Promise<Map<Hex, number>> {
-    const entries = await this.getTopUpQueueKeys();
-    return buildTopUpPositions(entries.map(({ pubkey }) => pubkey));
+  public async getOperatorTopUpPositions(
+    id: NodeOperatorId,
+  ): Promise<Map<number, number>> {
+    const { keys } = await this.getOperatorTopUpQueue(id);
+    return new Map(keys.map(({ index, position }) => [index, position]));
   }
 
   /**
-   * This operator's queued keys plus queue size, read from one snapshot.
-   * Never pair `total` from a separate call — reading them apart can straddle
-   * an `allocateDeposits` and render e.g. `#13/12`.
+   * This operator's queued keys plus queue size. `total` and the entry list come
+   * from one snapshot — never pair `total` from a separate call, since reading
+   * them apart can straddle an `allocateDeposits` and render e.g. `#13/12`.
+   * Identity reads follow that snapshot; a head advance in between drops or
+   * shifts an entry, self-correcting on the next read.
    */
   @Logger('Utils:')
   @ErrorHandler()
   public async getOperatorTopUpQueue(
     id: NodeOperatorId,
   ): Promise<OperatorTopUpQueue> {
-    if (!TOP_UP_MODULES.has(this.core.moduleName))
+    if (!TOPUP_QUEUE_MODULES.has(this.core.moduleName))
       return { total: 0, keys: [] };
 
     const [entries, operatorKeys] = await Promise.all([
@@ -250,11 +264,17 @@ export class DepositQueueSDK extends CsmSDKModule<{
       this.bus.operator.getKeys(id),
     ]);
 
-    const positions = buildTopUpPositions(entries.map(({ pubkey }) => pubkey));
+    // A queue slot is `(nodeOperatorId, keyIndex)`; the bulk read gives only
+    // pubkeys, which repeat within and across operators. Pubkey match is a
+    // no-false-negative prefilter, so only candidates pay for the identity read.
+    const candidates = selectQueueCandidates(operatorKeys, entries);
+    const items = await Promise.all(
+      candidates.map((position) => this.getTopUpQueueItem(position)),
+    );
 
     return {
       total: entries.length,
-      keys: selectOperatorQueueKeys(operatorKeys, positions),
+      keys: buildOperatorQueueKeys(id, operatorKeys, items),
     };
   }
 
