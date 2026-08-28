@@ -94,10 +94,24 @@ export class ModuleSDK extends CsmSDKModule {
     return this.stakingRouterContract.read[method]();
   }
 
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
+  public async getTotalStake(): Promise<bigint> {
+    return this.moduleContract.read.getTotalModuleStake();
+  }
+
   @Logger('Utils:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
   public async getShareLimit(): Promise<ShareLimitInfo> {
-    const digests = await this.getAllModulesDigests();
-    return calculateShareLimit(digests, this.core.moduleId);
+    const [digests, totalModuleStake] = await Promise.all([
+      this.getAllModulesDigests(),
+      this.getTotalStake(),
+    ]);
+    const { moduleId } = this.core;
+
+    return calculateShareLimit(digests, moduleId, totalModuleStake);
   }
 
   @Logger('API:')
