@@ -7,11 +7,9 @@ import {
   DEPOSIT_QUEUE_MODULES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
-  TOPUP_QUEUE_MODULES,
 } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { fetchJson, isNotUnique, isUnique } from '../common/utils/index';
-import { DepositQueueSDK } from '../deposit-queue-sdk/deposit-queue-sdk';
 import { EventsSDK } from '../events-sdk/events-sdk';
 import { FrameSDK } from '../frame-sdk/frame-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
@@ -27,7 +25,6 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   frame: FrameSDK;
   events: EventsSDK;
   strikes?: StrikesSDK;
-  depositQueue?: DepositQueueSDK;
 }> {
   @Logger('API:')
   @ErrorHandler()
@@ -158,15 +155,6 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         ? await this.bus.operator.getKeyAllocatedBalances(id)
         : undefined;
 
-    const hasTopUpQueue = TOPUP_QUEUE_MODULES.has(this.core.moduleName);
-
-    const topUpPositions =
-      hasTopUpQueue && keys.length > 0
-        ? await this.bus.depositQueue
-            ?.getOperatorTopUpPositions(id)
-            .catch(() => undefined)
-        : undefined;
-
     const ejectableEpoch = currentEpoch - EJECTABLE_EPOCH_COUNT;
 
     const clStatusMap = new Map(clKeysStatus?.map((k) => [k.pubkey, k]));
@@ -205,7 +193,6 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
         validatorIndex: prefilled?.validatorIndex,
         effectiveBalance,
         strikes: keyStrikes?.strikes,
-        topUpPosition: topUpPositions?.get(index),
       };
     });
   }

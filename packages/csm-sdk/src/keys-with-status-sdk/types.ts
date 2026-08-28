@@ -9,8 +9,6 @@ export type KeyWithStatus = {
   statuses: KEY_STATUS[];
   strikes?: KeyStrikes;
   effectiveBalance?: bigint;
-  /** 0-based position in the global top-up queue. `undefined` = not queued / queue unavailable. */
-  topUpPosition?: number;
 };
 
 type NetworkKey = {
