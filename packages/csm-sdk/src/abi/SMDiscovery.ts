@@ -25,7 +25,7 @@ export const SMDiscoveryAbi = [
   },
   {
     type: 'function',
-    name: '_tryGetQueuePriority',
+    name: '_tryGetMaxQueuePriority',
     inputs: [
       {
         name: '_module',

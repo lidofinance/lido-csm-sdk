@@ -167,7 +167,7 @@ For detailed documentation, see [packages/csm-sdk/README.md](packages/csm-sdk/RE
 The SDK's ABIs and addresses are sourced from the following upstream repositories:
 
 - [lidofinance/staking-modules](https://github.com/lidofinance/staking-modules) — CSM and Curated Module contracts (`CSModule`, `CSAccounting`, `CSFeeDistributor`, gates, etc.)
-- [lidofinance/csm-satellite](https://github.com/lidofinance/csm-satellite) — Satellite contracts (`SMDiscovery`)
+- [lidofinance/csm-satellite](https://github.com/lidofinance/csm-satellite) — Staking module discovery contracts (`SMDiscovery`)
 - [lidofinance/core](https://github.com/lidofinance/core) — Lido protocol core (`StakingRouter`, `WithdrawalVault`, `ValidatorsExitBusOracle`)
 
 ## License
