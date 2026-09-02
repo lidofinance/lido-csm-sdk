@@ -73,3 +73,9 @@ export type OperatorTopUpQueue = {
   /** This operator's queued keys, ascending by position. Empty when none are queued. */
   keys: OperatorTopUpQueueKey[];
 };
+
+/** One-call snapshot: queue state plus the entry identities in `[offset, offset+limit)`. */
+export type TopUpQueueSnapshot = TopUpQueueInfo & {
+  /** Ascending by `position`. Independent of `enabled` — a disabled queue may still hold items. */
+  items: TopUpQueueItem[];
+};

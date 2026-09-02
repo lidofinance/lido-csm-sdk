@@ -1,34 +1,22 @@
-import { Hex } from 'viem';
 import { describe, expect, it } from 'vitest';
 import { buildOperatorQueueKeys } from '../../../src/deposit-queue-sdk/build-operator-queue-keys';
-import { selectQueueCandidates } from '../../../src/deposit-queue-sdk/select-queue-candidates';
-import {
-  TopUpQueueEntry,
-  TopUpQueueItem,
-} from '../../../src/deposit-queue-sdk/types';
+import { parseTopUpQueueItems } from '../../../src/deposit-queue-sdk/parse-top-up-queue-items';
+import { TopUpQueueItem } from '../../../src/deposit-queue-sdk/types';
 
-const entries = (...pubkeys: Hex[]): TopUpQueueEntry[] =>
-  pubkeys.map((pubkey, position) => ({ pubkey, position }));
-
-describe('selectQueueCandidates', () => {
-  it('returns an empty array when the operator owns no queued pubkey', () => {
-    expect(selectQueueCandidates(['0xbb'], entries('0xaa'))).toEqual([]);
+describe('parseTopUpQueueItems', () => {
+  it('returns an empty array for empty input', () => {
+    expect(parseTopUpQueueItems(0n, [])).toEqual([]);
   });
 
-  it('returns the positions of every matching pubkey', () => {
-    expect(
-      selectQueueCandidates(['0xaa', '0xcc'], entries('0xaa', '0xbb', '0xcc')),
-    ).toEqual([0, 2]);
-  });
-
-  it('keeps every position of a repeated pubkey', () => {
-    expect(
-      selectQueueCandidates(['0xaa'], entries('0xaa', '0xbb', '0xaa')),
-    ).toEqual([0, 2]);
-  });
-
-  it('normalizes mixed casing on both sides', () => {
-    expect(selectQueueCandidates(['0xAAbb'], entries('0xaaBB'))).toEqual([0]);
+  it('assigns ascending positions starting at offset', () => {
+    const items = parseTopUpQueueItems(5n, [
+      { nodeOperatorId: 1n, keyIndex: 0n },
+      { nodeOperatorId: 2n, keyIndex: 3n },
+    ]);
+    expect(items).toEqual([
+      { position: 5, nodeOperatorId: 1n, keyIndex: 0 },
+      { position: 6, nodeOperatorId: 2n, keyIndex: 3 },
+    ]);
   });
 });
 

@@ -14,6 +14,7 @@ import {
 import { TOPUP_QUEUE_MODULES } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { bigIntRange } from '../common/utils/bigint-range';
+import { isMissingSelectorRevert } from '../common/utils/is-missing-selector-revert';
 import {
   byTotalCount,
   iteratePages,
@@ -28,7 +29,7 @@ import { buildOperatorQueueKeys } from './build-operator-queue-keys';
 import { filterEmptyBatches } from './filter-batches';
 import { byNextBatchIndex } from './next-batch-index';
 import { parseBatch } from './parse-batch';
-import { selectQueueCandidates } from './select-queue-candidates';
+import { parseTopUpQueueItems } from './parse-top-up-queue-items';
 import {
   DepositQueueBatch,
   DepositQueuePointer,
@@ -39,6 +40,7 @@ import {
   TopUpQueueEntry,
   TopUpQueueInfo,
   TopUpQueueItem,
+  TopUpQueueSnapshot,
 } from './types';
 
 export class DepositQueueSDK extends CsmSDKModule<{
@@ -57,6 +59,8 @@ export class DepositQueueSDK extends CsmSDKModule<{
   private get discoveryContract() {
     return this.core.getContract(CONTRACT_NAMES.smDiscovery);
   }
+
+  private isLegacyDiscovery = false;
 
   @Logger('Views:')
   @ErrorHandler()
@@ -234,6 +238,66 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return { position, nodeOperatorId, keyIndex: Number(keyIndex) };
   }
 
+  /**
+   * Queue state + entry identities in one snapshot. `pagination.offset` is head-relative;
+   * defaults to the whole queue. Falls back to per-position module reads on a pre-upgrade discovery impl.
+   */
+  @Logger('Views:')
+  @ErrorHandler()
+  public async getTopUpQueueItems(
+    pagination?: Pagination,
+  ): Promise<TopUpQueueSnapshot> {
+    const offset = pagination?.offset ?? 0n;
+    const limit = pagination?.limit ?? 1000n;
+
+    if (!this.isLegacyDiscovery) {
+      try {
+        const [enabled, queueLimit, total, head, items] =
+          await this.discoveryContract.read.getTopUpQueueItems([
+            this.core.moduleId,
+            offset,
+            limit,
+          ]);
+
+        return {
+          enabled,
+          limit: queueLimit,
+          length: total,
+          head,
+          items: parseTopUpQueueItems(offset, items),
+        };
+      } catch (error) {
+        if (!isMissingSelectorRevert(error)) throw error;
+        this.isLegacyDiscovery = true;
+      }
+    }
+
+    return this.getTopUpQueueItemsLegacy(offset, limit);
+  }
+
+  // TODO: drop with `isLegacyDiscovery` once the discovery upgrade is live on all networks.
+  @Logger('Views:')
+  @ErrorHandler()
+  private async getTopUpQueueItemsLegacy(
+    offset: bigint,
+    limit: bigint,
+  ): Promise<TopUpQueueSnapshot> {
+    const info = await this.getTopUpQueueInfo();
+
+    if (offset >= info.length) {
+      return { ...info, items: [] };
+    }
+
+    const end = offset + limit < info.length ? offset + limit : info.length;
+    const items = await Promise.all(
+      [...bigIntRange(end - offset)].map((i) =>
+        this.getTopUpQueueItem(Number(offset + i)),
+      ),
+    );
+
+    return { ...info, items };
+  }
+
   /** This operator's key index → 0-based queue position. Empty when none are queued. */
   @Logger('Utils:')
   @ErrorHandler()
@@ -248,8 +312,6 @@ export class DepositQueueSDK extends CsmSDKModule<{
    * This operator's queued keys plus queue size. `total` and the entry list come
    * from one snapshot — never pair `total` from a separate call, since reading
    * them apart can straddle an `allocateDeposits` and render e.g. `#13/12`.
-   * Identity reads follow that snapshot; a head advance in between drops or
-   * shifts an entry, self-correcting on the next read.
    */
   @Logger('Utils:')
   @ErrorHandler()
@@ -259,21 +321,13 @@ export class DepositQueueSDK extends CsmSDKModule<{
     if (!TOPUP_QUEUE_MODULES.has(this.core.moduleName))
       return { total: 0, keys: [] };
 
-    const [entries, operatorKeys] = await Promise.all([
-      this.getTopUpQueueKeys(),
+    const [{ length, items }, operatorKeys] = await Promise.all([
+      this.getTopUpQueueItems(),
       this.bus.operator.getKeys(id),
     ]);
 
-    // A queue slot is `(nodeOperatorId, keyIndex)`; the bulk read gives only
-    // pubkeys, which repeat within and across operators. Pubkey match is a
-    // no-false-negative prefilter, so only candidates pay for the identity read.
-    const candidates = selectQueueCandidates(operatorKeys, entries);
-    const items = await Promise.all(
-      candidates.map((position) => this.getTopUpQueueItem(position)),
-    );
-
     return {
-      total: entries.length,
+      total: Number(length),
       keys: buildOperatorQueueKeys(id, operatorKeys, items),
     };
   }

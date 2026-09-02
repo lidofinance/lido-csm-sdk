@@ -13,6 +13,7 @@ export * from './fetch-json';
 export * from './fetch-tree';
 export * from './is-defined';
 export * from './is-hexadecimal-string';
+export * from './is-missing-selector-revert';
 export * from './on-error';
 export * from './pooled-map';
 export * from './is-capability-supported';

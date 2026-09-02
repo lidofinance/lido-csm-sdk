@@ -59,4 +59,50 @@ describe('integration: top-up queue (read-only, CSM 0x02)', () => {
 
     expect(page[0]?.position).toBe(1);
   });
+
+  // The hoodi fork's discovery proxy predates the getTopUpQueueItems selector,
+  // so these exercise the legacy fallback — expected until the upgrade lands.
+  it('getTopUpQueueItems returns a full snapshot consistent with getTopUpQueueInfo', async () => {
+    const sdk = useCsm02Sdk();
+    const [info, snapshot] = await Promise.all([
+      sdk.depositQueue.getTopUpQueueInfo(),
+      sdk.depositQueue.getTopUpQueueItems(),
+    ]);
+
+    expect(snapshot.length).toBe(info.length);
+    expect(snapshot.enabled).toBe(info.enabled);
+    expect(snapshot.items.length).toBe(Number(info.length));
+
+    snapshot.items.forEach((item, i) => {
+      expect(item.position).toBe(i);
+      expect(item.keyIndex).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('getTopUpQueueItems paginates with an offset, positions starting at the offset', async () => {
+    const sdk = useCsm02Sdk();
+    const info = await sdk.depositQueue.getTopUpQueueInfo();
+    if (info.length < 3n) return;
+
+    const page = await sdk.depositQueue.getTopUpQueueItems({
+      offset: 1n,
+      limit: 2n,
+    });
+
+    expect(page.items[0]?.position).toBe(1);
+    expect(page.items.length).toBeLessThanOrEqual(2);
+  });
+
+  it('getTopUpQueueItems returns an empty item list once offset reaches the queue length', async () => {
+    const sdk = useCsm02Sdk();
+    const info = await sdk.depositQueue.getTopUpQueueInfo();
+
+    const snapshot = await sdk.depositQueue.getTopUpQueueItems({
+      offset: info.length,
+      limit: 10n,
+    });
+
+    expect(snapshot.items).toEqual([]);
+    expect(snapshot.length).toBe(info.length);
+  });
 });
