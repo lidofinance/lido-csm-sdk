@@ -4,7 +4,12 @@ import {
   ContractFunctionRevertedError,
   ContractFunctionZeroDataError,
 } from 'viem';
-import { onError, onVersionError } from '../../../src/common/utils/on-error';
+import {
+  onError,
+  onVersionError,
+  findRevertError,
+  onRevertEmptyList,
+} from '../../../src/common/utils/on-error';
 
 const makeZeroDataError = () => {
   const inner = new ContractFunctionZeroDataError({ functionName: 'foo' });
@@ -54,5 +59,50 @@ describe('onVersionError', () => {
   it('rethrows BaseError without matching walk target', () => {
     const err = new BaseError('unrelated');
     expect(() => onVersionError(err)).toThrow('unrelated');
+  });
+});
+
+describe('findRevertError', () => {
+  it('returns the inner ContractFunctionRevertedError from a wrapping BaseError', () => {
+    const inner = new ContractFunctionRevertedError({
+      abi: [],
+      functionName: 'foo',
+    });
+    const wrapper = new BaseError('wrapper', { cause: inner });
+
+    expect(findRevertError(wrapper)).toBe(inner);
+  });
+
+  it('returns the error itself when it is already a ContractFunctionRevertedError', () => {
+    const inner = new ContractFunctionRevertedError({
+      abi: [],
+      functionName: 'foo',
+    });
+
+    expect(findRevertError(inner)).toBe(inner);
+  });
+
+  it('returns undefined for a plain Error', () => {
+    expect(findRevertError(new Error('plain'))).toBeUndefined();
+  });
+
+  it('returns undefined for a BaseError with no revert in the chain', () => {
+    expect(findRevertError(new BaseError('no revert'))).toBeUndefined();
+  });
+});
+
+describe('onRevertEmptyList', () => {
+  it('returns [] on a wrapped revert', () => {
+    expect(onRevertEmptyList(makeRevertedError())).toEqual([]);
+  });
+
+  it('rethrows a plain error', () => {
+    expect(() => onRevertEmptyList(new Error('boom'))).toThrow('boom');
+  });
+
+  it('rethrows an unrelated BaseError', () => {
+    expect(() => onRevertEmptyList(new BaseError('unrelated'))).toThrow(
+      'unrelated',
+    );
   });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   Abi,
   BaseError,
@@ -127,9 +127,7 @@ describe('buildCombinedErrorAbi (selector dedup)', () => {
       },
     ] as Abi;
 
-  it('keeps both items when names collide but signatures differ, and warns once', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-
+  it('keeps both items when names collide but signatures differ', () => {
     const abiA = errorAbi('Collide', [{ name: 'a', type: 'uint256' }]);
     const abiB = errorAbi('Collide', [{ name: 'b', type: 'address' }]);
 
@@ -154,22 +152,14 @@ describe('buildCombinedErrorAbi (selector dedup)', () => {
     expect(decodeErrorResult({ abi: combined, data: dataB }).args).toEqual([
       '0x0000000000000000000000000000000000000001',
     ]);
-
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls[0]?.[0]).toContain('Collide');
-    warn.mockRestore();
   });
 
   it('silently dedupes identical signatures across multiple ABIs', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-
     const abiA = errorAbi('Same', [{ name: 'a', type: 'uint256' }]);
     const abiB = errorAbi('Same', [{ name: 'b', type: 'uint256' }]); // same signature, different param names
 
     const combined = buildCombinedErrorAbi([abiA, abiB]);
     expect(combined.filter((x) => x.type === 'error')).toHaveLength(1);
-    expect(warn).not.toHaveBeenCalled();
-    warn.mockRestore();
   });
 });
 

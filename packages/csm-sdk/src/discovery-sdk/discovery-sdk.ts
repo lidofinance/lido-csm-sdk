@@ -1,4 +1,12 @@
-import { Address, isAddressEqual } from 'viem';
+import {
+  Address,
+  ContractFunctionArgs,
+  isAddressEqual,
+  ReadContractReturnType,
+  zeroAddress,
+} from 'viem';
+import { SMDiscoveryAbi } from '../abi/SMDiscovery';
+import { SMDiscoveryV1Abi } from '../abi/SMDiscoveryV1';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   CONTRACT_NAMES,
@@ -14,9 +22,21 @@ import {
 } from '../common/types';
 import { getCurveIdByOperatorType } from '../common/utils/operator-type-utils';
 import { onRevertEmptyList } from '../common/utils/on-error';
-import { invariantArgument } from '../common/utils/sdk-error';
+import {
+  invariant,
+  invariantArgument,
+  ERROR_CODE,
+} from '../common/utils/sdk-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { byTotalCount, iteratePages, onePage } from './iterate-pages';
+import {
+  isEnumConversionPanic,
+  isLegacyDecodeError,
+  UPGRADE_REQUIRED_MESSAGE,
+  requiresUpgradedImpl,
+  VersionedRead,
+} from './legacy-impl';
+import { toDiscoveryInfo, toShortInfo } from './map-operators';
 import {
   NodeOperatorDiscoveryInfo,
   NodeOperatorLockedBond,
@@ -25,8 +45,68 @@ import {
 } from './types';
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
+  private isLegacy = false;
+
   private get discoveryContract() {
     return this.core.getContract(CONTRACT_NAMES.smDiscovery);
+  }
+
+  private get discoveryContractV1() {
+    return this.core.getContractWithAbi(
+      CONTRACT_NAMES.smDiscovery,
+      SMDiscoveryV1Abi,
+    );
+  }
+
+  private assertSearchModeSupported(mode: SearchMode) {
+    invariant(
+      !requiresUpgradedImpl(mode) || !this.isLegacy,
+      UPGRADE_REQUIRED_MESSAGE,
+      ERROR_CODE.NOT_SUPPORTED,
+    );
+  }
+
+  // Empty arrays decode identically under both ABIs, so a modern success never
+  // proves the new impl; only a decode failure followed by a legacy success does.
+  private async readVersioned<N extends VersionedRead>(
+    functionName: N,
+    args: ContractFunctionArgs<typeof SMDiscoveryV1Abi, 'view', N>,
+  ): Promise<ReadContractReturnType<typeof SMDiscoveryAbi, N>> {
+    type Result = ReadContractReturnType<typeof SMDiscoveryAbi, N>;
+    type Reads<R> = Record<
+      VersionedRead,
+      (
+        args: ContractFunctionArgs<typeof SMDiscoveryV1Abi, 'view', N>,
+      ) => Promise<R>
+    >;
+
+    const readLegacy = async () => {
+      const rows = await (
+        this.discoveryContractV1.read as Reads<readonly object[]>
+      )[functionName](args);
+      return rows.map((row) => ({
+        claimerAddress: zeroAddress,
+        ...row,
+      })) as unknown as Result;
+    };
+
+    if (this.isLegacy) return readLegacy();
+
+    try {
+      return await (this.discoveryContract.read as unknown as Reads<Result>)[
+        functionName
+      ](args);
+    } catch (modernError) {
+      if (!isLegacyDecodeError(modernError)) throw modernError;
+
+      try {
+        const result = await readLegacy();
+        this.isLegacy = true;
+        return result;
+      } catch {
+        throw modernError;
+      }
+    }
   }
 
   /**
@@ -65,15 +145,28 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     searchMode: SearchMode = SearchMode.CURRENT_ADDRESSES,
     pagination?: Pagination,
   ): Promise<NodeOperatorId[]> {
+    this.assertSearchModeSupported(searchMode);
+
     return this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.findNodeOperatorsByAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-          searchMode,
-        ]),
+        this.discoveryContract.read
+          .findNodeOperatorsByAddress([
+            this.core.moduleId,
+            address,
+            p.offset,
+            p.limit,
+            searchMode,
+          ])
+          .catch((error) => {
+            if (
+              requiresUpgradedImpl(searchMode) &&
+              isEnumConversionPanic(error)
+            ) {
+              this.isLegacy = true;
+            }
+            this.assertSearchModeSupported(searchMode);
+            throw error;
+          }),
       pagination,
     );
   }
@@ -86,7 +179,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getNodeOperatorsByAddress([
+        this.readVersioned('getNodeOperatorsByAddress', [
           this.core.moduleId,
           address,
           p.offset,
@@ -106,7 +199,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getOperatorsByCurveId([
+        this.readVersioned('getOperatorsByCurveId', [
           this.core.moduleId,
           curveId,
           p.offset,
@@ -179,16 +272,18 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   public async getAllNodeOperators(
     pagination?: Pagination,
   ): Promise<NodeOperatorDiscoveryInfo[]> {
-    return this.paginateOperators(
+    const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getAllNodeOperators([
+        this.readVersioned('getAllNodeOperators', [
           this.core.moduleId,
           p.offset,
           p.limit,
         ]),
       pagination,
       500n, // Custom default limit for bulk fetching
-    ) as Promise<NodeOperatorDiscoveryInfo[]>;
+    );
+
+    return operators.map(toDiscoveryInfo);
   }
 
   @Logger('Views:')
@@ -213,18 +308,3 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     }));
   }
 }
-
-/** Shape of the `NodeOperatorShort` struct shared by SMDiscovery ABI methods. */
-type NodeOperatorShort = {
-  id: bigint;
-  managerAddress: Address;
-  rewardAddress: Address;
-  extendedManagerPermissions: boolean;
-  curveId: bigint;
-};
-
-const toShortInfo = (operator: NodeOperatorShort): NodeOperatorShortInfo => ({
-  ...operator,
-  rewardsAddress: operator.rewardAddress,
-  nodeOperatorId: operator.id,
-});
