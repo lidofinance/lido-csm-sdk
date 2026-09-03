@@ -44,6 +44,40 @@ export const SMDiscoveryAbi = [
   },
   {
     type: 'function',
+    name: '_tryGetTopUpQueue',
+    inputs: [
+      {
+        name: '_module',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'findNodeOperatorsByAddress',
     inputs: [
       {
@@ -134,6 +168,11 @@ export const SMDiscoveryAbi = [
           },
           {
             name: 'proposedRewardAddress',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
+            name: 'claimerAddress',
             type: 'address',
             internalType: 'address',
           },
@@ -231,6 +270,11 @@ export const SMDiscoveryAbi = [
             name: 'extendedManagerPermissions',
             type: 'bool',
             internalType: 'bool',
+          },
+          {
+            name: 'claimerAddress',
+            type: 'address',
+            internalType: 'address',
           },
           {
             name: 'curveId',
@@ -384,6 +428,11 @@ export const SMDiscoveryAbi = [
             internalType: 'bool',
           },
           {
+            name: 'claimerAddress',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
             name: 'curveId',
             type: 'uint256',
             internalType: 'uint256',
@@ -433,6 +482,67 @@ export const SMDiscoveryAbi = [
             name: 'until',
             type: 'uint128',
             internalType: 'uint128',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getTopUpQueueItems',
+    inputs: [
+      {
+        name: '_moduleId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_offset',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_limit',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'enabled',
+        type: 'bool',
+        internalType: 'bool',
+      },
+      {
+        name: 'limit',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'total',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'head',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'items',
+        type: 'tuple[]',
+        internalType: 'struct TopUpQueueEntry[]',
+        components: [
+          {
+            name: 'nodeOperatorId',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'keyIndex',
+            type: 'uint256',
+            internalType: 'uint256',
           },
         ],
       },
