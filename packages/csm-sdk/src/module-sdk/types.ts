@@ -77,6 +77,18 @@ export type ModulesResponse = {
   }[];
 };
 
+export const StakingModuleStatus = {
+  ACTIVE: 0,
+  DEPOSITS_PAUSED: 1,
+  STOPPED: 2,
+} as const;
+export type StakingModuleStatus =
+  (typeof StakingModuleStatus)[keyof typeof StakingModuleStatus];
+
+export type ModuleRegistration =
+  | { registered: false; isActive: false }
+  | { registered: true; isActive: boolean };
+
 export type ModuleOperatorsResponse = {
   data: {
     operators: {

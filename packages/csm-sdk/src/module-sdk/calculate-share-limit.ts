@@ -1,3 +1,4 @@
+import { Address } from 'viem';
 import {
   MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
   PERCENT_BASIS,
@@ -10,9 +11,10 @@ import { ModuleDigest, ShareLimitInfo } from './types';
 export const calculateShareLimit = (
   digests: ModuleDigest[],
   moduleId: bigint,
+  moduleAddress: Address,
   totalModuleStake: bigint,
 ): ShareLimitInfo => {
-  const moduleDigest = findModuleDigest(digests, moduleId);
+  const moduleDigest = findModuleDigest(digests, moduleId, moduleAddress);
   const shareLimit = moduleDigest.state.stakeShareLimit;
   const stakeWeiOf = (digest: ModuleDigest) =>
     digest.state.id === moduleId ? totalModuleStake : undefined;

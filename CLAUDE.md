@@ -51,7 +51,7 @@ Key modules include:
 
 **Shared modules** (available in both CSM and CM):
 - **core-sdk** - Shared logic, configuration, and core utilities
-- **module-sdk** - Module status and share limit queries
+- **module-sdk** - Module status, StakingRouter registration check, and share limit queries
 - **operator-sdk** - Operator data management
 - **roles-sdk** - Standard role management
 - **keys-sdk** - Validator key management

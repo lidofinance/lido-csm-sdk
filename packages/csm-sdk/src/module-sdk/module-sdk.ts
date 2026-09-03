@@ -4,8 +4,15 @@ import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index';
 import { calculateShareLimit } from './calculate-share-limit';
 import { findModuleDigest } from './find-module-digest';
+import { findModuleRegistration } from './find-module-registration';
 import { findUsedOtherModule } from './find-used-other-module';
-import { CsmStatus, ModuleDigest, ShareLimitInfo, WCType } from './types';
+import {
+  CsmStatus,
+  ModuleDigest,
+  ModuleRegistration,
+  ShareLimitInfo,
+  WCType,
+} from './types';
 
 export class ModuleSDK extends CsmSDKModule {
   private get moduleContract() {
@@ -71,7 +78,23 @@ export class ModuleSDK extends CsmSDKModule {
   @ErrorHandler()
   public async getDigest() {
     const digests = await this.getAllModulesDigests();
-    return findModuleDigest(digests, this.core.moduleId);
+    return findModuleDigest(
+      digests,
+      this.core.moduleId,
+      this.moduleContract.address,
+    );
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_MID)
+  public async getRegistration(): Promise<ModuleRegistration> {
+    const digests = await this.getAllModulesDigests();
+    return findModuleRegistration(
+      digests,
+      this.core.moduleId,
+      this.moduleContract.address,
+    );
   }
 
   @Logger('Views:')
@@ -111,7 +134,12 @@ export class ModuleSDK extends CsmSDKModule {
     ]);
     const { moduleId } = this.core;
 
-    return calculateShareLimit(digests, moduleId, totalModuleStake);
+    return calculateShareLimit(
+      digests,
+      moduleId,
+      this.moduleContract.address,
+      totalModuleStake,
+    );
   }
 
   @Logger('API:')

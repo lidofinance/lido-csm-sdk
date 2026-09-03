@@ -5,6 +5,7 @@ import { ModuleDigest } from '../../../src/module-sdk/types';
 
 const GWEI = 1_000_000_000n;
 const WEI_PER_GWEI = 1_000_000_000n;
+const MODULE_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 type DigestOverrides = {
   id: bigint;
@@ -33,7 +34,7 @@ const makeDigest = ({
   activeNodeOperatorsCount: 0n,
   state: {
     id,
-    stakingModuleAddress: '0x0000000000000000000000000000000000000000',
+    stakingModuleAddress: MODULE_ADDRESS,
     stakingModuleFee: 0n,
     treasuryFee: 0,
     stakeShareLimit,
@@ -84,7 +85,7 @@ describe('calculateShareLimit', () => {
     });
 
     // queried module is 0x01, so totalModuleStake is ignored
-    const result = calculateShareLimit([csm, maxEb], 3n, 0n);
+    const result = calculateShareLimit([csm, maxEb], 3n, MODULE_ADDRESS, 0n);
 
     // totalActive equivalents = 2870 + 100000 = 102870
     // capacity = 102870 * 1600 / 10000 = 16459
@@ -116,7 +117,12 @@ describe('calculateShareLimit', () => {
       validatorsBalanceGwei: stakeGwei(100_000n),
     });
 
-    const { activeLeft } = calculateShareLimit([csm, maxEb], 3n, 0n);
+    const { activeLeft } = calculateShareLimit(
+      [csm, maxEb],
+      3n,
+      MODULE_ADDRESS,
+      0n,
+    );
 
     // Raw counting (2870 + 5000 = 7870) -> capacity 1259 -> activeLeft -1611.
     expect(activeLeft).not.toBe(-1611n);
@@ -133,7 +139,7 @@ describe('calculateShareLimit', () => {
     });
     const curated = makeDigest({ id: 2n, deposited: 4000n, exited: 0n });
 
-    const result = calculateShareLimit([csm, curated], 3n, 0n);
+    const result = calculateShareLimit([csm, curated], 3n, MODULE_ADDRESS, 0n);
 
     // active = 900; totalActive = 900 + 4000 = 4900
     // capacity = 4900 * 1000 / 10000 = 490; activeLeft = 490 - 900 = -410
@@ -163,6 +169,7 @@ describe('calculateShareLimit', () => {
           }),
         ],
         1n,
+        MODULE_ADDRESS,
         validatorsBalanceGwei * WEI_PER_GWEI,
       ).active;
 
@@ -184,7 +191,7 @@ describe('calculateShareLimit', () => {
     });
     const curated = makeDigest({ id: 2n, deposited: 4000n, exited: 0n });
 
-    const result = calculateShareLimit([csm, curated], 3n, 0n);
+    const result = calculateShareLimit([csm, curated], 3n, MODULE_ADDRESS, 0n);
 
     expect(result.activeWei).toBe(
       result.active * MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
@@ -202,7 +209,12 @@ describe('calculateShareLimit', () => {
       stakeShareLimit: 10_000n,
     });
 
-    const result = calculateShareLimit([maxEb], 1n, 33n * GWEI * WEI_PER_GWEI);
+    const result = calculateShareLimit(
+      [maxEb],
+      1n,
+      MODULE_ADDRESS,
+      33n * GWEI * WEI_PER_GWEI,
+    );
 
     expect(result.active).toBe(2n);
     expect(result.activeWei).toBe(33n * GWEI * WEI_PER_GWEI);
@@ -217,7 +229,7 @@ describe('calculateShareLimit', () => {
       stakeShareLimit: 10_000n,
     });
 
-    const { active } = calculateShareLimit([csm], 3n, 0n);
+    const { active } = calculateShareLimit([csm], 3n, MODULE_ADDRESS, 0n);
 
     expect(active).toBe(850n); // 1000 - 150, not 1000 - 100
   });
@@ -231,7 +243,7 @@ describe('calculateShareLimit', () => {
       stakeShareLimit: 10_000n,
     });
 
-    const { active } = calculateShareLimit([csm], 3n, 0n);
+    const { active } = calculateShareLimit([csm], 3n, MODULE_ADDRESS, 0n);
 
     expect(active).toBe(850n); // 1000 - 150, not 1000 - 100
   });
@@ -244,7 +256,12 @@ describe('calculateShareLimit', () => {
       stakeShareLimit: 10_000n,
     });
 
-    const live = calculateShareLimit([maxEb], 1n, stakeWei(50_000n));
+    const live = calculateShareLimit(
+      [maxEb],
+      1n,
+      MODULE_ADDRESS,
+      stakeWei(50_000n),
+    );
 
     expect(live.active).toBe(50_000n);
     expect(live.activeWei).toBe(stakeWei(50_000n));
@@ -262,7 +279,12 @@ describe('calculateShareLimit', () => {
       validatorsBalanceGwei: stakeGwei(100_000n),
     });
 
-    const result = calculateShareLimit([queried, other], 3n, stakeWei(10_000n));
+    const result = calculateShareLimit(
+      [queried, other],
+      3n,
+      MODULE_ADDRESS,
+      stakeWei(10_000n),
+    );
 
     // capacity = queried(10_000, from totalModuleStake) + other(100_000, from its own digest)
     expect(result.capacity).toBe(110_000n);
@@ -283,11 +305,13 @@ describe('calculateShareLimit', () => {
     const withLowStake = calculateShareLimit(
       [queried, other],
       3n,
+      MODULE_ADDRESS,
       stakeWei(10_000n),
     );
     const withHighStake = calculateShareLimit(
       [queried, other],
       3n,
+      MODULE_ADDRESS,
       stakeWei(200_000n),
     );
 
@@ -306,8 +330,13 @@ describe('calculateShareLimit', () => {
       depositable: 10n,
     });
 
-    const withZero = calculateShareLimit([csm], 3n, 0n);
-    const withNonZero = calculateShareLimit([csm], 3n, stakeWei(50_000n));
+    const withZero = calculateShareLimit([csm], 3n, MODULE_ADDRESS, 0n);
+    const withNonZero = calculateShareLimit(
+      [csm],
+      3n,
+      MODULE_ADDRESS,
+      stakeWei(50_000n),
+    );
 
     expect(withNonZero).toEqual(withZero);
   });
