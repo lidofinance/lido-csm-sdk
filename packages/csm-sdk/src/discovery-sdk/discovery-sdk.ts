@@ -8,11 +8,7 @@ import {
 import { SMDiscoveryAbi } from '../abi/SMDiscovery';
 import { SMDiscoveryV1Abi } from '../abi/SMDiscoveryV1';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import {
-  CONTRACT_NAMES,
-  OPERATOR_TYPE,
-  OPERATOR_TYPE_MODULE,
-} from '../common/constants/index';
+import { CONTRACT_NAMES, OPERATOR_TYPE } from '../common/constants/index';
 import { ROLES } from '../common/constants/roles';
 import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
@@ -20,7 +16,10 @@ import {
   NodeOperatorInviteInfo,
   NodeOperatorShortInfo,
 } from '../common/types';
-import { getCurveIdByOperatorType } from '../common/utils/operator-type-utils';
+import {
+  getCurveRefByOperatorType,
+  getOperatorTypesForModule,
+} from '../common/utils/operator-type-utils';
 import { onRevertEmptyList } from '../common/utils/on-error';
 import {
   invariant,
@@ -217,22 +216,18 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
     operatorType: OPERATOR_TYPE,
     pagination?: Pagination,
   ): Promise<NodeOperatorShortInfo[]> {
+    const ref = getCurveRefByOperatorType(this.core.chainId, operatorType);
     invariantArgument(
-      OPERATOR_TYPE_MODULE[operatorType] === this.core.moduleName,
-      `Operator type "${operatorType}" does not belong to the current module (${this.core.moduleName})`,
+      ref?.module === this.core.moduleName,
+      `Operator type "${operatorType}" is not available for module ${this.core.moduleName} on the current chain`,
     );
 
-    const curveId = getCurveIdByOperatorType(this.core.chainId, operatorType);
+    return this.getOperatorsByCurveId(ref.curveId, pagination);
+  }
 
-    // Belt-and-suspenders: with the module check above this should always be
-    // defined, but guard against a chain/type combo missing from the curve
-    // id table (e.g. a newly added OPERATOR_TYPE not yet backfilled).
-    invariantArgument(
-      curveId !== undefined,
-      `Operator type "${operatorType}" has no curve id for the current chain`,
-    );
-
-    return this.getOperatorsByCurveId(curveId, pagination);
+  @Logger('Views:')
+  public getAvailableOperatorTypes(): OPERATOR_TYPE[] {
+    return getOperatorTypesForModule(this.core.chainId, this.core.moduleName);
   }
 
   @Logger('Views:')

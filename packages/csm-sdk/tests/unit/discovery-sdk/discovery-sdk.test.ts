@@ -14,6 +14,7 @@ import { SMDiscoveryAbi } from '../../../src/abi/SMDiscovery';
 import { SMDiscoveryV1Abi } from '../../../src/abi/SMDiscoveryV1';
 import { OPERATOR_TYPE } from '../../../src/common/constants/operator-types';
 import { MODULE_NAME } from '../../../src/common/constants/module-name';
+import { getOperatorTypesForModule } from '../../../src/common/utils/operator-type-utils';
 import { SDKError } from '../../../src/common/utils/sdk-error';
 import { ERROR_CODE } from '../../../src/common/utils/sdk-error-code';
 import { UPGRADE_REQUIRED_MESSAGE } from '../../../src/discovery-sdk/legacy-impl';
@@ -182,9 +183,9 @@ describe('DiscoverySDK.getOperatorsByType', () => {
     expect(read).toHaveBeenCalledWith([4n, 4n, 0n, 5n]);
   });
 
-  // `OPERATOR_TYPE_MODULE[CM_PO]` is MODULE_NAME.CM, while this SDK is
+  // `OPERATOR_TYPE_INFO[CM_PO].module` is MODULE_NAME.CM, while this SDK is
   // configured for MODULE_NAME.CSM (the default) — a genuine foreign-module
-  // type, guarded explicitly before any curve id resolution happens.
+  // type, caught by the merged module+curveId availability check.
   it('throws INVALID_ARGUMENT for a foreign-module operator type', async () => {
     const { sdk, read } = makeSdk({ moduleName: MODULE_NAME.CSM });
 
@@ -194,6 +195,23 @@ describe('DiscoverySDK.getOperatorsByType', () => {
       code: ERROR_CODE.INVALID_ARGUMENT,
     } satisfies Partial<SDKError>);
     expect(read).not.toHaveBeenCalled();
+  });
+});
+
+describe('DiscoverySDK.getAvailableOperatorTypes', () => {
+  it('matches getOperatorTypesForModule for the configured chain and module', () => {
+    const { sdk } = makeSdk({
+      chainId: CHAINS.Mainnet,
+      moduleName: MODULE_NAME.CSM,
+    });
+
+    const result = sdk.getAvailableOperatorTypes();
+
+    expect(result).toEqual(
+      getOperatorTypesForModule(CHAINS.Mainnet, MODULE_NAME.CSM),
+    );
+    expect(result).toContain(OPERATOR_TYPE.CSM_DEF);
+    expect(result).not.toContain(OPERATOR_TYPE.CM_PO);
   });
 });
 

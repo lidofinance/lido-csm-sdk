@@ -1,6 +1,6 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { PerSupportedChain } from './supported-chains';
-import { MODULE_NAME, PerModule } from './module-name';
+import { PerSupportedChain, SUPPORTED_CHAINS } from './supported-chains';
+import { MODULE_NAME } from './module-name';
 
 export enum OPERATOR_TYPE {
   CSM_DEF = 'CSM_DEF',
@@ -17,62 +17,93 @@ export enum OPERATOR_TYPE {
   CM_IODCP = 'CM_IODCP',
 }
 
-export const OPERATOR_TYPE_MODULE: Record<OPERATOR_TYPE, MODULE_NAME> = {
-  [OPERATOR_TYPE.CSM_DEF]: MODULE_NAME.CSM,
-  [OPERATOR_TYPE.CSM_LEA]: MODULE_NAME.CSM,
-  [OPERATOR_TYPE.CSM_ICS]: MODULE_NAME.CSM,
-  [OPERATOR_TYPE.CSM_IDVTC]: MODULE_NAME.CSM,
-  [OPERATOR_TYPE.CSM2_DEF]: MODULE_NAME.CSM_02,
-  [OPERATOR_TYPE.CM_PO]: MODULE_NAME.CM,
-  [OPERATOR_TYPE.CM_PTO]: MODULE_NAME.CM,
-  [OPERATOR_TYPE.CM_PGO]: MODULE_NAME.CM,
-  [OPERATOR_TYPE.CM_DO]: MODULE_NAME.CM,
-  [OPERATOR_TYPE.CM_EEO]: MODULE_NAME.CM,
-  [OPERATOR_TYPE.CM_IODC]: MODULE_NAME.CM,
-  [OPERATOR_TYPE.CM_IODCP]: MODULE_NAME.CM,
+export type OperatorTypeInfo = {
+  module: MODULE_NAME;
+  /** `undefined` = gate not deployed on that chain yet. Every supported chain must be listed. */
+  curveId: PerSupportedChain<bigint | undefined>;
 };
 
-export const OPERATOR_TYPE_CURVE_ID: PerSupportedChain<
-  PerModule<Partial<Record<OPERATOR_TYPE, bigint>>>
-> = {
-  [CHAINS.Mainnet]: {
-    [MODULE_NAME.CSM]: {
-      [OPERATOR_TYPE.CSM_DEF]: 0n,
-      [OPERATOR_TYPE.CSM_LEA]: 1n,
-      [OPERATOR_TYPE.CSM_ICS]: 2n,
-      [OPERATOR_TYPE.CSM_IDVTC]: 3n,
-    },
-    [MODULE_NAME.CM]: {
-      [OPERATOR_TYPE.CM_PO]: 0n,
-      [OPERATOR_TYPE.CM_PTO]: 1n,
-      [OPERATOR_TYPE.CM_PGO]: 2n,
-      [OPERATOR_TYPE.CM_DO]: 3n,
-      [OPERATOR_TYPE.CM_EEO]: 4n,
-      [OPERATOR_TYPE.CM_IODC]: 5n,
-      [OPERATOR_TYPE.CM_IODCP]: 6n,
-    },
-    [MODULE_NAME.CSM_02]: {
-      [OPERATOR_TYPE.CSM2_DEF]: 0n,
-    },
+export const OPERATOR_TYPE_INFO = {
+  [OPERATOR_TYPE.CSM_DEF]: {
+    module: MODULE_NAME.CSM,
+    curveId: { [CHAINS.Mainnet]: 0n, [CHAINS.Hoodi]: 0n },
   },
-  [CHAINS.Hoodi]: {
-    [MODULE_NAME.CSM]: {
-      [OPERATOR_TYPE.CSM_DEF]: 0n,
-      [OPERATOR_TYPE.CSM_LEA]: 1n,
-      [OPERATOR_TYPE.CSM_ICS]: 2n,
-      [OPERATOR_TYPE.CSM_IDVTC]: 4n,
-    },
-    [MODULE_NAME.CM]: {
-      [OPERATOR_TYPE.CM_PO]: 0n,
-      [OPERATOR_TYPE.CM_PTO]: 1n,
-      [OPERATOR_TYPE.CM_PGO]: 2n,
-      [OPERATOR_TYPE.CM_DO]: 3n,
-      [OPERATOR_TYPE.CM_EEO]: 4n,
-      [OPERATOR_TYPE.CM_IODC]: 5n,
-      [OPERATOR_TYPE.CM_IODCP]: 6n,
-    },
-    [MODULE_NAME.CSM_02]: {
-      [OPERATOR_TYPE.CSM2_DEF]: 0n,
-    },
+  [OPERATOR_TYPE.CSM_LEA]: {
+    module: MODULE_NAME.CSM,
+    curveId: { [CHAINS.Mainnet]: 1n, [CHAINS.Hoodi]: 1n },
   },
+  [OPERATOR_TYPE.CSM_ICS]: {
+    module: MODULE_NAME.CSM,
+    curveId: { [CHAINS.Mainnet]: 2n, [CHAINS.Hoodi]: 2n },
+  },
+  [OPERATOR_TYPE.CSM_IDVTC]: {
+    module: MODULE_NAME.CSM,
+    curveId: { [CHAINS.Mainnet]: 3n, [CHAINS.Hoodi]: 4n },
+  },
+  [OPERATOR_TYPE.CSM2_DEF]: {
+    module: MODULE_NAME.CSM_02,
+    curveId: { [CHAINS.Mainnet]: 0n, [CHAINS.Hoodi]: 0n },
+  },
+  [OPERATOR_TYPE.CM_PO]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 0n, [CHAINS.Hoodi]: 0n },
+  },
+  [OPERATOR_TYPE.CM_PTO]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 1n, [CHAINS.Hoodi]: 1n },
+  },
+  [OPERATOR_TYPE.CM_PGO]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 2n, [CHAINS.Hoodi]: 2n },
+  },
+  [OPERATOR_TYPE.CM_DO]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 3n, [CHAINS.Hoodi]: 3n },
+  },
+  [OPERATOR_TYPE.CM_EEO]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 4n, [CHAINS.Hoodi]: 4n },
+  },
+  [OPERATOR_TYPE.CM_IODC]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 5n, [CHAINS.Hoodi]: 5n },
+  },
+  [OPERATOR_TYPE.CM_IODCP]: {
+    module: MODULE_NAME.CM,
+    curveId: { [CHAINS.Mainnet]: 6n, [CHAINS.Hoodi]: 6n },
+  },
+} satisfies Record<OPERATOR_TYPE, OperatorTypeInfo>;
+
+/** Operator types belonging to module `M` (type-level). */
+export type OperatorTypeOfModule<M extends MODULE_NAME> = {
+  [K in OPERATOR_TYPE]: (typeof OPERATOR_TYPE_INFO)[K]['module'] extends M
+    ? K
+    : never;
+}[OPERATOR_TYPE];
+
+/** Curve id scoped to its module; ids collide across modules and are meaningless alone. */
+export type CurveRef<M extends MODULE_NAME = MODULE_NAME> = {
+  curveId: bigint;
+  module: M;
 };
+
+export type CurveRefsByOperatorType = Partial<Record<OPERATOR_TYPE, CurveRef>>;
+
+const buildCurveRefsByChain =
+  (): PerSupportedChain<CurveRefsByOperatorType> => {
+    const table = {} as PerSupportedChain<CurveRefsByOperatorType>;
+    for (const chainId of SUPPORTED_CHAINS) {
+      const refs: CurveRefsByOperatorType = {};
+      for (const operatorType of Object.values(OPERATOR_TYPE)) {
+        const { module, curveId } = OPERATOR_TYPE_INFO[operatorType];
+        const id = curveId[chainId];
+        if (id !== undefined) refs[operatorType] = { curveId: id, module };
+      }
+      table[chainId] = refs;
+    }
+    return table;
+  };
+
+/** Per chain: operator type → curve ref. Absent key = gate not deployed on that chain. */
+export const OPERATOR_TYPE_CURVE_REFS: PerSupportedChain<CurveRefsByOperatorType> =
+  buildCurveRefsByChain();
