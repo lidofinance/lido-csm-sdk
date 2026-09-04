@@ -21,8 +21,8 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.3",
-    "@commitlint/config-conventional": "^20.5.3",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
     "@eslint/js": "^10.0.1",
     "@lidofinance/multi-semantic-release": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^8.69.0",
@@ -35,10 +35,9 @@
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-promise": "^7.3.0",
     "eslint-plugin-sonarjs": "^4.2.0",
-    "eslint-plugin-unicorn": "^64.0.0",
+    "eslint-plugin-unicorn": "^74.0.0",
     "husky": "^9.1.7",
     "prettier": "^3.9.6",
-    "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.69.0"
   },
@@ -48,7 +47,7 @@
     "micromatch/picomatch": "^2.3.2",
     "glob/minimatch": "^3.1.5",
     "eslint-plugin-import/minimatch": "^3.1.5",
-    "uuid": "14.0.0"
+    "uuid": "^14.0.0"
   },
   "workspaces": [
     "packages/*"

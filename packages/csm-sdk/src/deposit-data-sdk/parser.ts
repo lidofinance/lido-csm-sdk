@@ -6,7 +6,7 @@ import { MAX_JSON_LENGTH } from './constants';
  * Normalizes hex values in JSON by removing '0x' prefixes
  */
 const normalizeHexInJson = (text: string): string => {
-  return text.replaceAll(/"0x/gm, '"');
+  return text.replaceAll('"0x', '"');
 };
 
 // Convert a present value to Hex, leaving falsy values untouched for the
