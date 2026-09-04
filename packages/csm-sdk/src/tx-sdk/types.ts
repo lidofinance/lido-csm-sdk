@@ -32,16 +32,16 @@ export type AllowanceProps = Pick<AmountAndTokenProps, 'token'> &
 // Callback Types
 
 export enum TransactionCallbackStage {
-  'PERMIT_SIGN' = 'permit_sign',
-  'APPROVE_SIGN' = 'approve_sign',
-  'APPROVE_RECEIPT' = 'approve_receipt',
-  'GAS_LIMIT' = 'gas_limit',
-  'SIGN' = 'sign',
-  'RECEIPT' = 'receipt',
-  'CONFIRMATION' = 'confirmation',
-  'DONE' = 'done',
-  'MULTISIG_DONE' = 'multisig_done',
-  'ERROR' = 'error',
+  PERMIT_SIGN = 'permit_sign',
+  APPROVE_SIGN = 'approve_sign',
+  APPROVE_RECEIPT = 'approve_receipt',
+  GAS_LIMIT = 'gas_limit',
+  SIGN = 'sign',
+  RECEIPT = 'receipt',
+  CONFIRMATION = 'confirmation',
+  DONE = 'done',
+  MULTISIG_DONE = 'multisig_done',
+  ERROR = 'error',
 }
 
 export type TransactionCallbackProps<TDecodedResult = undefined> =
@@ -128,8 +128,7 @@ export type PerformOptionsSpend<TDecodedResult = undefined> =
     };
 
 export type PerformOptions<TDecodedResult = undefined> =
-  | PerformOptionsNoSpend<TDecodedResult>
-  | PerformOptionsSpend<TDecodedResult>;
+  PerformOptionsNoSpend<TDecodedResult> | PerformOptionsSpend<TDecodedResult>;
 
 export {
   type PerformTransactionGasLimit,

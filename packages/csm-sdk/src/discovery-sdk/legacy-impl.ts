@@ -20,9 +20,7 @@ export const requiresUpgradedImpl = (mode: SearchMode) =>
   mode > SearchMode.ALL_ADDRESSES;
 
 export type VersionedRead =
-  | 'getNodeOperatorsByAddress'
-  | 'getOperatorsByCurveId'
-  | 'getAllNodeOperators';
+  'getNodeOperatorsByAddress' | 'getOperatorsByCurveId' | 'getAllNodeOperators';
 
 // PositionOutOfBoundsError is not exported from viem's root, hence the name match.
 export const isLegacyDecodeError = (error: unknown): boolean => {
