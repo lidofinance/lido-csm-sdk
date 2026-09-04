@@ -33,9 +33,9 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Integration tests need a forkable RPC + Foundry. Skip on forks (secrets are unavailable),
-    # run on internal PRs and on develop/main pushes.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Integration tests need a forkable RPC + Foundry. Skip on forks and Dependabot PRs
+    # (secrets are unavailable), run on internal PRs and on develop/main pushes.
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
     needs: check-all
     steps:
       - name: Checkout repo
