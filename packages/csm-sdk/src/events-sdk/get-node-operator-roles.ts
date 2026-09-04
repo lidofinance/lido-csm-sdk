@@ -1,18 +1,23 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
 import { NodeOperatorShortInfo, ROLES } from '../common/index';
-import { NodeOperatorInfo } from '../operator-sdk/types';
 import { packRoles } from './merge';
 
 export const getNodeOperatorRoles = (
   {
     managerAddress,
     rewardsAddress,
-  }: Pick<NodeOperatorInfo, 'rewardsAddress' | 'managerAddress'>,
+    claimerAddress,
+  }: Pick<
+    NodeOperatorShortInfo,
+    'managerAddress' | 'rewardsAddress' | 'claimerAddress'
+  >,
   address: Address = zeroAddress,
 ) =>
   packRoles({
     [ROLES.MANAGER]: isAddressEqual(managerAddress, address),
     [ROLES.REWARDS]: isAddressEqual(rewardsAddress, address),
+    [ROLES.CLAIMER]:
+      !!claimerAddress && isAddressEqual(claimerAddress, address),
   });
 
 // TODO: move
