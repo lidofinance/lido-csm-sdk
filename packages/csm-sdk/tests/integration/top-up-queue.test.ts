@@ -60,8 +60,6 @@ describe('integration: top-up queue (read-only, CSM 0x02)', () => {
     expect(page[0]?.position).toBe(1);
   });
 
-  // The hoodi fork's discovery proxy predates the getTopUpQueueItems selector,
-  // so these exercise the legacy fallback — expected until the upgrade lands.
   it('getTopUpQueueItems returns a full snapshot consistent with getTopUpQueueInfo', async () => {
     const sdk = useCsm02Sdk();
     const [info, snapshot] = await Promise.all([

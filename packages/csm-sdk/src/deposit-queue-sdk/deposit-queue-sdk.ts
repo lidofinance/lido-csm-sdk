@@ -14,7 +14,6 @@ import {
 import { TOPUP_QUEUE_MODULES } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { bigIntRange } from '../common/utils/bigint-range';
-import { isMissingSelectorRevert } from '../common/utils/is-missing-selector-revert';
 import {
   byTotalCount,
   iteratePages,
@@ -59,8 +58,6 @@ export class DepositQueueSDK extends CsmSDKModule<{
   private get discoveryContract() {
     return this.core.getContract(CONTRACT_NAMES.smDiscovery);
   }
-
-  private isLegacyDiscovery = false;
 
   @Logger('Views:')
   @ErrorHandler()
@@ -240,7 +237,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   /**
    * Queue state + entry identities in one snapshot. `pagination.offset` is head-relative;
-   * defaults to the whole queue. Falls back to per-position module reads on a pre-upgrade discovery impl.
+   * defaults to the whole queue.
    */
   @Logger('Views:')
   @ErrorHandler()
@@ -250,52 +247,20 @@ export class DepositQueueSDK extends CsmSDKModule<{
     const offset = pagination?.offset ?? 0n;
     const limit = pagination?.limit ?? 1000n;
 
-    if (!this.isLegacyDiscovery) {
-      try {
-        const [enabled, queueLimit, total, head, items] =
-          await this.discoveryContract.read.getTopUpQueueItems([
-            this.core.moduleId,
-            offset,
-            limit,
-          ]);
+    const [enabled, queueLimit, total, head, items] =
+      await this.discoveryContract.read.getTopUpQueueItems([
+        this.core.moduleId,
+        offset,
+        limit,
+      ]);
 
-        return {
-          enabled,
-          limit: queueLimit,
-          length: total,
-          head,
-          items: parseTopUpQueueItems(offset, items),
-        };
-      } catch (error) {
-        if (!isMissingSelectorRevert(error)) throw error;
-        this.isLegacyDiscovery = true;
-      }
-    }
-
-    return this.getTopUpQueueItemsLegacy(offset, limit);
-  }
-
-  // TODO: drop with `isLegacyDiscovery` once the discovery upgrade is live on all networks.
-  @Logger('Views:')
-  @ErrorHandler()
-  private async getTopUpQueueItemsLegacy(
-    offset: bigint,
-    limit: bigint,
-  ): Promise<TopUpQueueSnapshot> {
-    const info = await this.getTopUpQueueInfo();
-
-    if (offset >= info.length) {
-      return { ...info, items: [] };
-    }
-
-    const end = offset + limit < info.length ? offset + limit : info.length;
-    const items = await Promise.all(
-      [...bigIntRange(end - offset)].map((i) =>
-        this.getTopUpQueueItem(Number(offset + i)),
-      ),
-    );
-
-    return { ...info, items };
+    return {
+      enabled,
+      limit: queueLimit,
+      length: total,
+      head,
+      items: parseTopUpQueueItems(offset, items),
+    };
   }
 
   /** This operator's key index → 0-based queue position. Empty when none are queued. */

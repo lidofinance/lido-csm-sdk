@@ -14,7 +14,6 @@ export * from './MetaRegistry';
 export * from './ParametersRegistry';
 export * from './PermissionlessGate';
 export * from './SMDiscovery';
-export * from './SMDiscoveryV1';
 export * from './StakingRouter';
 export * from './ValidatorStrikes';
 export * from './ValidatorsExitBusOracle';
