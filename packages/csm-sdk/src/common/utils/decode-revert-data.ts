@@ -34,14 +34,9 @@ const HEX_DATA_RE =
 
 // Dedup by 4-byte selector, not by name: two ABIs may declare distinct errors
 // that happen to share a name but encode different argument tuples. Dropping
-// by name would silently misdecode one of them. Same-selector duplicates
-// (identical signature in multiple contracts) are still collapsed silently.
-// Name collisions across different selectors emit a single console.warn each
-// so future ABI drift surfaces without breaking decoding.
+// by name would silently misdecode one of them.
 export const buildCombinedErrorAbi = (abis: readonly Abi[]): Abi => {
   const bySelector = new Map<Hex, Abi[number]>();
-  const byName = new Map<string, string>();
-  const warned = new Set<string>();
   for (const abi of abis) {
     for (const item of abi) {
       if (item.type !== 'error') continue;
@@ -49,20 +44,6 @@ export const buildCombinedErrorAbi = (abis: readonly Abi[]): Abi => {
       const selector = toFunctionSelector(signature);
       if (bySelector.has(selector)) continue;
       bySelector.set(selector, item);
-      const prevSignature = byName.get(item.name);
-      if (
-        prevSignature &&
-        prevSignature !== signature &&
-        !warned.has(item.name)
-      ) {
-        warned.add(item.name);
-
-        console.warn(
-          `[csm-sdk] ABI error name collision for "${item.name}": ${prevSignature} vs ${signature}`,
-        );
-      } else if (!prevSignature) {
-        byName.set(item.name, signature);
-      }
     }
   }
   return [...bySelector.values()] as Abi;

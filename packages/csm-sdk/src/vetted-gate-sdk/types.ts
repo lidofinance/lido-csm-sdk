@@ -10,8 +10,7 @@ import {
 import { CommonTransactionProps } from '../tx-sdk/types';
 
 export type VettedGateContractName =
-  | CONTRACT_NAMES.icsGate
-  | CONTRACT_NAMES.idvtcGate;
+  CONTRACT_NAMES.icsGate | CONTRACT_NAMES.idvtcGate;
 
 export type AddVettedNodeOperatorProps =
   CommonTransactionProps<NodeOperatorShortInfo> & {

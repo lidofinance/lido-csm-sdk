@@ -23,4 +23,13 @@ describe('integration: module views (read-only)', () => {
     expect(typeof status.isPausedModule).toBe('boolean');
     expect(typeof status.isPausedAccounting).toBe('boolean');
   });
+
+  it('module.getRegistration reports CSM as registered and active on hoodi', async () => {
+    const sdk = useCsmSdk();
+    const registration = await sdk.module.getRegistration();
+    expect(registration).toEqual({
+      registered: true,
+      isActive: true,
+    });
+  });
 });

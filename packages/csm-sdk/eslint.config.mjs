@@ -94,7 +94,8 @@ export default tseslint.config(
 
       // Unicorn (cherry-picked)
       'unicorn/consistent-destructuring': 'error',
-      'unicorn/custom-error-definition': 'error',
+      // v74 mandates (message, options) constructors; our error classes carry typed fields instead.
+      'unicorn/custom-error-definition': 'off',
       'unicorn/no-abusive-eslint-disable': 'error',
       'unicorn/no-unused-properties': 'error',
       'unicorn/no-useless-fallback-in-spread': 'error',

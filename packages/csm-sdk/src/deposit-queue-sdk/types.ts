@@ -1,3 +1,6 @@
+import { Hex } from 'viem';
+import { NodeOperatorId } from '../common/types';
+
 export type DepositQueuePointer = {
   head: bigint;
   tail: bigint;
@@ -31,4 +34,48 @@ export type CleanDepositQueueResult = {
 export type QueueBatchesPagination = {
   cursorIndex: bigint;
   limit: bigint;
+};
+
+export type TopUpQueueInfo = {
+  enabled: boolean;
+  limit: bigint;
+  length: bigint;
+  /** Absolute index of the queue head. Changes on rewind — treat as a generation counter. */
+  head: bigint;
+};
+
+export type TopUpQueueEntry = {
+  /** 0-based position from the head. 0 = next to be topped up. */
+  position: number;
+  pubkey: Hex;
+};
+
+/** Queue slot identity — what the contract actually stores per entry. */
+export type TopUpQueueItem = {
+  /** 0-based position from the head. */
+  position: number;
+  nodeOperatorId: NodeOperatorId;
+  /** Key index within that operator. */
+  keyIndex: number;
+};
+
+export type OperatorTopUpQueueKey = {
+  pubkey: Hex;
+  /** Key index within the operator — matches `KeyWithStatus.index`. */
+  index: number;
+  /** 0-based position in the global queue. UI displays `position + 1`. */
+  position: number;
+};
+
+export type OperatorTopUpQueue = {
+  /** Queue length at read time — the denominator. 0 when disabled. */
+  total: number;
+  /** This operator's queued keys, ascending by position. Empty when none are queued. */
+  keys: OperatorTopUpQueueKey[];
+};
+
+/** One-call snapshot: queue state plus the entry identities in `[offset, offset+limit)`. */
+export type TopUpQueueSnapshot = TopUpQueueInfo & {
+  /** Ascending by `position`. Independent of `enabled` — a disabled queue may still hold items. */
+  items: TopUpQueueItem[];
 };

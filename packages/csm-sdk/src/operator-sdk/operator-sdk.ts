@@ -134,9 +134,10 @@ export class OperatorSDK extends CsmSDKModule<{
   public async getManagementProperties(
     id: NodeOperatorId,
   ): Promise<NodeOperatorShortInfo> {
-    const [properties, curveId] = await Promise.all([
+    const [properties, curveId, claimer] = await Promise.all([
       this.moduleContract.read.getNodeOperatorManagementProperties([id]),
       this.getCurveId(id),
+      this.accountingContract.read.getCustomRewardsClaimer([id]),
     ]);
 
     return {
@@ -145,6 +146,7 @@ export class OperatorSDK extends CsmSDKModule<{
       rewardsAddress: properties.rewardAddress,
       extendedManagerPermissions: properties.extendedManagerPermissions,
       curveId,
+      claimerAddress: clearEmptyAddress(claimer),
     };
   }
 

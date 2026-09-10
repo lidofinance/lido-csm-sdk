@@ -284,16 +284,14 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'reported',
-            amount: e.args.amount!,
-            penaltyType: e.args.penaltyType!,
-            additionalFine: e.args.additionalFine!,
-            details: e.args.details!,
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'reported',
+          amount: e.args.amount!,
+          penaltyType: e.args.penaltyType!,
+          additionalFine: e.args.additionalFine!,
+          details: e.args.details!,
+        }));
       },
       async (s) => {
         const logs =
@@ -301,13 +299,11 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'reported',
-            amount: e.args.stolenAmount!,
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'reported',
+          amount: e.args.stolenAmount!,
+        }));
       },
       async (s) => {
         const logs =
@@ -315,13 +311,11 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'cancelled',
-            amount: e.args.amount!,
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'cancelled',
+          amount: e.args.amount!,
+        }));
       },
       async (s) => {
         const logs =
@@ -329,13 +323,11 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'cancelled',
-            amount: e.args.amount!,
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'cancelled',
+          amount: e.args.amount!,
+        }));
       },
       async (s) => {
         const logs =
@@ -343,13 +335,11 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'compensated',
-            amount: e.args.amount!,
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'compensated',
+          amount: e.args.amount!,
+        }));
       },
       async (s) => {
         const logs =
@@ -357,13 +347,11 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'compensated',
-            amount: e.args.amount!,
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'compensated',
+          amount: e.args.amount!,
+        }));
       },
       async (s) => {
         const logs =
@@ -371,12 +359,10 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'settled',
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'settled',
+        }));
       },
       async (s) => {
         const logs =
@@ -384,12 +370,10 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'settled',
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'settled',
+        }));
       },
       // Legacy expiry signal from the pre-upgrade contract. `ExpiredBondLockRemoved`
       // was removed as redundant (staking-modules #805), but historical
@@ -400,12 +384,10 @@ export class EventsSDK extends CsmSDKModule {
             { nodeOperatorId },
             s,
           );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'expired',
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'expired',
+        }));
       },
       // Forward expiry signal. `BondLockRemoved` fires on every full lock removal
       // (expiry, cancel, settle, compensate); the coinciding-tx ones are pruned in
@@ -415,12 +397,10 @@ export class EventsSDK extends CsmSDKModule {
           { nodeOperatorId },
           s,
         );
-        return logs.map(
-          (e): PenaltyRecordWithoutTimestamp => ({
-            ...base(e),
-            type: 'expired',
-          }),
-        );
+        return logs.map((e): PenaltyRecordWithoutTimestamp => ({
+          ...base(e),
+          type: 'expired',
+        }));
       },
     );
 

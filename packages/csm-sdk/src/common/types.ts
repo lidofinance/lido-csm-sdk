@@ -31,6 +31,7 @@ export type NodeOperatorShortInfo = {
   rewardsAddress: Address;
   extendedManagerPermissions: boolean;
   curveId: bigint;
+  claimerAddress?: Address;
 };
 
 export type NodeOperatorInviteInfo = {

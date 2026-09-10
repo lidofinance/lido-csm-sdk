@@ -51,7 +51,7 @@ Key modules include:
 
 **Shared modules** (available in both CSM and CM):
 - **core-sdk** - Shared logic, configuration, and core utilities
-- **module-sdk** - Module status and share limit queries
+- **module-sdk** - Module status, StakingRouter registration check, and share limit queries
 - **operator-sdk** - Operator data management
 - **roles-sdk** - Standard role management
 - **keys-sdk** - Validator key management
@@ -235,14 +235,12 @@ class SDKError extends Error {
   code: ERROR_CODE;                        // always set
   decodedRevert?: DecodedRevert;           // present iff revert selector decoded
   cause?: unknown;                         // original upstream error (viem BaseError)
-  get errorMessage(): string | undefined;  // @deprecated alias of `message` (pre-refactor compat)
 }
 ```
 
 - `code` defaults to `ERROR_CODE.UNKNOWN_ERROR`.
 - `cause` preserves the full upstream error — walk via `e.cause` to reach the original viem `BaseError` and its `walk()` chain.
 - `decodedRevert` is a discriminated union typed via abitype; narrowing on `name` types the `args` tuple.
-- `errorMessage` is a deprecated backward-compat alias for `message` (returns `undefined` when the message is empty). Kept for pre-refactor consumers; prefer `message`. Slated for removal in the next major.
 
 #### Classification
 
@@ -343,11 +341,15 @@ Exported helper that turns a `DecodedRevert` into the canonical `Name(arg1, arg2
   - Hoodi CSM: `staking-modules/artifacts/hoodi/csm/deploy-hoodi.json`
   - Hoodi CM: `staking-modules/artifacts/hoodi/curated/deploy-hoodi.json`
 
-**csm-satellite** (satellite contracts):
+**sm-discovery** (discovery contracts; formerly `csm-satellite`):
 
-- Sources: `csm-satellite/src`
-- ABI: `csm-satellite/out`
-- Deployed addresses: `csm-satellite/artifacts`
+- Sources: `sm-discovery/src`
+- ABI: `sm-discovery/out`
+- Deployed addresses: `sm-discovery/artifacts/<network>/transactions.json`
+
+`SMDiscovery` sits behind an `OssifiableProxy` — the SDK must hold the **proxy** address; the
+implementation rotates on every upgrade. Reads revert with `ModuleCacheNotInitialized` until
+`updateModuleCache(moduleId)` has been called for that module.
 
 ### Configuration
 

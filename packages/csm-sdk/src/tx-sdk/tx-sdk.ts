@@ -81,8 +81,7 @@ export class TxSDK extends CsmSDKModule {
   // collapsing a successful tx into a bare UNKNOWN_ERROR.
   private async runDecodeResult<TDecodedResult>(opts: {
     decodeResult:
-      | ((receipt: ReceiptLike) => Promise<TDecodedResult>)
-      | undefined;
+      ((receipt: ReceiptLike) => Promise<TDecodedResult>) | undefined;
     receipt: ReceiptLike;
     hash: `0x${string}`;
     confirmations: bigint;
@@ -294,8 +293,7 @@ export class TxSDK extends CsmSDKModule {
     // receipt over `callStatus.status`.
     const receipts = callStatus.receipts ?? [];
     const receipt = receipts.at(-1) as
-      | WalletCallReceipt<bigint, 'success' | 'reverted'>
-      | undefined;
+      WalletCallReceipt<bigint, 'success' | 'reverted'> | undefined;
 
     if (receipts.some((r) => r.status === 'reverted')) {
       const batchErr = new BatchTransactionRevertedError(

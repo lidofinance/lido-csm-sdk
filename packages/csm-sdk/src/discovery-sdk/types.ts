@@ -1,10 +1,12 @@
 import { Address } from 'viem';
-import { NodeOperatorId } from '../common/types';
+import { NodeOperatorId, NodeOperatorShortInfo } from '../common/types';
 
 export enum SearchMode {
   CURRENT_ADDRESSES = 0,
   PROPOSED_ADDRESSES = 1,
   ALL_ADDRESSES = 2,
+  CLAIMER = 3,
+  ANY_ROLE = 4,
 }
 
 export type Pagination = {
@@ -12,14 +14,9 @@ export type Pagination = {
   limit: bigint;
 };
 
-export type NodeOperatorDiscoveryInfo = {
-  id: bigint;
-  managerAddress: Address;
-  rewardAddress: Address;
-  extendedManagerPermissions: boolean;
-  proposedManagerAddress: Address;
-  proposedRewardAddress: Address;
-  curveId: bigint;
+export type NodeOperatorDiscoveryInfo = NodeOperatorShortInfo & {
+  proposedManagerAddress?: Address;
+  proposedRewardsAddress?: Address;
 };
 
 export type NodeOperatorLockedBond = {

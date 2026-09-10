@@ -35,15 +35,15 @@ export const onVersionError = (err: unknown) => {
   throw err;
 };
 
-export const onRevertEmptyList = <T>(err: unknown): T[] => {
-  if (err instanceof BaseError) {
-    const revertError = err.walk(
-      (err) => err instanceof ContractFunctionRevertedError,
-    );
-    if (revertError instanceof ContractFunctionRevertedError) {
-      return [];
-    }
-  }
+export const findRevertError = (
+  err: unknown,
+): ContractFunctionRevertedError | undefined => {
+  if (!(err instanceof BaseError)) return undefined;
+  const found = err.walk((e) => e instanceof ContractFunctionRevertedError);
+  return found instanceof ContractFunctionRevertedError ? found : undefined;
+};
 
+export const onRevertEmptyList = <T>(err: unknown): T[] => {
+  if (findRevertError(err)) return [];
   throw err;
 };

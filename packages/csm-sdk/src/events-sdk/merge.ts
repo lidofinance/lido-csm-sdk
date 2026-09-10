@@ -1,7 +1,7 @@
 import { ROLES } from '../common/index';
 import { NodeOperator, NodeOperatorId } from '../common/types';
 
-const ALL_ROLES = [ROLES.REWARDS, ROLES.MANAGER];
+const ALL_ROLES = [ROLES.REWARDS, ROLES.MANAGER, ROLES.CLAIMER];
 
 export const packRoles = (patch: Partial<Record<ROLES, boolean>>): ROLES[] =>
   ALL_ROLES.filter((role) => patch[role]);

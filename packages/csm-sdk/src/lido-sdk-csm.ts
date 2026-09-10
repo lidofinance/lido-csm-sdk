@@ -72,7 +72,7 @@ export class LidoSDKCsm {
     this.rewards = new RewardsSDK(commonProps);
     this.frame = new FrameSDK(commonProps, 'frame');
     this.events = new EventsSDK(commonProps, 'events');
-    this.depositQueue = new DepositQueueSDK(commonProps);
+    this.depositQueue = new DepositQueueSDK(commonProps, 'depositQueue');
     this.depositData = new DepositDataSDK(commonProps);
     this.delayedPenalty = new DelayedPenaltySDK(commonProps);
     this.feesMonitoring = new FeesMonitoringSDK(commonProps);

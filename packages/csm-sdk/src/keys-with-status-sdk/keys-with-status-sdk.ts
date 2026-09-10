@@ -2,10 +2,11 @@ import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
+  ALLOCATED_BALANCE_MODULES,
   CACHE_MID,
+  DEPOSIT_QUEUE_MODULES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
-  MODULE_NAME,
 } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { fetchJson, isNotUnique, isUnique } from '../common/utils/index';
@@ -31,9 +32,9 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   public async getApiKeys(pubkeys: Hex[]) {
     const keysApi = this.core.keysApiLink;
 
-    if (!keysApi) {
-      throw new Error('Keys API link is not configured');
-    }
+    // Unconfigured API degrades to "could not check", like a network failure
+    // below and like `getClKeys` — callers treat null as inconclusive.
+    if (!keysApi) return null;
 
     if (pubkeys.length === 0) return [];
 
@@ -110,8 +111,8 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
-    const isCM = this.core.moduleName === MODULE_NAME.CM;
-    const hasQueue = this.core.moduleName === MODULE_NAME.CSM;
+    const hasBalance = ALLOCATED_BALANCE_MODULES.has(this.core.moduleName);
+    const hasQueue = DEPOSIT_QUEUE_MODULES.has(this.core.moduleName);
 
     const [
       info,
@@ -150,7 +151,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
     ]);
 
     const allocatedBalances =
-      isCM && keys.length > 0
+      hasBalance && keys.length > 0
         ? await this.bus.operator.getKeyAllocatedBalances(id)
         : undefined;
 
