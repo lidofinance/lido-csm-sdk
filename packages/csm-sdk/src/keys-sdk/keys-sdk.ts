@@ -139,12 +139,7 @@ export class KeysSDK extends CsmSDKModule<{
 
   @Access({ level: AccessLevel.MANAGER })
   public async addKeys(props: WithToken<AddKeysProps>) {
-    const { token, amount } = props;
-
-    if (amount === 0n) {
-      return this.addKeysStETH(props);
-    }
-
+    const { token } = props;
     switch (token) {
       case TOKENS.eth:
         return this.addKeysETH(props);
