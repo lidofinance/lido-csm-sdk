@@ -6,6 +6,7 @@ import {
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call, erc20Abi, WalletCallReceipt } from 'viem';
+import type { ReplacementReturnType } from 'viem/actions';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { ErrorHandler } from '../common/decorators/error-handler';
 import { Logger } from '../common/decorators/logger';
@@ -131,7 +132,7 @@ export class TxSDK extends CsmSDKModule {
       getGasLimit,
       sendTransaction,
       decodeResult,
-      waitForTransactionReceiptParameters = {},
+      waitForTransactionReceiptParameters,
     } = props;
     const account = await this.core.core.useAccount(props.account);
     const isContract = await this.core.core.isContract(account.address);
@@ -201,18 +202,45 @@ export class TxSDK extends CsmSDKModule {
       payload: { hash },
     });
 
+    // onReplaced fires mid-poll: on a non-repriced replacement the receipt that
+    // resolves belongs to another transaction, so it is never our success
+    let replacement: ReplacementReturnType | undefined;
+
     const receipt = await withSDKError(
       this.core.core.publicClient.waitForTransactionReceipt({
         hash,
         timeout: 120_000,
         ...waitForTransactionReceiptParameters,
+        onReplaced: (response) => {
+          replacement = response;
+          waitForTransactionReceiptParameters?.onReplaced?.(response);
+        },
       }),
       ERROR_CODE.TRANSACTION_ERROR,
     );
 
+    if (replacement && replacement.reason !== 'repriced') {
+      throw new SDKError({
+        code: ERROR_CODE.TRANSACTION_ERROR,
+        message: `Transaction was ${replacement.reason}, not confirmed`,
+      });
+    }
+
+    if (receipt.status === 'reverted') {
+      throw new SDKError({
+        code: ERROR_CODE.TRANSACTION_REVERTED,
+        message:
+          'Transaction was included into block but reverted during execution',
+      });
+    }
+
+    // on a repriced replacement the receipt (and confirmed hash) belong to the
+    // replacement tx, not the one we originally signed
+    const confirmedHash = replacement?.transaction.hash ?? hash;
+
     await callback({
       stage: TransactionCallbackStage.CONFIRMATION,
-      payload: { receipt, hash },
+      payload: { receipt, hash: confirmedHash },
     });
 
     const confirmations =
@@ -223,7 +251,7 @@ export class TxSDK extends CsmSDKModule {
     const result = await this.runDecodeResult({
       decodeResult,
       receipt,
-      hash,
+      hash: confirmedHash,
       confirmations,
     });
 
@@ -233,14 +261,14 @@ export class TxSDK extends CsmSDKModule {
         result: result as Awaited<TDecodedResult>,
         confirmations,
         receipt,
-        hash,
+        hash: confirmedHash,
       },
     });
 
     this.core.invalidateCache();
 
     return {
-      hash,
+      hash: confirmedHash,
       receipt,
       result,
       confirmations,
