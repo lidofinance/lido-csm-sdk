@@ -140,4 +140,23 @@ describe('TxSDK.signPermitOrApprove (EOA / multisig branch)', () => {
       );
     });
   });
+
+  describe('zero-amount spend (e.g. a zero-quote token addition)', () => {
+    it('skips permit signing and approving regardless of allowance or account type', async () => {
+      const { tx, signPermit, sendTransaction, allowanceRead } = buildTx({
+        allowance: 0n,
+        isMultisig: false,
+      });
+      const result = await tx.signPermitOrApprove({
+        account: ACCOUNT,
+        spend: { token: TOKENS.steth, amount: 0n },
+      });
+      expect(allowanceRead).not.toHaveBeenCalled();
+      expect(signPermit).not.toHaveBeenCalled();
+      expect(sendTransaction).not.toHaveBeenCalled();
+      expect(result.permit).toEqual(
+        expect.objectContaining({ value: 0n, deadline: 0n }),
+      );
+    });
+  });
 });
