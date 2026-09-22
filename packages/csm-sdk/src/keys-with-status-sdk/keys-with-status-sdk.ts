@@ -2,9 +2,7 @@ import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  ALLOCATED_BALANCE_MODULES,
   CACHE_MID,
-  DEPOSIT_QUEUE_MODULES,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index';
@@ -111,8 +109,8 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
   @Logger('Utils:')
   @ErrorHandler()
   public async getKeys(id: NodeOperatorId): Promise<KeyWithStatus[]> {
-    const hasBalance = ALLOCATED_BALANCE_MODULES.has(this.core.moduleName);
-    const hasQueue = DEPOSIT_QUEUE_MODULES.has(this.core.moduleName);
+    const { allocatedBalance: hasBalance, depositQueue: hasQueue } =
+      this.core.profile;
 
     const [
       info,
