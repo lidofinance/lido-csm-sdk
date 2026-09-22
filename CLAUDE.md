@@ -37,6 +37,8 @@ The SDK follows a modular architecture centered around the `LidoSDKCsm` and `Lid
 
 - `packages/csm-sdk/src/lido-sdk-csm.ts` - CSM SDK class that instantiates and manages CSM-specific modules
 - `packages/csm-sdk/src/lido-sdk-cm.ts` - CM SDK class that instantiates and manages CM-specific modules
+- `packages/csm-sdk/src/sm-sdk/lido-sdk-sm.ts` - `LidoSmSDK` registry over every module deployed on the chain
+- `packages/csm-sdk/src/sm-sdk/staking-module-sdk.ts` - `StakingModuleSDK`, abstract base shared by the three module classes
 - `packages/csm-sdk/src/index.ts` - Primary export file with re-exports from all modules
 
 ### Module Organization
@@ -63,7 +65,9 @@ Key modules include:
 - **accounting-sdk** - Balance and supply data
 - **parameters-sdk** - Curve parameters access
 - **frame-sdk** - Protocol frame configuration
-- **tx-sdk** - Unified transaction handling layer with Abstract Account (AA) support (replaces deprecated spending-sdk)
+- **tx-sdk** - Module-scoped orchestration over wallet-sdk + allowance-sdk, with Abstract Account (AA) support
+- **wallet-sdk** - Chain-scoped AA/multisig detection (cached per address) and raw send; chain-scoped, registered on every module bus
+- **allowance-sdk** - ERC20 allowance / permit / approve for an explicit spender; chain-scoped, registered on every module bus
 - **deposit-queue-sdk** - Deposit queue pointers and batches
 - **deposit-data-sdk** - Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **fees-monitoring-sdk** - Validator fee recipient monitoring and issue detection
@@ -90,13 +94,13 @@ Key modules include:
 
 ### BusRegistry & Inter-Module Communication
 
-The **BusRegistry** provides type-safe inter-module communication with a Proxy-based design:
+The **BusRegistry** provides inter-module communication with a Proxy-based design:
 
 #### Architecture
 
 - **Proxy Pattern**: BusRegistry constructor returns a Proxy that intercepts property access
 - **Direct Property Access**: Enables `bus.moduleName.method()` instead of `bus.get('moduleName')?.method()`
-- **Type Safety**: Generic typing ensures TypeScript knows which modules are available
+- **Typing**: each module declares the peers it expects via the `CsmSDKModule<{...}>` generic; this is not checked against what is actually registered — a missing registration surfaces as `undefined` at runtime
 - **Self-Registration**: Modules auto-register when passing a name to CsmSDKModule constructor
 
 #### How It Works
@@ -114,19 +118,19 @@ The **BusRegistry** provides type-safe inter-module communication with a Proxy-b
    - Self-registers if `name` provided: `new ModuleSDK(props, 'moduleName')`
    - Typed via generic: `extends CsmSDKModule<{ dep1: DepSDK, dep2: DepSDK }>`
 
-3. **LidoSDKCsm** (`lido-sdk-csm.ts`):
-   - Creates single shared BusRegistry
-   - Passes bus to all modules via `commonProps`
-   - Modules auto-register during construction
+3. **StakingModuleSDK** (`sm-sdk/staking-module-sdk.ts`):
+   - Creates the single shared BusRegistry and passes it to all modules via `commonProps`
+   - Registers the shared `wallet`/`allowance`/`keysCache` services on the bus
+   - Module classes (`LidoSDKCsm`/`LidoSDKCm`/`LidoSDKCsm02`) pass `this.commonProps` to their extra modules
 
 #### Usage Examples
 
 ```typescript
 // Module with dependencies declared via generic
-export class OperatorSDK extends CsmSDKModule<{ parameters: ParametersSDK }> {
-  async method() {
+export class OperatorSDK extends CsmSDKModule<{ accounting: AccountingSDK }> {
+  async method(shares: bigint) {
     // Direct property access via Proxy
-    const config = await this.bus.parameters.getQueueConfig(curveId);
+    const eth = await this.bus.accounting.sharesToEth(shares);
   }
 }
 
@@ -138,14 +142,14 @@ export class DepositDataSDK extends CsmSDKModule<{
   async method(pubkeys: Hex[]) {
     // Use optional chaining for modules that might not exist
     const keys = await this.bus.keysWithStatus?.getApiKeys(pubkeys);
-    const isDuplicate = this.bus.keysCache?.isDuplicate(pubkey);
+    const status = this.bus.keysCache?.getCacheStatus(pubkey);
   }
 }
 ```
 
 #### Key Benefits
 
-- **Type-safe**: TypeScript enforces available modules and their methods
+- **Typed access**: declared peers are typed at call sites
 - **Clean syntax**: Natural property access instead of getter methods
 - **Dependency injection**: No circular dependencies between modules
 - **Optional dependencies**: Flexible module composition with `?` operator
@@ -412,9 +416,9 @@ export class ModuleSDK extends CsmSDKModule {
 - Smaller CoreSDK focused on infrastructure
 - No indirection for single-use contracts
 
-### Dual SDK Architecture
+### Module SDK Classes
 
-The SDK now supports two distinct module types through separate SDK classes:
+Three module SDK classes cover the staking modules, plus `LidoSmSDK`, a registry that constructs and shares state (wallet, allowance, keysCache) across whichever of them are deployed on a chain.
 
 #### LidoSDKCsm (Community Staking Module)
 - **Purpose**: Permissionless and ICS (Independent Community Staker) operator entry
@@ -428,30 +432,54 @@ The SDK now supports two distinct module types through separate SDK classes:
 - **Unique Modules**: curatedGates, metaRegistry, CuratedRolesSDK
 - **Use When**: Building applications for curated operator management with allowlists
 
+#### LidoSDKCsm02 (CSM with 0x02 credentials)
+- **Purpose**: Permissionless entry for 0x02 (compounding) validators with a top-up queue
+- **Contract**: `csModule` (Hoodi Module ID: 6; not on Mainnet yet)
+- **Unique Modules**: strikes, permissionlessGate, depositQueue (top-up queue enabled)
+- **Use When**: Building for the CSM 0x02 deployment
+
 #### Module Composition Differences
 
-| Module Category | CSM | CM | Notes |
-|----------------|-----|----|----|
-| Core & Infrastructure | ✅ | ✅ | tx, core, module, accounting, parameters, frame |
-| Operator Management | ✅ | ✅ | operator, keys, keysWithStatus, keysCache, bond |
-| Data & Events | ✅ | ✅ | events, depositQueue, depositData, discovery, feesMonitoring |
-| Rewards | ✅ | ✅ | rewards |
-| Roles | RolesSDK | CuratedRolesSDK | CM uses extended variant |
-| Strikes | ✅ | ❌ | CSM-only: strikes |
-| Delayed Penalties | ✅ | ✅ | Shared: delayedPenalty (general delayed penalty system) |
-| Entry Gates | permissionlessGate, icsGate | curatedGates | Different entry mechanisms |
-| Metadata | ❌ | ✅ | CM-only: metaRegistry |
+| Module Category | CSM | CSM_02 | CM | Notes |
+|----------------|-----|--------|----|----|
+| Core & Infrastructure | ✅ | ✅ | ✅ | tx, core, module, accounting, parameters, frame |
+| Operator Management | ✅ | ✅ | ✅ | operator, keys, keysWithStatus, keysCache, bond |
+| Data & Events | ✅ | ✅ | ✅ | events, depositData, discovery, feesMonitoring |
+| Deposit Queue | ✅ | ✅ (+ top-up) | ❌ | depositQueue; profile flags `depositQueue` / `topUpQueue` |
+| Rewards | ✅ | ✅ | ✅ | rewards |
+| Roles | RolesSDK | RolesSDK | CuratedRolesSDK | CM uses extended variant |
+| Strikes | ✅ | ✅ | ❌ | strikes |
+| Delayed Penalties | ✅ | ✅ | ✅ | delayedPenalty |
+| Entry Gates | permissionlessGate, icsGate, idvtcGate | permissionlessGate | curatedGates | Different entry mechanisms |
+| Metadata | ❌ | ❌ | ✅ | CM-only: metaRegistry |
 
 #### Contract Addresses
 
-Contract addresses are automatically selected based on the SDK class and network:
-- **CSM Addresses**: Used by `LidoSDKCsm` (from `CSM_CONTRACT_ADDRESSES`)
-- **CM Addresses**: Used by `LidoSDKCm` (from `CM_CONTRACT_ADDRESSES`)
-- **Common Addresses**: Shared contracts like SMDiscovery, FeeDistributor (from `COMMON_CONTRACT_ADDRESSES`)
+Contract addresses are selected by module and chain in `common/constants/module-config.ts`:
+- **Per-module**: `MODULE_CONFIG[MODULE_NAME][chainId]` (module contract, accounting, feeDistributor, gates, …); a missing chain entry makes the constructor throw `NOT_SUPPORTED`
+- **Common**: `COMMON_ADDRESSES[chainId]` (stakingRouter, stETH, wstETH, SMDiscovery, …)
+- `SdkProps.overridedAddresses` is merged over both, and also applies to the stETH/wstETH used by allowance/approve
+
+### Per-module profile
+
+`MODULE_PROFILE` (`common/constants/module-profile.ts`) is the single table of per-module, per-chain facts: `moduleContract`, `depositQueue`, `topUpQueue`, `allocatedBalance`, `contractVersions`, `merkleTreeFallbacks`, `reportV1LogCids`, typed as `PerModule<ModuleProfileConfig>`. `resolveModuleProfile(moduleName, chainId)` narrows one entry to a single chain (`merkleTreeFallbacks`/`reportV1LogCids` become plain, non-optional values), producing a `ModuleProfile`. `CoreSDK` resolves this once in its constructor and exposes it as `this.core.profile`.
+
+### Multi-module usage
+
+`LidoSmSDK` registers every module deployed on the connected chain behind one entry point:
+
+```ts
+const sm = new LidoSmSDK({ core });          // every module deployed on core.chain
+sm.csm?.strikes; sm.get(MODULE_NAME.CM)?.metaRegistry;
+sm.require(MODULE_NAME.CSM_02);              // throws NOT_SUPPORTED if absent
+await sm.discovery.getNodeOperatorsByAddress(addr);   // [{ module, operator }]
+```
+
+Sharing rule: `wallet`, `allowance`, `keysCache` are one instance across modules; everything reading a module address stays per-module. `createSharedServices(props)` (`sm-sdk/shared-services.ts`) builds this triple; both `LidoSmSDK` and `StakingModuleSDK` (when no `shared` is passed) call it.
 
 ### Transaction System (tx-sdk)
 
-The **tx-sdk** module provides unified transaction handling across different wallet types, replacing the deprecated **spending-sdk** module.
+The **tx-sdk** module provides unified transaction handling across different wallet types.
 
 #### Purpose
 
@@ -530,14 +558,14 @@ The tx-sdk provides detailed transaction lifecycle tracking via callbacks:
 
 #### Architecture
 
-- **tx-sdk.ts**: Main TxSDK class with perform() method and helpers
+- **tx-sdk.ts**: Orchestration — perform() method and helpers, reading `wallet`/`allowance` off the bus (registered by `StakingModuleSDK`) and delegating detection/send to wallet-sdk, spend handling to allowance-sdk
 - **types.ts**: Type definitions for transaction operations
-- **errors.ts**: Transaction-layer error helpers (incl. EIP-5792 batch error handling)
-- **utils/**: Helper functions including event parsing utilities
+- **wallet-sdk/**: Wallet-type detection and raw send (`DecodeResultError`, `BatchTransactionRevertedError` live here)
+- **allowance-sdk/**: Allowance checks, EIP-2612 permit signing, approve transactions
 
 ### Keys Cache System
 
-The **keys-cache-sdk** module provides pubkey caching functionality to prevent double-submission:
+The **keys-cache-sdk** module provides pubkey caching functionality to prevent double-submission. `KeysCacheSDK` is chain-scoped like `WalletSDK`/`AllowanceSDK` — not a `CsmSDKModule`, built once per chain via `createSharedServices` and shared across module SDKs:
 
 #### Purpose
 
@@ -554,7 +582,7 @@ The **keys-cache-sdk** module provides pubkey caching functionality to prevent d
 #### Key Features
 
 - **Timestamp-based TTL**: 2-week expiration using timestamps (not block numbers)
-- **Chain-specific storage**: localStorage keys include chainId (`lido-csm-keys-cache-${chainId}`)
+- **Chain-specific storage**: localStorage keys include chainId (`lido-keys-cache-${chainId}`)
 - **Automatic cleanup**: Expired keys removed on every add/remove operation
 - **Duplicate detection**: Integration with DepositDataSDK for validation
 
@@ -568,17 +596,15 @@ sdk.keysCache.addPubkeys(['0x123...', '0x456...']);
 sdk.keysCache.removePubkeys(['0x123...']);
 sdk.keysCache.clearAllKeys();
 
-// Check for duplicates
-const isDuplicate = sdk.keysCache.isDuplicate('0x123...');
-const hasCached = sdk.keysCache.hasCachedKey('0x123...');
+// Check whether a key was already submitted
+const status = sdk.keysCache.getCacheStatus('0x123...'); // KeyCacheStatus.CONFIRMED | KeyCacheStatus.PENDING | null
 
 // Get cache information
-const cachedKeys = sdk.keysCache.getCachedKeys();
-const stats = sdk.keysCache.getCacheStats(); // { count, oldestKey, newestKey }
+const cachedKeys = sdk.keysCache.getCachedKeys(); // Array<{ pubkey, confirmed }>
 
-// Automatic integration with deposit validation
+// Integration with deposit validation
 const result = await sdk.depositData.validateDepositData(depositData);
-// Will automatically check for cached duplicates and add valid keys to cache
+// Only checks the cache for duplicates; keys enter it via the tx callbacks of the add-keys / create-operator flows
 ```
 
 ### Testing

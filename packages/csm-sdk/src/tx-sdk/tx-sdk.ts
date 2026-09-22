@@ -4,11 +4,8 @@ import {
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, Call } from 'viem';
-import { AllowanceSDK } from '../allowance-sdk/allowance-sdk';
-import {
-  CsmSDKModule,
-  CsmSDKProps,
-} from '../common/class-primitives/csm-sdk-module';
+import type { AllowanceSDK } from '../allowance-sdk/allowance-sdk';
+import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CONTRACT_NAMES,
@@ -17,7 +14,7 @@ import {
   PermitSignatureShort,
   SDKError,
 } from '../common/index';
-import { WalletSDK } from '../wallet-sdk/wallet-sdk';
+import type { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import { SendCallsProps, SendTransactionProps } from '../wallet-sdk/types';
 import {
   AllowanceProps,
@@ -28,24 +25,11 @@ import {
   SpendProps,
 } from './types';
 
-export type TxSDKProps = CsmSDKProps & {
-  wallet?: WalletSDK;
-  allowance?: AllowanceSDK;
-};
-
 /** Module-scoped transaction orchestration: permit/approve for this module's accounting, version check, send. */
-export class TxSDK extends CsmSDKModule {
-  readonly wallet: WalletSDK;
-  readonly allowances: AllowanceSDK;
-
-  constructor(props: TxSDKProps, name?: string) {
-    super(props, name);
-    this.wallet = props.wallet ?? new WalletSDK({ core: props.core.core });
-    this.allowances =
-      props.allowance ??
-      new AllowanceSDK({ core: props.core.core, wallet: this.wallet });
-  }
-
+export class TxSDK extends CsmSDKModule<{
+  wallet: WalletSDK;
+  allowance: AllowanceSDK;
+}> {
   protected get spender(): Address {
     return this.core.getContractAddress(CONTRACT_NAMES.accounting);
   }
@@ -55,35 +39,35 @@ export class TxSDK extends CsmSDKModule {
   }
 
   public isAbstractAccount(account: Address): Promise<boolean> {
-    return this.wallet.isAbstractAccount(account);
+    return this.bus.wallet.isAbstractAccount(account);
   }
 
   public isMultisig(account?: AccountValue): Promise<boolean> {
-    return this.wallet.isMultisig(account);
+    return this.bus.wallet.isMultisig(account);
   }
 
   public allowance(props: AllowanceProps): Promise<bigint> {
-    return this.allowances.allowance(this.withSpender(props));
+    return this.bus.allowance.allowance(this.withSpender(props));
   }
 
   public checkAllowance(props: SpendProps): Promise<CheckAllowanceResult> {
-    return this.allowances.checkAllowance(this.withSpender(props));
+    return this.bus.allowance.checkAllowance(this.withSpender(props));
   }
 
   public signPermit(props: SpendProps) {
-    return this.allowances.signPermit(this.withSpender(props));
+    return this.bus.allowance.signPermit(this.withSpender(props));
   }
 
   @Logger('Call:')
   @ErrorHandler()
   public async approve(props: SpendProps): Promise<TransactionResult> {
-    const result = await this.allowances.approve(this.withSpender(props));
+    const result = await this.bus.allowance.approve(this.withSpender(props));
     if (result.receipt) this.core.invalidateCache();
     return result;
   }
 
   public signPermitOrApprove(props: SpendProps) {
-    return this.allowances.signPermitOrApprove(this.withSpender(props));
+    return this.bus.allowance.signPermitOrApprove(this.withSpender(props));
   }
 
   public async perform<TDecodedResult = undefined>(
@@ -108,7 +92,7 @@ export class TxSDK extends CsmSDKModule {
   ): Promise<TransactionResult<T>> {
     const calls: Call[] = [];
     if (props.spend) {
-      const approveCall = await this.allowances.getApproveCallIfNeeded(
+      const approveCall = await this.bus.allowance.getApproveCallIfNeeded(
         this.withSpender(props as PerformOptionsSpend<T>),
       );
       if (approveCall) calls.push(approveCall);
@@ -123,7 +107,7 @@ export class TxSDK extends CsmSDKModule {
     props: PerformOptions<T>,
   ): Promise<TransactionResult<T>> {
     const { hash, permit } = props.spend
-      ? await this.allowances.resolvePermit(
+      ? await this.bus.allowance.resolvePermit(
           this.withSpender(props as PerformOptionsSpend<T>),
         )
       : {};
@@ -132,14 +116,14 @@ export class TxSDK extends CsmSDKModule {
     await this.checkVersion(call);
     return this.sendTransaction({
       ...props,
-      ...this.wallet.callToTransaction(call),
+      ...this.bus.wallet.callToTransaction(call),
     });
   }
 
   private async sendCalls<T>(
     props: SendCallsProps<T>,
   ): Promise<TransactionResult<T>> {
-    const result = await this.wallet.sendCalls(props);
+    const result = await this.bus.wallet.sendCalls(props);
     this.core.invalidateCache();
     return result;
   }
@@ -148,7 +132,7 @@ export class TxSDK extends CsmSDKModule {
   private async sendTransaction<T>(
     props: SendTransactionProps<T>,
   ): Promise<TransactionResult<T>> {
-    const result = await this.wallet.sendTransaction(props);
+    const result = await this.bus.wallet.sendTransaction(props);
     if (result.receipt) this.core.invalidateCache();
     return result;
   }

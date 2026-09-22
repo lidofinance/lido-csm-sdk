@@ -1,5 +1,5 @@
+import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { Hex } from 'viem';
-import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Logger } from '../common/decorators/index';
 import { DepositDataKey } from '../common/types';
 import {
@@ -13,9 +13,9 @@ import {
   loadKeysRecord,
   saveToLocalStorage,
 } from './storage';
-import { KeyCacheStatus, KeysRecord } from './types';
+import { KeyCacheStatus, KeysCacheSDKProps, KeysRecord } from './types';
 
-export type { KeyCacheEntry } from './types';
+export type { KeyCacheEntry, KeysCacheSDKProps } from './types';
 export { KeyCacheStatus } from './types';
 
 const safe = <T>(operation: () => T, fallback: T): T => {
@@ -27,9 +27,20 @@ const safe = <T>(operation: () => T, fallback: T): T => {
   }
 };
 
-export class KeysCacheSDK extends CsmSDKModule {
+/** Chain-scoped pubkey cache preventing double-submission; shared by every module SDK. */
+export class KeysCacheSDK {
+  readonly core: LidoSDKCore;
+
+  constructor(props: KeysCacheSDKProps) {
+    this.core = props.core;
+  }
+
+  get chainId(): number {
+    return this.core.chain.id;
+  }
+
   private get storageKey() {
-    return `lido-keys-cache-${this.core.chainId}`;
+    return `lido-keys-cache-${this.chainId}`;
   }
 
   private getKeys(): KeysRecord {

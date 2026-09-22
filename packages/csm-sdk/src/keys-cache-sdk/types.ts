@@ -1,3 +1,7 @@
+import type { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
+
+export type KeysCacheSDKProps = { core: LidoSDKCore };
+
 export type KeyCacheEntry = {
   ts: number;
   confirmed: boolean;

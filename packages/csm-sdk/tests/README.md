@@ -48,6 +48,8 @@ Available fixtures:
 - `useTestClient()` — `TestClient<'anvil'>` extended with public actions, for `setBalance`, `impersonateAccount`, `mine`, `snapshot`
 - `useCsmSdk()` / `useCsmSdkWithWallet()` — `LidoSDKCsm` (read-only or signing)
 - `useCmSdk()` / `useCmSdkWithWallet()` — `LidoSDKCm` (read-only or signing)
+- `useCsm02Sdk()` / `useCsm02SdkWithWallet()` — `LidoSDKCsm02` (read-only or signing)
+- `useSmSdk()` — `LidoSmSDK` (read-only, every hoodi module)
 
 ### Cached SDKs + chain mutations = stale reads
 

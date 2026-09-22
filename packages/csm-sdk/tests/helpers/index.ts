@@ -8,5 +8,6 @@ export * from './use-cm-sdk';
 export * from './use-csm-sdk';
 export * from './use-csm02-sdk';
 export * from './use-public-client';
+export * from './use-sm-sdk';
 export * from './use-test-client';
 export * from './use-wallet-client';
