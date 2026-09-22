@@ -11,3 +11,4 @@ export * from './roles';
 export * from './tokens';
 export * from './supported-chains';
 export * from './module-name';
+export * from './module-profile';

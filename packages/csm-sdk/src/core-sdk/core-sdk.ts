@@ -17,11 +17,10 @@ import {
   DEFAULT_IPFS_GATEWAYS,
   ERROR_CODE,
   invariant,
-  MERKLE_TREE_FALLBACKS,
-  MODULE_CONTRACT,
   MODULE_NAME,
+  ModuleProfile,
+  resolveModuleProfile,
   SUPPORTED_CHAINS,
-  SUPPORTED_CONTRACT_VERSIONS,
 } from '../common/index';
 import { isValidIpfsCid, shuffle, toCidV1Base32 } from '../common/utils/index';
 import { onVersionError } from '../common/utils/on-error';
@@ -50,6 +49,7 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly skipHistoricalCalls: boolean;
   readonly moduleName: MODULE_NAME;
   readonly ipfsGateways: string[];
+  readonly profile: ModuleProfile;
 
   constructor(props: CoreProps) {
     super();
@@ -64,6 +64,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
     this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
     this.ipfsGateways = props.ipfsGateways ?? [];
+    this.profile = resolveModuleProfile(this.moduleName, this.chainId);
   }
 
   public get chainId(): SUPPORTED_CHAINS {
@@ -87,7 +88,7 @@ export class CoreSDK extends CsmSDKCacheable {
   }
 
   public get moduleContract() {
-    return MODULE_CONTRACT[this.moduleName];
+    return this.profile.moduleContract;
   }
 
   @Logger('Utils:')
@@ -138,10 +139,6 @@ export class CoreSDK extends CsmSDKCacheable {
     return this.getContractWithAbi(this.moduleContract, BaseModuleAbi);
   }
 
-  public get merkleTreeFallbacks() {
-    return MERKLE_TREE_FALLBACKS[this.moduleName][this.chainId];
-  }
-
   public get apiUrls() {
     return API_URLS[this.chainId];
   }
@@ -149,7 +146,7 @@ export class CoreSDK extends CsmSDKCacheable {
   public getMerkleTreeFallback(
     contractName: CONTRACT_NAMES,
   ): string | undefined {
-    return this.merkleTreeFallbacks[contractName];
+    return this.profile.merkleTreeFallbacks[contractName];
   }
 
   // `||` not `??`: env pipelines bake an unset var as '' (JSON.stringify keeps
@@ -166,7 +163,7 @@ export class CoreSDK extends CsmSDKCacheable {
   public async checkContractVersion(
     contractName: CONTRACT_NAMES,
   ): Promise<VersionCheckResult> {
-    const versionRange = SUPPORTED_CONTRACT_VERSIONS[contractName];
+    const versionRange = this.profile.contractVersions[contractName];
     if (!versionRange) {
       return { version: 0n, supported: true };
     }

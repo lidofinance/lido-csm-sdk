@@ -27,7 +27,6 @@ import { epochToTimestamp } from '../frame-sdk/utils';
 import { KeysWithStatusSDK } from '../keys-with-status-sdk/keys-with-status-sdk';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { ParametersSDK } from '../parameters-sdk/index';
-import { REPORT_V1_LOG_CIDS } from './consts';
 import { findOperatorRewards } from './find-operator-rewards';
 import { findProofAndAmount } from './find-proof';
 import { getValidatorsRewards } from './get-validators-rewards';
@@ -208,8 +207,7 @@ export class RewardsSDK extends CsmSDKModule<{
   public async getAllReports() {
     const reportsCount = await this.getHistoryCount();
 
-    const oldReportLogCids =
-      REPORT_V1_LOG_CIDS[this.core.moduleName]?.[this.core.chainId] ?? [];
+    const oldReportLogCids = this.core.profile.reportV1LogCids;
 
     const reports = await Promise.all([
       ...oldReportLogCids.map((cid) => this.getReportByCid(cid)),

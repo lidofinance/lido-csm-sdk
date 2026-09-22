@@ -11,7 +11,6 @@ import {
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
-import { TOPUP_QUEUE_MODULES } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import { bigIntRange } from '../common/utils/bigint-range';
 import {
@@ -219,7 +218,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   @Logger('Views:')
   @ErrorHandler()
   public async getTopUpQueueSize(): Promise<number> {
-    if (!TOPUP_QUEUE_MODULES.has(this.core.moduleName)) return 0;
+    if (!this.core.profile.topUpQueue) return 0;
 
     const { enabled, length } = await this.getTopUpQueueInfo();
     return enabled ? Number(length) : 0;
@@ -283,8 +282,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   public async getOperatorTopUpQueue(
     id: NodeOperatorId,
   ): Promise<OperatorTopUpQueue> {
-    if (!TOPUP_QUEUE_MODULES.has(this.core.moduleName))
-      return { total: 0, keys: [] };
+    if (!this.core.profile.topUpQueue) return { total: 0, keys: [] };
 
     const [{ length, items }, operatorKeys] = await Promise.all([
       this.getTopUpQueueItems(),
