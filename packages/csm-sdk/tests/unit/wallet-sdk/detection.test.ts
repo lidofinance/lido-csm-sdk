@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Address } from 'viem';
-import { TxSDK } from '../../../src/tx-sdk/tx-sdk';
+import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
 
 const ACCOUNT: Address = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 const CHAIN_ID = 560_048;
@@ -13,16 +13,16 @@ const buildAaTx = (capabilities: unknown, throws = false) => {
     return capabilities;
   });
   const fakeCore = {
-    chainId: CHAIN_ID,
-    walletClient: { getCapabilities },
+    chain: { id: CHAIN_ID },
+    useWalletClient: () => ({ getCapabilities }),
   };
   return {
-    tx: new TxSDK({ core: fakeCore as never }),
+    tx: new WalletSDK({ core: fakeCore as never }),
     getCapabilities,
   };
 };
 
-describe('TxSDK.isAbstractAccount', () => {
+describe('WalletSDK.isAbstractAccount', () => {
   it('returns true when chain-specific atomic capability is supported (status form)', async () => {
     const { tx } = buildAaTx({
       [CHAIN_ID]: { atomic: { status: 'supported' } },
@@ -89,17 +89,15 @@ describe('TxSDK.isAbstractAccount', () => {
 const buildMultisigTx = (isContractResult: boolean) => {
   const isContract = vi.fn(async () => isContractResult);
   const useAccount = vi.fn(async (a: unknown) => a ?? { address: ACCOUNT });
-  const fakeCore = {
-    core: { isContract, useAccount },
-  };
+  const fakeCore = { isContract, useAccount };
   return {
-    tx: new TxSDK({ core: fakeCore as never }),
+    tx: new WalletSDK({ core: fakeCore as never }),
     isContract,
     useAccount,
   };
 };
 
-describe('TxSDK.isMultisig', () => {
+describe('WalletSDK.isMultisig', () => {
   it('returns true when the resolved account address has bytecode', async () => {
     const { tx } = buildMultisigTx(true);
     expect(await tx.isMultisig()).toBe(true);

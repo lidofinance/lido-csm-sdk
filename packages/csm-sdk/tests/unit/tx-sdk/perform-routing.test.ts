@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Address } from 'viem';
+import { BusRegistry } from '../../../src/common/class-primitives/bus-registry';
 import { TxSDK } from '../../../src/tx-sdk/tx-sdk';
 
 // `perform()` is the public surface that routes between AA (sendCalls) and
@@ -7,18 +8,20 @@ import { TxSDK } from '../../../src/tx-sdk/tx-sdk';
 
 const ACCOUNT: Address = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 
-// Spying on `performCall` / `performTransaction` relies on TypeScript's
-// `private` being erased at runtime to plain prototype properties. If the
-// SDK ever migrates to ECMAScript hard-private fields (`#performCall`),
-// or stage-3 decorators relocate these methods off the prototype, this
-// setup throws at the vi.spyOn line and every test in this file fails.
-// Keep them as prototype methods or extract them into a separately-importable
-// helper so the spy has a stable target.
+const buildBus = (mocks: { wallet?: object; allowance?: object } = {}) => {
+  const bus = new BusRegistry<{ wallet: object; allowance: object }>();
+  bus.register(mocks.wallet ?? {}, 'wallet');
+  bus.register(mocks.allowance ?? {}, 'allowance');
+  return bus as never;
+};
+
+// Spies need `performCall`/`performTransaction` on the prototype (TS `private`
+// erases to plain methods); hard-private `#fields` would break this setup.
 const buildTx = () => {
   const fakeCore = {
     core: { useAccount: async (a: unknown) => a ?? { address: ACCOUNT } },
   };
-  const tx = new TxSDK({ core: fakeCore as never });
+  const tx = new TxSDK({ core: fakeCore as never, bus: buildBus() });
   const performCall = vi
     .spyOn(
       tx as unknown as { performCall: (p: unknown) => Promise<unknown> },
@@ -104,6 +107,103 @@ describe('TxSDK.perform (AA vs EOA/multisig routing)', () => {
 
     expect(performTransaction).toHaveBeenCalledWith(
       expect.objectContaining({ callback, decodeResult }),
+    );
+  });
+});
+
+describe('TxSDK.perform cache invalidation', () => {
+  const buildWithWallet = (result: object) => {
+    const invalidateCache = vi.fn();
+    const fakeCore = {
+      core: { useAccount: async (a: unknown) => a ?? { address: ACCOUNT } },
+      invalidateCache,
+      getContractNameByAddress: () => undefined,
+    };
+    const wallet = {
+      isAbstractAccount: async () => false,
+      callToTransaction: () => ({}),
+      sendTransaction: vi.fn(async () => result),
+    };
+    const tx = new TxSDK({
+      core: fakeCore as never,
+      bus: buildBus({ wallet }),
+    });
+    return { tx, invalidateCache };
+  };
+
+  it('invalidates the module cache after a mined transaction', async () => {
+    const { tx, invalidateCache } = buildWithWallet({
+      hash: '0x1',
+      receipt: {},
+    });
+    await tx.perform(fakeProps);
+    expect(invalidateCache).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not invalidate after a multisig submission (no receipt yet)', async () => {
+    const { tx, invalidateCache } = buildWithWallet({ hash: '0x1' });
+    await tx.perform(fakeProps);
+    expect(invalidateCache).not.toHaveBeenCalled();
+  });
+
+  it('invalidates the module cache after a mined AA batch (sendCalls)', async () => {
+    const invalidateCache = vi.fn();
+    const fakeCore = {
+      core: { useAccount: async (a: unknown) => a ?? { address: ACCOUNT } },
+      invalidateCache,
+      getContractNameByAddress: () => undefined,
+    };
+    const wallet = {
+      isAbstractAccount: async () => true,
+      sendCalls: vi.fn(async () => ({ hash: '0x1', receipt: {} })),
+    };
+    const tx = new TxSDK({
+      core: fakeCore as never,
+      bus: buildBus({ wallet }),
+    });
+
+    await tx.perform(fakeProps);
+
+    expect(invalidateCache).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('TxSDK pass-throughs fill in the module spender', () => {
+  const SPENDER = '0xcccccccccccccccccccccccccccccccccccccccc';
+  const build = () => {
+    const allowances = {
+      allowance: vi.fn(async () => 1n),
+      checkAllowance: vi.fn(async () => ({
+        allowance: 1n,
+        needsApprove: false,
+      })),
+      signPermit: vi.fn(async () => ({})),
+      approve: vi.fn(async () => ({ hash: '0x1' })),
+      signPermitOrApprove: vi.fn(async () => ({ permit: {} })),
+    };
+    const fakeCore = {
+      getContractAddress: () => SPENDER,
+      invalidateCache: vi.fn(),
+    };
+    const tx = new TxSDK({
+      core: fakeCore as never,
+      bus: buildBus({ allowance: allowances }),
+    });
+    return { tx, allowances };
+  };
+  const spend = { token: 'steth', amount: 1n } as never;
+
+  it.each([
+    ['allowance', { token: 'steth' }],
+    ['checkAllowance', { spend }],
+    ['signPermit', { spend }],
+    ['approve', { spend }],
+    ['signPermitOrApprove', { spend }],
+  ] as const)('%s', async (method, props) => {
+    const { tx, allowances } = build();
+    await (tx as any)[method](props);
+    expect(allowances[method]).toHaveBeenCalledWith(
+      expect.objectContaining({ spender: SPENDER }),
     );
   });
 });

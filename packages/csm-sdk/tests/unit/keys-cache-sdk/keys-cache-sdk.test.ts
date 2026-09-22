@@ -40,7 +40,8 @@ const localStorageMock = {
   key: vi.fn((index: number) => Object.keys(store)[index] ?? null),
 };
 
-const makeSdk = () => new KeysCacheSDK({ core: { chainId: CHAIN_ID } as any });
+const makeSdk = () =>
+  new KeysCacheSDK({ core: { chain: { id: CHAIN_ID } } as any });
 
 const readStore = () => JSON.parse(store[STORAGE_KEY] ?? '{}');
 

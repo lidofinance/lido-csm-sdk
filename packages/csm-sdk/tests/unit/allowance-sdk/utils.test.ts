@@ -4,8 +4,8 @@ import {
   TOKENS,
   STETH_ROUNDING_THRESHOLD,
 } from '../../../src/common/constants/tokens';
-import { parseSpendingProps } from '../../../src/tx-sdk/parse-spending-props';
-import { stripPermit } from '../../../src/tx-sdk/strip-permit';
+import { parseSpendingProps } from '../../../src/allowance-sdk/parse-spending-props';
+import { stripPermit } from '../../../src/allowance-sdk/strip-permit';
 
 describe('parseSpendingProps', () => {
   it('adds 10 wei buffer for stETH', () => {

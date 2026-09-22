@@ -1,6 +1,7 @@
 export * from './lido-sdk-csm';
 export * from './lido-sdk-csm02';
 export * from './lido-sdk-cm';
+export * from './sm-sdk/index';
 
 export * from './common/index';
 export * from './core-sdk/index';
@@ -19,6 +20,8 @@ export * from './operator-sdk/index';
 export * from './rewards-sdk/index';
 export * from './events-sdk/index';
 export * from './tx-sdk/index';
+export * from './wallet-sdk/index';
+export * from './allowance-sdk/index';
 export * from './permissionless-gate-sdk/index';
 export * from './vetted-gate-sdk/index';
 export * from './strikes-sdk/index';

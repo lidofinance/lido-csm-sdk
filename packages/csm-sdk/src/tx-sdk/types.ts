@@ -130,6 +130,13 @@ export type PerformOptionsSpend<TDecodedResult = undefined> =
 export type PerformOptions<TDecodedResult = undefined> =
   PerformOptionsNoSpend<TDecodedResult> | PerformOptionsSpend<TDecodedResult>;
 
+export type SpendProps = Omit<
+  PerformOptionsSpend<any>,
+  'call' | 'decodeResult'
+>;
+/** @deprecated Use `SpendProps`. */
+export type SignPermitOrApproveProps = SpendProps;
+
 export {
   type PerformTransactionGasLimit,
   type PerformTransactionSendTransaction,

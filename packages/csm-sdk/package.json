@@ -103,6 +103,16 @@
         "default": "./dist/accounting-sdk.cjs"
       }
     },
+    "./allowance-sdk": {
+      "import": {
+        "types": "./dist/allowance-sdk.d.mts",
+        "default": "./dist/allowance-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/allowance-sdk.d.cts",
+        "default": "./dist/allowance-sdk.cjs"
+      }
+    },
     "./bond-sdk": {
       "import": {
         "types": "./dist/bond-sdk.d.mts",
@@ -253,6 +263,36 @@
         "default": "./dist/keys-with-status-sdk.cjs"
       }
     },
+    "./lido-sdk-cm": {
+      "import": {
+        "types": "./dist/lido-sdk-cm.d.mts",
+        "default": "./dist/lido-sdk-cm.mjs"
+      },
+      "require": {
+        "types": "./dist/lido-sdk-cm.d.cts",
+        "default": "./dist/lido-sdk-cm.cjs"
+      }
+    },
+    "./lido-sdk-csm": {
+      "import": {
+        "types": "./dist/lido-sdk-csm.d.mts",
+        "default": "./dist/lido-sdk-csm.mjs"
+      },
+      "require": {
+        "types": "./dist/lido-sdk-csm.d.cts",
+        "default": "./dist/lido-sdk-csm.cjs"
+      }
+    },
+    "./lido-sdk-csm02": {
+      "import": {
+        "types": "./dist/lido-sdk-csm02.d.mts",
+        "default": "./dist/lido-sdk-csm02.mjs"
+      },
+      "require": {
+        "types": "./dist/lido-sdk-csm02.d.cts",
+        "default": "./dist/lido-sdk-csm02.cjs"
+      }
+    },
     "./meta-registry-sdk": {
       "import": {
         "types": "./dist/meta-registry-sdk.d.mts",
@@ -323,6 +363,16 @@
         "default": "./dist/roles-sdk.cjs"
       }
     },
+    "./sm-sdk": {
+      "import": {
+        "types": "./dist/sm-sdk.d.mts",
+        "default": "./dist/sm-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/sm-sdk.d.cts",
+        "default": "./dist/sm-sdk.cjs"
+      }
+    },
     "./strikes-sdk": {
       "import": {
         "types": "./dist/strikes-sdk.d.mts",
@@ -351,6 +401,16 @@
       "require": {
         "types": "./dist/vetted-gate-sdk.d.cts",
         "default": "./dist/vetted-gate-sdk.cjs"
+      }
+    },
+    "./wallet-sdk": {
+      "import": {
+        "types": "./dist/wallet-sdk.d.mts",
+        "default": "./dist/wallet-sdk.mjs"
+      },
+      "require": {
+        "types": "./dist/wallet-sdk.d.cts",
+        "default": "./dist/wallet-sdk.cjs"
       }
     },
     "./package.json": "./package.json"

@@ -1,5 +1,5 @@
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '../common/index';
-import { SpendOptions } from './types';
+import { SpendOptions } from '../tx-sdk/types';
 
 const DEFAULT_DEADLINE_SEC = 3600;
 
