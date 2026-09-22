@@ -1,14 +1,9 @@
-import { Address, Hex } from 'viem';
+import { Hex } from 'viem';
 import { AccountingV1EventsAbi } from '../abi/AccountingV1Events';
 import { CSModulev1EventsAbi } from '../abi/CSModuleV1Events';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { ErrorHandler, Logger } from '../common/decorators/index';
-import {
-  CONTRACT_NAMES,
-  NodeOperator,
-  NodeOperatorId,
-  NodeOperatorInvite,
-} from '../common/index';
+import { CONTRACT_NAMES, NodeOperatorId } from '../common/index';
 import {
   isDefined,
   isPropsDefined,
@@ -17,8 +12,6 @@ import {
   sortByBlockNumber,
 } from '../common/utils/index';
 import { BindedContract } from '../core-sdk/types';
-import { ChangeAddressLog, reconstructInvites } from './reconstruct-invites';
-import { NodeOperatorLog, reconstructOperators } from './reconstruct-operators';
 import { resolveExpiredRecords } from './resolve-expired-records';
 import {
   EventRangeProps,
@@ -64,102 +57,6 @@ export class EventsSDK extends CsmSDKModule {
       CONTRACT_NAMES.accounting,
       AccountingV1EventsAbi,
     );
-  }
-
-  @Logger('Events:')
-  @ErrorHandler()
-  public async getNodeOperatorsByAddress(
-    address: Address,
-    options?: EventRangeProps,
-  ): Promise<NodeOperator[]> {
-    const logs = await this.queryEvents<NodeOperatorLog>(
-      options,
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorAdded(
-          { managerAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorAdded(
-          { rewardAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContractV1.getEvents.NodeOperatorAdded(
-          { managerAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContractV1.getEvents.NodeOperatorAdded(
-          { rewardAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
-          { oldAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
-          { newAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
-          { oldAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
-          { newAddress: address },
-          s,
-        ),
-    );
-
-    return reconstructOperators(logs, address);
-  }
-
-  @Logger('Events:')
-  @ErrorHandler()
-  public async getInvitesByAddress(
-    address: Address,
-    options?: EventRangeProps,
-  ): Promise<NodeOperatorInvite[]> {
-    const logs = await this.queryEvents<ChangeAddressLog>(
-      options,
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorManagerAddressChanged(
-          { newAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorRewardAddressChanged(
-          { newAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorManagerAddressChangeProposed(
-          { oldProposedAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorRewardAddressChangeProposed(
-          { oldProposedAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorManagerAddressChangeProposed(
-          { newProposedAddress: address },
-          s,
-        ),
-      (s) =>
-        this.moduleContract.getEvents.NodeOperatorRewardAddressChangeProposed(
-          { newProposedAddress: address },
-          s,
-        ),
-    );
-
-    return reconstructInvites(logs, address);
   }
 
   @Logger('Events:')
