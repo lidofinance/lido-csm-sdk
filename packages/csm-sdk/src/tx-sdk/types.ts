@@ -134,8 +134,6 @@ export type SpendProps = Omit<
   PerformOptionsSpend<any>,
   'call' | 'decodeResult'
 >;
-/** @deprecated Use `SpendProps`. */
-export type SignPermitOrApproveProps = SpendProps;
 
 export {
   type PerformTransactionGasLimit,

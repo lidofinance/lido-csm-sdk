@@ -1,6 +1,10 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
 import { NodeOperatorShortInfo, ROLES } from '../common/index';
-import { packRoles } from './merge';
+
+const ALL_ROLES = [ROLES.REWARDS, ROLES.MANAGER, ROLES.CLAIMER];
+
+export const packRoles = (patch: Partial<Record<ROLES, boolean>>): ROLES[] =>
+  ALL_ROLES.filter((role) => patch[role]);
 
 export const getNodeOperatorRoles = (
   {

@@ -41,18 +41,6 @@ export type NodeOperatorInviteInfo = {
   role: ROLES;
 };
 
-/** @deprecated */
-export type NodeOperator = {
-  id: NodeOperatorId;
-  roles: ROLES[];
-};
-
-/** @deprecated */
-export type NodeOperatorInvite = {
-  id: NodeOperatorId;
-  role: ROLES;
-};
-
 export type BondBalance = {
   required: bigint;
   current: bigint;

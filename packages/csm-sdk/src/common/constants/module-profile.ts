@@ -222,37 +222,3 @@ export const resolveModuleProfile = (
       config.reportV1LogCids?.[chainId as SUPPORTED_CHAINS] ?? [],
   };
 };
-
-const modulesWhere = (flag: keyof ModuleProfileConfig): Set<MODULE_NAME> =>
-  new Set(
-    Object.values(MODULE_NAME).filter((m) => MODULE_PROFILE[m][flag] === true),
-  );
-
-const perModule = <T>(pick: (p: ModuleProfileConfig) => T): PerModule<T> =>
-  Object.fromEntries(
-    Object.values(MODULE_NAME).map((m) => [m, pick(MODULE_PROFILE[m])]),
-  ) as PerModule<T>;
-
-/** @deprecated Use `MODULE_PROFILE[module].moduleContract`. */
-export const MODULE_CONTRACT: PerModule<CONTRACT_NAMES> = perModule(
-  (p) => p.moduleContract,
-);
-/** @deprecated Use `MODULE_PROFILE[module].depositQueue`. */
-export const DEPOSIT_QUEUE_MODULES: Set<MODULE_NAME> =
-  modulesWhere('depositQueue');
-/** @deprecated Use `MODULE_PROFILE[module].allocatedBalance`. */
-export const ALLOCATED_BALANCE_MODULES: Set<MODULE_NAME> =
-  modulesWhere('allocatedBalance');
-/** @deprecated Use `MODULE_PROFILE[module].topUpQueue`. */
-export const TOPUP_QUEUE_MODULES: Set<MODULE_NAME> = modulesWhere('topUpQueue');
-/** @deprecated Use `MODULE_PROFILE[module].merkleTreeFallbacks`. */
-export const MERKLE_TREE_FALLBACKS: PerModule<MerkleTreeFallbacks> = perModule(
-  (p) => p.merkleTreeFallbacks,
-);
-/** @deprecated Use `MODULE_PROFILE[module].contractVersions`. */
-export const SUPPORTED_CONTRACT_VERSIONS: Partial<
-  Record<CONTRACT_NAMES, ContractVersionRange>
-> = Object.assign(
-  {},
-  ...Object.values(MODULE_PROFILE).map((p) => p.contractVersions),
-);
