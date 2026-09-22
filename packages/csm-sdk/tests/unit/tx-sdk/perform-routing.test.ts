@@ -107,3 +107,76 @@ describe('TxSDK.perform (AA vs EOA/multisig routing)', () => {
     );
   });
 });
+
+describe('TxSDK.perform cache invalidation', () => {
+  const buildWithWallet = (result: object) => {
+    const invalidateCache = vi.fn();
+    const fakeCore = {
+      core: { useAccount: async (a: unknown) => a ?? { address: ACCOUNT } },
+      invalidateCache,
+      getContractNameByAddress: () => undefined,
+    };
+    const wallet = {
+      isAbstractAccount: async () => false,
+      callToTransaction: () => ({}),
+      sendTransaction: vi.fn(async () => result),
+    };
+    const tx = new TxSDK({ core: fakeCore as never, wallet: wallet as never });
+    return { tx, invalidateCache };
+  };
+
+  it('invalidates the module cache after a mined transaction', async () => {
+    const { tx, invalidateCache } = buildWithWallet({
+      hash: '0x1',
+      receipt: {},
+    });
+    await tx.perform(fakeProps);
+    expect(invalidateCache).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not invalidate after a multisig submission (no receipt yet)', async () => {
+    const { tx, invalidateCache } = buildWithWallet({ hash: '0x1' });
+    await tx.perform(fakeProps);
+    expect(invalidateCache).not.toHaveBeenCalled();
+  });
+});
+
+describe('TxSDK pass-throughs fill in the module spender', () => {
+  const SPENDER = '0xcccccccccccccccccccccccccccccccccccccccc';
+  const build = () => {
+    const allowances = {
+      allowance: vi.fn(async () => 1n),
+      checkAllowance: vi.fn(async () => ({
+        allowance: 1n,
+        needsApprove: false,
+      })),
+      signPermit: vi.fn(async () => ({})),
+      approve: vi.fn(async () => ({ hash: '0x1' })),
+      signPermitOrApprove: vi.fn(async () => ({ permit: {} })),
+    };
+    const fakeCore = {
+      getContractAddress: () => SPENDER,
+      invalidateCache: vi.fn(),
+    };
+    const tx = new TxSDK({
+      core: fakeCore as never,
+      allowance: allowances as never,
+    });
+    return { tx, allowances };
+  };
+  const spend = { token: 'steth', amount: 1n } as never;
+
+  it.each([
+    ['allowance', { token: 'steth' }],
+    ['checkAllowance', { spend }],
+    ['signPermit', { spend }],
+    ['approve', { spend }],
+    ['signPermitOrApprove', { spend }],
+  ] as const)('%s', async (method, props) => {
+    const { tx, allowances } = build();
+    await (tx as any)[method](props);
+    expect(allowances[method]).toHaveBeenCalledWith(
+      expect.objectContaining({ spender: SPENDER }),
+    );
+  });
+});

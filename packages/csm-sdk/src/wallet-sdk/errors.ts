@@ -1,6 +1,6 @@
 import type { Hash, WalletCallReceipt } from 'viem';
 import type { WaitForCallsStatusReturnType } from 'viem/actions';
-import type { ReceiptLike } from './types';
+import type { ReceiptLike } from '../tx-sdk/types';
 
 export type BatchCallReceipt = WalletCallReceipt<
   bigint,

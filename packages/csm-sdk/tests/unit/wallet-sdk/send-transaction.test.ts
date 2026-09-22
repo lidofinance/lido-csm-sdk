@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Address, Hash, TransactionReceipt } from 'viem';
 import type { ReplacementReason } from 'viem/actions';
-import { TxSDK } from '../../../src/tx-sdk/tx-sdk';
+import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
 import {
   TransactionCallbackStage,
   type TransactionCallbackProps,
@@ -32,29 +32,24 @@ const buildTx = () => {
   const getGasLimit = vi.fn(async (_args: unknown) => 21_000n);
   const waitForTransactionReceipt =
     vi.fn<(args: Record<string, unknown>) => Promise<TransactionReceipt>>();
-  const invalidateCache = vi.fn();
 
   const fakeCore = {
     chain: undefined,
-    core: {
-      useAccount: async () => ({ address: ACCOUNT_ADDRESS }),
-      isContract: async () => false,
-      getFeeData: async () => ({ maxFeePerGas: 1n, maxPriorityFeePerGas: 1n }),
-      publicClient: {
-        waitForTransactionReceipt,
-        getTransactionConfirmations: async (_args: unknown) => 5n,
-      },
+    useAccount: async () => ({ address: ACCOUNT_ADDRESS }),
+    isContract: async () => false,
+    getFeeData: async () => ({ maxFeePerGas: 1n, maxPriorityFeePerGas: 1n }),
+    publicClient: {
+      waitForTransactionReceipt,
+      getTransactionConfirmations: async (_args: unknown) => 5n,
     },
-    invalidateCache,
   };
 
-  const tx = new TxSDK({ core: fakeCore as never });
+  const tx = new WalletSDK({ core: fakeCore as never });
   return {
     tx,
     sendTransaction,
     getGasLimit,
     waitForTransactionReceipt,
-    invalidateCache,
   };
 };
 
@@ -64,11 +59,11 @@ const invokeTransaction = (
   fakes: Fakes,
   overrides: Record<string, unknown> = {},
 ) =>
-  (fakes.tx as any).internalTransaction({
+  fakes.tx.sendTransaction({
     getGasLimit: fakes.getGasLimit,
     sendTransaction: fakes.sendTransaction,
     ...overrides,
-  }) as Promise<{ hash: Hash }>;
+  } as never) as Promise<{ hash: Hash }>;
 
 const mockReplacedBy = (fakes: Fakes, reason: ReplacementReason) => {
   const receipt = makeReceipt('success', REPLACEMENT_HASH);
@@ -91,14 +86,14 @@ const trackStages = () => {
   return { stages, callback };
 };
 
-describe('TxSDK.internalTransaction (EOA / sendTransaction path)', () => {
+describe('WalletSDK.sendTransaction (EOA / sendTransaction path)', () => {
   let fakes: Fakes;
 
   beforeEach(() => {
     fakes = buildTx();
   });
 
-  it('resolves with the receipt hash, fires DONE and invalidates cache', async () => {
+  it('resolves with the receipt hash and fires DONE', async () => {
     fakes.waitForTransactionReceipt.mockResolvedValue(makeReceipt('success'));
     const { stages, callback } = trackStages();
 
@@ -106,10 +101,9 @@ describe('TxSDK.internalTransaction (EOA / sendTransaction path)', () => {
 
     expect(result.hash).toBe(TX_HASH);
     expect(stages).toContain(TransactionCallbackStage.DONE);
-    expect(fakes.invalidateCache).toHaveBeenCalledTimes(1);
   });
 
-  it('rejects with TRANSACTION_REVERTED without DONE or cache invalidation', async () => {
+  it('rejects with TRANSACTION_REVERTED without DONE', async () => {
     fakes.waitForTransactionReceipt.mockResolvedValue(makeReceipt('reverted'));
     const { stages, callback } = trackStages();
 
@@ -117,11 +111,10 @@ describe('TxSDK.internalTransaction (EOA / sendTransaction path)', () => {
       code: ERROR_CODE.TRANSACTION_REVERTED,
     });
     expect(stages).not.toContain(TransactionCallbackStage.DONE);
-    expect(fakes.invalidateCache).not.toHaveBeenCalled();
   });
 
   describe('replaced transaction', () => {
-    it('rejects a cancelled transaction without DONE or cache invalidation', async () => {
+    it('rejects a cancelled transaction without DONE', async () => {
       mockReplacedBy(fakes, 'cancelled');
       const { stages, callback } = trackStages();
 
@@ -132,7 +125,6 @@ describe('TxSDK.internalTransaction (EOA / sendTransaction path)', () => {
         message: expect.stringContaining('cancelled'),
       });
       expect(stages).not.toContain(TransactionCallbackStage.DONE);
-      expect(fakes.invalidateCache).not.toHaveBeenCalled();
     });
 
     it('rejects when the transaction was replaced with a different one', async () => {
@@ -145,7 +137,6 @@ describe('TxSDK.internalTransaction (EOA / sendTransaction path)', () => {
       const { stages, callback } = trackStages();
       const result = await invokeTransaction(fakes, { callback });
       expect(result.hash).toBe(REPLACEMENT_HASH);
-      expect(fakes.invalidateCache).toHaveBeenCalledTimes(1);
 
       const confirmationCall = callback.mock.calls.find(
         ([props]) => props.stage === TransactionCallbackStage.CONFIRMATION,

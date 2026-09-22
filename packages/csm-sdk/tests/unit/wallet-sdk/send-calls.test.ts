@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Address, Hash, Hex, WalletCallReceipt } from 'viem';
-import { TxSDK } from '../../../src/tx-sdk/tx-sdk';
+import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
 import {
   TransactionCallbackStage,
   type TransactionCallbackProps,
 } from '../../../src/tx-sdk/types';
 import { ERROR_CODE, SDKError } from '../../../src/common/utils/sdk-error';
-import { DecodeResultError } from '../../../src/tx-sdk/errors';
+import { DecodeResultError } from '../../../src/wallet-sdk/errors';
 
 const ACCOUNT_ADDRESS = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' as Address;
 const TARGET_ADDRESS = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' as Address;
@@ -41,43 +41,39 @@ const buildTx = () => {
   const sendCalls = vi.fn(async (_args: unknown) => ({ id: CALL_ID }));
   const waitForCallsStatus = vi.fn<(args: unknown) => Promise<CallStatus>>();
   const getTransactionConfirmations = vi.fn(async (_args: unknown) => 5n);
-  const invalidateCache = vi.fn();
 
   const fakeCore = {
-    core: {
-      useAccount: async () => ({ address: ACCOUNT_ADDRESS }),
-      error: (props: { code: ERROR_CODE; message: string }) =>
-        new SDKError(props),
-    },
-    walletClient: {
+    useAccount: async () => ({ address: ACCOUNT_ADDRESS }),
+    error: (props: { code: ERROR_CODE; message: string }) =>
+      new SDKError(props),
+    useWalletClient: () => ({
       sendCalls,
       waitForCallsStatus,
-    },
+    }),
     publicClient: {
       getTransactionConfirmations,
     },
-    invalidateCache,
   };
 
-  const tx = new TxSDK({ core: fakeCore as never });
+  const tx = new WalletSDK({ core: fakeCore as never });
   return {
     tx,
     sendCalls,
     waitForCallsStatus,
     getTransactionConfirmations,
-    invalidateCache,
   };
 };
 
-const invokeCall = (tx: TxSDK, overrides: Record<string, unknown> = {}) =>
-  (
-    tx as unknown as { internalCall: (props: unknown) => Promise<unknown> }
-  ).internalCall({
+const invokeCall = (
+  tx: WalletSDK,
+  overrides: Record<string, unknown> = {},
+): Promise<unknown> =>
+  tx.sendCalls({
     calls: [{ to: TARGET_ADDRESS, data: CALLDATA }],
     ...overrides,
-  });
+  } as never);
 
-describe('TxSDK.internalCall (AA / sendCalls path)', () => {
+describe('WalletSDK.sendCalls (AA / sendCalls path)', () => {
   let fakes: ReturnType<typeof buildTx>;
 
   beforeEach(() => {
@@ -119,11 +115,6 @@ describe('TxSDK.internalCall (AA / sendCalls path)', () => {
       expect(result.result).toEqual({ decoded: TX_HASH });
     });
 
-    it('invalidates SDK cache after success', async () => {
-      await invokeCall(fakes.tx);
-      expect(fakes.invalidateCache).toHaveBeenCalledTimes(1);
-    });
-
     it('emits SIGN → RECEIPT → DONE callback sequence', async () => {
       const stages: TransactionCallbackStage[] = [];
       const callback = vi.fn((p: TransactionCallbackProps) => {
@@ -160,7 +151,6 @@ describe('TxSDK.internalCall (AA / sendCalls path)', () => {
       });
       const result = (await invokeCall(fakes.tx)) as { hash: Hash };
       expect(result.hash).toBe(TX_HASH);
-      expect(fakes.invalidateCache).toHaveBeenCalledTimes(1);
     });
 
     it('still calls decodeResult on the (successful) receipt', async () => {
@@ -219,7 +209,7 @@ describe('TxSDK.internalCall (AA / sendCalls path)', () => {
       });
     });
 
-    it('does not invalidate cache or fire DONE callback on failure', async () => {
+    it('does not fire DONE callback on failure', async () => {
       fakes.waitForCallsStatus.mockResolvedValue({
         status: 'failure',
         receipts: [makeReceipt('reverted')],
@@ -229,7 +219,6 @@ describe('TxSDK.internalCall (AA / sendCalls path)', () => {
         stages.push(p.stage);
       });
       await expect(invokeCall(fakes.tx, { callback })).rejects.toBeDefined();
-      expect(fakes.invalidateCache).not.toHaveBeenCalled();
       expect(stages).not.toContain(TransactionCallbackStage.DONE);
     });
   });
@@ -288,16 +277,6 @@ describe('TxSDK.internalCall (AA / sendCalls path)', () => {
         invokeCall(fakes.tx, { decodeResult, callback }),
       ).rejects.toBeDefined();
       expect(stages).not.toContain(TransactionCallbackStage.DONE);
-    });
-
-    it('does NOT invalidate cache when decode throws', async () => {
-      const decodeResult = vi.fn(async () => {
-        throw new Error('bad parse');
-      });
-      await expect(
-        invokeCall(fakes.tx, { decodeResult }),
-      ).rejects.toBeDefined();
-      expect(fakes.invalidateCache).not.toHaveBeenCalled();
     });
 
     it('falls back to a generic message when the throw is not an Error', async () => {

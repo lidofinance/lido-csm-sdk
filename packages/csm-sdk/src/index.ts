@@ -19,6 +19,8 @@ export * from './operator-sdk/index';
 export * from './rewards-sdk/index';
 export * from './events-sdk/index';
 export * from './tx-sdk/index';
+export * from './wallet-sdk/index';
+export * from './allowance-sdk/index';
 export * from './permissionless-gate-sdk/index';
 export * from './vetted-gate-sdk/index';
 export * from './strikes-sdk/index';
