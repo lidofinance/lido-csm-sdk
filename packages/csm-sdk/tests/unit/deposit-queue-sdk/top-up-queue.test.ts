@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { DepositQueueSDK } from '../../../src/deposit-queue-sdk/deposit-queue-sdk';
 import { buildOperatorQueueKeys } from '../../../src/deposit-queue-sdk/build-operator-queue-keys';
 import { parseTopUpQueueItems } from '../../../src/deposit-queue-sdk/parse-top-up-queue-items';
 import { TopUpQueueItem } from '../../../src/deposit-queue-sdk/types';
@@ -71,5 +72,59 @@ describe('buildOperatorQueueKeys', () => {
 
   it('skips a key index the operator no longer has', () => {
     expect(buildOperatorQueueKeys(1n, ['0xaa'], items([1n, 4, 0]))).toEqual([]);
+  });
+});
+
+describe('DepositQueueSDK.getOperatorTopUpQueue', () => {
+  const BLOCK = 123n;
+  const LENGTH = 2500n;
+
+  const makeSdk = () => {
+    const getTopUpQueueItems = vi.fn(
+      async (
+        [, offset, limit]: readonly [bigint, bigint, bigint],
+        _options?: { blockNumber: bigint },
+      ) => {
+        const end = offset + limit < LENGTH ? offset + limit : LENGTH;
+        const items = [];
+        for (let i = offset; i < end; i++) {
+          items.push({ nodeOperatorId: 1n, keyIndex: i });
+        }
+        return [true, 10n, LENGTH, 0n, items] as const;
+      },
+    );
+    const core = {
+      cacheVersion: 0,
+      moduleId: 3n,
+      profile: { topUpQueue: true },
+      publicClient: { getBlockNumber: vi.fn(async () => BLOCK) },
+      getContract: () => ({ read: { getTopUpQueueItems } }),
+    } as any;
+    const bus = {
+      operator: {
+        getKeys: async () =>
+          Array.from({ length: Number(LENGTH) }, (_, i) => `0x${i}`),
+      },
+    } as any;
+    return { sdk: new DepositQueueSDK({ core, bus }), getTopUpQueueItems };
+  };
+
+  it('reads every page at the same block and concatenates them', async () => {
+    const { sdk, getTopUpQueueItems } = makeSdk();
+
+    const { total, keys } = await sdk.getOperatorTopUpQueue(1n);
+
+    expect(total).toBe(2500);
+    expect(getTopUpQueueItems).toHaveBeenCalledTimes(3);
+    expect(getTopUpQueueItems.mock.calls.map(([args]) => args[1])).toEqual([
+      0n,
+      1000n,
+      2000n,
+    ]);
+    for (const call of getTopUpQueueItems.mock.calls) {
+      expect(call[1]).toEqual({ blockNumber: BLOCK });
+    }
+    expect(keys).toHaveLength(Number(LENGTH));
+    expect(keys.every(({ index, position }) => index === position)).toBe(true);
   });
 });
