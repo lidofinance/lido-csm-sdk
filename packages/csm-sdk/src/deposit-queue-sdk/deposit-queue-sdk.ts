@@ -41,6 +41,8 @@ import {
   TopUpQueueSnapshot,
 } from './types';
 
+const TOP_UP_QUEUE_PAGE_LIMIT = 1000n;
+
 export class DepositQueueSDK extends CsmSDKModule<{
   tx: TxSDK;
   module: ModuleSDK;
@@ -243,15 +245,21 @@ export class DepositQueueSDK extends CsmSDKModule<{
   public async getTopUpQueueItems(
     pagination?: Pagination,
   ): Promise<TopUpQueueSnapshot> {
+    return this.readTopUpQueuePage(pagination);
+  }
+
+  private async readTopUpQueuePage(
+    pagination?: Pagination,
+    blockNumber?: bigint,
+  ): Promise<TopUpQueueSnapshot> {
     const offset = pagination?.offset ?? 0n;
-    const limit = pagination?.limit ?? 1000n;
+    const limit = pagination?.limit ?? TOP_UP_QUEUE_PAGE_LIMIT;
 
     const [enabled, queueLimit, total, head, items] =
-      await this.discoveryContract.read.getTopUpQueueItems([
-        this.core.moduleId,
-        offset,
-        limit,
-      ]);
+      await this.discoveryContract.read.getTopUpQueueItems(
+        [this.core.moduleId, offset, limit],
+        { blockNumber },
+      );
 
     return {
       enabled,
@@ -272,6 +280,27 @@ export class DepositQueueSDK extends CsmSDKModule<{
     return new Map(keys.map(({ index, position }) => [index, position]));
   }
 
+  /** Pages through the whole queue at one pinned block — offsets are head-relative, so unpinned pages can skew. */
+  private async getAllTopUpQueueItems(): Promise<{
+    length: bigint;
+    items: TopUpQueueItem[];
+  }> {
+    const blockNumber = await this.core.publicClient.getBlockNumber();
+    let length = 0n;
+
+    const items = await iteratePages(
+      async (pagination) => {
+        const page = await this.readTopUpQueuePage(pagination, blockNumber);
+        length = page.length;
+        return page.items;
+      },
+      { offset: 0n, limit: TOP_UP_QUEUE_PAGE_LIMIT },
+      (params) => byTotalCount(length)(params),
+    );
+
+    return { length, items };
+  }
+
   /**
    * This operator's queued keys plus queue size. `total` and the entry list come
    * from one snapshot — never pair `total` from a separate call, since reading
@@ -285,7 +314,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     if (!this.core.profile.topUpQueue) return { total: 0, keys: [] };
 
     const [{ length, items }, operatorKeys] = await Promise.all([
-      this.getTopUpQueueItems(),
+      this.getAllTopUpQueueItems(),
       this.bus.operator.getKeys(id),
     ]);
 
