@@ -1,3 +1,5 @@
+import { parseEther } from 'viem';
+
 import { ERROR_CODE, SDKError } from '../common/index';
 import { NodeOperatorId } from '../common/types';
 import {
@@ -99,6 +101,9 @@ export const getValidatorsRewardsV3 = (
       slashed: validatorData.slashed,
       receivedShares: validatorData.distributed_rewards,
       rewardShare: validatorData.reward_share,
+      effectiveBalance: parseEther(
+        String(validatorData.participation_share_multiplier),
+      ),
     }),
   );
 };

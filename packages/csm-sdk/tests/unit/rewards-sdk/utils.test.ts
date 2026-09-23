@@ -13,6 +13,7 @@ import {
   EMPTY_PROOF,
 } from '../../../src/rewards-sdk/find-proof';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
+import { parseEther } from 'viem';
 
 const BLOCKSTAMP = {
   block_hash: '0xaabb',
@@ -113,7 +114,7 @@ const V3_FRAME = {
         '1': {
           attestation_duty: { assigned: 10, included: 5 },
           distributed_rewards: 100,
-          participation_share_multiplier: 32,
+          participation_share_multiplier: 2048,
           performance: 0.5,
           proposal_duty: { assigned: 0, included: 0 },
           reward_share: 0.25,
@@ -251,6 +252,26 @@ describe('getValidatorsRewards', () => {
     const result = getValidatorsRewards(0n, report as any);
 
     expect(result.map((v) => v.rewardShare)).toEqual([0.5, 0.25]);
+  });
+
+  it('maps effectiveBalance from a V3 frame', () => {
+    const report = parseReport(JSON.stringify(V3_FRAME));
+    const result = getValidatorsRewards(0n, report as any);
+
+    expect(result.map((v) => v.effectiveBalance)).toEqual([
+      parseEther('32'),
+      parseEther('2048'),
+    ]);
+  });
+
+  it('leaves effectiveBalance undefined for a V2 report', () => {
+    const report = parseReport(JSON.stringify(V2_REPORT));
+    const result = getValidatorsRewards(0n, report as any);
+
+    expect(result.map((v) => v.effectiveBalance)).toEqual([
+      undefined,
+      undefined,
+    ]);
   });
 });
 

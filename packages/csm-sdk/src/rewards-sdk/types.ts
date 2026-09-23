@@ -28,6 +28,7 @@ export type ValidatorRewards = {
   refSlot: bigint;
   blockNumber: bigint;
   rewardShare: number; // Percentage (0-1)
+  effectiveBalance?: bigint; // wei, at frame end; V3 only (participation_share_multiplier)
 };
 
 export type ValidatorRewardsEntity = ValidatorRewards & {
