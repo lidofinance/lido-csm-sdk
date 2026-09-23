@@ -273,6 +273,32 @@ describe('getValidatorsRewards', () => {
       undefined,
     ]);
   });
+
+  it('leaves effectiveBalance undefined for a slashed V3 validator', () => {
+    const slashedFrame = {
+      ...V3_FRAME,
+      operators: {
+        '0': {
+          ...V3_FRAME.operators['0'],
+          validators: {
+            ...V3_FRAME.operators['0'].validators,
+            '0': {
+              ...V3_FRAME.operators['0'].validators['0'],
+              participation_share_multiplier: 0,
+              slashed: true,
+            },
+          },
+        },
+      },
+    };
+    const report = parseReport(JSON.stringify(slashedFrame));
+    const result = getValidatorsRewards(0n, report as any);
+
+    expect(result.map((v) => v.effectiveBalance)).toEqual([
+      undefined,
+      parseEther('2048'),
+    ]);
+  });
 });
 
 describe('findProofAndAmount', () => {

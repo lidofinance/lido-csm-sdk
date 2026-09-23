@@ -92,19 +92,20 @@ export const getValidatorsRewardsV3 = (
   if (!operator) return [];
 
   return Object.entries(operator.validators).map(
-    ([validatorIndex, validatorData], indexInReport) => ({
-      ...getBaseFields(report),
-      indexInReport,
-      validatorIndex: validatorIndex as `${number}`,
-      performance: validatorData.performance,
-      threshold: validatorData.threshold,
-      slashed: validatorData.slashed,
-      receivedShares: validatorData.distributed_rewards,
-      rewardShare: validatorData.reward_share,
-      effectiveBalance: parseEther(
-        String(validatorData.participation_share_multiplier),
-      ),
-    }),
+    ([validatorIndex, validatorData], indexInReport) => {
+      const m = validatorData.participation_share_multiplier;
+      return {
+        ...getBaseFields(report),
+        indexInReport,
+        validatorIndex: validatorIndex as `${number}`,
+        performance: validatorData.performance,
+        threshold: validatorData.threshold,
+        slashed: validatorData.slashed,
+        receivedShares: validatorData.distributed_rewards,
+        rewardShare: validatorData.reward_share,
+        effectiveBalance: m > 0 ? parseEther(String(m)) : undefined,
+      };
+    },
   );
 };
 
