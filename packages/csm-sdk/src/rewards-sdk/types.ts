@@ -28,6 +28,7 @@ export type ValidatorRewards = {
   refSlot: bigint;
   blockNumber: bigint;
   rewardShare: number; // Percentage (0-1)
+  effectiveBalance?: bigint; // wei, effective balance at frame end, floored at 32 ETH; V3 only, unset for slashed
 };
 
 export type ValidatorRewardsEntity = ValidatorRewards & {
