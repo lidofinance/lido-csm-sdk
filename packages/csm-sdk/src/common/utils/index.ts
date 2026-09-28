@@ -6,6 +6,7 @@ export * from './is-bigint';
 export * from './parse-deposit-data';
 export * from './parse-value';
 export * from './request-with-block-step';
+export * from './shuffle';
 export * from './sort';
 export * from './split-keys';
 export * from './compare-lowercase';

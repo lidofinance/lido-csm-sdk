@@ -23,7 +23,7 @@ import {
   SUPPORTED_CHAINS,
   SUPPORTED_CONTRACT_VERSIONS,
 } from '../common/index';
-import { isValidIpfsCid, toCidV1Base32 } from '../common/utils/index';
+import { isValidIpfsCid, shuffle, toCidV1Base32 } from '../common/utils/index';
 import { onVersionError } from '../common/utils/on-error';
 import {
   BindedContract,
@@ -197,7 +197,7 @@ export class CoreSDK extends CsmSDKCacheable {
 
     // subdomain gateways can't carry base58 CIDv0 — DNS labels are case-insensitive
     const normalized = toCidV1Base32(cid);
-    const gateways = [...this.ipfsGateways, ...DEFAULT_IPFS_GATEWAYS];
+    const gateways = [...this.ipfsGateways, ...shuffle(DEFAULT_IPFS_GATEWAYS)];
 
     return gateways.map((gateway) =>
       gateway.includes('{cid}')
