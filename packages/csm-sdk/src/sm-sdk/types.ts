@@ -31,3 +31,8 @@ export type OperatorRef = {
   operator: NodeOperatorShortInfo;
 };
 export type InviteRef = { module: MODULE_NAME; invite: NodeOperatorInviteInfo };
+
+export type SmDiscoveryOptions = {
+  /** Called once per module whose query failed, when at least one other module succeeded. */
+  onModuleError?: (module: MODULE_NAME, error: unknown) => void;
+};

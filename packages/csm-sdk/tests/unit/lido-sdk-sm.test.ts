@@ -21,9 +21,9 @@ const catchError = (fn: () => unknown): SDKError => {
 };
 
 describe('LidoSmSDK', () => {
-  it('defaults to every module deployed on the chain, in MODULE_NAME order', () => {
+  it('defaults to every module deployed on the chain, in canonical order', () => {
     expect(new LidoSmSDK({ core: makeCore(CHAINS.Hoodi) }).moduleNames).toEqual(
-      [MODULE_NAME.CSM, MODULE_NAME.CM, MODULE_NAME.CSM_02],
+      [MODULE_NAME.CSM, MODULE_NAME.CSM_02, MODULE_NAME.CM],
     );
     expect(
       new LidoSmSDK({ core: makeCore(CHAINS.Mainnet) }).moduleNames,
@@ -117,20 +117,39 @@ describe('LidoSmSDK', () => {
 });
 
 describe('SmDiscoverySDK', () => {
+  const address = '0x1111111111111111111111111111111111111111';
+  const op = (id: bigint) => ({ nodeOperatorId: id }) as never;
+  const errors = {
+    csm: new Error('csm down'),
+    csm02: new Error('csm02 down'),
+    cm: new Error('cm down'),
+  };
+
+  type Method =
+    'getNodeOperatorsByAddress' | 'getNodeOperatorsByProposedAddress';
+  type Mock = unknown[] | Error;
+
+  const mockDiscovery = (
+    sdk: LidoSmSDK,
+    method: Method,
+    mocks: { csm: Mock; csm02: Mock; cm: Mock },
+  ) => {
+    const targets = { csm: sdk.csm!, csm02: sdk.csm02!, cm: sdk.cm! };
+    for (const key of ['csm', 'csm02', 'cm'] as const) {
+      const spy = vi.spyOn(targets[key].discovery, method);
+      const mock = mocks[key];
+      if (mock instanceof Error) spy.mockRejectedValue(mock);
+      else spy.mockResolvedValue(mock as never);
+    }
+  };
+
   it('fans out to every module and tags results with the module name', async () => {
     const sdk = new LidoSmSDK({ core: makeCore(CHAINS.Hoodi) });
-    const address = '0x1111111111111111111111111111111111111111';
-    const op = (id: bigint) => ({ nodeOperatorId: id }) as never;
-    vi.spyOn(sdk.csm!.discovery, 'getNodeOperatorsByAddress').mockResolvedValue(
-      [op(1n)],
-    );
-    vi.spyOn(sdk.cm!.discovery, 'getNodeOperatorsByAddress').mockResolvedValue(
-      [],
-    );
-    vi.spyOn(
-      sdk.csm02!.discovery,
-      'getNodeOperatorsByAddress',
-    ).mockResolvedValue([op(7n), op(8n)]);
+    mockDiscovery(sdk, 'getNodeOperatorsByAddress', {
+      csm: [op(1n)],
+      csm02: [op(7n), op(8n)],
+      cm: [],
+    });
 
     const refs = await sdk.discovery.getNodeOperatorsByAddress(address);
 
@@ -142,5 +161,81 @@ describe('SmDiscoverySDK', () => {
     expect(sdk.cm!.discovery.getNodeOperatorsByAddress).toHaveBeenCalledWith(
       address,
     );
+  });
+
+  describe('partial failure', () => {
+    const setup = () => new LidoSmSDK({ core: makeCore(CHAINS.Hoodi) });
+
+    it('resolves the other modules and reports the failed one', async () => {
+      const sdk = setup();
+      mockDiscovery(sdk, 'getNodeOperatorsByAddress', {
+        csm: [op(1n)],
+        csm02: errors.csm02,
+        cm: [op(5n)],
+      });
+      const onModuleError = vi.fn();
+
+      const refs = await sdk.discovery.getNodeOperatorsByAddress(address, {
+        onModuleError,
+      });
+
+      expect(refs).toEqual([
+        { module: MODULE_NAME.CSM, operator: op(1n) },
+        { module: MODULE_NAME.CM, operator: op(5n) },
+      ]);
+      expect(onModuleError).toHaveBeenCalledTimes(1);
+      expect(onModuleError).toHaveBeenCalledWith(
+        MODULE_NAME.CSM_02,
+        errors.csm02,
+      );
+    });
+
+    it('still resolves partial results without options', async () => {
+      const sdk = setup();
+      mockDiscovery(sdk, 'getNodeOperatorsByAddress', {
+        csm: errors.csm,
+        csm02: [op(7n)],
+        cm: [],
+      });
+
+      await expect(
+        sdk.discovery.getNodeOperatorsByAddress(address),
+      ).resolves.toEqual([{ module: MODULE_NAME.CSM_02, operator: op(7n) }]);
+    });
+
+    it('rejects with the first module error when all fail', async () => {
+      const sdk = setup();
+      mockDiscovery(sdk, 'getNodeOperatorsByAddress', errors);
+      const onModuleError = vi.fn();
+
+      await expect(
+        sdk.discovery.getNodeOperatorsByAddress(address, { onModuleError }),
+      ).rejects.toBe(errors.csm);
+      expect(onModuleError).not.toHaveBeenCalled();
+    });
+
+    it('getNodeOperatorsByProposedAddress has the same partial semantics', async () => {
+      const sdk = setup();
+      const invite = { id: 1n } as never;
+      mockDiscovery(sdk, 'getNodeOperatorsByProposedAddress', {
+        csm: [invite],
+        csm02: [],
+        cm: errors.cm,
+      });
+      const onModuleError = vi.fn();
+
+      const refs = await sdk.discovery.getNodeOperatorsByProposedAddress(
+        address,
+        { onModuleError },
+      );
+
+      expect(refs).toEqual([{ module: MODULE_NAME.CSM, invite }]);
+      expect(onModuleError).toHaveBeenCalledWith(MODULE_NAME.CM, errors.cm);
+
+      mockDiscovery(sdk, 'getNodeOperatorsByProposedAddress', errors);
+      await expect(
+        sdk.discovery.getNodeOperatorsByProposedAddress(address),
+      ).rejects.toBe(errors.csm);
+    });
   });
 });

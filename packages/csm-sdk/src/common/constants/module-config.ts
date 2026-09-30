@@ -2,8 +2,8 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Address } from 'viem';
 
 import { CONTRACT_NAMES } from './contract-names';
-import { MODULE_NAME, PerModule } from './module-name';
-import { PerSupportedChain } from './supported-chains';
+import { MODULE_NAME, PerModule, SUPPORTED_MODULES } from './module-name';
+import { PerSupportedChain, SUPPORTED_CHAINS } from './supported-chains';
 
 type ContractAddressMap = { [key in CONTRACT_NAMES]?: Address };
 
@@ -218,3 +218,12 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
     },
   },
 };
+
+export const isDeployedModule = (
+  module: MODULE_NAME,
+  chainId: number,
+): boolean => !!MODULE_CONFIG[module][chainId as SUPPORTED_CHAINS];
+
+/** Modules deployed on `chainId`, in `SUPPORTED_MODULES` order; `[]` for an unknown chain. */
+export const getDeployedModules = (chainId: number): MODULE_NAME[] =>
+  SUPPORTED_MODULES.filter((m) => isDeployedModule(m, chainId));

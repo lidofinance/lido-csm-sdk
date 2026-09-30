@@ -1,5 +1,9 @@
 import { AllowanceSDK } from '../allowance-sdk/allowance-sdk';
-import { MODULE_CONFIG, MODULE_NAME, SUPPORTED_CHAINS } from '../common/index';
+import {
+  getDeployedModules,
+  MODULE_NAME,
+  SUPPORTED_CHAINS,
+} from '../common/index';
 import { ERROR_CODE, invariant } from '../common/utils/sdk-error';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk';
 import { WalletSDK } from '../wallet-sdk/wallet-sdk';
@@ -7,9 +11,6 @@ import { SM_SDK_CLASSES } from './module-classes';
 import { createSharedServices } from './shared-services';
 import { SmDiscoverySDK } from './sm-discovery-sdk';
 import { SmSDK, SmSDKFor, SmSdkProps } from './types';
-
-const deployedModules = (chainId: SUPPORTED_CHAINS): MODULE_NAME[] =>
-  Object.values(MODULE_NAME).filter((name) => MODULE_CONFIG[name][chainId]);
 
 /** Every staking module deployed on the chain behind one entry point, sharing wallet detection, allowances and the keys cache. */
 export class LidoSmSDK {
@@ -24,7 +25,7 @@ export class LidoSmSDK {
     this.chainId = props.core.chain.id as SUPPORTED_CHAINS;
     const names = requested
       ? [...new Set(requested)]
-      : deployedModules(this.chainId);
+      : getDeployedModules(this.chainId);
     invariant(
       names.length > 0,
       `No modules to construct on chain ${this.chainId}`,

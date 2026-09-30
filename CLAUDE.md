@@ -478,6 +478,8 @@ sm.require(MODULE_NAME.CSM_02);              // throws NOT_SUPPORTED if absent
 await sm.discovery.getNodeOperatorsByAddress(addr);   // [{ module, operator }]
 ```
 
+`getDeployedModules(chainId)` (`common/constants/module-config.ts`) / `SUPPORTED_MODULES` (`common/constants/module-name.ts`) give the canonical module order. `sm.discovery` returns partial results when some modules fail (`{ onModuleError }` option reports each), rejecting with the first error only if all modules fail.
+
 Sharing rule: `wallet`, `allowance`, `keysCache` are one instance across modules; everything reading a module address stays per-module. `createSharedServices(props)` (`sm-sdk/shared-services.ts`) builds this triple; both `LidoSmSDK` and `StakingModuleSDK` (when no `shared` is passed) call it.
 
 ### Transaction System (tx-sdk)
