@@ -360,7 +360,7 @@ implementation rotates on every upgrade. Reads revert with `ModuleCacheNotInitia
 All modules accept `CsmCoreProps` which includes:
 
 - `core: LidoSDKCore` - Core SDK instance
-- `overridedAddresses?: CSM_ADDRESSES` - Custom contract addresses
+- `overridedAddresses?: OverridedAddresses` - Custom contract addresses (flat, and/or scoped per `MODULE_NAME`)
 - `maxEventBlocksRange?: number` - Event query range limits
 - `clApiUrl?: string` - Consensus layer API URL
 
@@ -458,7 +458,10 @@ Three module SDK classes cover the staking modules, plus `LidoSmSDK`, a registry
 Contract addresses are selected by module and chain in `common/constants/module-config.ts`:
 - **Per-module**: `MODULE_CONFIG[MODULE_NAME][chainId]` (module contract, accounting, feeDistributor, gates, …); a missing chain entry makes the constructor throw `NOT_SUPPORTED`
 - **Common**: `COMMON_ADDRESSES[chainId]` (stakingRouter, stETH, wstETH, SMDiscovery, …)
-- `SdkProps.overridedAddresses` is merged over both, and also applies to the stETH/wstETH used by allowance/approve
+- `SdkProps.overridedAddresses` is merged over both. Precedence: common < module config < flat overrides < per-module overrides. Flat stETH/wstETH also apply to allowance/approve (tokens are chain-wide; per-module stETH/wstETH is a type error)
+  ```ts
+  overridedAddresses: { stETH: '0x..', [MODULE_NAME.CSM]: { accounting: '0x..' } }  // accounting override hits CSM only
+  ```
 
 ### Per-module profile
 

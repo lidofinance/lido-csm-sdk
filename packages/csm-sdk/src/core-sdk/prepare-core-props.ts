@@ -6,6 +6,7 @@ import {
   MODULE_NAME,
   SUPPORTED_CHAINS,
 } from '../common/index';
+import { resolveOverridedAddresses } from './resolve-overrided-addresses';
 import { CoreProps, SdkProps } from './types';
 
 export const prepareCoreProps = (
@@ -25,7 +26,7 @@ export const prepareCoreProps = (
     contractAddresses: {
       ...COMMON_ADDRESSES[chainId],
       ...config.contractAddresses,
-      ...props.overridedAddresses,
+      ...resolveOverridedAddresses(props.overridedAddresses, moduleName),
     },
     moduleName,
   };
