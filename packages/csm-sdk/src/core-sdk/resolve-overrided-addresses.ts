@@ -1,7 +1,7 @@
-import { MODULE_NAME } from '../common/index';
+import { MODULE_NAME, SUPPORTED_MODULES } from '../common/index';
 import { ContractAddresses, OverridedAddresses } from './types';
 
-const MODULE_KEYS: readonly string[] = Object.values(MODULE_NAME);
+const MODULE_KEYS: readonly string[] = SUPPORTED_MODULES;
 
 /** Flat overrides merged with `overrides[moduleName]`; per-module entries win and module keys never leak. */
 export const resolveOverridedAddresses = (
