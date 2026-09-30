@@ -15,7 +15,7 @@ import {
 } from './storage';
 import { KeyCacheStatus, KeysCacheSDKProps, KeysRecord } from './types';
 
-export type { KeyCacheEntry, KeysCacheSDKProps } from './types';
+export type { KeyCacheEntry } from './types';
 export { KeyCacheStatus } from './types';
 
 const safe = <T>(operation: () => T, fallback: T): T => {
@@ -35,12 +35,8 @@ export class KeysCacheSDK {
     this.core = props.core;
   }
 
-  get chainId(): number {
-    return this.core.chain.id;
-  }
-
   private get storageKey() {
-    return `lido-keys-cache-${this.chainId}`;
+    return `lido-keys-cache-${this.core.chain.id}`;
   }
 
   private getKeys(): KeysRecord {

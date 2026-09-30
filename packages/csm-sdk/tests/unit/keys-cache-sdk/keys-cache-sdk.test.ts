@@ -454,15 +454,6 @@ describe('KeysCacheSDK.makeRemovalCallback', () => {
 describe('withKeysCacheCallback', () => {
   const depositData = [{ pubkey: PK_A } as any];
 
-  it('returns the user callback unchanged when cache is undefined', () => {
-    const user = vi.fn();
-    expect(withKeysCacheCallback(undefined, depositData, user)).toBe(user);
-  });
-
-  it('returns undefined when both cache and user callback are undefined', () => {
-    expect(withKeysCacheCallback(undefined, depositData)).toBeUndefined();
-  });
-
   it('returns a wrapped callback that mutates the cache when cache is present', async () => {
     const sdk = makeSdk();
     const wrapped = withKeysCacheCallback(sdk, depositData);

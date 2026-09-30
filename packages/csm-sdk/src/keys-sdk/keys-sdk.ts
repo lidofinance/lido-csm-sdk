@@ -26,7 +26,7 @@ import { AddKeysProps, EjectKeysByArrayProps, RemoveKeysProps } from './types';
 
 export class KeysSDK extends CsmSDKModule<{
   tx: TxSDK;
-  keysCache?: KeysCacheSDK;
+  keysCache: KeysCacheSDK;
 }> {
   private get moduleContract() {
     return this.core.contractBaseModule;

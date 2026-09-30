@@ -25,7 +25,7 @@ import { validateDepositData } from './validator';
 export class DepositDataSDK extends CsmSDKModule<{
   module: ModuleSDK;
   keysWithStatus?: KeysWithStatusSDK;
-  keysCache?: KeysCacheSDK;
+  keysCache: KeysCacheSDK;
 }> {
   @Logger('Utils:')
   public parseDepositData(json: string): ParseResult {
@@ -115,8 +115,6 @@ export class DepositDataSDK extends CsmSDKModule<{
   ): ValidationError[] {
     const keysCache = this.bus.keysCache;
     const errors: ValidationError[] = [];
-
-    if (!keysCache) return errors;
 
     pubkeys.forEach((pubkey, index) => {
       const status = keysCache.getCacheStatus(pubkey);

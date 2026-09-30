@@ -62,7 +62,7 @@ export class CoreSDK extends CsmSDKCacheable {
     this.maxEventBlocksRange = props.maxEventBlocksRange;
     this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
-    this.moduleName = props.moduleName ?? MODULE_NAME.CSM;
+    this.moduleName = props.moduleName;
     this.ipfsGateways = props.ipfsGateways ?? [];
     this.profile = resolveModuleProfile(this.moduleName, this.chainId);
   }

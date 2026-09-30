@@ -45,7 +45,7 @@ import {
 export class VettedGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
-  keysCache?: KeysCacheSDK;
+  keysCache: KeysCacheSDK;
 }> {
   private readonly gateName: VettedGateContractName;
   private readonly contract: BindedContract<typeof VettedGateAbi>;

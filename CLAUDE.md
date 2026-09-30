@@ -137,12 +137,12 @@ export class OperatorSDK extends CsmSDKModule<{ accounting: AccountingSDK }> {
 // Optional dependencies (module may not be registered)
 export class DepositDataSDK extends CsmSDKModule<{
   keysWithStatus?: KeysWithStatusSDK;
-  keysCache?: KeysCacheSDK;
+  keysCache: KeysCacheSDK; // shared service, always registered by StakingModuleSDK
 }> {
   async method(pubkeys: Hex[]) {
     // Use optional chaining for modules that might not exist
     const keys = await this.bus.keysWithStatus?.getApiKeys(pubkeys);
-    const status = this.bus.keysCache?.getCacheStatus(pubkey);
+    const status = this.bus.keysCache.getCacheStatus(pubkey);
   }
 }
 ```
