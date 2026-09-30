@@ -12,6 +12,12 @@ type ChainWideContract = CONTRACT_NAMES.stETH | CONTRACT_NAMES.wstETH;
 export type OverridedAddresses = ContractAddresses &
   Partial<PerModule<Omit<ContractAddresses, ChainWideContract>>>;
 
+export type GetContractAddressesProps = {
+  moduleName: MODULE_NAME;
+  chainId: number;
+  overridedAddresses?: OverridedAddresses;
+};
+
 export type CoreProps = {
   core: LidoSDKCore;
   contractAddresses: ContractAddresses;

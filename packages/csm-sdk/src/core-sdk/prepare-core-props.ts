@@ -1,12 +1,5 @@
-import {
-  COMMON_ADDRESSES,
-  ERROR_CODE,
-  invariant,
-  MODULE_CONFIG,
-  MODULE_NAME,
-  SUPPORTED_CHAINS,
-} from '../common/index';
-import { resolveOverridedAddresses } from './resolve-overrided-addresses';
+import { MODULE_CONFIG, MODULE_NAME, SUPPORTED_CHAINS } from '../common/index';
+import { getContractAddresses } from './get-contract-addresses';
 import { CoreProps, SdkProps } from './types';
 
 export const prepareCoreProps = (
@@ -14,20 +7,15 @@ export const prepareCoreProps = (
   moduleName: MODULE_NAME,
 ): CoreProps => {
   const chainId = props.core.chain.id as SUPPORTED_CHAINS;
-  const config = MODULE_CONFIG[moduleName][chainId];
-  invariant(
-    config,
-    `${moduleName} is not deployed on chain ${chainId}`,
-    ERROR_CODE.NOT_SUPPORTED,
-  );
+  const contractAddresses = getContractAddresses({
+    moduleName,
+    chainId,
+    overridedAddresses: props.overridedAddresses,
+  });
   return {
     ...props,
-    ...config,
-    contractAddresses: {
-      ...COMMON_ADDRESSES[chainId],
-      ...config.contractAddresses,
-      ...resolveOverridedAddresses(props.overridedAddresses, moduleName),
-    },
+    ...MODULE_CONFIG[moduleName][chainId]!,
+    contractAddresses,
     moduleName,
   };
 };
