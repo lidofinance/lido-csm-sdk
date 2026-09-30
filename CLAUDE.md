@@ -458,6 +458,7 @@ Three module SDK classes cover the staking modules, plus `LidoSmSDK`, a registry
 Contract addresses are selected by module and chain in `common/constants/module-config.ts`:
 - **Per-module**: `MODULE_CONFIG[MODULE_NAME][chainId]` (module contract, accounting, feeDistributor, gates, …); a missing chain entry makes the constructor throw `NOT_SUPPORTED`
 - **Common**: `COMMON_ADDRESSES[chainId]` (stakingRouter, stETH, wstETH, SMDiscovery, …)
+- `getContractAddresses({ moduleName, chainId, overridedAddresses })` (`core-sdk/get-contract-addresses.ts`) is the pure resolver (no `LidoSDKCore`) with the same precedence; throws `NOT_SUPPORTED` if undeployed
 - `SdkProps.overridedAddresses` is merged over both. Precedence: common < module config < flat overrides < per-module overrides. Flat stETH/wstETH also apply to allowance/approve (tokens are chain-wide; per-module stETH/wstETH is a type error)
   ```ts
   overridedAddresses: { stETH: '0x..', [MODULE_NAME.CSM]: { accounting: '0x..' } }  // accounting override hits CSM only
