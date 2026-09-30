@@ -26,7 +26,7 @@ import { AddNodeOperatorProps } from './types';
 export class PermissionlessGateSDK extends CsmSDKModule<{
   tx: TxSDK;
   operator: OperatorSDK;
-  keysCache?: KeysCacheSDK;
+  keysCache: KeysCacheSDK;
 }> {
   private get permissionlessContract() {
     return this.core.getContract(CONTRACT_NAMES.permissionlessGate);

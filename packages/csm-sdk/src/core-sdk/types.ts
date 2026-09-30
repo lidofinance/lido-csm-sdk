@@ -16,7 +16,7 @@ export type CoreProps = {
   core: LidoSDKCore;
   contractAddresses: ContractAddresses;
   moduleId: bigint;
-  moduleName?: MODULE_NAME;
+  moduleName: MODULE_NAME;
   deploymentBlockNumber?: bigint;
   maxEventBlocksRange?: number;
   clApiUrl?: string;
@@ -28,7 +28,7 @@ export type CoreProps = {
 
 export type SdkProps = Omit<
   CoreProps,
-  'contractAddresses' | 'moduleId' | 'deploymentBlockNumber'
+  'contractAddresses' | 'moduleId' | 'moduleName' | 'deploymentBlockNumber'
 > & {
   overridedAddresses?: OverridedAddresses;
 };

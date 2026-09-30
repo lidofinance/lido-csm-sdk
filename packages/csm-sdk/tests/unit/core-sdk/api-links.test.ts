@@ -1,6 +1,7 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { describe, expect, it } from 'vitest';
 import { API_NAME, API_URLS } from '../../../src/common/constants/links';
+import { MODULE_NAME } from '../../../src/common/constants/module-name';
 import { CoreSDK } from '../../../src/core-sdk/core-sdk';
 
 const makeCore = (props: {
@@ -9,6 +10,7 @@ const makeCore = (props: {
 }) =>
   new CoreSDK({
     core: { chain: { id: CHAINS.Hoodi } },
+    moduleName: MODULE_NAME.CSM,
     ...props,
   } as any);
 

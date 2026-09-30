@@ -1,6 +1,7 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_IPFS_GATEWAYS } from '../../../src/common/constants/links';
+import { MODULE_NAME } from '../../../src/common/constants/module-name';
 import { CoreSDK } from '../../../src/core-sdk/core-sdk';
 
 const CID = 'QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco';
@@ -10,6 +11,7 @@ const NORMALIZED_CID =
 const makeCore = (ipfsGateways?: string[]) =>
   new CoreSDK({
     core: { chain: { id: CHAINS.Hoodi } },
+    moduleName: MODULE_NAME.CSM,
     ipfsGateways,
   } as any);
 

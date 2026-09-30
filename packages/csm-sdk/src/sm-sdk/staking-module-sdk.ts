@@ -1,5 +1,4 @@
 import { AccountingSDK } from '../accounting-sdk/accounting-sdk';
-import { AllowanceSDK } from '../allowance-sdk/allowance-sdk';
 import { BondSDK } from '../bond-sdk/bond-sdk';
 import { BusRegistry } from '../common/class-primitives/bus-registry';
 import { CsmSDKProps } from '../common/class-primitives/csm-sdk-module';
@@ -21,7 +20,6 @@ import { ParametersSDK } from '../parameters-sdk/parameters-sdk';
 import { RewardsSDK } from '../rewards-sdk/rewards-sdk';
 import { RolesSDK } from '../roles-sdk/roles-sdk';
 import { TxSDK } from '../tx-sdk/tx-sdk';
-import { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import { createSharedServices } from './shared-services';
 import { SharedServices } from './types';
 
@@ -53,11 +51,7 @@ export abstract class StakingModuleSDK {
     moduleName: MODULE_NAME,
     shared: SharedServices = createSharedServices(props),
   ) {
-    const bus = new BusRegistry<{
-      keysCache: KeysCacheSDK;
-      wallet: WalletSDK;
-      allowance: AllowanceSDK;
-    }>();
+    const bus = new BusRegistry<SharedServices>();
     this.core = new CoreSDK(prepareCoreProps(props, moduleName));
     this.commonProps = { core: this.core, bus: bus as BusRegistry };
 
