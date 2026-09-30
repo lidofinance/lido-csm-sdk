@@ -601,6 +601,7 @@ sdk.keysCache.clearAllKeys();
 
 // Check whether a key was already submitted
 const status = sdk.keysCache.getCacheStatus('0x123...'); // KeyCacheStatus.CONFIRMED | KeyCacheStatus.PENDING | null
+const statuses = sdk.keysCache.getCacheStatuses(['0x123...', '0x456...']); // one storage read, input order
 
 // Get cache information
 const cachedKeys = sdk.keysCache.getCachedKeys(); // Array<{ pubkey, confirmed }>

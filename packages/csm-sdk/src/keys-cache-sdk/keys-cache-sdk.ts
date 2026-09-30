@@ -133,13 +133,25 @@ export class KeysCacheSDK {
    */
   @Logger('Cache:')
   public getCacheStatus(pubkey: Hex): KeyCacheStatus | null {
-    return safe(() => {
-      const entry = this.getKeys()[normalizeTrimHex(pubkey)];
-      if (!entry || isKeyExpired(entry)) return null;
-      return entry.confirmed
-        ? KeyCacheStatus.CONFIRMED
-        : KeyCacheStatus.PENDING;
-    }, null);
+    return this.getCacheStatuses([pubkey])[0] ?? null;
+  }
+
+  /** Batch `getCacheStatus`: reads storage once, results in input order. */
+  @Logger('Cache:')
+  public getCacheStatuses(pubkeys: Hex[]): (KeyCacheStatus | null)[] {
+    return safe(
+      () => {
+        const stored = this.getKeys();
+        return pubkeys.map((pubkey) => {
+          const entry = stored[normalizeTrimHex(pubkey)];
+          if (!entry || isKeyExpired(entry)) return null;
+          return entry.confirmed
+            ? KeyCacheStatus.CONFIRMED
+            : KeyCacheStatus.PENDING;
+        });
+      },
+      pubkeys.map(() => null),
+    );
   }
 
   /**

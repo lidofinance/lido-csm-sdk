@@ -113,11 +113,10 @@ export class DepositDataSDK extends CsmSDKModule<{
     pubkeys: Hex[],
     options?: { skipPending?: boolean },
   ): ValidationError[] {
-    const keysCache = this.bus.keysCache;
+    const statuses = this.bus.keysCache.getCacheStatuses(pubkeys);
     const errors: ValidationError[] = [];
 
-    pubkeys.forEach((pubkey, index) => {
-      const status = keysCache.getCacheStatus(pubkey);
+    statuses.forEach((status, index) => {
       if (!status) return;
       if (status === KeyCacheStatus.PENDING && options?.skipPending) return;
 
