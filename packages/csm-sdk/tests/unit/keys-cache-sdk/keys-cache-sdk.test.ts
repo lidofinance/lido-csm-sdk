@@ -256,6 +256,54 @@ describe('KeysCacheSDK.getCacheStatus', () => {
   });
 });
 
+describe('KeysCacheSDK.getCacheStatuses', () => {
+  it('returns statuses in input order for mixed entries', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1_000_000_000);
+    const sdk = makeSdk();
+    sdk.addPubkeys([PK_C]);
+    vi.setSystemTime(1_000_000_000 + KEY_TTL_DURATION + 1);
+    sdk.addPubkeys([PK_A], { confirmed: true });
+    store[STORAGE_KEY] = JSON.stringify({
+      ...readStore(),
+      [KEY_B]: { ts: Date.now(), confirmed: false },
+      [KEY_C]: { ts: 1_000_000_000, confirmed: false },
+    });
+
+    const missing = `0x${'dd'.repeat(48)}` as const;
+    expect(sdk.getCacheStatuses([PK_B, missing, PK_A, PK_C])).toEqual([
+      KeyCacheStatus.PENDING,
+      null,
+      KeyCacheStatus.CONFIRMED,
+      null,
+    ]);
+  });
+
+  it('returns [] for empty input', () => {
+    expect(makeSdk().getCacheStatuses([])).toEqual([]);
+  });
+
+  it('reads storage once regardless of pubkey count', () => {
+    const sdk = makeSdk();
+    sdk.addPubkeys([PK_A, PK_B]);
+    localStorageMock.getItem.mockClear();
+
+    sdk.getCacheStatuses([PK_A, PK_B, PK_C, PK_A]);
+
+    expect(localStorageMock.getItem).toHaveBeenCalledTimes(1);
+  });
+
+  it('agrees with getCacheStatus', () => {
+    const sdk = makeSdk();
+    sdk.addPubkeys([PK_A], { confirmed: true });
+    sdk.addPubkeys([PK_B]);
+    const pubkeys = [PK_A, PK_B, PK_C];
+    expect(sdk.getCacheStatuses(pubkeys)).toEqual(
+      pubkeys.map((pk) => sdk.getCacheStatus(pk)),
+    );
+  });
+});
+
 describe('KeysCacheSDK.makeCallback', () => {
   const depositData = [{ pubkey: PK_A } as any, { pubkey: PK_B } as any];
 
