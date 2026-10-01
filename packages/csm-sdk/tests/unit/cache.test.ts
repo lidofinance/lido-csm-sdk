@@ -1,21 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { CsmSDKCacheable } from '../../src/common/class-primitives/csm-sdk-cacheable';
-import { Cache } from '../../src/common/decorators/cache';
+import { Cache, cacheSize } from '../../src/common/decorators/cache';
+import { IN_FLIGHT_TIMEOUT_MS } from '../../src/common/decorators/cache-key';
 
 const TTL = 10_000;
 
-class TestService extends CsmSDKCacheable {
-  private _cacheVersion = 0;
-
-  get cacheVersion() {
-    return this._cacheVersion;
-  }
-
-  invalidateCache() {
-    this._cacheVersion++;
-  }
-
+class TestService {
   impl = vi.fn<(arg?: number) => Promise<string>>();
+  otherImpl = vi.fn<(arg?: number) => Promise<string>>();
   syncImpl = vi.fn<(arg?: number) => string>();
   getterImpl = vi.fn<() => Promise<number>>();
 
@@ -24,9 +15,19 @@ class TestService extends CsmSDKCacheable {
     return this.impl(arg);
   }
 
+  @Cache(Infinity)
+  async getImmutable(arg?: number): Promise<string> {
+    return this.impl(arg);
+  }
+
   @Cache(TTL)
   getSyncValue(arg?: number): string {
     return this.syncImpl(arg);
+  }
+
+  @Cache(TTL)
+  async getOther(arg?: number): Promise<string> {
+    return this.otherImpl(arg);
   }
 
   @Cache(TTL)
@@ -71,18 +72,6 @@ describe('Cache decorator', () => {
     expect(service.impl).toHaveBeenCalledTimes(2);
   });
 
-  it('re-fetches after cache invalidation within TTL', async () => {
-    service.impl.mockResolvedValueOnce('old').mockResolvedValueOnce('new');
-
-    const first = await service.getValue();
-    service.invalidateCache();
-    const second = await service.getValue();
-
-    expect(first).toBe('old');
-    expect(second).toBe('new');
-    expect(service.impl).toHaveBeenCalledTimes(2);
-  });
-
   it('caches different args independently', async () => {
     service.impl.mockImplementation(async (arg) => `val-${arg}`);
 
@@ -115,32 +104,106 @@ describe('Cache decorator', () => {
     expect(service.impl).toHaveBeenCalledTimes(1);
   });
 
-  it('in-flight promise does not survive version-based invalidation', async () => {
+  it('never expires immutable entries', async () => {
+    await service.getImmutable();
+    vi.advanceTimersByTime(365 * 24 * 3600 * 1000);
+    await service.getImmutable();
+
+    expect(service.impl).toHaveBeenCalledTimes(1);
+  });
+
+  it('re-executes when an in-flight entry exceeds the in-flight timeout', async () => {
+    service.impl.mockReturnValueOnce(new Promise(() => {}));
+    service.impl.mockResolvedValueOnce('second');
+
+    void service.getValue();
+    vi.advanceTimersByTime(IN_FLIGHT_TIMEOUT_MS + 1);
+
+    expect(await service.getValue()).toBe('second');
+    expect(service.impl).toHaveBeenCalledTimes(2);
+  });
+
+  it('late settle does not clobber a newer entry', async () => {
     let resolveFirst: (v: string) => void;
-    let resolveSecond: (v: string) => void;
     service.impl
       .mockReturnValueOnce(
         new Promise((resolve) => {
           resolveFirst = resolve;
         }),
       )
-      .mockReturnValueOnce(
-        new Promise((resolve) => {
-          resolveSecond = resolve;
-        }),
-      );
+      .mockResolvedValueOnce('second');
 
     const p1 = service.getValue();
-    service.invalidateCache();
+    vi.advanceTimersByTime(IN_FLIGHT_TIMEOUT_MS + 1);
     const p2 = service.getValue();
+    expect(await p2).toBe('second');
 
     resolveFirst!('first');
-    resolveSecond!('second');
-    const [r1, r2] = await Promise.all([p1, p2]);
+    expect(await p1).toBe('first');
 
-    expect(r1).toBe('first');
-    expect(r2).toBe('second');
+    expect(await service.getValue()).toBe('second');
     expect(service.impl).toHaveBeenCalledTimes(2);
+  });
+
+  it('late rejection does not delete a newer entry', async () => {
+    let rejectFirst: (e: Error) => void;
+    service.impl
+      .mockReturnValueOnce(
+        new Promise((_resolve, reject) => {
+          rejectFirst = reject;
+        }),
+      )
+      .mockResolvedValueOnce('second');
+
+    const p1 = service.getValue();
+    vi.advanceTimersByTime(IN_FLIGHT_TIMEOUT_MS + 1);
+    await service.getValue();
+
+    rejectFirst!(new Error('late'));
+    await expect(p1).rejects.toThrow('late');
+
+    expect(await service.getValue()).toBe('second');
+    expect(service.impl).toHaveBeenCalledTimes(2);
+  });
+
+  it('prunes expired settled entries on write', async () => {
+    await service.getValue(1);
+    await service.getValue(2);
+    expect(cacheSize(service, service.getValue)).toBe(2);
+
+    vi.advanceTimersByTime(TTL + 1);
+    await service.getValue(3);
+
+    expect(cacheSize(service, service.getValue)).toBe(1);
+  });
+
+  it('never prunes immutable or in-flight entries', async () => {
+    await service.getImmutable();
+    service.impl.mockReturnValueOnce(new Promise(() => {}));
+    void service.getValue(1);
+
+    vi.advanceTimersByTime(IN_FLIGHT_TIMEOUT_MS + 1);
+    await service.getValue(2);
+
+    expect(cacheSize(service, service.getImmutable)).toBe(1);
+    expect(cacheSize(service, service.getValue)).toBe(2);
+  });
+
+  it('does not share entries between instances', async () => {
+    const other = new TestService();
+    other.impl.mockResolvedValue('other-result');
+
+    expect(await service.getValue()).toBe('result');
+    expect(await other.getValue()).toBe('other-result');
+    expect(service.impl).toHaveBeenCalledTimes(1);
+    expect(other.impl).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not collide across methods with identical args', async () => {
+    service.otherImpl.mockResolvedValue('other');
+
+    expect(await service.getValue(1)).toBe('result');
+    expect(await service.getOther(1)).toBe('other');
   });
 
   it('does not cache rejected promises', async () => {
@@ -166,18 +229,6 @@ describe('Cache decorator', () => {
     expect(service.syncImpl).toHaveBeenCalledTimes(1);
   });
 
-  it('invalidation works with sync methods', () => {
-    service.syncImpl.mockReturnValueOnce('old').mockReturnValueOnce('new');
-
-    const first = service.getSyncValue();
-    service.invalidateCache();
-    const second = service.getSyncValue();
-
-    expect(first).toBe('old');
-    expect(second).toBe('new');
-    expect(service.syncImpl).toHaveBeenCalledTimes(2);
-  });
-
   it('works with getters', async () => {
     const first = await service.computed;
     const second = await service.computed;
@@ -185,18 +236,6 @@ describe('Cache decorator', () => {
     expect(first).toBe(42);
     expect(second).toBe(42);
     expect(service.getterImpl).toHaveBeenCalledTimes(1);
-  });
-
-  it('invalidation works with getters', async () => {
-    service.getterImpl.mockResolvedValueOnce(1).mockResolvedValueOnce(2);
-
-    const first = await service.computed;
-    service.invalidateCache();
-    const second = await service.computed;
-
-    expect(first).toBe(1);
-    expect(second).toBe(2);
-    expect(service.getterImpl).toHaveBeenCalledTimes(2);
   });
 
   it('returns a thenable on a cache hit for async methods', async () => {

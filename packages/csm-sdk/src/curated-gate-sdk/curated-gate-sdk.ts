@@ -1,4 +1,4 @@
-import { Address } from 'viem';
+import { Address, Hex } from 'viem';
 import { CuratedGateAbi } from '../abi/CuratedGate';
 import {
   CsmSDKModule,
@@ -12,7 +12,7 @@ import {
   Logger,
 } from '../common/decorators/index';
 import {
-  CACHE_LONG,
+  CACHE_IMMUTABLE,
   CURATED_GATES,
   GateEligibility,
   NodeOperatorShortInfo,
@@ -119,14 +119,18 @@ export class CuratedGateSDK extends CsmSDKModule<{
     ].filter(isDefined);
   }
 
+  @Cache(CACHE_IMMUTABLE)
+  private async loadTree(cid: string, root: Hex) {
+    const urls = this.getProofTreeUrls(cid);
+    return fetchTree<AddressTreeLeaf>({ urls, root });
+  }
+
   @Logger('API:')
-  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
     if (!root || !cid) return null;
 
-    const urls = this.getProofTreeUrls(cid);
-    return fetchTree<AddressTreeLeaf>({ urls, root });
+    return this.loadTree(cid, root);
   }
 
   @Logger('Utils:')

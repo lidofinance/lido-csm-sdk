@@ -77,7 +77,7 @@ describe('KeysWithStatusSDK.getClKeys', () => {
 
     await sdk.getClKeys([PUBKEY]);
     fetchMock.mockClear();
-    // Different pubkeys avoid the @Cache decorator's memoized result.
+    // Different pubkeys avoid the @Cache decorator's 10 s memoized result.
     await sdk.getClKeys([`0x${'1'.repeat(96)}` as Hex]);
 
     expect(

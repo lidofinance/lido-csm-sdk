@@ -7,26 +7,17 @@ import {
   type CanPerformResult,
 } from '../utils/can-perform';
 import { BusRegistry, BusWithModules } from './bus-registry';
-import { CsmSDKCacheable } from './csm-sdk-cacheable';
 
 export type CsmSDKProps = {
   core: CoreSDK;
   bus?: BusRegistry;
 };
 
-export abstract class CsmSDKModule<
-  TBus extends object = object,
-> extends CsmSDKCacheable {
+export abstract class CsmSDKModule<TBus extends object = object> {
   readonly core: CoreSDK;
   readonly bus: BusWithModules<TBus>;
 
-  get cacheVersion() {
-    return this.core.cacheVersion;
-  }
-
   constructor(props: CsmSDKProps, name?: string) {
-    super();
-
     this.core = props.core;
 
     this.bus = (props.bus ?? new BusRegistry<TBus>()) as BusWithModules<TBus>;

@@ -61,9 +61,7 @@ export class TxSDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async approve(props: SpendProps): Promise<TransactionResult> {
-    const result = await this.bus.allowance.approve(this.withSpender(props));
-    if (result.receipt) this.core.invalidateCache();
-    return result;
+    return this.bus.allowance.approve(this.withSpender(props));
   }
 
   public signPermitOrApprove(props: SpendProps) {
@@ -123,18 +121,13 @@ export class TxSDK extends CsmSDKModule<{
   private async sendCalls<T>(
     props: SendCallsProps<T>,
   ): Promise<TransactionResult<T>> {
-    const result = await this.bus.wallet.sendCalls(props);
-    this.core.invalidateCache();
-    return result;
+    return this.bus.wallet.sendCalls(props);
   }
 
-  // A multisig submission resolves to `{ hash }` only; state hasn't changed yet.
   private async sendTransaction<T>(
     props: SendTransactionProps<T>,
   ): Promise<TransactionResult<T>> {
-    const result = await this.bus.wallet.sendTransaction(props);
-    if (result.receipt) this.core.invalidateCache();
-    return result;
+    return this.bus.wallet.sendTransaction(props);
   }
 
   private async prepareCall(

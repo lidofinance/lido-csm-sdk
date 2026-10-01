@@ -5,7 +5,6 @@ import {
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
 import { erc20Abi, getContract, Hash } from 'viem';
-import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_IMMUTABLE,
@@ -33,18 +32,12 @@ import { stripPermit } from './strip-permit';
 import { AllowanceSDKProps, WithSpender } from './types';
 
 /** ERC20 allowance, EIP-2612 permit and approve flows for an explicit spender. */
-export class AllowanceSDK extends CsmSDKCacheable {
+export class AllowanceSDK {
   readonly core: LidoSDKCore;
   readonly wallet: WalletSDK;
   private readonly tokenAddresses?: AllowanceSDKProps['tokenAddresses'];
 
-  // Nothing here depends on module state, so no tx ever needs to invalidate it.
-  get cacheVersion() {
-    return 0;
-  }
-
   constructor(props: AllowanceSDKProps) {
-    super();
     this.core = props.core;
     this.wallet = props.wallet;
     this.tokenAddresses = props.tokenAddresses;

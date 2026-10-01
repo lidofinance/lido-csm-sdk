@@ -1,37 +1,37 @@
-import {
-  CacheEntry,
-  CsmSDKCacheable,
-} from '../class-primitives/csm-sdk-cacheable';
-import { isBigint } from '../utils/index';
+import { buildCacheKey, getOrCreate, IN_FLIGHT_TIMEOUT_MS } from './cache-key';
 import { callConsoleMessage } from './utils';
 
-const serializeArgs = (args: any[]) =>
-  args
-    .map((arg: any) =>
-      JSON.stringify(arg, (_key, value) => {
-        return isBigint(value) ? value.toString() : value;
-      }),
-    )
-    .join(':');
-
-const getDecoratorArgsString = function <This>(this: This, args?: string[]) {
-  if (!args) return '';
-
-  const argsStringArr = args.map((arg) => {
-    const field = arg
-      .split('.')
-      .reduce((a, b) => (a as { [key: string]: any })[b], this);
-
-    return arg && typeof field === 'function' ? field.call(this) : field;
-  });
-
-  return serializeArgs(argsStringArr);
+type CacheEntry = {
+  data: any;
+  timestamp: number;
+  ttl: number;
+  async?: boolean;
 };
 
-const IN_FLIGHT_TIMEOUT_MS = 60_000;
+type Store = WeakMap<object, Map<string, CacheEntry>>;
+
+const storeByReplacement = new WeakMap<object, Store>();
+
+/** Test hook: entry count for `instance` in the store behind decorated `fn`. */
+export const cacheSize = (instance: object, fn: object) =>
+  storeByReplacement.get(fn)?.get(instance)?.size ?? 0;
+
+const isInFlight = (entry: CacheEntry) => entry.data instanceof Promise;
+
+const isEntryValid = (entry: CacheEntry, now: number) =>
+  isInFlight(entry)
+    ? now - entry.timestamp <= IN_FLIGHT_TIMEOUT_MS
+    : now - entry.timestamp <= entry.ttl;
+
+const pruneExpired = (cache: Map<string, CacheEntry>, now: number) => {
+  for (const [key, entry] of cache) {
+    if (isInFlight(entry) || entry.ttl === Infinity) continue;
+    if (!isEntryValid(entry, now)) cache.delete(key);
+  }
+};
 
 export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
-  return function CacheDecorator<This extends CsmSDKCacheable, Value>(
+  return function CacheDecorator<This extends object, Value>(
     target:
       | (This extends object ? This[keyof This] : never)
       | ((this: This, ...args: any[]) => Value),
@@ -41,8 +41,7 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
   ) {
     const methodName = String(context.name);
     const kind = context.kind;
-
-    const isImmutable = timeMs === Infinity;
+    const store: Store = new WeakMap();
 
     const resolveCache = function (
       instance: This,
@@ -50,15 +49,9 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
       cacheKey: string,
       execute: () => any,
     ): any {
-      const isEntryValid = (entry: CacheEntry, now: number) =>
-        (isImmutable || entry.version === instance.cacheVersion) &&
-        (entry.data instanceof Promise
-          ? now - entry.timestamp <= IN_FLIGHT_TIMEOUT_MS
-          : isImmutable || now - entry.timestamp <= timeMs);
-
-      if (cache.has(cacheKey)) {
-        const cachedEntry = cache.get(cacheKey);
-        if (cachedEntry && isEntryValid(cachedEntry, Date.now())) {
+      const cachedEntry = cache.get(cacheKey);
+      if (cachedEntry) {
+        if (isEntryValid(cachedEntry, Date.now())) {
           callConsoleMessage.call(
             instance,
             'Cache:',
@@ -68,14 +61,13 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
           return cachedEntry.async
             ? Promise.resolve(cachedEntry.data)
             : cachedEntry.data;
-        } else {
-          callConsoleMessage.call(
-            instance,
-            'Cache:',
-            `Cache for ${kind} '${methodName}' has expired.`,
-          );
-          cache.delete(cacheKey);
         }
+        callConsoleMessage.call(
+          instance,
+          'Cache:',
+          `Cache for ${kind} '${methodName}' has expired.`,
+        );
+        cache.delete(cacheKey);
       }
 
       callConsoleMessage.call(
@@ -83,65 +75,65 @@ export const Cache = function (timeMs = 0, cacheArgs?: string[]) {
         'Cache:',
         `Cache for ${kind} '${methodName}' set.`,
       );
-      const callVersion = isImmutable ? undefined : instance.cacheVersion;
       const result = execute();
-      if (result instanceof Promise) {
-        const wrapped = result
-          .then((resolvedResult) => {
-            if (isImmutable || cache.get(cacheKey)?.version === callVersion) {
-              cache.set(cacheKey, {
-                data: resolvedResult,
-                timestamp: Date.now(),
-                version: callVersion,
-                async: true,
-              });
-            }
-            return resolvedResult;
-          })
-          .catch((error) => {
-            if (isImmutable || cache.get(cacheKey)?.version === callVersion) {
-              cache.delete(cacheKey);
-            }
-            throw error;
-          });
-        cache.set(cacheKey, {
-          data: wrapped,
-          timestamp: Date.now(),
-          version: callVersion,
-          async: true,
-        });
-        return wrapped;
-      } else {
-        cache.set(cacheKey, {
-          data: result,
-          timestamp: Date.now(),
-          version: callVersion,
-        });
+      const write = (entry: CacheEntry) => {
+        pruneExpired(cache, entry.timestamp);
+        cache.set(cacheKey, entry);
+        return entry;
+      };
+
+      if (!(result instanceof Promise)) {
+        write({ data: result, timestamp: Date.now(), ttl: timeMs });
+        return result;
       }
 
-      return result;
+      const wrapped: Promise<unknown> = result
+        .then((resolvedResult) => {
+          if (cache.get(cacheKey) === pending) {
+            write({
+              data: resolvedResult,
+              timestamp: Date.now(),
+              ttl: timeMs,
+              async: true,
+            });
+          }
+          return resolvedResult;
+        })
+        .catch((error) => {
+          if (cache.get(cacheKey) === pending) cache.delete(cacheKey);
+          throw error;
+        });
+      const pending = write({
+        data: wrapped,
+        timestamp: Date.now(),
+        ttl: timeMs,
+        async: true,
+      });
+      return wrapped;
     };
+
+    const entriesOf = (self: object) =>
+      getOrCreate(store, self, () => new Map<string, CacheEntry>());
 
     if (kind === 'getter') {
       const replacementGetter = function (this: This): Value {
-        const decoratorArgsKey = getDecoratorArgsString.call(this, cacheArgs);
-        const cacheKey = `${methodName}:${decoratorArgsKey}:`;
-        return resolveCache(this, this.cache, cacheKey, () =>
+        const cacheKey = buildCacheKey(this, cacheArgs);
+        return resolveCache(this, entriesOf(this), cacheKey, () =>
           (target as () => Value).call(this),
         );
       };
 
+      storeByReplacement.set(replacementGetter, store);
       return replacementGetter as any;
     }
 
     const replacementMethod = function (this: This, ...args: any[]): any {
-      const decoratorArgsKey = getDecoratorArgsString.call(this, cacheArgs);
-      const argsKey = serializeArgs(args);
-      const cacheKey = `${methodName}:${decoratorArgsKey}:${argsKey}`;
-      return resolveCache(this, this.cache, cacheKey, () =>
+      const cacheKey = buildCacheKey(this, cacheArgs, args);
+      return resolveCache(this, entriesOf(this), cacheKey, () =>
         (target as (...args: any[]) => any).call(this, ...args),
       );
     };
+    storeByReplacement.set(replacementMethod, store);
     return replacementMethod;
   };
 };

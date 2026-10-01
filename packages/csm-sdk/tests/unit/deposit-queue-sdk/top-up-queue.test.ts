@@ -94,7 +94,6 @@ describe('DepositQueueSDK.getOperatorTopUpQueue', () => {
       },
     );
     const core = {
-      cacheVersion: 0,
       moduleId: 3n,
       profile: { topUpQueue: true },
       publicClient: { getBlockNumber: vi.fn(async () => BLOCK) },

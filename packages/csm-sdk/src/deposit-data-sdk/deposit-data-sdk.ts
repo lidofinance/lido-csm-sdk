@@ -1,7 +1,7 @@
 import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
-import { CACHE_MID, CONTRACT_NAMES } from '../common/index';
+import { CACHE_SHORT, CONTRACT_NAMES } from '../common/index';
 import {
   compareLowercase,
   isHexadecimalString,
@@ -84,7 +84,7 @@ export class DepositDataSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async checkUploadedKeys(pubkeys: Hex[]): Promise<ValidationError[]> {
     const keys = await this.bus.keysWithStatus?.getApiKeys(pubkeys);
     const errors: ValidationError[] = [];

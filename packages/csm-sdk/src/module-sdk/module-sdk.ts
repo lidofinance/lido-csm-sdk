@@ -2,11 +2,17 @@ import { Address, keccak256, toHex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Cache,
+  Dedupe,
   ErrorHandler,
   Logger,
   ProtocolRole,
 } from '../common/decorators/index';
-import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index';
+import {
+  CACHE_IMMUTABLE,
+  CACHE_LONG,
+  CACHE_SHORT,
+  CONTRACT_NAMES,
+} from '../common/index';
 import { calculateShareLimit } from './calculate-share-limit';
 import { findModuleDigest } from './find-module-digest';
 import { findModuleRegistration } from './find-module-registration';
@@ -84,7 +90,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   private async getAllModulesDigests(): Promise<ModuleDigest[]> {
     const digests =
       await this.stakingRouterContract.read.getAllStakingModuleDigests();
@@ -112,7 +118,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getRegistration(): Promise<ModuleRegistration> {
     const digests = await this.getAllModulesDigests();
     return findModuleRegistration(
@@ -124,7 +130,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   public async getWithdrawalCredentialsType(): Promise<number> {
     const digest = await this.getDigest();
     return digest.state.withdrawalCredentialsType;
@@ -132,7 +138,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   public async getMaxEffectiveBalance(): Promise<bigint> {
     const wcType = await this.getWithdrawalCredentialsType();
     const method =
@@ -144,14 +150,14 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getTotalStake(): Promise<bigint> {
     return this.moduleContract.read.getTotalModuleStake();
   }
 
   @Logger('Utils:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getShareLimit(): Promise<ShareLimitInfo> {
     const [digests, totalModuleStake] = await Promise.all([
       this.getAllModulesDigests(),
@@ -169,7 +175,7 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async getUsedOtherModule(address: Address): Promise<string | null> {
     return findUsedOtherModule(
       this.core.keysApiLink,

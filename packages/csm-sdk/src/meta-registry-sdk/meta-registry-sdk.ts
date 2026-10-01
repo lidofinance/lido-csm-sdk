@@ -2,12 +2,11 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
-  Cache,
+  Dedupe,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
 import {
-  CACHE_MID,
   CONTRACT_NAMES,
   ERROR_CODE,
   invariant,
@@ -72,7 +71,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getOperatorGroupId(
     nodeOperatorId: NodeOperatorId,
   ): Promise<bigint | null> {
@@ -85,7 +84,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getGroup(groupId: bigint): Promise<GroupOperators | null> {
     if (!groupId) return null;
 
@@ -99,7 +98,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getOperatorGroup(
     nodeOperatorId: NodeOperatorId,
   ): Promise<GroupInfo | null> {
@@ -117,7 +116,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getOperatorWeight(
     nodeOperatorId: NodeOperatorId,
   ): Promise<bigint> {
@@ -126,7 +125,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getOperatorWeightAndExternalStake(
     nodeOperatorId: NodeOperatorId,
   ) {
@@ -147,7 +146,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   private async getDepositAllocations() {
     return this.moduleContract.read.getDepositAllocationTargets();
   }
@@ -169,7 +168,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   private async getTopUpAllocations() {
     return this.moduleContract.read.getTopUpAllocationTargets();
   }
@@ -196,7 +195,7 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async isTopUpAllocationEnabled(
     nodeOperatorId: NodeOperatorId,
   ): Promise<boolean> {

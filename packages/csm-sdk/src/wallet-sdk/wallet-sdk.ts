@@ -9,7 +9,6 @@ import {
 } from '@lidofinance/lido-ethereum-sdk';
 import { Address, WalletCallReceipt } from 'viem';
 import type { ReplacementReturnType } from 'viem/actions';
-import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
 import {
   CACHE_SHORT,
   ERROR_CODE,
@@ -30,16 +29,10 @@ import { BatchTransactionRevertedError, DecodeResultError } from './errors';
 import { SendCallsProps, SendTransactionProps, WalletSDKProps } from './types';
 
 /** Chain-scoped wallet detection and transaction sending; shared by every module SDK. */
-export class WalletSDK extends CsmSDKCacheable {
+export class WalletSDK {
   readonly core: LidoSDKCore;
 
-  // Nothing here depends on module state, so no tx ever needs to invalidate it.
-  get cacheVersion() {
-    return 0;
-  }
-
   constructor(props: WalletSDKProps) {
-    super();
     this.core = props.core;
   }
 

@@ -1,13 +1,18 @@
+import { Hex } from 'viem';
 import {
   AccountingSDK,
   convertSharesToEth,
   StethPoolData,
 } from '../accounting-sdk/index';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  CACHE_LONG,
-  CACHE_MID,
+  Cache,
+  Dedupe,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
+import {
+  CACHE_IMMUTABLE,
   CONTRACT_NAMES,
   NodeOperatorId,
   PERCENT_BASIS,
@@ -66,14 +71,14 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   private async getHistoryCount() {
     return this.distributorContract.read.distributionDataHistoryCount();
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   public async getReportConfig(number: bigint) {
     return this.distributorContract.read.getHistoricalDistributionData([
       number,
@@ -82,7 +87,7 @@ export class RewardsSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getLastReportConfig() {
     const historyCount = await this.getHistoryCount();
     if (!historyCount) return null;
@@ -90,15 +95,19 @@ export class RewardsSDK extends CsmSDKModule<{
     return this.getReportConfig(historyCount - 1n);
   }
 
+  @Cache(CACHE_IMMUTABLE)
+  private async loadTree(cid: string, root: Hex) {
+    const urls = this.getProofTreeUrls(cid);
+
+    return fetchTree({ urls, root, parse: parseRewardsTree });
+  }
+
   @Logger('API:')
-  @Cache(CACHE_LONG)
   public async getProofTree() {
     const config = await this.getLastReportConfig();
     if (!config) return null;
 
-    const urls = this.getProofTreeUrls(config.treeCid);
-
-    return fetchTree({ urls, root: config.treeRoot, parse: parseRewardsTree });
+    return this.loadTree(config.treeCid, config.treeRoot);
   }
 
   @Logger('Utils:')

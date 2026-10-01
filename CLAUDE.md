@@ -16,7 +16,7 @@ Modules talk via a shared Proxy-based `BusRegistry` (`bus.moduleName.method()`),
 
 ### Decorator Order Convention
 
-**Standard order (outermost to innermost):** `@Access → @Logger → @ErrorHandler → @Cache`
+**Standard order (outermost to innermost):** `@Access → @Logger → @ErrorHandler → @Cache | @Dedupe`
 
 **Every transaction method (with `tx.perform`) must have `@Access`** — it declares who can call the method, enabling frontend permission checks via `getMethodAccess()` and `resolveAccess()`.
 
@@ -34,9 +34,22 @@ View methods (without `@Access`):
 ```typescript
 @Logger('Views:')      // Outermost - logs all calls (including cache hits)
 @ErrorHandler()        // Middle - catches and transforms errors
-@Cache(CACHE_SHORT)    // Innermost - checks/stores cache
+@Dedupe()              // Innermost - shares concurrent calls (or @Cache(ttl) to store results)
 public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo>
 ```
+
+Async view methods over mutable on-chain state use `@Dedupe()` in place of `@Cache` (innermost, same position).
+
+**Choosing a tier for a new view method:**
+
+| Kind | Decorator |
+|------|-----------|
+| Immutable (constants, per-module fixed values, CID-keyed trees) | `@Cache(CACHE_IMMUTABLE)` |
+| Governance-mutable config (curves, frame config) | `@Cache(CACHE_LONG)` (1 h) |
+| External API / wallet detection | `@Cache(CACHE_SHORT)` (10 s) |
+| Mutable on-chain state | `@Dedupe()` (concurrent calls share one promise, nothing kept after settle) |
+
+The SDK does not cache mutable on-chain state; consumers own freshness. There is no cache invalidation API.
 
 **Why this order:**
 

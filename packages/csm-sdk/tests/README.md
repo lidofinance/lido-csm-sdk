@@ -51,14 +51,11 @@ Available fixtures:
 - `useCsm02Sdk()` / `useCsm02SdkWithWallet()` — `LidoSDKCsm02` (read-only or signing)
 - `useSmSdk()` — `LidoSmSDK` (read-only, every hoodi module)
 
-### Cached SDKs + chain mutations = stale reads
+### Cached SDKs + chain mutations
 
-`useCsmSdk()` and `useCmSdk()` cache one shared `LidoSDK*` instance per process. Their read methods are `@Cache`-decorated with TTLs. If a test reads a value through the shared SDK, then mutates chain state via `useTestClient()` (`setCode`, `setBalance`, executing a tx), then re-reads through the SAME SDK, the cached pre-mutation value is returned until the TTL elapses.
+Mutable on-chain reads are not cached across calls (`@Dedupe` only shares concurrent calls), so re-reading after a mutation through the shared SDK returns fresh state. Only external-API reads (`keysWithStatus`, `feesMonitoring`, `depositData.checkUploadedKeys`) and wallet detection keep a 10 s TTL; immutable values and CID-keyed proof trees are cached for the instance lifetime.
 
-Two ways to dodge it:
-
-1. **Use `makeCsmSdk(publicClient, walletClient?)`** (see `tests/helpers/make-csm-sdk.ts`) to get a fresh SDK per test — `bond-aa.test.ts` and `bond-multisig.test.ts` already do this for their write paths.
-2. **Call `sdk.core.invalidateCache()`** between the mutation and the re-read if you must reuse the shared SDK.
+If a test re-reads one of those TTL-cached values after a mutation, use `makeCsmSdk(publicClient, walletClient?)` (see `tests/helpers/make-csm-sdk.ts`) to get a fresh SDK per test, as `bond-aa.test.ts` and `bond-multisig.test.ts` do.
 
 ## File naming conventions
 
