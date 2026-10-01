@@ -1,9 +1,10 @@
 import { stethSharesAbi } from '@lidofinance/lido-ethereum-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache } from '../common/decorators/cache';
+import { Dedupe } from '../common/decorators/dedupe';
 import { ErrorHandler } from '../common/decorators/error-handler';
 import { Logger } from '../common/decorators/logger';
-import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES, TOKENS } from '../common/index';
+import { CACHE_IMMUTABLE, CONTRACT_NAMES, TOKENS } from '../common/index';
 import { convertEthToShares, convertSharesToEth } from './convert-shares';
 import {
   AmountByKeys,
@@ -18,26 +19,39 @@ export class AccountingSDK extends CsmSDKModule {
     return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   private get stethContract() {
     return this.core.getContractWithAbi(CONTRACT_NAMES.stETH, stethSharesAbi);
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
   public async getStethPoolData(blockNumber?: bigint): Promise<StethPoolData> {
     const effectiveBlockNumber = this.core.skipHistoricalCalls
       ? undefined
       : blockNumber;
 
+    return effectiveBlockNumber === undefined
+      ? this.getStethPoolDataLatest()
+      : this.getStethPoolDataAt(effectiveBlockNumber);
+  }
+
+  @Cache(CACHE_IMMUTABLE)
+  private async getStethPoolDataAt(blockNumber: bigint) {
+    return this.readStethPoolData(blockNumber);
+  }
+
+  @Dedupe()
+  private async getStethPoolDataLatest() {
+    return this.readStethPoolData(undefined);
+  }
+
+  private async readStethPoolData(
+    blockNumber: bigint | undefined,
+  ): Promise<StethPoolData> {
     const [totalPooledEther, totalShares] = await Promise.all([
-      this.stethContract.read.getTotalPooledEther({
-        blockNumber: effectiveBlockNumber,
-      }),
-      this.stethContract.read.getTotalShares({
-        blockNumber: effectiveBlockNumber,
-      }),
+      this.stethContract.read.getTotalPooledEther({ blockNumber }),
+      this.stethContract.read.getTotalShares({ blockNumber }),
     ]);
 
     return { totalPooledEther, totalShares };

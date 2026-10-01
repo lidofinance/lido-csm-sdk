@@ -2,7 +2,7 @@ import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  CACHE_MID,
+  CACHE_SHORT,
   EJECTABLE_EPOCH_COUNT,
   MAX_BLOCKS_DEPTH_TWO_WEEKS,
 } from '../common/index';
@@ -26,7 +26,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 }> {
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async getApiKeys(pubkeys: Hex[]) {
     const keysApi = this.core.keysApiLink;
 
@@ -51,7 +51,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async getApiKeysDuplicates(
     nodeOperatorId: NodeOperatorId,
   ): Promise<Hex[] | null> {
@@ -86,7 +86,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
    */
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async getClKeys(pubkeys: Hex[]): Promise<ClPreparedKey[] | null> {
     const { clApiUrl } = this.core;
     if (!clApiUrl || pubkeys.length === 0) {
@@ -98,7 +98,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async getClKeysStatus(
     nodeOperatorId: NodeOperatorId,
   ): Promise<ClPreparedKey[] | null> {

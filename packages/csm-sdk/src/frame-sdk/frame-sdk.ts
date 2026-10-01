@@ -1,11 +1,11 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { ErrorHandler, Logger, Cache } from '../common/decorators/index';
 import {
-  CACHE_IMMUTABLE,
-  CACHE_LONG,
-  CACHE_SHORT,
-  CONTRACT_NAMES,
-} from '../common/index';
+  ErrorHandler,
+  Logger,
+  Cache,
+  Dedupe,
+} from '../common/decorators/index';
+import { CACHE_IMMUTABLE, CACHE_LONG, CONTRACT_NAMES } from '../common/index';
 import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types';
 import {
   getFrameDuration,
@@ -26,7 +26,7 @@ export class FrameSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getLastRefSlot(): Promise<bigint> {
     return this.oracleContract.read.getLastProcessingRefSlot();
   }
@@ -40,7 +40,7 @@ export class FrameSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getLatestBlock() {
     return this.core.publicClient.getBlock({ blockTag: 'latest' });
   }

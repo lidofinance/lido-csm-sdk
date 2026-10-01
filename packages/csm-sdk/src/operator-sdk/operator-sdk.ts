@@ -1,13 +1,11 @@
 import { Address, isAddressEqual, zeroAddress } from 'viem';
 import { AccountingSDK } from '../accounting-sdk/accounting-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { Cache } from '../common/decorators/cache';
+import { Dedupe } from '../common/decorators/dedupe';
 import { ErrorHandler } from '../common/decorators/error-handler';
 import { Logger } from '../common/decorators/logger';
 import {
   BondBalance,
-  CACHE_MID,
-  CACHE_SHORT,
   CONTRACT_NAMES,
   NodeOperatorId,
   NodeOperatorShortInfo,
@@ -30,7 +28,7 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getCurveId(id: NodeOperatorId): Promise<bigint> {
     return this.accountingContract.read.getBondCurveId([id]);
   }
@@ -63,7 +61,7 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getInfo(id: NodeOperatorId): Promise<NodeOperatorInfo> {
     const info = await this.moduleContract.read.getNodeOperator([id]);
 
@@ -77,7 +75,7 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getKeys(id: NodeOperatorId, start = 0n, count?: bigint) {
     if (count === undefined) {
       const info = await this.getInfo(id);
@@ -95,7 +93,7 @@ export class OperatorSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Dedupe()
   public async getKeyAllocatedBalances(
     id: NodeOperatorId,
     start = 0n,

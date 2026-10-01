@@ -111,63 +111,6 @@ describe('TxSDK.perform (AA vs EOA/multisig routing)', () => {
   });
 });
 
-describe('TxSDK.perform cache invalidation', () => {
-  const buildWithWallet = (result: object) => {
-    const invalidateCache = vi.fn();
-    const fakeCore = {
-      core: { useAccount: async (a: unknown) => a ?? { address: ACCOUNT } },
-      invalidateCache,
-      getContractNameByAddress: () => undefined,
-    };
-    const wallet = {
-      isAbstractAccount: async () => false,
-      callToTransaction: () => ({}),
-      sendTransaction: vi.fn(async () => result),
-    };
-    const tx = new TxSDK({
-      core: fakeCore as never,
-      bus: buildBus({ wallet }),
-    });
-    return { tx, invalidateCache };
-  };
-
-  it('invalidates the module cache after a mined transaction', async () => {
-    const { tx, invalidateCache } = buildWithWallet({
-      hash: '0x1',
-      receipt: {},
-    });
-    await tx.perform(fakeProps);
-    expect(invalidateCache).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not invalidate after a multisig submission (no receipt yet)', async () => {
-    const { tx, invalidateCache } = buildWithWallet({ hash: '0x1' });
-    await tx.perform(fakeProps);
-    expect(invalidateCache).not.toHaveBeenCalled();
-  });
-
-  it('invalidates the module cache after a mined AA batch (sendCalls)', async () => {
-    const invalidateCache = vi.fn();
-    const fakeCore = {
-      core: { useAccount: async (a: unknown) => a ?? { address: ACCOUNT } },
-      invalidateCache,
-      getContractNameByAddress: () => undefined,
-    };
-    const wallet = {
-      isAbstractAccount: async () => true,
-      sendCalls: vi.fn(async () => ({ hash: '0x1', receipt: {} })),
-    };
-    const tx = new TxSDK({
-      core: fakeCore as never,
-      bus: buildBus({ wallet }),
-    });
-
-    await tx.perform(fakeProps);
-
-    expect(invalidateCache).toHaveBeenCalledTimes(1);
-  });
-});
-
 describe('TxSDK pass-throughs fill in the module spender', () => {
   const SPENDER = '0xcccccccccccccccccccccccccccccccccccccccc';
   const build = () => {
@@ -183,7 +126,6 @@ describe('TxSDK pass-throughs fill in the module spender', () => {
     };
     const fakeCore = {
       getContractAddress: () => SPENDER,
-      invalidateCache: vi.fn(),
     };
     const tx = new TxSDK({
       core: fakeCore as never,

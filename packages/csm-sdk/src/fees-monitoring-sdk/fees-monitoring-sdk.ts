@@ -1,7 +1,7 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  CACHE_MID,
+  CACHE_SHORT,
   ERROR_CODE,
   invariant,
   NodeOperatorId,
@@ -15,7 +15,7 @@ import { ValidatorInfoIssues } from './types';
 export class FeesMonitoringSDK extends CsmSDKModule {
   @Logger('Call:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_SHORT)
   public async getKeysWithIssues(
     nodeOperatorId: NodeOperatorId,
   ): Promise<ValidatorInfoIssues[]> {

@@ -1,6 +1,6 @@
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
-  CACHE_LONG,
+  CACHE_IMMUTABLE,
   CONTRACT_NAMES,
   DEFAULT_CLEAN_MAX_ITEMS,
 } from '../common/constants/index';
@@ -62,7 +62,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_LONG)
+  @Cache(CACHE_IMMUTABLE)
   public async getLowestPriorityQueue(): Promise<bigint> {
     return this.parametersRegistryContract.read.QUEUE_LOWEST_PRIORITY();
   }

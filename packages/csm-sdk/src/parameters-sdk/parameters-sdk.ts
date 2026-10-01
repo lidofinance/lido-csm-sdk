@@ -4,7 +4,7 @@ import { ErrorHandler } from '../common/decorators/error-handler';
 import { Logger } from '../common/decorators/logger';
 import {
   CACHE_LONG,
-  CACHE_MID,
+  CACHE_IMMUTABLE,
   CONTRACT_NAMES,
   PERCENT_BASIS,
 } from '../common/index';
@@ -29,14 +29,14 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_IMMUTABLE)
   public async getDefaultCurveId(): Promise<bigint> {
     return this.accountingContract.read.DEFAULT_BOND_CURVE_ID();
   }
 
   @Logger('Views:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_LONG)
   public async getBondConfig(
     curveId: bigint,
   ): Promise<KeyNumberValueInterval[]> {
@@ -51,7 +51,7 @@ export class ParametersSDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Utils:')
   @ErrorHandler()
-  @Cache(CACHE_MID)
+  @Cache(CACHE_LONG)
   public async getAll(curveId: bigint): Promise<CurveParameters> {
     const [params, bondConfig, lowestPriority, digest] = await Promise.all([
       this.parametersContract.read.getCurveParameters([curveId]),

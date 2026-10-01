@@ -6,7 +6,6 @@ import {
 } from '@lidofinance/lido-ethereum-sdk';
 import { Abi, Address, Chain, getContract } from 'viem';
 import { BaseModuleAbi, VersionCheckAbi } from '../abi/index';
-import { CsmSDKCacheable } from '../common/class-primitives/csm-sdk-cacheable';
 import { Cache, Logger } from '../common/decorators/index';
 import {
   API_NAME,
@@ -31,13 +30,7 @@ import {
   VersionCheckResult,
 } from './types';
 
-export class CoreSDK extends CsmSDKCacheable {
-  private _cacheVersion = 0;
-
-  get cacheVersion() {
-    return this._cacheVersion;
-  }
-
+export class CoreSDK {
   readonly core: LidoSDKCore;
   readonly contractAddresses: ContractAddresses;
   readonly moduleId: bigint;
@@ -52,7 +45,6 @@ export class CoreSDK extends CsmSDKCacheable {
   readonly profile: ModuleProfile;
 
   constructor(props: CoreProps) {
-    super();
     this.core = props.core;
     this.contractAddresses = props.contractAddresses;
     this.moduleId = props.moduleId;
@@ -183,10 +175,6 @@ export class CoreSDK extends CsmSDKCacheable {
       version: actualVersion,
       supported: actualVersion >= min && actualVersion <= max,
     };
-  }
-
-  public invalidateCache() {
-    this._cacheVersion++;
   }
 
   public getIpfsUrls(cid: string): string[] {

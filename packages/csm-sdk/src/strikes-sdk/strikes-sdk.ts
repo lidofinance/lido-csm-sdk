@@ -2,7 +2,7 @@ import { Hex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
-  CACHE_LONG,
+  CACHE_IMMUTABLE,
   CONTRACT_NAMES,
   NodeOperatorId,
   Proof,
@@ -32,8 +32,14 @@ export class StrikesSDK extends CsmSDKModule {
     return this.core.getIpfsUrls(cid).filter(isDefined);
   }
 
+  @Cache(CACHE_IMMUTABLE)
+  private async loadTree(cid: string, root: Hex) {
+    const urls = this.getProofTreeUrls(cid);
+
+    return fetchTree<StrikesTreeLeaf>({ urls, root, parse: parseStrikesTree });
+  }
+
   @Logger('API:')
-  @Cache(CACHE_LONG)
   public async getProofTree() {
     const { root, cid } = await this.getTreeConfig();
 
@@ -41,9 +47,7 @@ export class StrikesSDK extends CsmSDKModule {
       return null;
     }
 
-    const urls = this.getProofTreeUrls(cid);
-
-    return fetchTree<StrikesTreeLeaf>({ urls, root, parse: parseStrikesTree });
+    return this.loadTree(cid, root);
   }
 
   @Logger('Utils:')

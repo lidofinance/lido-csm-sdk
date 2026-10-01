@@ -23,7 +23,6 @@ const makeSdk = (claimer: Address) => {
     },
   };
   const core = {
-    cacheVersion: 0,
     getContract: () => accounting,
     contractBaseModule: module,
   } as any;
