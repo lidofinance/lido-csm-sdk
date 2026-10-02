@@ -8,6 +8,7 @@ import {
   Access,
   AccessLevel,
   Cache,
+  Dedupe,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -69,6 +70,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getQueuePointers(
     queuePriority: number,
   ): Promise<DepositQueuePointer> {
@@ -80,6 +82,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getQueuesPointers(): Promise<DepositQueuePointer[]> {
     const queuesCount = await this.getLowestPriorityQueue();
     return Promise.all(
@@ -128,6 +131,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getBatchInQueue(
     queuePriority: number,
     batchIndex: bigint,
@@ -139,6 +143,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getBatchesInQueue(
     queuePriority: number,
   ): Promise<RawDepositQueueBatch[]> {
@@ -163,6 +168,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getAllBatches(): Promise<DepositQueueBatch[][]> {
     const lowestPriorityQueue = await this.getLowestPriorityQueue();
 
@@ -181,6 +187,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   /** Raw top-up queue state, including `limit` and `head`. Safe when disabled. */
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getTopUpQueueInfo(): Promise<TopUpQueueInfo> {
     const [enabled, limit, length, head] =
       await this.moduleContract.read.getTopUpQueue();
@@ -193,6 +200,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
    */
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getTopUpQueueKeys(
     pagination?: Pagination,
   ): Promise<TopUpQueueEntry[]> {
@@ -219,6 +227,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   /** Current queue length, or 0 when disabled or on a non-top-up module. */
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getTopUpQueueSize(): Promise<number> {
     if (!this.core.profile.topUpQueue) return 0;
 
@@ -229,6 +238,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   /** Identity of the entry at `position`, which the bulk pubkey read can't provide. */
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getTopUpQueueItem(position: number): Promise<TopUpQueueItem> {
     const [nodeOperatorId, keyIndex] =
       await this.moduleContract.read.getTopUpQueueItem([BigInt(position)]);
@@ -242,6 +252,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
    */
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getTopUpQueueItems(
     pagination?: Pagination,
   ): Promise<TopUpQueueSnapshot> {
@@ -273,6 +284,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
   /** This operator's key index → 0-based queue position. Empty when none are queued. */
   @Logger('Utils:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorTopUpPositions(
     id: NodeOperatorId,
   ): Promise<Map<number, number>> {
@@ -308,6 +320,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
    */
   @Logger('Utils:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorTopUpQueue(
     id: NodeOperatorId,
   ): Promise<OperatorTopUpQueue> {
