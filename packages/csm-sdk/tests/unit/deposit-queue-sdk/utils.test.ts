@@ -97,8 +97,6 @@ describe('byNextBatchIndex', () => {
     const cursor = byNextBatchIndex(100n);
     const result = cursor({
       items: [{ nextBatchIndex: 50n }],
-      offset: 0n,
-      limit: 10n,
     });
     expect(result).toBe(50n);
   });
@@ -107,8 +105,6 @@ describe('byNextBatchIndex', () => {
     const cursor = byNextBatchIndex(100n);
     const result = cursor({
       items: [{ nextBatchIndex: 100n }],
-      offset: 0n,
-      limit: 10n,
     });
     expect(result).toBeUndefined();
   });
@@ -117,15 +113,13 @@ describe('byNextBatchIndex', () => {
     const cursor = byNextBatchIndex(100n);
     const result = cursor({
       items: [{ nextBatchIndex: 200n }],
-      offset: 0n,
-      limit: 10n,
     });
     expect(result).toBeUndefined();
   });
 
   it('returns undefined for empty items', () => {
     const cursor = byNextBatchIndex(100n);
-    const result = cursor({ items: [], offset: 0n, limit: 10n });
+    const result = cursor({ items: [] });
     expect(result).toBeUndefined();
   });
 
@@ -133,8 +127,6 @@ describe('byNextBatchIndex', () => {
     const cursor = byNextBatchIndex(100n);
     const result = cursor({
       items: [{ nextBatchIndex: 10n }, { nextBatchIndex: 50n }],
-      offset: 0n,
-      limit: 10n,
     });
     expect(result).toBe(50n);
   });

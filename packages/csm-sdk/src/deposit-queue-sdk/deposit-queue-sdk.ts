@@ -14,12 +14,8 @@ import {
 } from '../common/decorators/index';
 import { NodeOperatorId } from '../common/types';
 import { bigIntRange } from '../common/utils/bigint-range';
-import {
-  byTotalCount,
-  iteratePages,
-  onePage,
-  Pagination,
-} from '../discovery-sdk/index';
+import { MAX_PAGE_LIMIT, readAllPages } from '../common/utils/read-all-pages';
+import { Pagination } from '../discovery-sdk/index';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
@@ -33,7 +29,6 @@ import {
   DepositQueueBatch,
   DepositQueuePointer,
   OperatorTopUpQueue,
-  QueueBatchesPagination,
   RawDepositQueueBatch,
   RawDepositQueueBatchWithIndex,
   TopUpQueueEntry,
@@ -41,8 +36,6 @@ import {
   TopUpQueueItem,
   TopUpQueueSnapshot,
 } from './types';
-
-const TOP_UP_QUEUE_PAGE_LIMIT = 1000n;
 
 export class DepositQueueSDK extends CsmSDKModule<{
   tx: TxSDK;
@@ -92,41 +85,48 @@ export class DepositQueueSDK extends CsmSDKModule<{
     );
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  private async getNodeOperatorsDepositableKeysCount(
-    pagination?: Pagination,
-  ): Promise<number[]> {
-    const getNextOffset = pagination
-      ? onePage
-      : byTotalCount(await this.bus.module.getOperatorsCount());
-
-    return iteratePages(
-      (p) =>
-        this.discoveryContract.read.getNodeOperatorsDepositableValidatorsCount([
-          this.core.moduleId,
-          p.offset,
-          p.limit,
-        ]),
-      pagination,
-      getNextOffset,
-    );
+  private readDepositableKeysCounts(blockNumber: bigint): Promise<number[]> {
+    return readAllPages({
+      publicClient: this.core.publicClient,
+      blockNumber,
+      count: (block) =>
+        this.bus.module.getOperatorsCount({ blockNumber: block }),
+      readPage: async (p) => ({
+        items:
+          await this.discoveryContract.read.getNodeOperatorsDepositableValidatorsCount(
+            [this.core.moduleId, p.offset, p.limit],
+            { blockNumber: p.blockNumber },
+          ),
+      }),
+    });
   }
 
-  @Logger('Views:')
-  @ErrorHandler()
-  private async getQueueBatchesPage(
+  private async readQueueBatches(
     queuePriority: number,
-    pagination?: QueueBatchesPagination,
-  ): Promise<bigint[]> {
-    const result = await this.discoveryContract.read.getDepositQueueBatches([
-      this.core.moduleId,
-      BigInt(queuePriority),
-      pagination?.cursorIndex ?? 0n,
-      pagination?.limit ?? 1000n,
-    ]);
+    blockNumber: bigint,
+  ): Promise<RawDepositQueueBatch[]> {
+    const [head, tail] = await this.moduleContract.read.depositQueuePointers(
+      [BigInt(queuePriority)],
+      { blockNumber },
+    );
 
-    return result as bigint[];
+    if (head === tail) {
+      return [];
+    }
+
+    return readAllPages({
+      publicClient: this.core.publicClient,
+      blockNumber,
+      next: byNextBatchIndex(tail),
+      readPage: async ({ offset, limit }) => {
+        const batches =
+          await this.discoveryContract.read.getDepositQueueBatches(
+            [this.core.moduleId, BigInt(queuePriority), offset, limit],
+            { blockNumber },
+          );
+        return { items: batches.map(parseBatch) };
+      },
+    });
   }
 
   @Logger('Views:')
@@ -147,39 +147,24 @@ export class DepositQueueSDK extends CsmSDKModule<{
   public async getBatchesInQueue(
     queuePriority: number,
   ): Promise<RawDepositQueueBatch[]> {
-    const { head, tail } = await this.getQueuePointers(queuePriority);
-
-    if (head === tail) {
-      return [];
-    }
-
-    return iteratePages(
-      async ({ offset: cursorIndex, limit }) => {
-        const batches = await this.getQueueBatchesPage(queuePriority, {
-          cursorIndex,
-          limit,
-        });
-        return batches.map(parseBatch);
-      },
-      undefined,
-      byNextBatchIndex(tail),
-    );
+    const blockNumber = await this.core.publicClient.getBlockNumber();
+    return this.readQueueBatches(queuePriority, blockNumber);
   }
 
   @Logger('Views:')
   @ErrorHandler()
   @Dedupe()
   public async getAllBatches(): Promise<DepositQueueBatch[][]> {
+    const blockNumber = await this.core.publicClient.getBlockNumber();
     const lowestPriorityQueue = await this.getLowestPriorityQueue();
 
     const queueBatches = await Promise.all(
       [...bigIntRange(lowestPriorityQueue + 1n)].map((priority) =>
-        this.getBatchesInQueue(Number(priority)),
+        this.readQueueBatches(Number(priority), blockNumber),
       ),
     );
-
     const depositableKeysCount =
-      await this.getNodeOperatorsDepositableKeysCount();
+      await this.readDepositableKeysCounts(blockNumber);
 
     return filterEmptyBatches(queueBatches, depositableKeysCount);
   }
@@ -204,19 +189,18 @@ export class DepositQueueSDK extends CsmSDKModule<{
   public async getTopUpQueueKeys(
     pagination?: Pagination,
   ): Promise<TopUpQueueEntry[]> {
-    const { enabled, length } = await this.getTopUpQueueInfo();
+    const blockNumber = await this.core.publicClient.getBlockNumber();
+    const [enabled, , length] = await this.moduleContract.read.getTopUpQueue({
+      blockNumber,
+    });
     if (!enabled || length === 0n) return [];
 
-    if (!pagination) {
-      const pubkeys = await this.moduleContract.read.getKeysForTopUp([length]);
-      return pubkeys.map((pubkey, position) => ({ pubkey, position }));
-    }
-
-    const { offset, limit } = pagination;
+    const { offset, limit } = pagination ?? { offset: 0n, limit: length };
     const fetchCount = offset + limit < length ? offset + limit : length;
-    const pubkeys = await this.moduleContract.read.getKeysForTopUp([
-      fetchCount,
-    ]);
+    const pubkeys = await this.moduleContract.read.getKeysForTopUp(
+      [fetchCount],
+      { blockNumber },
+    );
 
     return pubkeys.slice(Number(offset)).map((pubkey, i) => ({
       pubkey,
@@ -264,7 +248,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
     blockNumber?: bigint,
   ): Promise<TopUpQueueSnapshot> {
     const offset = pagination?.offset ?? 0n;
-    const limit = pagination?.limit ?? TOP_UP_QUEUE_PAGE_LIMIT;
+    const limit = pagination?.limit ?? MAX_PAGE_LIMIT;
 
     const [enabled, queueLimit, total, head, items] =
       await this.discoveryContract.read.getTopUpQueueItems(
@@ -297,18 +281,16 @@ export class DepositQueueSDK extends CsmSDKModule<{
     length: bigint;
     items: TopUpQueueItem[];
   }> {
-    const blockNumber = await this.core.publicClient.getBlockNumber();
     let length = 0n;
 
-    const items = await iteratePages(
-      async (pagination) => {
-        const page = await this.readTopUpQueuePage(pagination, blockNumber);
+    const items = await readAllPages({
+      publicClient: this.core.publicClient,
+      readPage: async (p) => {
+        const page = await this.readTopUpQueuePage(p, p.blockNumber);
         length = page.length;
-        return page.items;
+        return { items: page.items, total: page.length };
       },
-      { offset: 0n, limit: TOP_UP_QUEUE_PAGE_LIMIT },
-      (params) => byTotalCount(length)(params),
-    );
+    });
 
     return { length, items };
   }

@@ -58,8 +58,12 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
-  public async getOperatorsCount(): Promise<bigint> {
-    return this.moduleContract.read.getNodeOperatorsCount();
+  public async getOperatorsCount(props?: {
+    blockNumber?: bigint;
+  }): Promise<bigint> {
+    return this.moduleContract.read.getNodeOperatorsCount({
+      blockNumber: props?.blockNumber,
+    });
   }
 
   @Logger('Views:')

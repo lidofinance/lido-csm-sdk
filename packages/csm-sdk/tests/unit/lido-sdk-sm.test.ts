@@ -253,6 +253,10 @@ describe('SmDiscoverySDK', () => {
       const failing = sdk.cm!;
       for (const m of sdk.modules.values()) {
         vi.spyOn(m.module, 'getOperatorsCount').mockResolvedValue(1n);
+        vi.spyOn(
+          m.discovery.core.publicClient,
+          'getBlockNumber',
+        ).mockResolvedValue(1n);
         const read = () =>
           m === failing ? Promise.reject(reverted) : Promise.resolve([]);
         vi.spyOn(m.discovery.core, 'getContract').mockReturnValue({
