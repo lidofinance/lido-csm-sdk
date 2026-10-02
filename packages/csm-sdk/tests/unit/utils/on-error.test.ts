@@ -8,7 +8,6 @@ import {
   onError,
   onVersionError,
   findRevertError,
-  onRevertEmptyList,
 } from '../../../src/common/utils/on-error';
 
 const makeZeroDataError = () => {
@@ -88,21 +87,5 @@ describe('findRevertError', () => {
 
   it('returns undefined for a BaseError with no revert in the chain', () => {
     expect(findRevertError(new BaseError('no revert'))).toBeUndefined();
-  });
-});
-
-describe('onRevertEmptyList', () => {
-  it('returns [] on a wrapped revert', () => {
-    expect(onRevertEmptyList(makeRevertedError())).toEqual([]);
-  });
-
-  it('rethrows a plain error', () => {
-    expect(() => onRevertEmptyList(new Error('boom'))).toThrow('boom');
-  });
-
-  it('rethrows an unrelated BaseError', () => {
-    expect(() => onRevertEmptyList(new BaseError('unrelated'))).toThrow(
-      'unrelated',
-    );
   });
 });

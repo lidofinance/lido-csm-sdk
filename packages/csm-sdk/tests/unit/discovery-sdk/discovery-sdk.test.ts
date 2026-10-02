@@ -1,6 +1,11 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { describe, expect, it, vi } from 'vitest';
-import { zeroAddress, type Address } from 'viem';
+import {
+  BaseError,
+  ContractFunctionRevertedError,
+  zeroAddress,
+  type Address,
+} from 'viem';
 import { DiscoverySDK } from '../../../src/discovery-sdk/discovery-sdk';
 import { OPERATOR_TYPE } from '../../../src/common/constants/operator-types';
 import { MODULE_NAME } from '../../../src/common/constants/module-name';
@@ -180,5 +185,63 @@ describe('DiscoverySDK.getNodeOperatorsByAddress', () => {
         rewardsAddress: REWARDS,
       },
     ]);
+  });
+});
+
+describe('DiscoverySDK error handling', () => {
+  const revert = () =>
+    new BaseError('call failed', {
+      cause: new ContractFunctionRevertedError({
+        abi: [],
+        functionName: 'getNodeOperatorsByAddress',
+        message: 'ModuleCacheNotInitialized',
+      }),
+    });
+
+  it('propagates a contract revert instead of returning an empty list', async () => {
+    const { sdk } = makeSdk({ read: vi.fn().mockRejectedValue(revert()) });
+
+    await expect(
+      sdk.getNodeOperatorsByAddress(MANAGER, { offset: 0n, limit: 10n }),
+    ).rejects.toBeInstanceOf(SDKError);
+  });
+
+  it('propagates a revert on a later page', async () => {
+    const read = vi
+      .fn()
+      .mockResolvedValueOnce([RAW_OPERATOR])
+      .mockRejectedValueOnce(revert());
+    const { sdk } = makeSdk({ read });
+    // total 2000 with default limit 1000 forces a second page
+    sdk.bus.register(
+      { getOperatorsCount: async () => 2000n } as never,
+      'module' as never,
+    );
+
+    await expect(sdk.getNodeOperatorsByAddress(MANAGER)).rejects.toBeInstanceOf(
+      SDKError,
+    );
+  });
+
+  it.each([0n, -1n, 1001n])(
+    'throws INVALID_ARGUMENT for limit %s without calling the contract',
+    async (limit) => {
+      const { sdk, read } = makeSdk();
+
+      await expect(
+        sdk.getAllNodeOperators({ offset: 0n, limit }),
+      ).rejects.toMatchObject({
+        code: ERROR_CODE.INVALID_ARGUMENT,
+      } satisfies Partial<SDKError>);
+      expect(read).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([1n, 1000n])('accepts limit %s', async (limit) => {
+    const { sdk, read } = makeSdk();
+
+    await sdk.getAllNodeOperators({ offset: 0n, limit });
+
+    expect(read).toHaveBeenCalledWith([3n, 0n, limit]);
   });
 });

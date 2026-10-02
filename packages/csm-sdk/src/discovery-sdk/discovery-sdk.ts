@@ -12,7 +12,6 @@ import {
   getCurveRefByOperatorType,
   getOperatorTypesForModule,
 } from '../common/utils/operator-type-utils';
-import { onRevertEmptyList } from '../common/utils/on-error';
 import { invariantArgument } from '../common/utils/sdk-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { byTotalCount, iteratePages, onePage } from './iterate-pages';
@@ -23,6 +22,8 @@ import {
   Pagination,
   SearchMode,
 } from './types';
+
+const MAX_PAGE_LIMIT = 1000n;
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
@@ -44,18 +45,20 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private async paginateOperators<T>(
     fetchPage: (p: Pagination) => Promise<readonly T[] | T[]>,
     pagination?: Pagination,
-    defaultLimit = 1000n,
+    defaultLimit = MAX_PAGE_LIMIT,
   ): Promise<T[]> {
     const limit = pagination?.limit ?? defaultLimit;
+    invariantArgument(
+      limit >= 1n && limit <= MAX_PAGE_LIMIT,
+      `Pagination limit must be between 1 and ${MAX_PAGE_LIMIT}`,
+    );
     const offset = pagination?.offset ?? 0n;
 
     const getNextOffset = pagination
       ? onePage
       : byTotalCount(await this.bus.module.getOperatorsCount());
 
-    return iteratePages(fetchPage, { offset, limit }, getNextOffset).catch(
-      onRevertEmptyList<T>,
-    );
+    return iteratePages(fetchPage, { offset, limit }, getNextOffset);
   }
 
   @Logger('Views:')
