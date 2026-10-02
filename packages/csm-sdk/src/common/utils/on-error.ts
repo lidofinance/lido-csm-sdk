@@ -42,8 +42,3 @@ export const findRevertError = (
   const found = err.walk((e) => e instanceof ContractFunctionRevertedError);
   return found instanceof ContractFunctionRevertedError ? found : undefined;
 };
-
-export const onRevertEmptyList = <T>(err: unknown): T[] => {
-  if (findRevertError(err)) return [];
-  throw err;
-};
