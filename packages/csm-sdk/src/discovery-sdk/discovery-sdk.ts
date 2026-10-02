@@ -2,7 +2,7 @@ import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { CONTRACT_NAMES, OPERATOR_TYPE } from '../common/constants/index';
 import { ROLES } from '../common/constants/roles';
-import { ErrorHandler, Logger } from '../common/decorators/index';
+import { Dedupe, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   NodeOperatorId,
   NodeOperatorInviteInfo,
@@ -63,6 +63,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getNodeOperatorIds(
     address: Address,
     searchMode: SearchMode = SearchMode.CURRENT_ADDRESSES,
@@ -83,6 +84,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getNodeOperatorsByAddress(
     address: Address,
     pagination?: Pagination,
@@ -103,6 +105,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorsByCurveId(
     curveId: bigint,
     pagination?: Pagination,
@@ -123,6 +126,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorsByType(
     operatorType: OPERATOR_TYPE,
     pagination?: Pagination,
@@ -143,6 +147,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getNodeOperatorsByProposedAddress(
     address: Address,
     pagination?: Pagination,
@@ -175,6 +180,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getAllNodeOperators(
     pagination?: Pagination,
   ): Promise<NodeOperatorDiscoveryInfo[]> {
@@ -194,6 +200,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorsWithLockedBond(
     pagination?: Pagination,
   ): Promise<NodeOperatorLockedBond[]> {

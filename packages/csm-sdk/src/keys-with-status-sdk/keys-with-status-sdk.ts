@@ -1,6 +1,11 @@
 import { Hex, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
+import {
+  Cache,
+  Dedupe,
+  ErrorHandler,
+  Logger,
+} from '../common/decorators/index';
 import {
   CACHE_SHORT,
   EJECTABLE_EPOCH_COUNT,
@@ -51,7 +56,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getApiKeysDuplicates(
     nodeOperatorId: NodeOperatorId,
   ): Promise<Hex[] | null> {
@@ -98,7 +103,7 @@ export class KeysWithStatusSDK extends CsmSDKModule<{
 
   @Logger('API:')
   @ErrorHandler()
-  @Cache(CACHE_SHORT)
+  @Dedupe()
   public async getClKeysStatus(
     nodeOperatorId: NodeOperatorId,
   ): Promise<ClPreparedKey[] | null> {
