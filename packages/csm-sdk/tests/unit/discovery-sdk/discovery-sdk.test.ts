@@ -43,6 +43,7 @@ const makeSdk = ({
     chainId,
     moduleId,
     moduleName,
+    publicClient: { getBlockNumber: vi.fn(async () => 9n) },
     getContract: () => ({
       read: {
         getOperatorsByCurveId: read,
@@ -77,7 +78,7 @@ describe('DiscoverySDK.getOperatorsByType', () => {
     });
 
     // CSM_ICS -> curveId 2n on Mainnet, see operator-types.ts.
-    expect(read).toHaveBeenCalledWith([3n, 2n, 0n, 10n]);
+    expect(read).toHaveBeenCalledWith([3n, 2n, 0n, 10n], undefined);
     // toShortInfo spreads the raw operator (keeping `id`/`rewardAddress`)
     // while adding the renamed `nodeOperatorId`/`rewardsAddress` fields.
     expect(result).toEqual([
@@ -113,7 +114,7 @@ describe('DiscoverySDK.getOperatorsByType', () => {
     });
 
     // CSM_IDVTC -> curveId 4n on Hoodi (vs 3n on Mainnet).
-    expect(read).toHaveBeenCalledWith([4n, 4n, 0n, 5n]);
+    expect(read).toHaveBeenCalledWith([4n, 4n, 0n, 5n], undefined);
   });
 
   // `OPERATOR_TYPE_INFO[CM_PO].module` is MODULE_NAME.CM, while this SDK is
@@ -155,7 +156,7 @@ describe('DiscoverySDK.getAllNodeOperators', () => {
 
     const result = await sdk.getAllNodeOperators({ offset: 0n, limit: 500n });
 
-    expect(read).toHaveBeenCalledWith([3n, 0n, 500n]);
+    expect(read).toHaveBeenCalledWith([3n, 0n, 500n], undefined);
     expect(result).toEqual([
       {
         ...RAW_FULL_OPERATOR,
@@ -177,7 +178,7 @@ describe('DiscoverySDK.getNodeOperatorsByAddress', () => {
       limit: 10n,
     });
 
-    expect(read).toHaveBeenCalledWith([3n, MANAGER, 0n, 10n]);
+    expect(read).toHaveBeenCalledWith([3n, MANAGER, 0n, 10n], undefined);
     expect(result).toEqual([
       {
         ...RAW_OPERATOR,
@@ -204,6 +205,21 @@ describe('DiscoverySDK error handling', () => {
     await expect(
       sdk.getNodeOperatorsByAddress(MANAGER, { offset: 0n, limit: 10n }),
     ).rejects.toBeInstanceOf(SDKError);
+  });
+
+  it('pins every page to one block when reading all operators', async () => {
+    const read = vi.fn().mockResolvedValue([RAW_OPERATOR]);
+    const { sdk } = makeSdk({ read });
+    const getOperatorsCount = vi.fn(async (_p?: unknown) => 2000n);
+    sdk.bus.register({ getOperatorsCount } as never, 'module' as never);
+
+    await sdk.getNodeOperatorsByAddress(MANAGER);
+
+    expect(getOperatorsCount).toHaveBeenCalledWith({ blockNumber: 9n });
+    expect(read).toHaveBeenCalledTimes(2);
+    for (const call of read.mock.calls) {
+      expect(call[1]).toEqual({ blockNumber: 9n });
+    }
   });
 
   it('propagates a revert on a later page', async () => {
@@ -242,6 +258,6 @@ describe('DiscoverySDK error handling', () => {
 
     await sdk.getAllNodeOperators({ offset: 0n, limit });
 
-    expect(read).toHaveBeenCalledWith([3n, 0n, limit]);
+    expect(read).toHaveBeenCalledWith([3n, 0n, limit], undefined);
   });
 });

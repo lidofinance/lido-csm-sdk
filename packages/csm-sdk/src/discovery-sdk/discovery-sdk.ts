@@ -12,9 +12,13 @@ import {
   getCurveRefByOperatorType,
   getOperatorTypesForModule,
 } from '../common/utils/operator-type-utils';
+import {
+  assertPageLimit,
+  MAX_PAGE_LIMIT,
+  readAllPages,
+} from '../common/utils/read-all-pages';
 import { invariantArgument } from '../common/utils/sdk-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
-import { byTotalCount, iteratePages, onePage } from './iterate-pages';
 import { toDiscoveryInfo, toShortInfo } from './map-operators';
 import {
   NodeOperatorDiscoveryInfo,
@@ -23,7 +27,12 @@ import {
   SearchMode,
 } from './types';
 
-const MAX_PAGE_LIMIT = 1000n;
+const pinnedAt = ({ blockNumber }: { blockNumber?: bigint }) =>
+  blockNumber === undefined ? undefined : { blockNumber };
+
+type PageFetcher<T> = (
+  p: Pagination & { blockNumber?: bigint },
+) => Promise<readonly T[] | T[]>;
 
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
@@ -31,34 +40,26 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   }
 
   /**
-   * Paginates through operators using the provided fetch function.
-   *
-   * Behavior:
-   * - Without pagination parameter: Fetches ALL operators by querying total count and iterating through all pages
-   * - With pagination parameter: Fetches ONLY ONE PAGE at the specified offset/limit
-   *
-   * @param fetchPage - Function to fetch a page of operators
-   * @param pagination - Optional pagination parameters (offset, limit)
-   * @param defaultLimit - Optional default limit when pagination is not provided (defaults to 1000)
-   * @returns Array of all fetched operators
+   * Without `pagination`: reads ALL operators page by page at one pinned block.
+   * With `pagination`: reads ONLY that page, unpinned.
    */
   private async paginateOperators<T>(
-    fetchPage: (p: Pagination) => Promise<readonly T[] | T[]>,
+    fetchPage: PageFetcher<T>,
     pagination?: Pagination,
     defaultLimit = MAX_PAGE_LIMIT,
   ): Promise<T[]> {
-    const limit = pagination?.limit ?? defaultLimit;
-    invariantArgument(
-      limit >= 1n && limit <= MAX_PAGE_LIMIT,
-      `Pagination limit must be between 1 and ${MAX_PAGE_LIMIT}`,
-    );
-    const offset = pagination?.offset ?? 0n;
+    if (pagination) {
+      assertPageLimit(pagination.limit);
+      return [...(await fetchPage(pagination))];
+    }
 
-    const getNextOffset = pagination
-      ? onePage
-      : byTotalCount(await this.bus.module.getOperatorsCount());
-
-    return iteratePages(fetchPage, { offset, limit }, getNextOffset);
+    return readAllPages({
+      publicClient: this.core.publicClient,
+      limit: defaultLimit,
+      count: (blockNumber) =>
+        this.bus.module.getOperatorsCount({ blockNumber }),
+      readPage: async (p) => ({ items: await fetchPage(p) }),
+    });
   }
 
   @Logger('Views:')
@@ -71,13 +72,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorId[]> {
     return this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.findNodeOperatorsByAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-          searchMode,
-        ]),
+        this.discoveryContract.read.findNodeOperatorsByAddress(
+          [this.core.moduleId, address, p.offset, p.limit, searchMode],
+          pinnedAt(p),
+        ),
       pagination,
     );
   }
@@ -91,12 +89,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getNodeOperatorsByAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getNodeOperatorsByAddress(
+          [this.core.moduleId, address, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
@@ -112,12 +108,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getOperatorsByCurveId([
-          this.core.moduleId,
-          curveId,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getOperatorsByCurveId(
+          [this.core.moduleId, curveId, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
@@ -154,12 +148,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorInviteInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getNodeOperatorsByProposedAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getNodeOperatorsByProposedAddress(
+          [this.core.moduleId, address, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
@@ -186,11 +178,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorDiscoveryInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getAllNodeOperators([
-          this.core.moduleId,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getAllNodeOperators(
+          [this.core.moduleId, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
       500n, // Custom default limit for bulk fetching
     );
@@ -206,11 +197,10 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorLockedBond[]> {
     const entries = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getOperatorsWithLockedBond([
-          this.core.moduleId,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getOperatorsWithLockedBond(
+          [this.core.moduleId, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
