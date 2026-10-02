@@ -7,10 +7,10 @@ import { PerSupportedChain, SUPPORTED_CHAINS } from './supported-chains';
 
 type ContractAddressMap = { [key in CONTRACT_NAMES]?: Address };
 
-type ModuleChainConfig = {
+export type ModuleChainConfig = {
   contractAddresses: ContractAddressMap;
   moduleId: bigint;
-  deploymentBlockNumber?: bigint;
+  deploymentBlockNumber: bigint;
 };
 
 export type ModuleConfig = Partial<PerSupportedChain<ModuleChainConfig>>;
@@ -219,10 +219,16 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
   },
 };
 
+export const getModuleChainConfig = (
+  module: MODULE_NAME,
+  chainId: number,
+): ModuleChainConfig | undefined =>
+  MODULE_CONFIG[module][chainId as SUPPORTED_CHAINS];
+
 export const isDeployedModule = (
   module: MODULE_NAME,
   chainId: number,
-): boolean => !!MODULE_CONFIG[module][chainId as SUPPORTED_CHAINS];
+): boolean => !!getModuleChainConfig(module, chainId);
 
 /** Modules deployed on `chainId`, in `SUPPORTED_MODULES` order; `[]` for an unknown chain. */
 export const getDeployedModules = (chainId: number): MODULE_NAME[] =>

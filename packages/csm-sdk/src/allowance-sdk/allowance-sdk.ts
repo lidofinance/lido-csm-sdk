@@ -8,13 +8,13 @@ import { erc20Abi, getContract, Hash } from 'viem';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_IMMUTABLE,
-  COMMON_ADDRESSES,
   CONTRACT_NAMES,
   EMPTY_PERMIT,
   Erc20Tokens,
   ERROR_CODE,
   invariant,
   PermitSignatureShort,
+  TOKENS,
   SUPPORTED_CHAINS,
 } from '../common/index';
 import { BindedContract } from '../core-sdk/types';
@@ -31,11 +31,16 @@ import { parseSpendingProps } from './parse-spending-props';
 import { stripPermit } from './strip-permit';
 import { AllowanceSDKProps, WithSpender } from './types';
 
+const TOKEN_CONTRACT = {
+  [TOKENS.steth]: CONTRACT_NAMES.stETH,
+  [TOKENS.wsteth]: CONTRACT_NAMES.wstETH,
+} as const satisfies Record<Erc20Tokens, CONTRACT_NAMES>;
+
 /** ERC20 allowance, EIP-2612 permit and approve flows for an explicit spender. */
 export class AllowanceSDK {
   readonly core: LidoSDKCore;
   readonly wallet: WalletSDK;
-  private readonly tokenAddresses?: AllowanceSDKProps['tokenAddresses'];
+  private readonly tokenAddresses: AllowanceSDKProps['tokenAddresses'];
 
   constructor(props: AllowanceSDKProps) {
     this.core = props.core;
@@ -48,10 +53,7 @@ export class AllowanceSDK {
     token: Erc20Tokens,
   ): BindedContract<typeof erc20Abi> {
     const chainId = this.core.chain.id as SUPPORTED_CHAINS;
-    const key = token as unknown as
-      CONTRACT_NAMES.stETH | CONTRACT_NAMES.wstETH;
-    const address =
-      this.tokenAddresses?.[key] ?? COMMON_ADDRESSES[chainId]?.[key];
+    const address = this.tokenAddresses[TOKEN_CONTRACT[token]];
     invariant(
       address,
       `Token [${token}] not configured on chain ${chainId}`,
