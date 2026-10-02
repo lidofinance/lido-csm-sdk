@@ -1,8 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Address } from 'viem';
 import { getContract } from 'viem';
-import { AllowanceSDK } from '../../../src/allowance-sdk/allowance-sdk';
-import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
+import { createSharedServices } from '../../../src/sm-sdk/shared-services';
 import { CONTRACT_NAMES } from '../../../src/common/constants/contract-names';
 import { TOKENS } from '../../../src/common/constants/tokens';
 
@@ -20,8 +19,8 @@ const ACCOUNT: Address = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 const SPENDER: Address = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
 const OVERRIDDEN_STETH: Address = '0xdddddddddddddddddddddddddddddddddddddddd';
 
-describe('AllowanceSDK.tokenAddresses override', () => {
-  it('resolves stETH through the overridden address instead of COMMON_ADDRESSES', async () => {
+describe('createSharedServices token addresses', () => {
+  it('hands flat stETH override to allowance', async () => {
     const fakeCore = {
       chain: { id: 560_048 },
       useAccount: async (a: unknown) =>
@@ -35,14 +34,12 @@ describe('AllowanceSDK.tokenAddresses override', () => {
       read: { allowance: vi.fn(async () => 0n) },
     } as never);
 
-    const wallet = new WalletSDK({ core: fakeCore as never });
-    const sdk = new AllowanceSDK({
+    const { allowance } = createSharedServices({
       core: fakeCore as never,
-      wallet,
-      tokenAddresses: { [CONTRACT_NAMES.stETH]: OVERRIDDEN_STETH },
+      overridedAddresses: { [CONTRACT_NAMES.stETH]: OVERRIDDEN_STETH },
     });
 
-    await sdk.allowance({
+    await allowance.allowance({
       account: ACCOUNT,
       token: TOKENS.steth,
       spender: SPENDER,

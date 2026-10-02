@@ -1,5 +1,5 @@
 import { AllowanceSDK } from '../allowance-sdk/allowance-sdk';
-import { SdkProps } from '../core-sdk/index';
+import { resolveChainAddresses, SdkProps } from '../core-sdk/index';
 import { KeysCacheSDK } from '../keys-cache-sdk/keys-cache-sdk';
 import { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import { SharedServices } from './types';
@@ -10,7 +10,10 @@ export const createSharedServices = (props: SdkProps): SharedServices => {
   const allowance = new AllowanceSDK({
     core: props.core,
     wallet,
-    tokenAddresses: props.overridedAddresses,
+    tokenAddresses: resolveChainAddresses({
+      chainId: props.core.chain.id,
+      overridedAddresses: props.overridedAddresses,
+    }),
   });
   const keysCache = new KeysCacheSDK({ core: props.core });
   return { wallet, allowance, keysCache };

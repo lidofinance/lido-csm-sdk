@@ -370,10 +370,10 @@ export class EventsSDK extends CsmSDKModule {
       });
     } else if (props?.maxBlocksDepth !== undefined) {
       const depthLimit = toBlock - props.maxBlocksDepth;
-      const deploymentBlock = this.core.deploymentBlockNumber ?? 0n;
+      const deploymentBlock = this.core.deploymentBlockNumber;
       fromBlock = depthLimit > deploymentBlock ? depthLimit : deploymentBlock;
     } else {
-      fromBlock = this.core.deploymentBlockNumber ?? toBlock - BigInt(step);
+      fromBlock = this.core.deploymentBlockNumber;
     }
 
     return {

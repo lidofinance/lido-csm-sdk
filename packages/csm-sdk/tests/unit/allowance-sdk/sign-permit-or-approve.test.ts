@@ -4,6 +4,7 @@ import { getContract } from 'viem';
 import { AllowanceSDK } from '../../../src/allowance-sdk/allowance-sdk';
 import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
 import { TransactionCallbackStage } from '../../../src/tx-sdk/types';
+import { CONTRACT_NAMES } from '../../../src/common/constants/contract-names';
 import { TOKENS } from '../../../src/common/constants/tokens';
 
 vi.mock('viem', async (orig) => ({
@@ -91,7 +92,11 @@ const buildAllowance = (overrides: {
   } as never);
 
   const wallet = new WalletSDK({ core: fakeCore as never });
-  const sdk = new AllowanceSDK({ core: fakeCore as never, wallet });
+  const sdk = new AllowanceSDK({
+    core: fakeCore as never,
+    wallet,
+    tokenAddresses: { [CONTRACT_NAMES.stETH]: STETH },
+  });
   return { sdk, signPermit, sendTransaction, allowanceRead };
 };
 

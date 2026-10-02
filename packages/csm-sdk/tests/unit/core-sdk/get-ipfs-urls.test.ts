@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_IPFS_GATEWAYS } from '../../../src/common/constants/links';
 import { MODULE_NAME } from '../../../src/common/constants/module-name';
 import { CoreSDK } from '../../../src/core-sdk/core-sdk';
+import { resolveDeployment } from '../../../src/core-sdk/resolve-deployment';
 
 const CID = 'QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco';
 const NORMALIZED_CID =
@@ -11,7 +12,10 @@ const NORMALIZED_CID =
 const makeCore = (ipfsGateways?: string[]) =>
   new CoreSDK({
     core: { chain: { id: CHAINS.Hoodi } },
-    moduleName: MODULE_NAME.CSM,
+    ...resolveDeployment({
+      moduleName: MODULE_NAME.CSM,
+      chainId: CHAINS.Hoodi,
+    }),
     ipfsGateways,
   } as any);
 

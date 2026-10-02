@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { API_NAME, API_URLS } from '../../../src/common/constants/links';
 import { MODULE_NAME } from '../../../src/common/constants/module-name';
 import { CoreSDK } from '../../../src/core-sdk/core-sdk';
+import { resolveDeployment } from '../../../src/core-sdk/resolve-deployment';
 
 const makeCore = (props: {
   keysApiUrl?: string;
@@ -10,7 +11,10 @@ const makeCore = (props: {
 }) =>
   new CoreSDK({
     core: { chain: { id: CHAINS.Hoodi } },
-    moduleName: MODULE_NAME.CSM,
+    ...resolveDeployment({
+      moduleName: MODULE_NAME.CSM,
+      chainId: CHAINS.Hoodi,
+    }),
     ...props,
   } as any);
 

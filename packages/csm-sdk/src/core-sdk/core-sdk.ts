@@ -18,7 +18,6 @@ import {
   invariant,
   MODULE_NAME,
   ModuleProfile,
-  resolveModuleProfile,
   SUPPORTED_CHAINS,
 } from '../common/index';
 import { isValidIpfsCid, shuffle, toCidV1Base32 } from '../common/utils/index';
@@ -52,11 +51,11 @@ export class CoreSDK {
     this.keysApiUrl = props.keysApiUrl;
     this.feesMonitoringApiUrl = props.feesMonitoringApiUrl;
     this.maxEventBlocksRange = props.maxEventBlocksRange;
-    this.deploymentBlockNumber = props.deploymentBlockNumber ?? 0n;
+    this.deploymentBlockNumber = props.deploymentBlockNumber;
     this.skipHistoricalCalls = props.skipHistoricalCalls ?? false;
     this.moduleName = props.moduleName;
     this.ipfsGateways = props.ipfsGateways ?? [];
-    this.profile = resolveModuleProfile(this.moduleName, this.chainId);
+    this.profile = props.profile;
   }
 
   public get chainId(): SUPPORTED_CHAINS {
