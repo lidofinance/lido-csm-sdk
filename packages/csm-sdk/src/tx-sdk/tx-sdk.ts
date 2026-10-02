@@ -3,7 +3,7 @@ import {
   CheckAllowanceResult,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { Address, Call } from 'viem';
+import { Address } from 'viem';
 import type { AllowanceSDK } from '../allowance-sdk/allowance-sdk';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { ErrorHandler, Logger } from '../common/decorators/index';
@@ -15,7 +15,6 @@ import {
   SDKError,
 } from '../common/index';
 import type { WalletSDK } from '../wallet-sdk/wallet-sdk';
-import { SendCallsProps, SendTransactionProps } from '../wallet-sdk/types';
 import {
   AllowanceProps,
   CallResult,
@@ -24,6 +23,7 @@ import {
   PerformOptionsSpend,
   SpendProps,
 } from './types';
+import { StrategyContext, WALLET_STRATEGIES } from './wallet-strategies';
 
 /** Module-scoped transaction orchestration: permit/approve for this module's accounting, version check, send. */
 export class TxSDK extends CsmSDKModule<{
@@ -80,54 +80,21 @@ export class TxSDK extends CsmSDKModule<{
   public async perform<TDecodedResult = undefined>(
     props: PerformOptions<TDecodedResult>,
   ): Promise<TransactionResult<TDecodedResult>> {
-    const account = await this.core.core.useAccount(props.account);
-    const isAA = await this.isAbstractAccount(account.address);
-    return isAA ? this.performCall(props) : this.performTransaction(props);
+    const kind = await this.bus.wallet.getWalletKind(props.account);
+    return WALLET_STRATEGIES[kind].perform(this.context, props);
   }
 
-  private async performCall<T>(
-    props: PerformOptions<T>,
-  ): Promise<TransactionResult<T>> {
-    const calls: Call[] = [];
-    if (props.spend) {
-      const approveCall = await this.bus.allowance.getApproveCallIfNeeded(
-        this.withSpender(props as PerformOptionsSpend<T>),
-      );
-      if (approveCall) calls.push(approveCall);
-    }
-    const call = await this.prepareCall(props);
-    await this.checkVersion(call);
-    calls.push(call);
-    return this.sendCalls({ ...props, calls });
-  }
-
-  private async performTransaction<T>(
-    props: PerformOptions<T>,
-  ): Promise<TransactionResult<T>> {
-    const { hash, permit } = props.spend
-      ? await this.bus.allowance.resolvePermit(
-          this.withSpender(props as PerformOptionsSpend<T>),
-        )
-      : {};
-    if (hash) return { hash };
-    const call = await this.prepareCall(props, { permit });
-    await this.checkVersion(call);
-    return this.sendTransaction({
-      ...props,
-      ...this.bus.wallet.callToTransaction(call),
-    });
-  }
-
-  private async sendCalls<T>(
-    props: SendCallsProps<T>,
-  ): Promise<TransactionResult<T>> {
-    return this.bus.wallet.sendCalls(props);
-  }
-
-  private async sendTransaction<T>(
-    props: SendTransactionProps<T>,
-  ): Promise<TransactionResult<T>> {
-    return this.bus.wallet.sendTransaction(props);
+  private get context(): StrategyContext {
+    return {
+      wallet: this.bus.wallet,
+      allowance: this.bus.allowance,
+      spender: this.spender,
+      prepare: async (props, permit) => {
+        const call = await this.prepareCall(props, permit && { permit });
+        await this.checkVersion(call);
+        return call;
+      },
+    };
   }
 
   private async prepareCall(

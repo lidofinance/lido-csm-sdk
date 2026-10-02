@@ -23,14 +23,13 @@ import {
 // broadcasts ONLY the approve tx, then returns hash-only with the main deposit
 // DEFERRED (no receipt/result): the deposit is left for the external signers
 // to co-sign. addBondStETH(...) therefore resolves to { hash } the moment the
-// approve is sent — see signPermitOrApprove → approve (multisig) → performTransaction
-// short-circuit on `if (hash) return { hash }`.
+// approve is sent: the multisig strategy approves, then perform short-circuits
+// to { hash } before preparing the main call.
 //
 // Ordering matters: the alt account must mint stETH BEFORE we install bytecode,
 // because minting is a real signed tx and an EOA cannot sign once it's "code".
 //
-// The on-chain allowance is set to amount + 10n: stETH's STETH_ROUNDING_THRESHOLD
-// bump that parseSpendingProps adds to every stETH approve/permit request.
+// The alt account starts with zero allowance, so the spend always needs an approve.
 
 const OPERATOR_ID = 0n;
 // PUSH1 0 PUSH1 0 — 4 bytes of EVM bytecode. The bytes never execute (anvil
@@ -92,7 +91,7 @@ describe('integration: bond-permit-multisig (multisig spend branch via setCode t
       address: account.address,
       bytecode: MIN_BYTECODE,
     });
-    // SDK's multisig stub hard-codes nonce: 1 (tx-sdk.ts internalTransaction).
+    // SDK's multisig stub hard-codes nonce: 1 (WalletSDK.sendTransaction).
     // Minting already advanced the nonce to 1, so this simply realigns it.
     await test.setNonce({ address: account.address, nonce: 1 });
     // Match the maxFeePerGas: 1n stub. mine() commits the base fee change so
@@ -135,7 +134,7 @@ describe('integration: bond-permit-multisig (multisig spend branch via setCode t
     expect(stages).not.toContain(TransactionCallbackStage.DONE);
 
     // No on-chain allowance assertion: the multisig branch signs the approve with
-    // stub fee/gas params (maxFeePerGas: 1n, gas: 21_000n, nonce: 1 — tx-sdk.ts:148-156)
+    // stub fee/gas params (maxFeePerGas: 1n, gas: 21_000n, nonce: 1 — WalletSDK.sendTransaction)
     // that model "submitted to the Safe for the owners to execute". anvil never
     // actually includes that tx (underpriced + under-gassed), so there is no on-chain
     // effect to read — confirmed: result.hash has no receipt and the account nonce

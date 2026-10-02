@@ -17,14 +17,14 @@ import {
   useTestClient,
 } from '../helpers';
 
-// Exercises the multisig branch of TxSDK.internalTransaction.
+// Exercises the multisig branch of TxSDK.perform.
 //
 // Setup: install bytecode at the signer's address so `core.isContract` returns
 // true. We derive an isolated alt account via a seed unique to this file so a
 // future test using useAltAccount() with a different seed cannot collide on
 // nonce. The per-test snapshot/revert keeps the rest of the suite clean.
 //
-// The SDK hard-codes `nonce: 1` in the multisig stub (tx-sdk.ts:117) because
+// The SDK hard-codes `nonce: 1` in the multisig stub (WalletSDK.sendTransaction, `multisig: true`) because
 // real Safe wallets carry their own internal nonce — we satisfy it via
 // anvil_setNonce. The fork's base fee is dropped to 1 wei via setNextBlockBaseFeePerGas
 // to match the `maxFeePerGas: 1n` stub.
@@ -84,7 +84,7 @@ describe('integration: bond-multisig (multisig branch via setCode trick)', () =>
       address: account.address,
       bytecode: MIN_BYTECODE,
     });
-    // SDK's multisig stub expects nonce: 1 (see tx-sdk.ts:117)
+    // SDK's multisig stub expects nonce: 1 (see WalletSDK.sendTransaction)
     await test.setNonce({ address: account.address, nonce: 1 });
     // Match the maxFeePerGas: 1n stub. mine() commits the base fee change
     // so it applies to the block our tx will be included in.
