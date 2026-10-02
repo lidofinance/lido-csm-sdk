@@ -3,6 +3,7 @@ import type { Address } from 'viem';
 import { getContract } from 'viem';
 import { AllowanceSDK } from '../../../src/allowance-sdk/allowance-sdk';
 import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
+import { TransactionCallbackStage } from '../../../src/tx-sdk/types';
 import { TOKENS } from '../../../src/common/constants/tokens';
 
 vi.mock('viem', async (orig) => ({
@@ -38,10 +39,14 @@ const PERMIT_SIG = {
 const buildAllowance = (overrides: {
   allowance: bigint;
   isMultisig: boolean;
+  sendError?: Error;
 }) => {
   const signPermit = vi.fn(async () => PERMIT_SIG);
   const allowanceRead = vi.fn(async () => overrides.allowance);
-  const sendTransaction = vi.fn(async () => APPROVE_TX_HASH);
+  const sendTransaction = vi.fn(async () => {
+    if (overrides.sendError) throw overrides.sendError;
+    return APPROVE_TX_HASH;
+  });
   const estimateGas = vi.fn(async () => 100_000n);
   const getFeeData = vi.fn(async () => ({
     maxFeePerGas: 1n,
@@ -153,6 +158,29 @@ describe('AllowanceSDK.signPermitOrApprove (EOA / multisig branch)', () => {
       expect(result.permit).toEqual(
         expect.objectContaining({ value: 0n, deadline: 0n }),
       );
+    });
+  });
+
+  describe('multisig approve failure', () => {
+    it('notifies the consumer callback with ERROR exactly once', async () => {
+      const { sdk } = buildAllowance({
+        allowance: 0n,
+        isMultisig: true,
+        sendError: new Error('rpc down'),
+      });
+      const callback = vi.fn();
+      await expect(
+        sdk.signPermitOrApprove({
+          account: ACCOUNT,
+          spend,
+          spender: SPENDER,
+          callback,
+        }),
+      ).rejects.toThrow();
+      const errors = callback.mock.calls.filter(
+        ([a]) => a.stage === TransactionCallbackStage.ERROR,
+      );
+      expect(errors).toHaveLength(1);
     });
   });
 

@@ -178,6 +178,7 @@ export class AllowanceSDK {
             payload: { token, amount, hash: (args.payload as any).hash },
           });
         case TransactionCallbackStage.MULTISIG_DONE:
+        case TransactionCallbackStage.ERROR:
           return callback(args);
         default:
       }
