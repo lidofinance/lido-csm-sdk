@@ -127,3 +127,47 @@ describe('DepositQueueSDK.getOperatorTopUpQueue', () => {
     expect(keys.every(({ index, position }) => index === position)).toBe(true);
   });
 });
+
+describe('DepositQueueSDK.getAllBatches', () => {
+  const BLOCK = 321n;
+
+  it('reads pointers, batches and depositable counts at one block', async () => {
+    const depositQueuePointers = vi.fn(async (..._args: unknown[]) => [0n, 1n]);
+    // packed batch: operator 0, 2 keys, nextBatchIndex 1 (== tail, ends the scan)
+    const getDepositQueueBatches = vi.fn(async (..._args: unknown[]) => [
+      (0n << 192n) | (2n << 128n) | 1n,
+    ]);
+    const getNodeOperatorsDepositableValidatorsCount = vi.fn(
+      async (..._args: unknown[]) => [2],
+    );
+    const getOperatorsCount = vi.fn(async (..._args: unknown[]) => 1n);
+    const core = {
+      moduleId: 3n,
+      publicClient: { getBlockNumber: vi.fn(async () => BLOCK) },
+      getContract: () => ({
+        read: {
+          QUEUE_LOWEST_PRIORITY: async () => 0n,
+          depositQueuePointers,
+          getDepositQueueBatches,
+          getNodeOperatorsDepositableValidatorsCount,
+        },
+      }),
+    } as any;
+    const bus = { module: { getOperatorsCount } } as any;
+    const sdk = new DepositQueueSDK({ core, bus });
+
+    const result = await sdk.getAllBatches();
+
+    expect(result).toEqual([[{ nodeOperatorId: 0n, keysCount: 2 }]]);
+    expect(core.publicClient.getBlockNumber).toHaveBeenCalledTimes(1);
+    expect(getOperatorsCount).toHaveBeenCalledWith({ blockNumber: BLOCK });
+    for (const fn of [
+      depositQueuePointers,
+      getDepositQueueBatches,
+      getNodeOperatorsDepositableValidatorsCount,
+    ]) {
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(fn.mock.calls[0]?.[1]).toEqual({ blockNumber: BLOCK });
+    }
+  });
+});

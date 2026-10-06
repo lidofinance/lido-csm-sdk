@@ -96,17 +96,17 @@ describe('bond: deposit (wallet)', () => {
 
 ## Wallet-type test matrix
 
-The SDK routes through three branches based on the signer type. Each branch is covered at both layers:
+The SDK resolves a wallet kind (`WalletSDK.getWalletKind`) and routes through one strategy per kind (`tx-sdk/wallet-strategies.ts`). Each branch is covered at both layers:
 
 | Branch | Detection | Unit tests | Integration test | Anvil trick |
 |---|---|---|---|---|
-| **EOA** | `!isContract && !atomic` | `detection.test.ts` (8 cases), `perform-routing.test.ts` (5 cases), `sign-permit-or-approve.test.ts` (3 cases), `internal-call.test.ts` (existing 13 cases) | `bond-wallet.test.ts` | `setBalance` |
-| **Multisig** | `isContract === true` | same as EOA + the multisig branch in `sign-permit-or-approve.test.ts` | `bond-multisig.test.ts` | `setCode` + `setNonce(1)` + `setNextBlockBaseFeePerGas(1n)` + `mine(1)` |
+| **EOA** | `!isContract && !atomic` | `detection.test.ts` (8 cases), `perform-routing.test.ts` (perform/approve per wallet kind), `send-transaction.test.ts` | `bond-wallet.test.ts` | `setBalance` |
+| **Multisig** | `isContract === true` | same as EOA + multisig cases in `perform-routing.test.ts` | `bond-multisig.test.ts` | `setCode` + `setNonce(1)` + `setNextBlockBaseFeePerGas(1n)` + `mine(1)` |
 | **AA (EIP-5792)** | `getCapabilities.atomic === 'supported'` | `detection.test.ts` + routing tests | `bond-aa.test.ts` | walletClient `.extend({ getCapabilities })` + viem's `experimental_fallback: true` |
 
 ### Multisig integration nuances
 
-The SDK hard-codes `nonce: 1` + `gas: 21_000n` + `maxFeePerGas: 1n` in the multisig branch (`tx-sdk.ts:117`). In production a Safe wallet ignores these stubs and uses its own internal counters. To exercise the branch against anvil:
+The SDK hard-codes `nonce: 1` + `gas: 21_000n` + `maxFeePerGas: 1n` in the multisig branch (`WalletSDK.sendTransaction` with `multisig: true`). In production a Safe wallet ignores these stubs and uses its own internal counters. To exercise the branch against anvil:
 
 - `setNonce({ nonce: 1 })` — match the stub
 - `setNextBlockBaseFeePerGas({ baseFeePerGas: 1n })` + `mine({ blocks: 1 })` — the `setNext*` family applies to the NEXT block, so an empty mine is required to commit it BEFORE the tx is broadcast. Without the mine, the tx sits in the mempool because `maxFeePerGas: 1` < the current block's base fee.

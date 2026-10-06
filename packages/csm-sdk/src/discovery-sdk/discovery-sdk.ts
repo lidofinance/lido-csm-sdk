@@ -2,7 +2,7 @@ import { Address, isAddressEqual } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import { CONTRACT_NAMES, OPERATOR_TYPE } from '../common/constants/index';
 import { ROLES } from '../common/constants/roles';
-import { ErrorHandler, Logger } from '../common/decorators/index';
+import { Dedupe, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   NodeOperatorId,
   NodeOperatorInviteInfo,
@@ -12,10 +12,13 @@ import {
   getCurveRefByOperatorType,
   getOperatorTypesForModule,
 } from '../common/utils/operator-type-utils';
-import { onRevertEmptyList } from '../common/utils/on-error';
+import {
+  assertPageLimit,
+  MAX_PAGE_LIMIT,
+  readAllPages,
+} from '../common/utils/read-all-pages';
 import { invariantArgument } from '../common/utils/sdk-error';
 import { ModuleSDK } from '../module-sdk/module-sdk';
-import { byTotalCount, iteratePages, onePage } from './iterate-pages';
 import { toDiscoveryInfo, toShortInfo } from './map-operators';
 import {
   NodeOperatorDiscoveryInfo,
@@ -24,42 +27,44 @@ import {
   SearchMode,
 } from './types';
 
+const pinnedAt = ({ blockNumber }: { blockNumber?: bigint }) =>
+  blockNumber === undefined ? undefined : { blockNumber };
+
+type PageFetcher<T> = (
+  p: Pagination & { blockNumber?: bigint },
+) => Promise<readonly T[] | T[]>;
+
 export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   private get discoveryContract() {
     return this.core.getContract(CONTRACT_NAMES.smDiscovery);
   }
 
   /**
-   * Paginates through operators using the provided fetch function.
-   *
-   * Behavior:
-   * - Without pagination parameter: Fetches ALL operators by querying total count and iterating through all pages
-   * - With pagination parameter: Fetches ONLY ONE PAGE at the specified offset/limit
-   *
-   * @param fetchPage - Function to fetch a page of operators
-   * @param pagination - Optional pagination parameters (offset, limit)
-   * @param defaultLimit - Optional default limit when pagination is not provided (defaults to 1000)
-   * @returns Array of all fetched operators
+   * Without `pagination`: reads ALL operators page by page at one pinned block.
+   * With `pagination`: reads ONLY that page, unpinned.
    */
   private async paginateOperators<T>(
-    fetchPage: (p: Pagination) => Promise<readonly T[] | T[]>,
+    fetchPage: PageFetcher<T>,
     pagination?: Pagination,
-    defaultLimit = 1000n,
+    defaultLimit = MAX_PAGE_LIMIT,
   ): Promise<T[]> {
-    const limit = pagination?.limit ?? defaultLimit;
-    const offset = pagination?.offset ?? 0n;
+    if (pagination) {
+      assertPageLimit(pagination.limit);
+      return [...(await fetchPage(pagination))];
+    }
 
-    const getNextOffset = pagination
-      ? onePage
-      : byTotalCount(await this.bus.module.getOperatorsCount());
-
-    return iteratePages(fetchPage, { offset, limit }, getNextOffset).catch(
-      onRevertEmptyList<T>,
-    );
+    return readAllPages({
+      publicClient: this.core.publicClient,
+      limit: defaultLimit,
+      count: (blockNumber) =>
+        this.bus.module.getOperatorsCount({ blockNumber }),
+      readPage: async (p) => ({ items: await fetchPage(p) }),
+    });
   }
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getNodeOperatorIds(
     address: Address,
     searchMode: SearchMode = SearchMode.CURRENT_ADDRESSES,
@@ -67,31 +72,27 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
   ): Promise<NodeOperatorId[]> {
     return this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.findNodeOperatorsByAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-          searchMode,
-        ]),
+        this.discoveryContract.read.findNodeOperatorsByAddress(
+          [this.core.moduleId, address, p.offset, p.limit, searchMode],
+          pinnedAt(p),
+        ),
       pagination,
     );
   }
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getNodeOperatorsByAddress(
     address: Address,
     pagination?: Pagination,
   ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getNodeOperatorsByAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getNodeOperatorsByAddress(
+          [this.core.moduleId, address, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
@@ -100,18 +101,17 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorsByCurveId(
     curveId: bigint,
     pagination?: Pagination,
   ): Promise<NodeOperatorShortInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getOperatorsByCurveId([
-          this.core.moduleId,
-          curveId,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getOperatorsByCurveId(
+          [this.core.moduleId, curveId, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
@@ -120,6 +120,7 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorsByType(
     operatorType: OPERATOR_TYPE,
     pagination?: Pagination,
@@ -140,18 +141,17 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getNodeOperatorsByProposedAddress(
     address: Address,
     pagination?: Pagination,
   ): Promise<NodeOperatorInviteInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getNodeOperatorsByProposedAddress([
-          this.core.moduleId,
-          address,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getNodeOperatorsByProposedAddress(
+          [this.core.moduleId, address, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 
@@ -172,16 +172,16 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getAllNodeOperators(
     pagination?: Pagination,
   ): Promise<NodeOperatorDiscoveryInfo[]> {
     const operators = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getAllNodeOperators([
-          this.core.moduleId,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getAllNodeOperators(
+          [this.core.moduleId, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
       500n, // Custom default limit for bulk fetching
     );
@@ -191,16 +191,16 @@ export class DiscoverySDK extends CsmSDKModule<{ module: ModuleSDK }> {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Dedupe()
   public async getOperatorsWithLockedBond(
     pagination?: Pagination,
   ): Promise<NodeOperatorLockedBond[]> {
     const entries = await this.paginateOperators(
       (p) =>
-        this.discoveryContract.read.getOperatorsWithLockedBond([
-          this.core.moduleId,
-          p.offset,
-          p.limit,
-        ]),
+        this.discoveryContract.read.getOperatorsWithLockedBond(
+          [this.core.moduleId, p.offset, p.limit],
+          pinnedAt(p),
+        ),
       pagination,
     );
 

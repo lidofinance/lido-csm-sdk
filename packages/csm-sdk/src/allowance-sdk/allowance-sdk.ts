@@ -4,38 +4,45 @@ import {
   LidoSDKCore,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { erc20Abi, getContract, Hash } from 'viem';
+import { erc20Abi, getContract } from 'viem';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_IMMUTABLE,
-  COMMON_ADDRESSES,
   CONTRACT_NAMES,
-  EMPTY_PERMIT,
   Erc20Tokens,
   ERROR_CODE,
   invariant,
-  PermitSignatureShort,
+  TOKENS,
   SUPPORTED_CHAINS,
 } from '../common/index';
 import { BindedContract } from '../core-sdk/types';
+import type { WalletKind } from '../wallet-sdk/types';
+import type { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import {
   AllowanceProps,
   AmountAndTokenProps,
   CallResult,
   SpendProps,
-  TransactionCallback,
   TransactionCallbackStage,
 } from '../tx-sdk/types';
-import { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import { parseSpendingProps } from './parse-spending-props';
-import { stripPermit } from './strip-permit';
+import {
+  getApproveCallIfNeeded,
+  SPEND_STRATEGIES,
+  SpendResolution,
+} from './spend-strategies';
 import { AllowanceSDKProps, WithSpender } from './types';
 
-/** ERC20 allowance, EIP-2612 permit and approve flows for an explicit spender. */
+const TOKEN_CONTRACT = {
+  [TOKENS.steth]: CONTRACT_NAMES.stETH,
+  [TOKENS.wsteth]: CONTRACT_NAMES.wstETH,
+} as const satisfies Record<Erc20Tokens, CONTRACT_NAMES>;
+
+/** ERC20 allowance, EIP-2612 permit and approve flows for an explicit spender, per wallet kind. */
 export class AllowanceSDK {
   readonly core: LidoSDKCore;
   readonly wallet: WalletSDK;
-  private readonly tokenAddresses?: AllowanceSDKProps['tokenAddresses'];
+  private readonly tokenAddresses: AllowanceSDKProps['tokenAddresses'];
 
   constructor(props: AllowanceSDKProps) {
     this.core = props.core;
@@ -48,10 +55,7 @@ export class AllowanceSDK {
     token: Erc20Tokens,
   ): BindedContract<typeof erc20Abi> {
     const chainId = this.core.chain.id as SUPPORTED_CHAINS;
-    const key = token as unknown as
-      CONTRACT_NAMES.stETH | CONTRACT_NAMES.wstETH;
-    const address =
-      this.tokenAddresses?.[key] ?? COMMON_ADDRESSES[chainId]?.[key];
+    const address = this.tokenAddresses[TOKEN_CONTRACT[token]];
     invariant(
       address,
       `Token [${token}] not configured on chain ${chainId}`,
@@ -115,90 +119,57 @@ export class AllowanceSDK {
     });
   }
 
-  @Logger('Call:')
-  @ErrorHandler()
-  public async approve(
-    props: WithSpender<SpendProps>,
-  ): Promise<TransactionResult> {
-    const call = await this.getApproveCall({
-      ...props.spend,
-      spender: props.spender,
-    });
-
-    return this.wallet.sendTransaction({
-      ...props,
-      ...this.wallet.callToTransaction(call),
-    });
-  }
-
   public getApproveCall(props: WithSpender<AmountAndTokenProps>): CallResult {
     const { amount, token } = parseSpendingProps(props);
     return this.getTokenContract(token).encode.approve([props.spender, amount]);
   }
 
-  @Logger('Utils:')
-  public async signPermitOrApprove(props: WithSpender<SpendProps>) {
-    const [{ needsApprove }, isMultisig] = await Promise.all([
-      this.checkAllowance(props),
-      this.wallet.isMultisig(props.account),
-    ]);
-
-    if (!needsApprove) {
-      return { permit: EMPTY_PERMIT };
-    }
-
-    if (isMultisig) {
-      const { hash } = await this.approve({
-        ...props,
-        callback: this.wrapApproveCallback(props),
-      });
-      return { permit: EMPTY_PERMIT, hash };
-    } else {
-      const permit = await this.signPermit(props);
-      return { permit };
-    }
+  @Logger('Call:')
+  @ErrorHandler()
+  public async approve(
+    props: WithSpender<SpendProps>,
+  ): Promise<TransactionResult> {
+    return this.approveAs(
+      await this.wallet.getWalletKind(props.account),
+      props,
+    );
   }
 
-  private wrapApproveCallback({
-    callback,
-    spend,
-  }: WithSpender<SpendProps>): TransactionCallback | undefined {
-    if (!callback) return undefined;
-    const { token, amount } = parseSpendingProps(spend);
-    return (args) => {
-      switch (args.stage) {
-        case TransactionCallbackStage.SIGN:
-          return callback({
-            stage: TransactionCallbackStage.APPROVE_SIGN,
-            payload: { token, amount },
-          });
-        case TransactionCallbackStage.RECEIPT:
-          return callback({
-            stage: TransactionCallbackStage.APPROVE_RECEIPT,
-            payload: { token, amount, hash: (args.payload as any).hash },
-          });
-        case TransactionCallbackStage.MULTISIG_DONE:
-          return callback(args);
-        default:
-      }
-    };
+  @Logger('Utils:')
+  @ErrorHandler()
+  public async signPermitOrApprove(
+    props: WithSpender<SpendProps>,
+  ): Promise<SpendResolution> {
+    return this.resolveSpendAs(
+      await this.wallet.getWalletKind(props.account),
+      props,
+    );
+  }
+
+  /** @internal Approve for an already-detected wallet kind; callers own error handling. */
+  public approveAs(
+    kind: WalletKind,
+    props: WithSpender<SpendProps>,
+  ): Promise<TransactionResult> {
+    return SPEND_STRATEGIES[kind].approve(this.spendContext, props);
+  }
+
+  /** @internal Permit-or-approve for an already-detected wallet kind; callers own error handling. */
+  public resolveSpendAs(
+    kind: WalletKind,
+    props: WithSpender<SpendProps>,
+  ): Promise<SpendResolution> {
+    return SPEND_STRATEGIES[kind].signPermitOrApprove(this.spendContext, props);
   }
 
   /** Approve call to prepend to an AA batch, or undefined when allowance already covers the spend. */
-  public async getApproveCallIfNeeded(
+  public getApproveCallIfNeeded(
     props: WithSpender<SpendProps>,
   ): Promise<CallResult | undefined> {
-    const { needsApprove } = await this.checkAllowance(props);
-    if (!needsApprove) return undefined;
-    return this.getApproveCall({ ...props.spend, spender: props.spender });
+    return getApproveCallIfNeeded(this.spendContext, props);
   }
 
-  /** Permit to attach to an EOA call; `hash` set instead when a multisig approve was submitted. */
-  public async resolvePermit(
-    props: WithSpender<SpendProps>,
-  ): Promise<{ permit?: PermitSignatureShort; hash?: Hash }> {
-    if (props.spend.permit) return { permit: stripPermit(props.spend.permit) };
-    const result = await this.signPermitOrApprove(props);
-    return { hash: result.hash, permit: stripPermit(result.permit) };
+  private get spendContext() {
+    return { wallet: this.wallet, allowance: this };
   }
 }

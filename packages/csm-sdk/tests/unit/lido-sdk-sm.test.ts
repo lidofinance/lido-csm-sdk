@@ -1,4 +1,5 @@
 import { CHAINS, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
+import { BaseError, ContractFunctionRevertedError } from 'viem';
 import { describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { MODULE_NAME } from '../../src/common/constants/module-name';
 import { SDKError } from '../../src/common/utils/sdk-error';
@@ -236,6 +237,44 @@ describe('SmDiscoverySDK', () => {
       await expect(
         sdk.discovery.getNodeOperatorsByProposedAddress(address),
       ).rejects.toBe(errors.csm);
+    });
+  });
+
+  describe('real DiscoverySDK revert', () => {
+    it('reports a module whose discovery read reverts via onModuleError', async () => {
+      const sdk = new LidoSmSDK({ core: makeCore(CHAINS.Hoodi) });
+      const reverted = new BaseError('call failed', {
+        cause: new ContractFunctionRevertedError({
+          abi: [],
+          functionName: 'getNodeOperatorsByAddress',
+          message: 'ModuleCacheNotInitialized',
+        }),
+      });
+      const failing = sdk.cm!;
+      for (const m of sdk.modules.values()) {
+        vi.spyOn(m.module, 'getOperatorsCount').mockResolvedValue(1n);
+        vi.spyOn(
+          m.discovery.core.publicClient,
+          'getBlockNumber',
+        ).mockResolvedValue(1n);
+        const read = () =>
+          m === failing ? Promise.reject(reverted) : Promise.resolve([]);
+        vi.spyOn(m.discovery.core, 'getContract').mockReturnValue({
+          read: { getNodeOperatorsByAddress: read },
+        } as never);
+      }
+      const onModuleError = vi.fn();
+
+      const refs = await sdk.discovery.getNodeOperatorsByAddress(address, {
+        onModuleError,
+      });
+
+      expect(refs).toEqual([]);
+      expect(onModuleError).toHaveBeenCalledTimes(1);
+      expect(onModuleError).toHaveBeenCalledWith(
+        MODULE_NAME.CM,
+        expect.any(SDKError),
+      );
     });
   });
 });

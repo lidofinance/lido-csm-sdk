@@ -1,6 +1,11 @@
 import { EncodableContract, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import type { Abi, Address, GetContractReturnType, WalletClient } from 'viem';
-import { CONTRACT_NAMES, MODULE_NAME, PerModule } from '../common/index';
+import {
+  CONTRACT_NAMES,
+  MODULE_NAME,
+  ModuleProfile,
+  PerModule,
+} from '../common/index';
 
 export type ContractAddresses = {
   [contract in CONTRACT_NAMES]?: Address;
@@ -18,12 +23,22 @@ export type GetContractAddressesProps = {
   overridedAddresses?: OverridedAddresses;
 };
 
-export type CoreProps = {
-  core: LidoSDKCore;
-  contractAddresses: ContractAddresses;
-  moduleId: bigint;
+export type ResolveChainAddressesProps = {
+  chainId: number;
+  overridedAddresses?: OverridedAddresses;
+};
+
+export type Deployment = {
   moduleName: MODULE_NAME;
-  deploymentBlockNumber?: bigint;
+  chainId: number;
+  moduleId: bigint;
+  deploymentBlockNumber: bigint;
+  contractAddresses: ContractAddresses;
+  profile: ModuleProfile;
+};
+
+export type CoreProps = Omit<Deployment, 'chainId'> & {
+  core: LidoSDKCore;
   maxEventBlocksRange?: number;
   clApiUrl?: string;
   keysApiUrl?: string;
@@ -32,10 +47,7 @@ export type CoreProps = {
   ipfsGateways?: string[];
 };
 
-export type SdkProps = Omit<
-  CoreProps,
-  'contractAddresses' | 'moduleId' | 'moduleName' | 'deploymentBlockNumber'
-> & {
+export type SdkProps = Omit<CoreProps, keyof Omit<Deployment, 'chainId'>> & {
   overridedAddresses?: OverridedAddresses;
 };
 

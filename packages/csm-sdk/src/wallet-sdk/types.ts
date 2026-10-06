@@ -9,6 +9,8 @@ import type {
   PerformOptionsDecodePartial,
 } from '../tx-sdk/types';
 
+export type WalletKind = 'eoa' | 'multisig' | 'atomicBatch';
+
 export type WalletSDKProps = { core: LidoSDKCore };
 
 export type SendTransactionProps<TDecodedResult = undefined> =
@@ -16,6 +18,8 @@ export type SendTransactionProps<TDecodedResult = undefined> =
     PerformOptionsDecodePartial<TDecodedResult> & {
       getGasLimit: PerformTransactionGasLimit;
       sendTransaction: PerformTransactionSendTransaction;
+      /** Contract-account wallet: stub gas/fees and return the hash without waiting for a receipt. */
+      multisig?: boolean;
     };
 
 export type SendCallsProps<TDecodedResult = undefined> =

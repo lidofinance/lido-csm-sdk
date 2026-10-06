@@ -133,8 +133,8 @@ Module IDs: CSM mainnet 3 / hoodi 4; CM mainnet 4 / hoodi 5; CSM_02 hoodi 6 (not
 Contract addresses are selected by module and chain in `common/constants/module-config.ts`:
 - **Per-module**: `MODULE_CONFIG[MODULE_NAME][chainId]` (module contract, accounting, feeDistributor, gates, …); a missing chain entry makes the constructor throw `NOT_SUPPORTED`
 - **Common**: `COMMON_ADDRESSES[chainId]` (stakingRouter, stETH, wstETH, SMDiscovery, …)
-- `getContractAddresses({ moduleName, chainId, overridedAddresses })` (`core-sdk/get-contract-addresses.ts`) is the pure resolver (no `LidoSDKCore`) with the same precedence; throws `NOT_SUPPORTED` if undeployed
-- `SdkProps.overridedAddresses` is merged over both. Precedence: common < module config < flat overrides < per-module overrides. Flat stETH/wstETH also apply to allowance/approve (tokens are chain-wide; per-module stETH/wstETH is a type error)
+- `resolveDeployment({ moduleName, chainId, overridedAddresses })` (`core-sdk/resolve-deployment.ts`) is the single pure resolver (no `LidoSDKCore`): addresses, `moduleId`, `deploymentBlockNumber`, `profile`; throws `NOT_SUPPORTED` if undeployed. `getContractAddresses` is its `.contractAddresses` projection; `resolveChainAddresses` gives chain-wide contracts (common + flat overrides) and feeds `AllowanceSDK`
+- `SdkProps.overridedAddresses` is merged over both. Precedence: common < module config < flat overrides < per-module overrides; explicit `undefined` values mean unset. Flat stETH/wstETH also apply to allowance/approve (tokens are chain-wide; per-module stETH/wstETH is a type error)
   ```ts
   overridedAddresses: { stETH: '0x..', [MODULE_NAME.CSM]: { accounting: '0x..' } }  // accounting override hits CSM only
   ```
@@ -160,7 +160,7 @@ Sharing rule: `wallet`, `allowance`, `keysCache` are one instance across modules
 
 ### Transaction System (tx-sdk)
 
-`tx.perform()` detects the wallet type and routes: EOA → permit signature + tx; multisig → approve tx + main tx; Abstract Account → EIP-5792 `sendCalls` batch.
+`WalletSDK.getWalletKind()` resolves `eoa | multisig | atomicBatch` once per operation (AA check first, then contract code). `tx.perform` picks one perform strategy from `tx-sdk/wallet-strategies.ts` and, for spend, calls the kind-accepting `allowance.resolveSpendAs(kind, …)` (no re-detect). The chain-scoped `AllowanceSDK` owns approve/permit per kind (`allowance-sdk/spend-strategies.ts`) with an explicit spender, so `allowance.approve/signPermitOrApprove` work for any spender without a module; `tx.approve/signPermitOrApprove` delegate with the module's accounting spender. EOA → permit signature + tx; multisig → approve tx only (returns `{ hash }`, caller re-invokes after the Safe executes) or stubbed main tx; atomicBatch → EIP-5792 `sendCalls` batch (approve + call; caller permit ignored; `signPermitOrApprove` = single-call approve batch, then stop).
 
 - Encode calls with viem's `contract.encode.method([args])` (payable: `contract.encode.method([args], { value })`) — the former `prepCall` helper was removed.
 - `decodeResult` runs **after** the tx is mined and confirmed. If it throws, `tx.perform` rejects with `DECODE_RESULT_ERROR` — the tx still succeeded on-chain.

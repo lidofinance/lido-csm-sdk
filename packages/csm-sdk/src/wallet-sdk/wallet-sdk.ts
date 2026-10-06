@@ -26,7 +26,12 @@ import {
 } from '../tx-sdk/types';
 import { AA_POLLING_INTERVAL, AA_TX_POLLING_TIMEOUT } from './consts';
 import { BatchTransactionRevertedError, DecodeResultError } from './errors';
-import { SendCallsProps, SendTransactionProps, WalletSDKProps } from './types';
+import {
+  SendCallsProps,
+  SendTransactionProps,
+  WalletKind,
+  WalletSDKProps,
+} from './types';
 
 /** Chain-scoped wallet detection and transaction sending; shared by every module SDK. */
 export class WalletSDK {
@@ -65,6 +70,14 @@ export class WalletSDK {
   public async isMultisig(account?: AccountValue): Promise<boolean> {
     const { address } = await this.core.useAccount(account);
     return this.isContract(address);
+  }
+
+  /** Resolved once per operation; AA capability wins over contract code. */
+  @Logger('Views:')
+  public async getWalletKind(account?: AccountValue): Promise<WalletKind> {
+    const { address } = await this.core.useAccount(account);
+    if (await this.isAbstractAccount(address)) return 'atomicBatch';
+    return (await this.isContract(address)) ? 'multisig' : 'eoa';
   }
 
   @Cache(CACHE_SHORT)
@@ -138,9 +151,9 @@ export class WalletSDK {
       sendTransaction,
       decodeResult,
       waitForTransactionReceiptParameters,
+      multisig = false,
     } = props;
     const account = await this.core.useAccount(props.account);
-    const isContractAccount = await this.isContract(account.address);
 
     let overrides: TransactionOptions = {
       account,
@@ -150,7 +163,7 @@ export class WalletSDK {
       maxPriorityFeePerGas: undefined,
     };
 
-    if (isContractAccount) {
+    if (multisig) {
       // passing these stub params prevent unnecessary possibly errorish RPC calls
       overrides = {
         ...overrides,
@@ -197,7 +210,7 @@ export class WalletSDK {
       ERROR_CODE.TRANSACTION_ERROR,
     );
 
-    if (isContractAccount) {
+    if (multisig) {
       await callback({ stage: TransactionCallbackStage.MULTISIG_DONE });
       return { hash };
     }
