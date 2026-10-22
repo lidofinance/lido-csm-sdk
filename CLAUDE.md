@@ -218,6 +218,13 @@ const result = resolveAccess(access, { account: wallet, operatorInfo });
 if (!result.allowed) disableButton(result.reason);
 ```
 
+For `PROTOCOL_ROLE` methods, pass held roles via `protocolRoles`:
+
+```typescript
+const held = access.protocolRole && (await sdk.module.hasProtocolRole(access.protocolRole, wallet)) ? [access.protocolRole] : [];
+resolveAccess(access, { account: wallet, protocolRoles: held });
+```
+
 #### Key Files
 
 - `common/decorators/access-types.ts` — `AccessLevel` enum, `MethodAccess` type

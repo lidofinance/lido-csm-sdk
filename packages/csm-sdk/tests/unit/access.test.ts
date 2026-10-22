@@ -230,10 +230,29 @@ describe('resolveAccess', () => {
       protocolRole: 'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
     };
 
-    it('always returns not allowed (cannot be resolved client-side)', () => {
+    it('denies when protocolRoles missing', () => {
       const result = resolveAccess(access, ctx(manager));
       expect(result.allowed).toBe(false);
       expect(result.reason).toContain('REPORT_GENERAL_DELAYED_PENALTY_ROLE');
+    });
+
+    it('denies when role not held', () => {
+      const result = resolveAccess(access, {
+        ...ctx(manager),
+        protocolRoles: ['ENABLE_TOP_UP_ALLOCATION_ROLE'],
+      });
+      expect(result.allowed).toBe(false);
+    });
+
+    it('allows when role held', () => {
+      const result = resolveAccess(access, {
+        ...ctx(manager),
+        protocolRoles: ['REPORT_GENERAL_DELAYED_PENALTY_ROLE'],
+      });
+      expect(result).toEqual({
+        allowed: true,
+        reason: 'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+      });
     });
   });
 

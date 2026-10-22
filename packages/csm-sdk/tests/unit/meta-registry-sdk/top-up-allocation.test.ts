@@ -7,7 +7,9 @@ const ENCODED = '0xdeadbeef';
 const account = '0x0000000000000000000000000000000000000001';
 
 const setup = (version: bigint) => {
-  const read = { isTopUpAllocationEnabled: vi.fn().mockResolvedValue(false) };
+  const read = {
+    isTopUpAllocationEnabled: vi.fn().mockResolvedValue(false),
+  };
   const encode = {
     enableTopUpAllocation: vi.fn().mockReturnValue(ENCODED),
     disableTopUpAllocation: vi.fn().mockReturnValue(ENCODED),
