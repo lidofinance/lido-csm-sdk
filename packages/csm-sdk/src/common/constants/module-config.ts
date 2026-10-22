@@ -142,8 +142,6 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
         [CONTRACT_NAMES.curatedGateIODCP]:
           '0x773933F9db8964A17d62fb808f2EC7A2de4247CC',
       },
-      // CM is not registered in StakingRouter yet (3 modules as of 2026-07) —
-      // confirm the assigned id once the DAO vote executes
       moduleId: 4n,
       deploymentBlockNumber: BigInt('0x1845a2b'),
     },
@@ -190,7 +188,31 @@ export const MODULE_CONFIG: PerModule<ModuleConfig> = {
   },
 
   [MODULE_NAME.CSM_02]: {
-    // Not deployed on Mainnet yet.
+    [CHAINS.Mainnet]: {
+      contractAddresses: {
+        [CONTRACT_NAMES.csModule]: '0x792Cd25e4aE3578375031FB55e048E163A804F7B',
+        [CONTRACT_NAMES.accounting]:
+          '0x3696dDd942A9e156F5D4728505D1b9a32dCef900',
+        [CONTRACT_NAMES.ejector]: '0x2EE500885870b020e84E86a09A5d26D1EEec3E5E',
+        [CONTRACT_NAMES.exitPenalties]:
+          '0xa96021Eff64E8FE927424C77902c56C4F17d10A5',
+        [CONTRACT_NAMES.feeDistributor]:
+          '0x122CdeDD0da630B555050976052C262EA25f8335',
+        [CONTRACT_NAMES.feeOracle]:
+          '0x0fB5EC09Cc975d8E1aF43063e51882798814f311',
+        [CONTRACT_NAMES.parametersRegistry]:
+          '0x5352b3d8274933c72dC774DccCD12B7301EdBfD7',
+        [CONTRACT_NAMES.validatorStrikes]:
+          '0x89bd84481F7679732EADDF7d99d02ABD8309df65',
+        [CONTRACT_NAMES.verifier]: '0x69b4C32a43565e768794D41b4A265F86dE61b861',
+        [CONTRACT_NAMES.hashConsensus]:
+          '0xd5a965FAab2d02D3cC2286A9da42d09F0F2aE210',
+        [CONTRACT_NAMES.permissionlessGate]:
+          '0x78e36353FE904c3685585D9F3204D4aAcb3Ad506',
+      },
+      moduleId: 5n,
+      deploymentBlockNumber: BigInt('0x18e4ebf'),
+    },
     [CHAINS.Hoodi]: {
       contractAddresses: {
         [CONTRACT_NAMES.csModule]: '0xbb7dd81FAC80f3Effa10eA8b973c15AE65a4CAf9',

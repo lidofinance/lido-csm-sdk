@@ -183,7 +183,7 @@ export const MODULE_PROFILE: PerModule<ModuleProfileConfig> = {
     allocatedBalance: true,
     contractVersions: {
       ...SHARED_VERSIONS,
-      [CONTRACT_NAMES.curatedModule]: [1n, 1n],
+      [CONTRACT_NAMES.curatedModule]: [1n, 2n],
     },
     merkleTreeFallbacks: {
       [CHAINS.Mainnet]: {

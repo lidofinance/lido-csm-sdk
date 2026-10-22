@@ -21,10 +21,13 @@ export type AccessCondition = {
   extendedManagerPermissions?: boolean;
 };
 
+export type ProtocolRole =
+  'REPORT_GENERAL_DELAYED_PENALTY_ROLE' | 'ENABLE_TOP_UP_ALLOCATION_ROLE';
+
 export type MethodAccess = {
   level: AccessLevel;
   condition?: AccessCondition;
-  protocolRole?: string;
+  protocolRole?: ProtocolRole;
 };
 
 export type PublicMethods<T> = {

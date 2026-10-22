@@ -1,5 +1,14 @@
 import { CHAINS, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
-import { describe, expect, expectTypeOf, it, vi } from 'vitest';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  expectTypeOf,
+  it,
+  vi,
+} from 'vitest';
+import { MODULE_CONFIG } from '../../src/common/constants/module-config';
 import { MODULE_NAME } from '../../src/common/constants/module-name';
 import { SDKError } from '../../src/common/utils/sdk-error';
 import { ERROR_CODE } from '../../src/common/utils/sdk-error-code';
@@ -27,46 +36,56 @@ describe('LidoSmSDK', () => {
     );
     expect(
       new LidoSmSDK({ core: makeCore(CHAINS.Mainnet) }).moduleNames,
-    ).toEqual([MODULE_NAME.CSM, MODULE_NAME.CM]);
+    ).toEqual([MODULE_NAME.CSM, MODULE_NAME.CSM_02, MODULE_NAME.CM]);
   });
 
-  it('throws NOT_SUPPORTED when an explicitly requested module is not deployed', () => {
-    const error = catchError(
-      () =>
-        new LidoSmSDK({
-          core: makeCore(CHAINS.Mainnet),
-          modules: [MODULE_NAME.CSM_02],
-        }),
-    );
-    expect(error).toBeInstanceOf(SDKError);
-    expect(error.code).toBe(ERROR_CODE.NOT_SUPPORTED);
-    expect(error.message).toContain('CSM_02');
-  });
+  describe('with CSM_02 undeployed on mainnet', () => {
+    const mainnetCsm02 = MODULE_CONFIG[MODULE_NAME.CSM_02][CHAINS.Mainnet];
+    beforeEach(() => {
+      delete MODULE_CONFIG[MODULE_NAME.CSM_02][CHAINS.Mainnet];
+    });
+    afterEach(() => {
+      MODULE_CONFIG[MODULE_NAME.CSM_02][CHAINS.Mainnet] = mainnetCsm02;
+    });
 
-  it('get() narrows by module and returns undefined for absent modules', () => {
-    const sdk = new LidoSmSDK({ core: makeCore(CHAINS.Mainnet) });
-    expect(sdk.get(MODULE_NAME.CSM)).toBeInstanceOf(LidoSDKCsm);
-    expect(sdk.get(MODULE_NAME.CM)).toBeInstanceOf(LidoSDKCm);
-    expect(sdk.get(MODULE_NAME.CSM_02)).toBeUndefined();
-    expect(sdk.csm).toBe(sdk.get(MODULE_NAME.CSM));
-    expect(sdk.cm).toBe(sdk.get(MODULE_NAME.CM));
-    expect(sdk.csm02).toBeUndefined();
-    expectTypeOf(sdk.get(MODULE_NAME.CM)).toEqualTypeOf<
-      LidoSDKCm | undefined
-    >();
-    expectTypeOf(sdk.get(MODULE_NAME.CSM_02)).toEqualTypeOf<
-      LidoSDKCsm02 | undefined
-    >();
-  });
+    it('throws NOT_SUPPORTED when an explicitly requested module is not deployed', () => {
+      const error = catchError(
+        () =>
+          new LidoSmSDK({
+            core: makeCore(CHAINS.Mainnet),
+            modules: [MODULE_NAME.CSM_02],
+          }),
+      );
+      expect(error).toBeInstanceOf(SDKError);
+      expect(error.code).toBe(ERROR_CODE.NOT_SUPPORTED);
+      expect(error.message).toContain('CSM_02');
+    });
 
-  it('require() throws NOT_SUPPORTED naming module and chain', () => {
-    const sdk = new LidoSmSDK({ core: makeCore(CHAINS.Mainnet) });
-    expect(sdk.require(MODULE_NAME.CSM)).toBeInstanceOf(LidoSDKCsm);
-    const error = catchError(() => sdk.require(MODULE_NAME.CSM_02));
-    expect(error.code).toBe(ERROR_CODE.NOT_SUPPORTED);
-    expect(error.message).toBe(
-      `CSM_02 is not available on chain ${CHAINS.Mainnet}`,
-    );
+    it('get() narrows by module and returns undefined for absent modules', () => {
+      const sdk = new LidoSmSDK({ core: makeCore(CHAINS.Mainnet) });
+      expect(sdk.get(MODULE_NAME.CSM)).toBeInstanceOf(LidoSDKCsm);
+      expect(sdk.get(MODULE_NAME.CM)).toBeInstanceOf(LidoSDKCm);
+      expect(sdk.get(MODULE_NAME.CSM_02)).toBeUndefined();
+      expect(sdk.csm).toBe(sdk.get(MODULE_NAME.CSM));
+      expect(sdk.cm).toBe(sdk.get(MODULE_NAME.CM));
+      expect(sdk.csm02).toBeUndefined();
+      expectTypeOf(sdk.get(MODULE_NAME.CM)).toEqualTypeOf<
+        LidoSDKCm | undefined
+      >();
+      expectTypeOf(sdk.get(MODULE_NAME.CSM_02)).toEqualTypeOf<
+        LidoSDKCsm02 | undefined
+      >();
+    });
+
+    it('require() throws NOT_SUPPORTED naming module and chain', () => {
+      const sdk = new LidoSmSDK({ core: makeCore(CHAINS.Mainnet) });
+      expect(sdk.require(MODULE_NAME.CSM)).toBeInstanceOf(LidoSDKCsm);
+      const error = catchError(() => sdk.require(MODULE_NAME.CSM_02));
+      expect(error.code).toBe(ERROR_CODE.NOT_SUPPORTED);
+      expect(error.message).toBe(
+        `CSM_02 is not available on chain ${CHAINS.Mainnet}`,
+      );
+    });
   });
 
   it('shares keysCache, wallet and allowance across every module', () => {

@@ -19,10 +19,7 @@ describe('deployed modules', () => {
   });
 
   it('getDeployedModules follows SUPPORTED_MODULES order per chain', () => {
-    expect(getDeployedModules(CHAINS.Mainnet)).toEqual([
-      MODULE_NAME.CSM,
-      MODULE_NAME.CM,
-    ]);
+    expect(getDeployedModules(CHAINS.Mainnet)).toEqual(SUPPORTED_MODULES);
     expect(getDeployedModules(CHAINS.Hoodi)).toEqual([
       MODULE_NAME.CSM,
       MODULE_NAME.CSM_02,
@@ -36,7 +33,7 @@ describe('deployed modules', () => {
 
   it('isDeployedModule reflects MODULE_CONFIG', () => {
     expect(isDeployedModule(MODULE_NAME.CSM_02, CHAINS.Hoodi)).toBe(true);
-    expect(isDeployedModule(MODULE_NAME.CSM_02, CHAINS.Mainnet)).toBe(false);
+    expect(isDeployedModule(MODULE_NAME.CSM_02, CHAINS.Mainnet)).toBe(true);
     expect(isDeployedModule(MODULE_NAME.CM, 1337)).toBe(false);
   });
 });

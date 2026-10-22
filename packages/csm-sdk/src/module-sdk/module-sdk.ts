@@ -1,12 +1,18 @@
-import { Address } from 'viem';
+import { Address, keccak256, toHex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Cache,
   Dedupe,
   ErrorHandler,
   Logger,
+  ProtocolRole,
 } from '../common/decorators/index';
-import { CACHE_IMMUTABLE, CACHE_SHORT, CONTRACT_NAMES } from '../common/index';
+import {
+  CACHE_IMMUTABLE,
+  CACHE_LONG,
+  CACHE_SHORT,
+  CONTRACT_NAMES,
+} from '../common/index';
 import { calculateShareLimit } from './calculate-share-limit';
 import { findModuleDigest } from './find-module-digest';
 import { findModuleRegistration } from './find-module-registration';
@@ -32,6 +38,16 @@ export class ModuleSDK extends CsmSDKModule {
     return this.core.getContract(CONTRACT_NAMES.accounting);
   }
 
+  // Every role constant in the contracts is keccak256("NAME")
+  @Logger('Views:')
+  @ErrorHandler()
+  public async hasProtocolRole(
+    role: ProtocolRole,
+    account: Address,
+  ): Promise<boolean> {
+    return this.moduleContract.read.hasRole([keccak256(toHex(role)), account]);
+  }
+
   @Logger('Views:')
   @ErrorHandler()
   public async getStatus(): Promise<CsmStatus> {
@@ -54,6 +70,16 @@ export class ModuleSDK extends CsmSDKModule {
       this.core.checkContractVersion(CONTRACT_NAMES.accounting),
     ]);
     return results.every((r) => r.supported);
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Cache(CACHE_LONG)
+  public async getModuleVersion(): Promise<bigint> {
+    const { version } = await this.core.checkContractVersion(
+      this.core.moduleContract,
+    );
+    return version;
   }
 
   @Logger('Views:')

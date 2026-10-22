@@ -86,6 +86,13 @@ exports[`SDK @Access coverage > annotated methods across all SDK modules match s
     },
   },
   "MetaRegistrySDK": {
+    "disableTopUpAllocation": {
+      "level": "OWNER",
+    },
+    "enableTopUpAllocation": {
+      "level": "PROTOCOL_ROLE",
+      "protocolRole": "ENABLE_TOP_UP_ALLOCATION_ROLE",
+    },
     "setOperatorInfo": {
       "level": "OWNER",
     },

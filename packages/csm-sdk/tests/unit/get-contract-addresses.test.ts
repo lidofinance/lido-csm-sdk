@@ -76,13 +76,10 @@ describe('getContractAddresses', () => {
     expect(result).toEqual(base);
   });
 
-  it.each([
-    [MODULE_NAME.CSM_02, CHAINS.Mainnet],
-    [MODULE_NAME.CSM, 999_999],
-  ])('throws NOT_SUPPORTED for %s on chain %s', (moduleName, id) => {
+  it('throws NOT_SUPPORTED for an undeployed chain', () => {
     let error: unknown;
     try {
-      getContractAddresses({ moduleName, chainId: id });
+      getContractAddresses({ moduleName: MODULE_NAME.CSM, chainId: 999_999 });
     } catch (e) {
       error = e;
     }

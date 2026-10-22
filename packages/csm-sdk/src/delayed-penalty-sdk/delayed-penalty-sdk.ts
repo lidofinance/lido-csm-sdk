@@ -1,10 +1,7 @@
-import { Address } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { CACHE_IMMUTABLE } from '../common/constants/index';
 import {
   Access,
   AccessLevel,
-  Cache,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -58,20 +55,6 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
           amount,
         ]),
     });
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  @Cache(CACHE_IMMUTABLE)
-  private async getReportRole(): Promise<Address> {
-    return this.moduleContract.read.REPORT_GENERAL_DELAYED_PENALTY_ROLE();
-  }
-
-  @Logger('Views:')
-  @ErrorHandler()
-  public async hasReportRole(address: Address): Promise<boolean> {
-    const role = await this.getReportRole();
-    return this.moduleContract.read.hasRole([role, address]);
   }
 
   @Logger('Views:')

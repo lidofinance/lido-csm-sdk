@@ -6,7 +6,12 @@ import {
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
-import { CONTRACT_NAMES, NodeOperatorId } from '../common/index';
+import {
+  CONTRACT_NAMES,
+  ERROR_CODE,
+  invariant,
+  NodeOperatorId,
+} from '../common/index';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
@@ -20,8 +25,11 @@ import {
   OperatorStakeSummary,
   SetOperatorDataProps,
   SubOperatorStakeSummary,
+  TopUpAllocationProps,
 } from './types';
 import { decodeExternalOperator } from './utils';
+
+const TOP_UP_ALLOCATION_MIN_VERSION = 2n;
 
 export class MetaRegistrySDK extends CsmSDKModule<{
   tx: TxSDK;
@@ -178,6 +186,61 @@ export class MetaRegistrySDK extends CsmSDKModule<{
       targetStake: target[idx] ?? 0n,
       currentStake: current[idx] ?? 0n,
     };
+  }
+
+  private async isTopUpAllocationSupported(): Promise<boolean> {
+    const version = await this.bus.module.getModuleVersion();
+    return version >= TOP_UP_ALLOCATION_MIN_VERSION;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
+  @Dedupe()
+  public async isTopUpAllocationEnabled(
+    nodeOperatorId: NodeOperatorId,
+  ): Promise<boolean> {
+    // v1 has no per-operator toggle: top-up allocation is always on
+    if (!(await this.isTopUpAllocationSupported())) return true;
+    return this.moduleContract.read.isTopUpAllocationEnabled([nodeOperatorId]);
+  }
+
+  @Access({
+    level: AccessLevel.PROTOCOL_ROLE,
+    protocolRole: 'ENABLE_TOP_UP_ALLOCATION_ROLE',
+  })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async enableTopUpAllocation(props: TopUpAllocationProps) {
+    const { nodeOperatorId, ...rest } = props;
+    invariant(
+      await this.isTopUpAllocationSupported(),
+      'Top-up allocation toggle requires CuratedModule v2',
+      ERROR_CODE.NOT_SUPPORTED,
+    );
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        this.moduleContract.encode.enableTopUpAllocation([nodeOperatorId]),
+    });
+  }
+
+  @Access({ level: AccessLevel.OWNER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async disableTopUpAllocation(props: TopUpAllocationProps) {
+    const { nodeOperatorId, ...rest } = props;
+    invariant(
+      await this.isTopUpAllocationSupported(),
+      'Top-up allocation toggle requires CuratedModule v2',
+      ERROR_CODE.NOT_SUPPORTED,
+    );
+
+    return this.bus.tx.perform({
+      ...rest,
+      call: () =>
+        this.moduleContract.encode.disableTopUpAllocation([nodeOperatorId]),
+    });
   }
 
   @Logger('Utils:')

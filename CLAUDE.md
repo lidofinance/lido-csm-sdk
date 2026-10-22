@@ -62,7 +62,7 @@ The SDK does not cache mutable on-chain state; consumers own freshness. There is
 
 ### Access Permission Metadata
 
-`@Access(...)` is metadata-only — contracts enforce permissions on-chain; the decorator enables frontend UX (disable buttons, show warnings). `resolveAccess(access, ctx)` is a pure function (no RPC); the consumer pre-fetches operator info.
+`@Access(...)` is metadata-only — contracts enforce permissions on-chain; the decorator enables frontend UX (disable buttons, show warnings). `resolveAccess(access, ctx)` is a pure function (no RPC); the consumer pre-fetches operator info. For `PROTOCOL_ROLE` methods, pass held roles via `ctx.protocolRoles` (check with `module.hasProtocolRole(role, account)`).
 
 | Level | Who can call |
 |-------|-------------|
@@ -126,7 +126,7 @@ implementation rotates on every upgrade. Reads revert with `ModuleCacheNotInitia
 | Entry Gates | permissionlessGate, icsGate, idvtcGate | permissionlessGate | curatedGates | Different entry mechanisms |
 | Metadata | ❌ | ❌ | ✅ | CM-only: metaRegistry |
 
-Module IDs: CSM mainnet 3 / hoodi 4; CM mainnet 4 / hoodi 5; CSM_02 hoodi 6 (not on mainnet yet).
+Module IDs: CSM mainnet 3 / hoodi 4; CM mainnet 4 / hoodi 5; CSM_02 mainnet 5 / hoodi 6.
 
 #### Contract Addresses
 
