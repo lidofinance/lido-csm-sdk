@@ -39,6 +39,19 @@ const CuratedModuleExtrasAbi = [
   },
   {
     type: 'function',
+    name: 'ENABLE_TOP_UP_ALLOCATION_ROLE',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'META_REGISTRY',
     inputs: [],
     outputs: [
@@ -49,6 +62,39 @@ const CuratedModuleExtrasAbi = [
       },
     ],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'disableTopUpAllocation',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'enableTopUpAllocation',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'finalizeUpgradeV2',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -173,6 +219,25 @@ const CuratedModuleExtrasAbi = [
   },
   {
     type: 'function',
+    name: 'isTopUpAllocationEnabled',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'enabled',
+        type: 'bool',
+        internalType: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'notifyNodeOperatorWeightChange',
     inputs: [
       {
@@ -195,6 +260,32 @@ const CuratedModuleExtrasAbi = [
     stateMutability: 'nonpayable',
   },
   {
+    type: 'event',
+    name: 'TopUpAllocationDisabled',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'TopUpAllocationEnabled',
+    inputs: [
+      {
+        name: 'nodeOperatorId',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
     type: 'error',
     name: 'InvalidSigningKey',
     inputs: [],
@@ -202,6 +293,11 @@ const CuratedModuleExtrasAbi = [
   {
     type: 'error',
     name: 'SenderIsNotMetaRegistry',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'TopUpAllocationStateUnchanged',
     inputs: [],
   },
   {
