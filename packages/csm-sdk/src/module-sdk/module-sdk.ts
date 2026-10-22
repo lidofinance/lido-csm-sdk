@@ -53,6 +53,16 @@ export class ModuleSDK extends CsmSDKModule {
 
   @Logger('Views:')
   @ErrorHandler()
+  @Cache(CACHE_LONG)
+  public async getModuleVersion(): Promise<bigint> {
+    const { version } = await this.core.checkContractVersion(
+      this.core.moduleContract,
+    );
+    return version;
+  }
+
+  @Logger('Views:')
+  @ErrorHandler()
   public async getOperatorsCount(): Promise<bigint> {
     return this.moduleContract.read.getNodeOperatorsCount();
   }

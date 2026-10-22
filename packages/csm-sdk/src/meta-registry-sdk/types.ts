@@ -13,6 +13,10 @@ export type SetOperatorDataProps = CommonTransactionProps & {
   nodeOperatorId: NodeOperatorId;
 } & Omit<OperatorMetadata, 'ownerEditsRestricted'>;
 
+export type TopUpAllocationProps = CommonTransactionProps & {
+  nodeOperatorId: NodeOperatorId;
+};
+
 export type SubNodeOperator = {
   nodeOperatorId: bigint;
   share: number;
