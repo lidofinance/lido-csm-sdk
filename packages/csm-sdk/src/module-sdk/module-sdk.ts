@@ -1,6 +1,11 @@
-import { Address } from 'viem';
+import { Address, keccak256, toHex } from 'viem';
 import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
-import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
+import {
+  Cache,
+  ErrorHandler,
+  Logger,
+  ProtocolRole,
+} from '../common/decorators/index';
 import { CACHE_LONG, CACHE_MID, CONTRACT_NAMES } from '../common/index';
 import { calculateShareLimit } from './calculate-share-limit';
 import { findModuleDigest } from './find-module-digest';
@@ -25,6 +30,16 @@ export class ModuleSDK extends CsmSDKModule {
 
   private get accountingContract() {
     return this.core.getContract(CONTRACT_NAMES.accounting);
+  }
+
+  // Every role constant in the contracts is keccak256("NAME")
+  @Logger('Views:')
+  @ErrorHandler()
+  public async hasProtocolRole(
+    role: ProtocolRole,
+    account: Address,
+  ): Promise<boolean> {
+    return this.moduleContract.read.hasRole([keccak256(toHex(role)), account]);
   }
 
   @Logger('Views:')

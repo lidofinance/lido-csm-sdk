@@ -1,9 +1,15 @@
 import { type Address, isAddressEqual } from 'viem';
 
-import { AccessLevel, type MethodAccess } from '../decorators/access-types';
+import {
+  AccessLevel,
+  type MethodAccess,
+  type ProtocolRole,
+} from '../decorators/access-types';
 
 export type CanPerformContext = {
   account: Address;
+  /** Protocol roles held by `account`, resolved via `ModuleSDK.hasProtocolRole` */
+  protocolRoles?: ProtocolRole[];
   operatorInfo?: {
     managerAddress: Address;
     rewardsAddress: Address;
@@ -124,8 +130,9 @@ export const resolveAccess = (
   }
 
   if (access.level === AccessLevel.PROTOCOL_ROLE) {
-    const role = access.protocolRole ?? 'unknown';
-    return deny(`requires protocol role: ${role}`);
+    const role = access.protocolRole;
+    if (role && ctx.protocolRoles?.includes(role)) return allow(role);
+    return deny(`requires protocol role: ${role ?? 'unknown'}`);
   }
 
   if (!ctx.operatorInfo) {
