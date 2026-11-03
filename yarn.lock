@@ -1050,7 +1050,7 @@ __metadata:
     viem: ^2.56.3
     vite: ^8.2.2
     vitest: ^5.0.0
-    zod: ^4.5.4
+    zod: ^4.6.6
   peerDependencies:
     "@lidofinance/lido-ethereum-sdk": ^4.8.0
     viem: ^2.46.0
@@ -11284,9 +11284,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^4.5.4":
-  version: 4.5.4
-  resolution: "zod@npm:4.5.4"
-  checksum: cc9cb1892c3e79b2cc6af4ea0ff44a544895b3793db09055bdeb21e5ac41a48137f02a0a07828c7d50d71c55d9e376b137df710ca5c7631eb9a4e96c40e2af68
+"zod@npm:^4.6.6":
+  version: 4.6.6
+  resolution: "zod@npm:4.6.6"
+  checksum: 9274ef2492f25549ade182f5142dff1093c7a9578152eb91a18d891f0b4a86445ac1b2dde37f457e749c1f8fba32f708a733c39017cf51a3bf18aebf294f5db6
   languageName: node
   linkType: hard
