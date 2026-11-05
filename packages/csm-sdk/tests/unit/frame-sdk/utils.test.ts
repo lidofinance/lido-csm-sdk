@@ -7,6 +7,7 @@ import {
   epochToTimestamp,
   getSlotsPerFrame,
   getFrameDuration,
+  getFrameStartSlot,
 } from '../../../src/frame-sdk/utils';
 import type { FrameConfig } from '../../../src/frame-sdk/types';
 
@@ -103,5 +104,20 @@ describe('getFrameDuration', () => {
     const result = getFrameDuration(config);
     expect(result).toBe(86_400);
     expect(typeof result).toBe('number');
+  });
+});
+
+describe('getFrameStartSlot', () => {
+  const base = { refSlot: 1000n, slotsPerFrame: 100n };
+
+  it.each([
+    [1000n, 1000n],
+    [1050n, 1000n],
+    [1100n, 1100n],
+    [950n, 900n],
+    [900n, 900n],
+    [850n, 800n],
+  ])('latest %s -> start %s', (latestSlot, expected) => {
+    expect(getFrameStartSlot({ ...base, latestSlot })).toBe(expected);
   });
 });

@@ -59,3 +59,18 @@ export const getFrameDuration = ({
 >) => {
   return Number(epochsPerFrame * slotsPerEpoch * secondsPerSlot);
 };
+
+export const getFrameStartSlot = ({
+  latestSlot,
+  refSlot,
+  slotsPerFrame,
+}: {
+  latestSlot: bigint;
+  refSlot: bigint;
+  slotsPerFrame: bigint;
+}) => {
+  const diff = latestSlot - refSlot;
+  let frames = diff / slotsPerFrame;
+  if (diff % slotsPerFrame < 0n) frames -= 1n;
+  return refSlot + frames * slotsPerFrame;
+};

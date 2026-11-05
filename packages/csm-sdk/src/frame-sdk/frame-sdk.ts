@@ -9,6 +9,7 @@ import {
 import { CurrentFrameInfo, FrameConfig, FrameInfo } from './types';
 import {
   getFrameDuration,
+  getFrameStartSlot,
   getSlotsPerFrame,
   slotToEpoch,
   slotToTimestamp,
@@ -70,14 +71,14 @@ export class FrameSDK extends CsmSDKModule {
       this.getConfig(),
       this.getLastRefSlot(),
     ]);
-    const refSlot = lastRefSlot || (await this.getInitialRefSlot());
+    const nextReportSlot =
+      lastRefSlot === 0n
+        ? await this.getInitialRefSlot()
+        : lastRefSlot + getSlotsPerFrame(config);
 
     const lastReport =
       lastRefSlot === 0n ? 0 : slotToTimestamp(lastRefSlot, config);
-    const nextReport = slotToTimestamp(
-      refSlot + getSlotsPerFrame(config),
-      config,
-    );
+    const nextReport = slotToTimestamp(nextReportSlot, config);
     const frameDuration = getFrameDuration(config);
 
     return {
@@ -115,8 +116,7 @@ export class FrameSDK extends CsmSDKModule {
     const refSlot =
       lastRefSlot === 0n ? await this.getInitialRefSlot() : lastRefSlot;
 
-    const startSlot =
-      ((latestSlot - refSlot) / slotsPerFrame) * slotsPerFrame + refSlot;
+    const startSlot = getFrameStartSlot({ latestSlot, refSlot, slotsPerFrame });
     const startTimestamp = slotToTimestamp(startSlot, config);
     const endTimestamp = slotToTimestamp(startSlot + slotsPerFrame, config);
     const numberEpochs = slotToEpoch(latestSlot - startSlot, config);
