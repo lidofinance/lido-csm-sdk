@@ -42,9 +42,18 @@ import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 
 ## Initialization
 
-The SDK provides two classes for different module types:
-- **LidoSDKCsm**: For Community Staking Module (permissionless/ICS entry)
+The SDK provides a class per module type:
+- **LidoSDKCsm**: For Community Staking Module (permissionless/ICS/IDVTC entry)
+- **LidoSDKCsm02**: For CSM v2 (permissionless entry, top-up queue)
 - **LidoSDKCm**: For Curated Module (gate-based allowlist entry)
+- **LidoSmSDK**: Registry over every module deployed on the connected chain
+
+```ts
+const sm = new LidoSmSDK({ core });
+sm.csm?.strikes;
+sm.get(MODULE_NAME.CM)?.metaRegistry;
+sm.require(MODULE_NAME.CSM_02); // throws NOT_SUPPORTED if absent
+```
 
 ### CSM (Community Staking Module)
 
@@ -90,10 +99,10 @@ const operatorsCount = await csmSdk.module.getOperatorsCount();
 const operator = await csmSdk.operator.getInfo(69n);
 
 // Manage keys
-const keys = await csmSdk.keys.getKeys(operatorId);
+const keys = await csmSdk.operator.getKeys(operatorId);
 
 // CSM-specific: Create operator via permissionless gate
-await csmSdk.permissionlessGate.createNodeOperator(...);
+await csmSdk.permissionlessGate.addNodeOperator({ token, amount, depositData });
 ```
 
 ### CM Examples
@@ -106,19 +115,26 @@ const operatorsCount = await cmSdk.module.getOperatorsCount();
 const operator = await cmSdk.operator.getInfo(69n);
 
 // CM-specific: Create operator via curated gate
-await cmSdk.curatedGates.createNodeOperator(gateIndex, proof, ...);
+await cmSdk.curatedGates.createNodeOperator({
+  gateName: 'curatedGatePO',
+  name,
+  description,
+  managerAddress,
+  rewardAddress,
+  proof,
+});
 
 // CM-specific: Manage operator metadata
-await cmSdk.metaRegistry.setMetadata({ nodeOperatorId, name, description, account });
+await cmSdk.metaRegistry.setOperatorInfo({ nodeOperatorId, name, description });
 ```
 
 ## SDK Modules
 
-The SDK provides two classes: **`LidoSDKCsm`** for Community Staking Module and **`LidoSDKCm`** for Curated Module. Each aggregates a set of modules tailored to their specific use cases.
+The SDK provides **`LidoSDKCsm`** (Community Staking Module), **`LidoSDKCsm02`** (CSM v2) and **`LidoSDKCm`** (Curated Module). Each aggregates a set of modules tailored to their specific use cases.
 
 ### Shared Modules (Available in Both)
 
-These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
+These modules are available in `LidoSDKCsm`, `LidoSDKCsm02` and `LidoSDKCm`, except `depositQueue` (CSM and CSM v2 only):
 
 - **core**: Core SDK for shared logic, configuration, and utilities
 - **tx**: Unified transaction handling with multi-wallet support (EOA, multisig, Abstract Accounts)
@@ -133,20 +149,21 @@ These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
 - **accounting**: Access accounting data
 - **parameters**: Read curve parameters
 - **frame**: Query protocol frame config
-- **depositQueue**: Query deposit queue pointers, batches
+- **depositQueue**: Query deposit queue pointers, batches (CSM and CSM v2 only)
 - **depositData**: Parse and validate deposit data JSON
 - **feesMonitoring**: Validator fee recipient monitoring
 - **discovery**: Operator discovery and pagination (renamed from satellite)
 - **delayedPenalty**: General delayed penalty management (report, cancel, settle)
+- **roles**: Role management
 
 ### CSM-Specific Modules
 
-Only available in `LidoSDKCsm`:
+Only available in `LidoSDKCsm` (`LidoSDKCsm02` has `strikes`, `permissionlessGate` and `depositQueue`):
 
 - **strikes**: Query operator penalties
 - **permissionlessGate**: Permissionless operator creation
 - **icsGate**: ICS (Independent Community Staker) vetted entry point
-- **roles**: Standard role management
+- **idvtcGate**: IDVTC vetted entry point
 
 ### CM-Specific Modules
 
@@ -154,7 +171,6 @@ Only available in `LidoSDKCm`:
 
 - **curatedGates**: Collection of curated gates for allowlist-based operator creation
 - **metaRegistry**: Operator metadata management (name, description)
-- **roles**: Curated-specific role management (CuratedRolesSDK)
 
 For detailed documentation, see [packages/csm-sdk/README.md](packages/csm-sdk/README.md).
 

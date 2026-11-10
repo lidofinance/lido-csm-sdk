@@ -238,7 +238,7 @@ export class DepositQueueSDK extends CsmSDKModule<{
 
   /**
    * Queue state + entry identities in one snapshot. `pagination.offset` is head-relative;
-   * defaults to the whole queue.
+   * defaults to the first page (MAX_PAGE_LIMIT entries).
    */
   @Logger('Views:')
   @ErrorHandler()

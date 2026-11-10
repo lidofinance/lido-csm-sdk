@@ -4,7 +4,7 @@ Two test projects, one Vitest config (`vitest.config.ts`):
 
 | Project | Files | What it covers | When it runs |
 |---|---|---|---|
-| `unit` | `tests/unit/**/*.test.ts` | Pure logic — decoders, parsers, merkle utils, `@Access` metadata coverage, `keys-cache` localStorage. No network, no chain. | Every push, every PR (incl. forks). |
+| `unit` | `tests/unit/**/*.test.ts` | Pure logic — decoders, parsers, merkle utils, `@Access` metadata coverage, `keys-cache` localStorage. No network, no chain. | Every PR (incl. forks). |
 | `integration` | `tests/integration/**/*.test.ts` | SDK against a real fork via anvil. Read-only views, wallet flows, EIP-2612 permits, multisig approve, EIP-5792 AA branch (faked `getCapabilities` + viem `experimental_fallback`). | Internal PRs only (needs RPC + funded account). |
 
 ## Commands
@@ -53,7 +53,7 @@ Available fixtures:
 
 ### Cached SDKs + chain mutations
 
-Mutable on-chain reads are not cached across calls (`@Dedupe` only shares concurrent calls), so re-reading after a mutation through the shared SDK returns fresh state. Only external-API reads (`keysWithStatus`, `feesMonitoring`, `depositData.checkUploadedKeys`) and wallet detection keep a 10 s TTL; immutable values and CID-keyed proof trees are cached for the instance lifetime.
+Mutable on-chain reads are not cached across calls (`@Dedupe` only shares concurrent calls), so re-reading after a mutation through the shared SDK returns fresh state. Only external-API reads (`keysWithStatus.getApiKeys`/`getClKeys`, `feesMonitoring.getKeysWithIssues`, `depositData.checkUploadedKeys`), `module.getUsedOtherModule` and wallet detection (`isAbstractAccount`, `isContract`) keep a 10 s TTL; immutable values and CID-keyed proof trees are cached for the instance lifetime.
 
 If a test re-reads one of those TTL-cached values after a mutation, use `makeCsmSdk(publicClient, walletClient?)` (see `tests/helpers/make-csm-sdk.ts`) to get a fresh SDK per test, as `bond-aa.test.ts` and `bond-multisig.test.ts` do.
 
@@ -100,9 +100,9 @@ The SDK resolves a wallet kind (`WalletSDK.getWalletKind`) and routes through on
 
 | Branch | Detection | Unit tests | Integration test | Anvil trick |
 |---|---|---|---|---|
-| **EOA** | `!isContract && !atomic` | `detection.test.ts` (8 cases), `perform-routing.test.ts` (perform/approve per wallet kind), `send-transaction.test.ts` | `bond-wallet.test.ts` | `setBalance` |
-| **Multisig** | `isContract === true` | same as EOA + multisig cases in `perform-routing.test.ts` | `bond-multisig.test.ts` | `setCode` + `setNonce(1)` + `setNextBlockBaseFeePerGas(1n)` + `mine(1)` |
-| **AA (EIP-5792)** | `getCapabilities.atomic === 'supported'` | `detection.test.ts` + routing tests | `bond-aa.test.ts` | walletClient `.extend({ getCapabilities })` + viem's `experimental_fallback: true` |
+| **EOA** | not AA, no contract code | `unit/wallet-sdk/detection.test.ts` (12 cases), `unit/tx-sdk/perform-routing.test.ts` (perform/approve per wallet kind), `unit/wallet-sdk/send-transaction.test.ts` | `bond-wallet.test.ts` | `setBalance` |
+| **Multisig** | contract code and not AA | same as EOA + multisig cases in `perform-routing.test.ts` | `bond-multisig.test.ts` | `setCode` + `setNonce(1)` + `setNextBlockBaseFeePerGas(1n)` + `mine(1)` |
+| **AA (EIP-5792)** | `getCapabilities.atomic === 'supported'` (checked first) | `unit/wallet-sdk/detection.test.ts` + routing tests | `bond-aa.test.ts` | walletClient `.extend({ getCapabilities })` + viem's `experimental_fallback: true` |
 
 ### Multisig integration nuances
 
@@ -123,7 +123,7 @@ This is a routing + callback + receipt-handling test, **not** an atomicity test.
 
 For *contract-side* atomicity testing (e.g., partial-failure scenarios), a 4337 stack would be needed. None of the CSM contracts depend on atomicity at the SDK boundary, so this isn't on the roadmap.
 
-See the [AA Status Quirk](../CLAUDE.md) note in package CLAUDE.md for the production failure mode that no test infra catches: smart-account wallets returning `'failure'` callStatus on a successful tx. The SDK trusts the receipt over `callStatus.status` — `internal-call.test.ts` has a regression test for this.
+Production failure mode that no test infra catches: smart-account wallets returning `'failure'` callStatus on a successful tx. The SDK trusts the receipt over `callStatus.status`; `tests/unit/wallet-sdk/send-calls.test.ts` ('AA quirk: batch reports failure but receipt is success') is the regression test.
 
 ## Snapshot-style tests
 

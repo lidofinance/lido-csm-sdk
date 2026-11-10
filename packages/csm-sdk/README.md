@@ -10,7 +10,7 @@
 
 ## Features
 - Modular SDKs for all major Lido staking module contract domains
-- Dual SDK classes: `LidoSDKCsm` for CSM and `LidoSDKCm` for Curated Module
+- SDK classes per module: `LidoSDKCsm` (CSM), `LidoSDKCsm02` (CSM v2), `LidoSDKCm` (Curated Module), plus `LidoSmSDK`, a registry over every module deployed on the connected chain
 - TypeScript support and type safety
 - Extensible architecture for advanced integrations
 
@@ -49,7 +49,7 @@ const operatorsCount = await csmSdk.module.getOperatorsCount();
 const operator = await csmSdk.operator.getInfo(69n);
 
 // CSM-specific features
-await csmSdk.permissionlessGate.createNodeOperator(...);
+await csmSdk.permissionlessGate.addNodeOperator({ token, amount, depositData });
 ```
 
 ### Curated Module (CM)
@@ -64,8 +64,15 @@ const operatorsCount = await cmSdk.module.getOperatorsCount();
 const operator = await cmSdk.operator.getInfo(69n);
 
 // CM-specific features
-await cmSdk.curatedGates.createNodeOperator(gateIndex, proof, ...);
-await cmSdk.metaRegistry.setMetadata({ nodeOperatorId, name, description, account });
+await cmSdk.curatedGates.createNodeOperator({
+  gateName: 'curatedGatePO',
+  name,
+  description,
+  managerAddress,
+  rewardAddress,
+  proof,
+});
+await cmSdk.metaRegistry.setOperatorInfo({ nodeOperatorId, name, description });
 ```
 
 ### Gas estimation
@@ -91,11 +98,18 @@ const { main, unlock, total, walletKind } = await csmSdk.bond.estimateAddBond({
 
 ## SDK Modules
 
-The SDK provides two classes: **`LidoSDKCsm`** for Community Staking Module and **`LidoSDKCm`** for Curated Module. Each class aggregates modules tailored to their specific module type, with many modules shared between both.
+The SDK provides **`LidoSDKCsm`** (Community Staking Module), **`LidoSDKCsm02`** (CSM v2) and **`LidoSDKCm`** (Curated Module). Each class aggregates modules tailored to its module type, with many modules shared. `LidoSmSDK` registers every module deployed on the connected chain:
+
+```typescript
+const sm = new LidoSmSDK({ core });
+sm.csm?.strikes;
+sm.get(MODULE_NAME.CM)?.metaRegistry;
+sm.require(MODULE_NAME.CSM_02); // throws NOT_SUPPORTED if absent
+```
 
 ### Shared Modules
 
-These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
+These modules are available in `LidoSDKCsm`, `LidoSDKCsm02` and `LidoSDKCm`, except `depositQueue` (CSM and CSM v2 only):
 
 - **core**: Core SDK for shared logic, configuration, and utilities
 - **tx**: Unified transaction handling with multi-wallet support (EOA, multisig, Abstract Accounts), permit/approve flow, and batch operations
@@ -109,8 +123,9 @@ These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
 - **keys**: Manage operator keys
 - **keysCache**: Pubkey caching to prevent double-submission with 2-week TTL and manual key management
 - **bond**: Manage operator bond balance
+- **roles**: Role management
 - **events**: Query protocol events
-- **depositQueue**: Query deposit queue pointers, batches
+- **depositQueue**: Query deposit queue pointers, batches (CSM and CSM v2 only)
 - **depositData**: Parse and validate deposit data JSON, check for duplicates and previously submitted keys
 - **feesMonitoring**: Validator fee recipient monitoring and issue detection
 - **discovery**: Operator discovery and pagination using SMDiscovery contract (renamed from satellite-sdk)
@@ -118,12 +133,12 @@ These modules are available in both `LidoSDKCsm` and `LidoSDKCm`:
 
 ### CSM-Specific Modules
 
-Only available in `LidoSDKCsm`:
+Only available in `LidoSDKCsm` (`LidoSDKCsm02` has `strikes`, `permissionlessGate` and `depositQueue`):
 
 - **strikes**: Query operator penalties
 - **permissionlessGate**: Permissionless entry point for creating new operators
 - **icsGate**: ICS (Independent Community Staker) vetted entry point for creating new operators with benefits
-- **roles**: Standard role management for CSM operators
+- **idvtcGate**: IDVTC vetted entry point for creating new operators
 
 ### CM-Specific Modules
 
@@ -131,7 +146,6 @@ Only available in `LidoSDKCm`:
 
 - **curatedGates**: Collection of curated gates for allowlist-based operator creation using merkle proofs
 - **metaRegistry**: Operator metadata management (name, description) via MetaRegistry contract
-- **roles**: Curated-specific role management (CuratedRolesSDK) with extended functionality
 
 Each module exposes a set of methods tailored to its domain. Refer to the source code or generated API documentation for detailed method signatures and usage.
 

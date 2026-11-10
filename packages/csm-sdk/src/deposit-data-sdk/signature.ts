@@ -1,11 +1,8 @@
 /**
- * Alternative BLS signature verification implementation for Ethereum deposit data.
+ * BLS signature verification for Ethereum deposit data (bls-eth-wasm).
  *
- * This implementation follows the Ethereum consensus specification closely:
- * - Proper SSZ serialization using @chainsafe/ssz
- * - Clear separation of domain computation, signing root, and verification
- * - Better error handling and type safety
- * - Compatible with both @chainsafe/bls and bls-eth-wasm
+ * Follows the consensus spec: SSZ serialization via @chainsafe/ssz, with separate
+ * domain computation, signing root, and verification steps.
  *
  * Reference:
  * - https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/beacon-chain.md#bls-signatures

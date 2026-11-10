@@ -59,7 +59,7 @@ The SDK does not cache mutable on-chain state; consumers own freshness. There is
 - `@Access` is metadata-only (stores Symbol on function, no wrapping) — outermost so the Symbol attaches to the final wrapped function
 - Logger tracks all calls for debugging/monitoring (executes first)
 - ErrorHandler catches errors from both cache and method execution
-- Cache only stores successful results (uses `.then()` without `.catch()`)
+- Cache only stores successful results (a rejected pending entry is evicted and the error rethrown)
 - Errors are never cached regardless of decorator order
 
 ### Access Permission Metadata
@@ -93,10 +93,12 @@ Most codes are class-based and spec-stable. `WALLET_TIMEOUT`, `AA_VALIDATION_ERR
 
 - Sources: `staking-modules/src`
 - ABI: `staking-modules/out`
-- Deployed addresses (split into `csm/` and `curated/` subdirs per network):
+- Deployed addresses (split into `csm/`, `csm0x02/` and `curated/` subdirs per network):
   - Mainnet CSM: `staking-modules/artifacts/mainnet/csm/deploy-mainnet.json`
+  - Mainnet CSM_02: `staking-modules/artifacts/mainnet/csm0x02/deploy-mainnet.json`
   - Mainnet CM: `staking-modules/artifacts/mainnet/curated/deploy-mainnet.json`
   - Hoodi CSM: `staking-modules/artifacts/hoodi/csm/deploy-hoodi.json`
+  - Hoodi CSM_02: `staking-modules/artifacts/hoodi/csm0x02/deploy-hoodi.json`
   - Hoodi CM: `staking-modules/artifacts/hoodi/curated/deploy-hoodi.json`
 
 **sm-discovery** (discovery contracts; formerly `csm-satellite`):
@@ -111,7 +113,7 @@ implementation rotates on every upgrade. Reads revert with `ModuleCacheNotInitia
 
 ### Contract Ownership
 
-`CoreSDK` exposes `contract*` getters only for high-reuse infrastructure contracts (module, accounting, fee distributor/oracle, parameters registry, staking router, SMDiscovery, …). Module-specific and single-use contracts are owned by the module that uses them, via `this.core.getContract(CONTRACT_NAMES.x)` in a private getter — don't add new ones to `CoreSDK`.
+`CoreSDK` has one `contractBaseModule` getter plus `getContract(name)` / `getContractWithAbi`. Each module owns the contracts it uses via `this.core.getContract(CONTRACT_NAMES.x)` in a private getter — don't add new `contract*` getters to `CoreSDK`.
 
 ### Module Composition
 
@@ -122,7 +124,7 @@ implementation rotates on every upgrade. Reads revert with `ModuleCacheNotInitia
 | Data & Events | ✅ | ✅ | ✅ | events, depositData, discovery, feesMonitoring |
 | Deposit Queue | ✅ | ✅ (+ top-up) | ❌ | depositQueue; profile flags `depositQueue` / `topUpQueue` |
 | Rewards | ✅ | ✅ | ✅ | rewards |
-| Roles | RolesSDK | RolesSDK | CuratedRolesSDK | CM uses extended variant |
+| Roles | RolesSDK | RolesSDK | RolesSDK | roles |
 | Strikes | ✅ | ✅ | ❌ | strikes |
 | Delayed Penalties | ✅ | ✅ | ✅ | delayedPenalty |
 | Entry Gates | permissionlessGate, icsGate, idvtcGate | permissionlessGate | curatedGates | Different entry mechanisms |
@@ -181,7 +183,7 @@ Two Vitest projects share `packages/csm-sdk/vitest.config.ts`:
 
 **Fixtures (`tests/helpers/`)** follow a cached `use*()` pattern: `useCsmSdk()`, `useCmSdk()`, `useWalletClient()`, `useTestClient()`, `useAccount()`, `useAltAccount()`. Each helper memoizes and returns the same instance per test process. See `packages/csm-sdk/tests/README.md` for the full guide.
 
-**File naming convention**: `tests/integration/*-wallet.test.ts` for tests that sign + broadcast; plain `tests/integration/*.test.ts` for read-only SDK calls. Mirrors lido-ethereum-sdk's separation.
+**File naming convention**: `tests/integration/*-wallet.test.ts` for tests that sign + broadcast (`-multisig` / `-aa` suffixes for the multisig / atomic-batch variants, e.g. `bond-multisig`, `bond-aa`); plain `tests/integration/*.test.ts` for read-only SDK calls. Mirrors lido-ethereum-sdk's separation.
 
 **Snapshot tests**: `tests/unit/access-coverage.test.ts` pins the `@Access` annotation across every SDK module — any accidental annotation loss becomes a visible snapshot diff in PR review. Refresh deliberately with `yarn test -u` when changing access levels.
 

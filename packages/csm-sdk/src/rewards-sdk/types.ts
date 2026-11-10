@@ -32,7 +32,7 @@ export type ValidatorRewards = {
 };
 
 export type ValidatorRewardsEntity = ValidatorRewards & {
-  fee: bigint; // Fee value from rewardsConfig
+  fee: bigint; // rewardShare × stakingModuleFee / PERCENT_BASIS
   startTimestamp: number; // Unix timestamp
   endTimestamp: number; // Unix timestamp
   receivedRewards: bigint; // stETH rewards in ETH (converted from shares)

@@ -70,7 +70,8 @@ export class AccountingSDK extends CsmSDKModule {
   }
 
   /**
-   * Converts stETH shares to ETH amount using the current pool ratio.
+   * Converts stETH shares to ETH amount using the pool ratio at `blockNumber`
+   * (latest when omitted or when historical calls are skipped).
    * Also works for converting wstETH to stETH.
    */
   @Logger('Views:')
@@ -81,7 +82,8 @@ export class AccountingSDK extends CsmSDKModule {
   }
 
   /**
-   * Converts ETH amount to stETH shares using the current pool ratio.
+   * Converts ETH amount to stETH shares using the pool ratio at `blockNumber`
+   * (latest when omitted or when historical calls are skipped).
    * Also works for converting stETH to wstETH.
    */
   @Logger('Views:')
