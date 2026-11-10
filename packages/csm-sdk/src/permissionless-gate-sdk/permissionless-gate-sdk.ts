@@ -2,6 +2,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -20,7 +21,12 @@ import {
 import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
-import { ReceiptLike } from '../tx-sdk/types';
+import {
+  PerformOptions,
+  PerformOptionsNoSpend,
+  PerformOptionsSpend,
+  ReceiptLike,
+} from '../tx-sdk/types';
 import { AddNodeOperatorProps } from './types';
 
 export class PermissionlessGateSDK extends CsmSDKModule<{
@@ -37,10 +43,9 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorETH(props: AddNodeOperatorProps) {
+  private buildAddNodeOperatorETH(
+    props: AddNodeOperatorProps,
+  ): PerformOptionsNoSpend<NodeOperatorShortInfo> {
     const { depositData } = props;
     const {
       amount,
@@ -52,7 +57,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ...rest
     } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -65,13 +70,12 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
           { value: amount },
         ),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorStETH(props: AddNodeOperatorProps) {
+  private buildAddNodeOperatorStETH(
+    props: AddNodeOperatorProps,
+  ): PerformOptionsSpend<NodeOperatorShortInfo> {
     const { depositData } = props;
     const {
       amount,
@@ -84,7 +88,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ...rest
     } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -102,13 +106,12 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
           referrer,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorWstETH(props: AddNodeOperatorProps) {
+  private buildAddNodeOperatorWstETH(
+    props: AddNodeOperatorProps,
+  ): PerformOptionsSpend<NodeOperatorShortInfo> {
     const { depositData } = props;
     const {
       amount,
@@ -121,7 +124,7 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
       ...rest
     } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -139,25 +142,58 @@ export class PermissionlessGateSDK extends CsmSDKModule<{
           referrer,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  public async addNodeOperator(props: WithToken<AddNodeOperatorProps>) {
-    const { token } = props;
-    switch (token) {
+  private buildAddNodeOperator(
+    props: WithToken<AddNodeOperatorProps>,
+  ): PerformOptions<NodeOperatorShortInfo> {
+    switch (props.token) {
       case TOKENS.eth:
-        return this.addNodeOperatorETH(props);
+        return this.buildAddNodeOperatorETH(props);
       case TOKENS.steth:
-        return this.addNodeOperatorStETH(props);
+        return this.buildAddNodeOperatorStETH(props);
       case TOKENS.wsteth:
-        return this.addNodeOperatorWstETH(props);
+        return this.buildAddNodeOperatorWstETH(props);
       default:
         throw new SDKError({
           message: 'unsupported token',
           code: ERROR_CODE.INVALID_ARGUMENT,
         });
     }
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorETH(props: AddNodeOperatorProps) {
+    return this.bus.tx.perform(this.buildAddNodeOperatorETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorStETH(props: AddNodeOperatorProps) {
+    return this.bus.tx.perform(this.buildAddNodeOperatorStETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorWstETH(props: AddNodeOperatorProps) {
+    return this.bus.tx.perform(this.buildAddNodeOperatorWstETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperator(props: WithToken<AddNodeOperatorProps>) {
+    return this.bus.tx.perform(this.buildAddNodeOperator(props));
+  }
+
+  @EstimateView()
+  public async estimateAddNodeOperator(props: WithToken<AddNodeOperatorProps>) {
+    return this.bus.tx.estimate(this.buildAddNodeOperator(props));
   }
 
   @Logger('Views:')

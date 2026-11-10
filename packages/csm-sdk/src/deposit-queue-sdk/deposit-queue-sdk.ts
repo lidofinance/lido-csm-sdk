@@ -9,6 +9,7 @@ import {
   AccessLevel,
   Cache,
   Dedupe,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -19,7 +20,7 @@ import { Pagination } from '../discovery-sdk/index';
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
-import { CommonTransactionProps } from '../tx-sdk/types';
+import { CommonTransactionProps, PerformOptionsNoSpend } from '../tx-sdk/types';
 import { buildOperatorQueueKeys } from './build-operator-queue-keys';
 import { filterEmptyBatches } from './filter-batches';
 import { byNextBatchIndex } from './next-batch-index';
@@ -36,6 +37,11 @@ import {
   TopUpQueueItem,
   TopUpQueueSnapshot,
 } from './types';
+
+type CleanProps = CommonTransactionProps & { maxItems?: number };
+type NormalizeProps = CommonTransactionProps & {
+  nodeOperatorId: NodeOperatorId;
+};
 
 export class DepositQueueSDK extends CsmSDKModule<{
   tx: TxSDK;
@@ -319,41 +325,51 @@ export class DepositQueueSDK extends CsmSDKModule<{
     };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async clean(
-    props: CommonTransactionProps & {
-      maxItems?: number;
-    } = {},
-  ) {
+  private buildClean(props: CleanProps = {}): PerformOptionsNoSpend {
     const { maxItems, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.moduleContract.encode.cleanDepositQueue([
           BigInt(maxItems ?? DEFAULT_CLEAN_MAX_ITEMS),
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async normalize(
-    props: CommonTransactionProps & {
-      nodeOperatorId: NodeOperatorId;
-    },
-  ) {
+  private buildNormalize(props: NormalizeProps): PerformOptionsNoSpend {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.moduleContract.encode.updateDepositableValidatorsCount([
           nodeOperatorId,
         ]),
-    });
+    };
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async clean(props: CleanProps = {}) {
+    return this.bus.tx.perform(this.buildClean(props));
+  }
+
+  @EstimateView()
+  public async estimateClean(props: CleanProps = {}) {
+    return this.bus.tx.estimate(this.buildClean(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async normalize(props: NormalizeProps) {
+    return this.bus.tx.perform(this.buildNormalize(props));
+  }
+
+  @EstimateView()
+  public async estimateNormalize(props: NormalizeProps) {
+    return this.bus.tx.estimate(this.buildNormalize(props));
   }
 }

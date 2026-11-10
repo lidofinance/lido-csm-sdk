@@ -68,6 +68,27 @@ await cmSdk.curatedGates.createNodeOperator(gateIndex, proof, ...);
 await cmSdk.metaRegistry.setMetadata({ nodeOperatorId, name, description, account });
 ```
 
+### Gas estimation
+
+Every write has an `estimate*` sibling taking the same props (`bond.estimateAddBond`, `keys.estimateAddKeys`, …). It signs and sends nothing and never fires `callback`.
+
+```typescript
+const { main, unlock, total, walletKind } = await csmSdk.bond.estimateAddBond({
+  token: TOKENS.steth,
+  nodeOperatorId: 69n,
+  amount: parseEther('1'),
+  account, // required unless the wallet client already has an account; never prompts
+});
+// unlock: { kind: 'permit', gas } for EOA, { kind: 'approve', gas } for multisig / atomic batch, absent if allowance suffices
+```
+
+- Throws `SDKError` like the write would — a revert (`CONTRACT_REVERT` + `decodedRevert`) means the tx would fail, so it doubles as a pre-flight check.
+- `main` is the raw `eth_estimateGas` result (no padding); `permit` gas is a fixed approximation (`PERMIT_GAS_OVERHEAD`, same token bytecode on every supported chain, pinned within 15% by an integration test), not a live estimate.
+- When allowance is missing, the main call is estimated with an `eth_estimateGas` `stateOverride` of the token allowance. Each call verifies the override took effect: if the RPC ignored it or the token's allowance slot differs → `NOT_SUPPORTED`; if it applied but the call needs more than the spend amount, the original revert is rethrown; an RPC that rejects the param → RPC error.
+- `unlock` is present iff the user still has to sign a permit or send an approve; with a caller-supplied permit its cost is already inside `main`. For multisig, `total` sums two separate Safe txs (approve sent first; `perform` returns `{ hash }` and the caller re-invokes).
+- `from` must hold the ETH/tokens being spent (no balance override). No fee fields are sent, so "not enough ETH for gas" isn't detected.
+- Multisig / atomic-batch numbers are approximations: no Safe/EntryPoint wrapper overhead, and gas may be sponsored.
+
 ## SDK Modules
 
 The SDK provides two classes: **`LidoSDKCsm`** for Community Staking Module and **`LidoSDKCm`** for Curated Module. Each class aggregates modules tailored to their specific module type, with many modules shared between both.

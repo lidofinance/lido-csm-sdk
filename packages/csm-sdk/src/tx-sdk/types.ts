@@ -7,6 +7,7 @@ import type {
   WaitForTransactionReceiptParameters,
   WalletCallReceipt,
 } from 'viem';
+import type { WalletKind } from '../wallet-sdk/types';
 import { Erc20Tokens, PermitSignatureShort, SDKError } from '../common/index';
 
 // Core Transaction Props
@@ -139,3 +140,21 @@ export {
   type PerformTransactionGasLimit,
   type PerformTransactionSendTransaction,
 } from '@lidofinance/lido-ethereum-sdk';
+
+// Gas estimation
+
+export type GasEstimateUnlock = {
+  kind: 'permit' | 'approve';
+  /** permit: `PERMIT_GAS_OVERHEAD[token]`; approve: live estimate of `approve(spender, amount)`. */
+  gas: bigint;
+};
+
+export type GasEstimate = {
+  /** Live `eth_estimateGas` of the main call, unpadded. */
+  main: bigint;
+  /** Present iff the user still has to sign a permit or send an approve; with a caller-supplied permit its cost is already inside `main`. */
+  unlock?: GasEstimateUnlock;
+  /** `main + (unlock?.gas ?? 0n)`. For multisig this sums two separate Safe txs (approve first; `perform` returns `{ hash }` and the caller re-invokes). */
+  total: bigint;
+  walletKind: WalletKind;
+};

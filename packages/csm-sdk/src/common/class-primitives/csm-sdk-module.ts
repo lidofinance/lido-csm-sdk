@@ -1,3 +1,4 @@
+import type { Address } from 'viem';
 import { CoreSDK } from '../../core-sdk/core-sdk';
 import { ACCESS } from '../decorators/access';
 import type { MethodAccess, PublicMethods } from '../decorators/access-types';
@@ -25,6 +26,11 @@ export abstract class CsmSDKModule<TBus extends object = object> {
     if (name) {
       this.bus.register(this as TBus[keyof TBus], name as keyof TBus);
     }
+  }
+
+  /** Wallet account used when a call omits `account`; part of the `estimate*` dedupe key. */
+  protected get defaultAccountAddress(): Address | '' {
+    return this.core?.core?.walletClient?.account?.address ?? '';
   }
 
   getMethodAccess<K extends string & PublicMethods<this>>(

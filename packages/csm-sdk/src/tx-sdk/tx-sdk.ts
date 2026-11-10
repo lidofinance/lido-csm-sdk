@@ -11,6 +11,7 @@ import {
   CONTRACT_NAMES,
   EMPTY_PERMIT,
   ERROR_CODE,
+  invariantArgument,
   PermitSignatureShort,
   SDKError,
 } from '../common/index';
@@ -18,6 +19,7 @@ import type { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import {
   AllowanceProps,
   CallResult,
+  GasEstimate,
   PerformOptions,
   PerformOptionsNoSpend,
   PerformOptionsSpend,
@@ -74,6 +76,9 @@ export class TxSDK extends CsmSDKModule<{
   public async perform<TDecodedResult = undefined>(
     props: PerformOptionsNoSpend<TDecodedResult>,
   ): Promise<TransactionResult<TDecodedResult>>;
+  public async perform<TDecodedResult = undefined>(
+    props: PerformOptions<TDecodedResult>,
+  ): Promise<TransactionResult<TDecodedResult>>;
 
   @Logger('Call:')
   @ErrorHandler()
@@ -82,6 +87,28 @@ export class TxSDK extends CsmSDKModule<{
   ): Promise<TransactionResult<TDecodedResult>> {
     const kind = await this.bus.wallet.getWalletKind(props.account);
     return WALLET_STRATEGIES[kind].perform(this.context, props);
+  }
+
+  /** Pre-flight `eth_estimateGas` of the call and its allowance step. Signs and sends nothing; callbacks are never invoked. */
+  @Logger('Views:')
+  @ErrorHandler('Error:', { notify: false })
+  public async estimate(props: PerformOptions<any>): Promise<GasEstimate> {
+    const account = this.resolveEstimateAccount(props.account);
+    const kind = await this.bus.wallet.getWalletKind(account);
+    return WALLET_STRATEGIES[kind].estimate(this.context, {
+      ...props,
+      account,
+    });
+  }
+
+  // never prompts the wallet (no requestAddresses)
+  private resolveEstimateAccount(account?: AccountValue): Address {
+    const address =
+      typeof account === 'string'
+        ? account
+        : (account?.address ?? this.defaultAccountAddress);
+    invariantArgument(address, 'account required for estimate');
+    return address;
   }
 
   private get context(): StrategyContext {

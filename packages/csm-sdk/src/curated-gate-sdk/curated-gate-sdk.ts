@@ -8,6 +8,7 @@ import {
   Access,
   AccessLevel,
   Cache,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -30,7 +31,7 @@ import {
 import { BindedContract } from '../core-sdk/types';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
-import { ReceiptLike } from '../tx-sdk/types';
+import { PerformOptionsNoSpend, ReceiptLike } from '../tx-sdk/types';
 import { parseCreateOperatorProps } from './parse-create-operator-props';
 import { CreateNodeOperatorProps } from './types';
 
@@ -53,15 +54,13 @@ export class CuratedGateSDK extends CsmSDKModule<{
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
-  // Transaction Method
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async createNodeOperator(props: CreateNodeOperatorProps) {
+  private async buildCreateNodeOperator(
+    props: CreateNodeOperatorProps,
+  ): Promise<PerformOptionsNoSpend<NodeOperatorShortInfo>> {
     const { name, description, managerAddress, rewardAddress, proof, ...rest } =
       await parseCreateOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       call: () =>
         this.contract.encode.createNodeOperator([
@@ -72,7 +71,20 @@ export class CuratedGateSDK extends CsmSDKModule<{
           proof,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
+  }
+
+  // Transaction Method
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async createNodeOperator(props: CreateNodeOperatorProps) {
+    return this.bus.tx.perform(await this.buildCreateNodeOperator(props));
+  }
+
+  @EstimateView()
+  public async estimateCreateNodeOperator(props: CreateNodeOperatorProps) {
+    return this.bus.tx.estimate(await this.buildCreateNodeOperator(props));
   }
 
   // View Methods

@@ -9,9 +9,9 @@ import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
 
 // Callers must vi.mock viem.getContract and getEncodableContract (see perform-routing.test.ts).
 
-const ACCOUNT: Address = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+export const ACCOUNT: Address = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 export const SPENDER: Address = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
-const STETH: Address = '0xcccccccccccccccccccccccccccccccccccccccc';
+export const STETH: Address = '0xcccccccccccccccccccccccccccccccccccccccc';
 const TARGET: Address = '0xdddddddddddddddddddddddddddddddddddddddd';
 export const TX_HASH = '0x' + '11'.repeat(32);
 export const APPROVE_HASH = '0x' + '22'.repeat(32);
@@ -33,10 +33,20 @@ export const GIVEN_PERMIT = { ...SIGNED_PERMIT, v: 28, value: 7n };
 
 export type Kind = 'eoa' | 'multisig' | 'atomicBatch';
 
-export const build = (kind: Kind, allowance = 0n) => {
+export const APPROVE_GAS = 46_000n;
+export const MAIN_GAS = 100_000n;
+
+export const build = (
+  kind: Kind,
+  allowance = 0n,
+  options: { walletAccount?: boolean; overrideIgnored?: boolean } = {},
+) => {
+  const opts = { walletAccount: true, ...options };
   const hashes = [APPROVE_HASH, TX_HASH];
   const sendTransaction = vi.fn(async (_args: unknown) => hashes.shift()!);
-  const estimateGas = vi.fn(async () => 100_000n);
+  const estimateGas = vi.fn(async (args: { to?: Address }) =>
+    args.to === STETH ? APPROVE_GAS : MAIN_GAS,
+  );
   const sendCalls = vi.fn(async (_args: unknown) => ({ id: 'call-1' }));
   const waitForCallsStatus = vi.fn(async () => ({
     status: 'success',
@@ -53,6 +63,15 @@ export const build = (kind: Kind, allowance = 0n) => {
     transactionHash: TX_HASH,
     logs: [],
   }));
+  const requestAddresses = vi.fn(async () => [ACCOUNT]);
+  const walletClient = {
+    account: opts.walletAccount ? { address: ACCOUNT } : undefined,
+    requestAddresses,
+    sendTransaction,
+    sendCalls,
+    waitForCallsStatus,
+    getCapabilities,
+  };
   const isContract = vi.fn(async () => kind !== 'eoa');
 
   const lido = {
@@ -62,12 +81,8 @@ export const build = (kind: Kind, allowance = 0n) => {
     isContract,
     signPermit,
     getFeeData: async () => ({ maxFeePerGas: 2n, maxPriorityFeePerGas: 2n }),
-    useWalletClient: () => ({
-      sendTransaction,
-      sendCalls,
-      waitForCallsStatus,
-      getCapabilities,
-    }),
+    walletClient,
+    useWalletClient: () => walletClient,
     publicClient: {
       estimateGas,
       waitForTransactionReceipt,
@@ -81,10 +96,21 @@ export const build = (kind: Kind, allowance = 0n) => {
     getContractNameByAddress: () => undefined,
   };
 
+  const readAllowance = vi.fn(
+    async (
+      _args: unknown,
+      readOpts?: { stateOverride?: { stateDiff: { value: string }[] }[] },
+    ) => {
+      const overridden = readOpts?.stateOverride?.[0]?.stateDiff[0]?.value;
+      return overridden && !opts.overrideIgnored
+        ? BigInt(overridden)
+        : allowance;
+    },
+  );
   const encodeApprove = vi.fn((_args: unknown) => APPROVE_CALL);
   vi.mocked(getContract).mockReturnValue({
     address: STETH,
-    read: { allowance: vi.fn(async () => allowance) },
+    read: { allowance: readAllowance },
     encode: { approve: encodeApprove },
   } as never);
 
@@ -109,6 +135,9 @@ export const build = (kind: Kind, allowance = 0n) => {
     sendCalls,
     signPermit,
     estimateGas,
+    readAllowance,
+    requestAddresses,
+    bus,
     waitForTransactionReceipt,
   };
 };

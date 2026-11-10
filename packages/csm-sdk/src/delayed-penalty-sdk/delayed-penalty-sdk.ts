@@ -2,11 +2,13 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
 import { DiscoverySDK } from '../discovery-sdk/discovery-sdk';
 import { TxSDK } from '../tx-sdk/index';
+import { PerformOptionsNoSpend } from '../tx-sdk/types';
 import { CancelProps, OperatorWithLockedBond, ReportProps } from './types';
 
 export class DelayedPenaltySDK extends CsmSDKModule<{
@@ -17,16 +19,10 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
     return this.core.contractBaseModule;
   }
 
-  @Access({
-    level: AccessLevel.PROTOCOL_ROLE,
-    protocolRole: 'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
-  })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async report(props: ReportProps) {
+  private buildReport(props: ReportProps): PerformOptionsNoSpend {
     const { nodeOperatorId, penaltyType, amount, details, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.moduleContract.encode.reportGeneralDelayedPenalty([
@@ -35,7 +31,35 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
           amount,
           details,
         ]),
-    });
+    };
+  }
+
+  private buildCancel(props: CancelProps): PerformOptionsNoSpend {
+    const { nodeOperatorId, amount, ...rest } = props;
+
+    return {
+      ...rest,
+      call: () =>
+        this.moduleContract.encode.cancelGeneralDelayedPenalty([
+          nodeOperatorId,
+          amount,
+        ]),
+    };
+  }
+
+  @Access({
+    level: AccessLevel.PROTOCOL_ROLE,
+    protocolRole: 'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+  })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async report(props: ReportProps) {
+    return this.bus.tx.perform(this.buildReport(props));
+  }
+
+  @EstimateView()
+  public async estimateReport(props: ReportProps) {
+    return this.bus.tx.estimate(this.buildReport(props));
   }
 
   @Access({
@@ -45,16 +69,12 @@ export class DelayedPenaltySDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async cancel(props: CancelProps) {
-    const { nodeOperatorId, amount, ...rest } = props;
+    return this.bus.tx.perform(this.buildCancel(props));
+  }
 
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        this.moduleContract.encode.cancelGeneralDelayedPenalty([
-          nodeOperatorId,
-          amount,
-        ]),
-    });
+  @EstimateView()
+  public async estimateCancel(props: CancelProps) {
+    return this.bus.tx.estimate(this.buildCancel(props));
   }
 
   @Logger('Views:')

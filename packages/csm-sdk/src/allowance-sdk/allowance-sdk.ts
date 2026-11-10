@@ -4,7 +4,7 @@ import {
   LidoSDKCore,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { erc20Abi, getContract } from 'viem';
+import { erc20Abi, getContract, type StateOverride } from 'viem';
 import { Cache, ErrorHandler, Logger } from '../common/decorators/index';
 import {
   CACHE_IMMUTABLE,
@@ -25,13 +25,18 @@ import {
   SpendProps,
   TransactionCallbackStage,
 } from '../tx-sdk/types';
+import { buildAllowanceOverride } from './allowance-override';
 import { parseSpendingProps } from './parse-spending-props';
 import {
   getApproveCallIfNeeded,
   SPEND_STRATEGIES,
   SpendResolution,
 } from './spend-strategies';
-import { AllowanceSDKProps, WithSpender } from './types';
+import {
+  AllowanceOverrideProps,
+  AllowanceSDKProps,
+  WithSpender,
+} from './types';
 
 const TOKEN_CONTRACT = {
   [TOKENS.steth]: CONTRACT_NAMES.stETH,
@@ -122,6 +127,26 @@ export class AllowanceSDK {
   public getApproveCall(props: WithSpender<AmountAndTokenProps>): CallResult {
     const { amount, token } = parseSpendingProps(props);
     return this.getTokenContract(token).encode.approve([props.spender, amount]);
+  }
+
+  /** `stateOverride` that makes `allowance(account, spender)` read exactly `amount` for an `eth_estimateGas`. */
+  public getAllowanceOverride(props: AllowanceOverrideProps): StateOverride {
+    return buildAllowanceOverride({
+      ...props,
+      tokenAddress: this.getTokenContract(props.token).address,
+    });
+  }
+
+  /** True when the RPC honors `stateOverride`, i.e. `allowance(account, spender)` reads exactly `amount` under it. */
+  public async isAllowanceOverrideApplied(
+    props: AllowanceOverrideProps,
+  ): Promise<boolean> {
+    const { token, amount, account, spender } = props;
+    const read = await this.getTokenContract(token).read.allowance(
+      [account, spender],
+      { stateOverride: this.getAllowanceOverride(props) },
+    );
+    return read === amount;
   }
 
   @Logger('Call:')

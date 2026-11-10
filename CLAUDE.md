@@ -49,6 +49,7 @@ Async view methods over mutable on-chain state use `@Dedupe()` in place of `@Cac
 | External API / wallet detection | `@Cache(CACHE_SHORT)` (10 s) |
 | External API keyed by operator (result tracks on-chain key set) | `@Dedupe()` |
 | Mutable on-chain state | `@Dedupe()` (concurrent calls share one promise, nothing kept after settle) |
+| `estimate*` gas views | `@EstimateView()` (Logger + silent ErrorHandler + Dedupe keyed by wallet account) |
 
 The SDK does not cache mutable on-chain state; consumers own freshness. There is no cache invalidation API.
 

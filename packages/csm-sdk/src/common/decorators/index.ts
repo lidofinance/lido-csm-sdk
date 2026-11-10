@@ -4,6 +4,7 @@ export { Cache } from './cache';
 export * from './constants';
 export * from './dedupe';
 export * from './error-handler';
+export * from './estimate-view';
 export * from './logger';
 export * from './types';
 export * from './utils';

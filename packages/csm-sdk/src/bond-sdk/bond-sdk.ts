@@ -2,6 +2,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -15,6 +16,11 @@ import {
 } from '../common/index';
 import { parseClaimProps } from '../common/utils/parse-claim-props';
 import { TxSDK } from '../tx-sdk/index';
+import {
+  PerformOptions,
+  PerformOptionsNoSpend,
+  PerformOptionsSpend,
+} from '../tx-sdk/types';
 import { parseCoverReceiptEvents } from './parse-cover-receipt-events';
 import {
   AddBondProps,
@@ -43,29 +49,27 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     return { current, required };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addBondETH(props: AddBondProps) {
-    const { nodeOperatorId, amount, permit, ...rest } = props;
+  private buildAddBondETH(
+    props: AddBondProps,
+  ): PerformOptionsNoSpend<AddBondResult> {
+    const { nodeOperatorId, amount, permit: _permit, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.accountingContract.encode.depositETH([nodeOperatorId], {
           value: amount,
         }),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addBondStETH(props: AddBondProps) {
+  private buildAddBondStETH(
+    props: AddBondProps,
+  ): PerformOptionsSpend<AddBondResult> {
     const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       spend: { token: TOKENS.steth, amount, permit },
       call: ({ permit }) =>
@@ -75,16 +79,15 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           permit,
         ]),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addBondWstETH(props: AddBondProps) {
+  private buildAddBondWstETH(
+    props: AddBondProps,
+  ): PerformOptionsSpend<AddBondResult> {
     const { nodeOperatorId, amount, permit, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       spend: { token: TOKENS.wsteth, amount, permit },
       call: ({ permit }) =>
@@ -94,19 +97,19 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           permit,
         ]),
       decodeResult: () => this.getBondSummary(nodeOperatorId),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  public async addBond(props: WithToken<AddBondProps>) {
-    const { token } = props;
-    switch (token) {
+  private buildAddBond(
+    props: WithToken<AddBondProps>,
+  ): PerformOptions<AddBondResult> {
+    switch (props.token) {
       case TOKENS.eth:
-        return this.addBondETH(props);
+        return this.buildAddBondETH(props);
       case TOKENS.steth:
-        return this.addBondStETH(props);
+        return this.buildAddBondStETH(props);
       case TOKENS.wsteth:
-        return this.addBondWstETH(props);
+        return this.buildAddBondWstETH(props);
       default:
         throw new SDKError({
           message: 'unsupported token',
@@ -115,42 +118,37 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
     }
   }
 
-  @Access({ level: AccessLevel.MANAGER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async compensateLockedBond(props: CompensateLockedBondProps) {
+  private buildCompensateLockedBond(
+    props: CompensateLockedBondProps,
+  ): PerformOptionsNoSpend<bigint> {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.moduleContract.encode.compensateGeneralDelayedPenalty([
           nodeOperatorId,
         ]),
       decodeResult: (receipt) => parseCoverReceiptEvents(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async unlockExpiredLock(props: UnlockExpiredLockProps) {
+  private buildUnlockExpiredLock(
+    props: UnlockExpiredLockProps,
+  ): PerformOptionsNoSpend {
     const { nodeOperatorId, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.accountingContract.encode.unlockExpiredLock([nodeOperatorId]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async pullRewards(props: PullRewardsProps) {
+  private buildPullRewards(props: PullRewardsProps): PerformOptionsNoSpend {
     const { nodeOperatorId, shares, proof, ...rest } = parseClaimProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.accountingContract.encode.pullAndSplitFeeRewards([
@@ -158,17 +156,14 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           shares,
           proof,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.CLAIMER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async claimBondUnstETH(props: ClaimBondProps) {
+  private buildClaimBondUnstETH(props: ClaimBondProps): PerformOptionsNoSpend {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
       parseClaimProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.accountingContract.encode.claimRewardsUnstETH([
@@ -177,17 +172,14 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           shares,
           proof,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.CLAIMER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async claimBondStETH(props: ClaimBondProps) {
+  private buildClaimBondStETH(props: ClaimBondProps): PerformOptionsNoSpend {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
       parseClaimProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.accountingContract.encode.claimRewardsStETH([
@@ -196,17 +188,14 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           shares,
           proof,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.CLAIMER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async claimBondWstETH(props: ClaimBondProps) {
+  private buildClaimBondWstETH(props: ClaimBondProps): PerformOptionsNoSpend {
     const { nodeOperatorId, amount, shares, proof, ...rest } =
       parseClaimProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.accountingContract.encode.claimRewardsWstETH([
@@ -215,27 +204,128 @@ export class BondSDK extends CsmSDKModule<{ tx: TxSDK }> {
           shares,
           proof,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.CLAIMER })
-  public async claimBond(props: WithToken<ClaimBondProps>) {
+  private buildClaimBond(props: WithToken<ClaimBondProps>): PerformOptions {
     const { token, amount } = props;
 
     switch (true) {
       case amount === 0n:
-        return this.pullRewards(props);
+        return this.buildPullRewards(props);
       case token === TOKENS.eth:
-        return this.claimBondUnstETH(props);
+        return this.buildClaimBondUnstETH(props);
       case token === TOKENS.steth:
-        return this.claimBondStETH(props);
+        return this.buildClaimBondStETH(props);
       case token === TOKENS.wsteth:
-        return this.claimBondWstETH(props);
+        return this.buildClaimBondWstETH(props);
       default:
         throw new SDKError({
           message: 'unsupported token',
           code: ERROR_CODE.INVALID_ARGUMENT,
         });
     }
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addBondETH(props: AddBondProps) {
+    return this.bus.tx.perform(this.buildAddBondETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addBondStETH(props: AddBondProps) {
+    return this.bus.tx.perform(this.buildAddBondStETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addBondWstETH(props: AddBondProps) {
+    return this.bus.tx.perform(this.buildAddBondWstETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addBond(props: WithToken<AddBondProps>) {
+    return this.bus.tx.perform(this.buildAddBond(props));
+  }
+
+  @EstimateView()
+  public async estimateAddBond(props: WithToken<AddBondProps>) {
+    return this.bus.tx.estimate(this.buildAddBond(props));
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async compensateLockedBond(props: CompensateLockedBondProps) {
+    return this.bus.tx.perform(this.buildCompensateLockedBond(props));
+  }
+
+  @EstimateView()
+  public async estimateCompensateLockedBond(props: CompensateLockedBondProps) {
+    return this.bus.tx.estimate(this.buildCompensateLockedBond(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async unlockExpiredLock(props: UnlockExpiredLockProps) {
+    return this.bus.tx.perform(this.buildUnlockExpiredLock(props));
+  }
+
+  @EstimateView()
+  public async estimateUnlockExpiredLock(props: UnlockExpiredLockProps) {
+    return this.bus.tx.estimate(this.buildUnlockExpiredLock(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async pullRewards(props: PullRewardsProps) {
+    return this.bus.tx.perform(this.buildPullRewards(props));
+  }
+
+  @EstimateView()
+  public async estimatePullRewards(props: PullRewardsProps) {
+    return this.bus.tx.estimate(this.buildPullRewards(props));
+  }
+
+  @Access({ level: AccessLevel.CLAIMER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async claimBondUnstETH(props: ClaimBondProps) {
+    return this.bus.tx.perform(this.buildClaimBondUnstETH(props));
+  }
+
+  @Access({ level: AccessLevel.CLAIMER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async claimBondStETH(props: ClaimBondProps) {
+    return this.bus.tx.perform(this.buildClaimBondStETH(props));
+  }
+
+  @Access({ level: AccessLevel.CLAIMER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async claimBondWstETH(props: ClaimBondProps) {
+    return this.bus.tx.perform(this.buildClaimBondWstETH(props));
+  }
+
+  @Access({ level: AccessLevel.CLAIMER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async claimBond(props: WithToken<ClaimBondProps>) {
+    return this.bus.tx.perform(this.buildClaimBond(props));
+  }
+
+  @EstimateView()
+  public async estimateClaimBond(props: WithToken<ClaimBondProps>) {
+    return this.bus.tx.estimate(this.buildClaimBond(props));
   }
 }

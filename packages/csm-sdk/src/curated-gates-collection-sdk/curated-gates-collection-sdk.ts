@@ -7,6 +7,7 @@ import { CURATED_GATES } from '../common/constants/contract-names';
 import {
   Access,
   AccessLevel,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -76,5 +77,16 @@ export class CuratedGatesCollectionSDK extends CsmSDKModule<{
     const gate = this.getOrThrow(gateName);
 
     return gate.createNodeOperator(gateProps);
+  }
+
+  @EstimateView()
+  public async estimateCreateNodeOperator(
+    props: CreateNodeOperatorInGateProps,
+  ) {
+    const { gateName, ...gateProps } = props;
+
+    const gate = this.getOrThrow(gateName);
+
+    return gate.estimateCreateNodeOperator(gateProps);
   }
 }

@@ -8,6 +8,7 @@ import {
   Access,
   AccessLevel,
   Cache,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -35,7 +36,12 @@ import { BindedContract } from '../core-sdk/types';
 import { KeysCacheSDK, withKeysCacheCallback } from '../keys-cache-sdk/index';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
-import { ReceiptLike } from '../tx-sdk/types';
+import {
+  PerformOptions,
+  PerformOptionsNoSpend,
+  PerformOptionsSpend,
+  ReceiptLike,
+} from '../tx-sdk/types';
 import {
   AddVettedNodeOperatorProps,
   ClaimCurveProps,
@@ -61,10 +67,9 @@ export class VettedGateSDK extends CsmSDKModule<{
     return this.bus.operator.getManagementProperties(nodeOperatorId);
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorETH(props: AddVettedNodeOperatorProps) {
+  private buildAddNodeOperatorETH(
+    props: AddVettedNodeOperatorProps,
+  ): PerformOptionsNoSpend<NodeOperatorShortInfo> {
     const { depositData } = props;
     const {
       amount,
@@ -77,7 +82,7 @@ export class VettedGateSDK extends CsmSDKModule<{
       ...rest
     } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -97,13 +102,12 @@ export class VettedGateSDK extends CsmSDKModule<{
           { value: amount },
         ),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorStETH(props: AddVettedNodeOperatorProps) {
+  private buildAddNodeOperatorStETH(
+    props: AddVettedNodeOperatorProps,
+  ): PerformOptionsSpend<NodeOperatorShortInfo> {
     const { depositData } = props;
     const {
       amount,
@@ -117,7 +121,7 @@ export class VettedGateSDK extends CsmSDKModule<{
       ...rest
     } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -136,13 +140,12 @@ export class VettedGateSDK extends CsmSDKModule<{
           referrer,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addNodeOperatorWstETH(props: AddVettedNodeOperatorProps) {
+  private buildAddNodeOperatorWstETH(
+    props: AddVettedNodeOperatorProps,
+  ): PerformOptionsSpend<NodeOperatorShortInfo> {
     const { depositData } = props;
     const {
       amount,
@@ -156,7 +159,7 @@ export class VettedGateSDK extends CsmSDKModule<{
       ...rest
     } = parseAddOperatorProps(props);
 
-    return this.bus.tx.perform<NodeOperatorShortInfo>({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -175,25 +178,60 @@ export class VettedGateSDK extends CsmSDKModule<{
           referrer,
         ]),
       decodeResult: (receipt) => this.parseOperatorFromReceipt(receipt),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.ANYONE })
-  public async addNodeOperator(props: WithToken<AddVettedNodeOperatorProps>) {
-    const { token } = props;
-    switch (token) {
+  private buildAddNodeOperator(
+    props: WithToken<AddVettedNodeOperatorProps>,
+  ): PerformOptions<NodeOperatorShortInfo> {
+    switch (props.token) {
       case TOKENS.eth:
-        return this.addNodeOperatorETH(props);
+        return this.buildAddNodeOperatorETH(props);
       case TOKENS.steth:
-        return this.addNodeOperatorStETH(props);
+        return this.buildAddNodeOperatorStETH(props);
       case TOKENS.wsteth:
-        return this.addNodeOperatorWstETH(props);
+        return this.buildAddNodeOperatorWstETH(props);
       default:
         throw new SDKError({
           message: 'unsupported token',
           code: ERROR_CODE.INVALID_ARGUMENT,
         });
     }
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorETH(props: AddVettedNodeOperatorProps) {
+    return this.bus.tx.perform(this.buildAddNodeOperatorETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorStETH(props: AddVettedNodeOperatorProps) {
+    return this.bus.tx.perform(this.buildAddNodeOperatorStETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperatorWstETH(props: AddVettedNodeOperatorProps) {
+    return this.bus.tx.perform(this.buildAddNodeOperatorWstETH(props));
+  }
+
+  @Access({ level: AccessLevel.ANYONE })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addNodeOperator(props: WithToken<AddVettedNodeOperatorProps>) {
+    return this.bus.tx.perform(this.buildAddNodeOperator(props));
+  }
+
+  @EstimateView()
+  public async estimateAddNodeOperator(
+    props: WithToken<AddVettedNodeOperatorProps>,
+  ) {
+    return this.bus.tx.estimate(this.buildAddNodeOperator(props));
   }
 
   @Logger('Views:')
@@ -292,15 +330,24 @@ export class VettedGateSDK extends CsmSDKModule<{
     };
   }
 
+  private buildClaimCurve(props: ClaimCurveProps): PerformOptionsNoSpend {
+    const { nodeOperatorId, proof, ...rest } = props;
+
+    return {
+      ...rest,
+      call: () => this.contract.encode.claimBondCurve([nodeOperatorId, proof]),
+    };
+  }
+
   @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async claimCurve(props: ClaimCurveProps) {
-    const { nodeOperatorId, proof, ...rest } = props;
+    return this.bus.tx.perform(this.buildClaimCurve(props));
+  }
 
-    return this.bus.tx.perform({
-      ...rest,
-      call: () => this.contract.encode.claimBondCurve([nodeOperatorId, proof]),
-    });
+  @EstimateView()
+  public async estimateClaimCurve(props: ClaimCurveProps) {
+    return this.bus.tx.estimate(this.buildClaimCurve(props));
   }
 }

@@ -7,7 +7,7 @@ import {
   TransactionOptions,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { Address, WalletCallReceipt } from 'viem';
+import { Address, StateOverride, WalletCallReceipt } from 'viem';
 import type { ReplacementReturnType } from 'viem/actions';
 import {
   CACHE_SHORT,
@@ -85,18 +85,37 @@ export class WalletSDK {
     return this.core.isContract(address);
   }
 
+  /** Pure `eth_estimateGas` for a prepared call; never signs, sends, or sets fee fields. */
+  public estimateGas(
+    call: CallResult,
+    opts: { account: Address; stateOverride?: StateOverride },
+  ): Promise<bigint> {
+    return this.estimateCall(call, {
+      account: opts.account,
+      stateOverride: opts.stateOverride,
+    });
+  }
+
+  private estimateCall(
+    call: CallResult,
+    opts:
+      | Parameters<PerformTransactionGasLimit>[0]
+      | { account: Address; stateOverride?: StateOverride },
+  ): Promise<bigint> {
+    return this.publicClient.estimateGas({
+      ...opts,
+      to: call.to,
+      data: call.data,
+      value: call.value,
+    });
+  }
+
   public callToTransaction(call: CallResult): {
     getGasLimit: PerformTransactionGasLimit;
     sendTransaction: PerformTransactionSendTransaction;
   } {
     return {
-      getGasLimit: (options) =>
-        this.publicClient.estimateGas({
-          ...options,
-          to: call.to,
-          data: call.data,
-          value: call.value,
-        }),
+      getGasLimit: (options) => this.estimateCall(call, options),
       sendTransaction: (options) =>
         this.walletClient.sendTransaction({
           ...options,

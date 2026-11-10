@@ -13,6 +13,9 @@ import { SDKError } from '../index';
 // error object and allows GC when the error is no longer referenced.
 const notifiedErrors = new WeakSet<SDKError>();
 
+// Same first-fire-wins rule for the console line: only the innermost layer prints.
+const loggedErrors = new WeakSet<SDKError>();
+
 const notifyOnce = (
   error: SDKError,
   callback: TransactionCallback | undefined,
@@ -26,7 +29,23 @@ const notifyOnce = (
   });
 };
 
-export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
+const logOnce = (
+  self: unknown,
+  error: SDKError,
+  headMessage: HeadMessage,
+  message: string,
+): void => {
+  if (loggedErrors.has(error)) return;
+  loggedErrors.add(error);
+  callConsoleMessage.call(self, headMessage, message, 'Error:');
+};
+
+export const ErrorHandler = function (
+  headMessage: HeadMessage = 'Error:',
+  options: { notify?: boolean } = {},
+) {
+  const { notify = true } = options;
+
   return function ErrorHandlerDecorator<This, Value>(
     target:
       | (This extends object ? This[keyof This] : never)
@@ -39,32 +58,25 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
 
     if (context.kind === 'getter') {
       const replacementGetter = function (this: This): Value {
+        const fail = (error: unknown): never => {
+          const txError = SDKError.from(error);
+          logOnce(
+            this,
+            txError,
+            headMessage,
+            `Error in getter '${methodName}'.`,
+          );
+          throw txError;
+        };
+
         try {
           const result = (target as () => Value).call(this);
 
           return result instanceof Promise
-            ? (result.catch((error) => {
-                callConsoleMessage.call(
-                  this,
-                  headMessage,
-                  `Error in getter '${methodName}'.`,
-                  'Error:',
-                );
-
-                const txError = SDKError.from(error);
-                throw txError;
-              }) as Value)
+            ? (result.catch(fail) as Value)
             : result;
         } catch (error) {
-          callConsoleMessage.call(
-            this,
-            headMessage,
-            `Error in getter '${methodName}'.`,
-            'Error:',
-          );
-
-          const txError = SDKError.from(error);
-          throw txError;
+          return fail(error);
         }
       };
 
@@ -72,38 +84,23 @@ export const ErrorHandler = function (headMessage: HeadMessage = 'Error:') {
     }
 
     const replacementMethod = function (this: This, ...args: any[]): any {
-      const callback = args[0]?.callback as TransactionCallback | undefined;
+      const callback = notify
+        ? (args[0]?.callback as TransactionCallback | undefined)
+        : undefined;
+
+      const fail = (error: unknown): never => {
+        const txError = SDKError.from(error);
+        logOnce(this, txError, headMessage, `Error in method '${methodName}'.`);
+        notifyOnce(txError, callback);
+        throw txError;
+      };
 
       try {
         const result = (target as (...args: any[]) => any).call(this, ...args);
 
-        return result instanceof Promise
-          ? (result.catch((error) => {
-              callConsoleMessage.call(
-                this,
-                headMessage,
-                `Error in method '${methodName}'.`,
-                'Error:',
-              );
-
-              const txError = SDKError.from(error);
-              notifyOnce(txError, callback);
-
-              throw txError;
-            }) as any)
-          : result;
+        return result instanceof Promise ? result.catch(fail) : result;
       } catch (error) {
-        callConsoleMessage.call(
-          this,
-          headMessage,
-          `Error in method '${methodName}'.`,
-          'Error:',
-        );
-
-        const txError = SDKError.from(error);
-        notifyOnce(txError, callback);
-
-        throw txError;
+        return fail(error);
       }
     };
     return replacementMethod;

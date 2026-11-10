@@ -3,6 +3,7 @@ import {
   Access,
   AccessLevel,
   Dedupe,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -15,6 +16,7 @@ import {
 import { ModuleSDK } from '../module-sdk/module-sdk';
 import { OperatorSDK } from '../operator-sdk/operator-sdk';
 import { TxSDK } from '../tx-sdk/index';
+import { PerformOptionsNoSpend } from '../tx-sdk/types';
 import {
   GroupInfo,
   GroupOperators,
@@ -42,23 +44,6 @@ export class MetaRegistrySDK extends CsmSDKModule<{
 
   private get moduleContract() {
     return this.core.getContract(CONTRACT_NAMES.curatedModule);
-  }
-
-  @Access({ level: AccessLevel.OWNER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async setOperatorInfo(props: SetOperatorDataProps) {
-    const { nodeOperatorId, name, description, ...rest } = props;
-
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        this.contract.encode.setOperatorMetadataAsOwner([
-          nodeOperatorId,
-          name,
-          description,
-        ]),
-    });
   }
 
   @Logger('Views:')
@@ -204,6 +189,68 @@ export class MetaRegistrySDK extends CsmSDKModule<{
     return this.moduleContract.read.isTopUpAllocationEnabled([nodeOperatorId]);
   }
 
+  private buildSetOperatorInfo(
+    props: SetOperatorDataProps,
+  ): PerformOptionsNoSpend {
+    const { nodeOperatorId, name, description, ...rest } = props;
+
+    return {
+      ...rest,
+      call: () =>
+        this.contract.encode.setOperatorMetadataAsOwner([
+          nodeOperatorId,
+          name,
+          description,
+        ]),
+    };
+  }
+
+  private async buildEnableTopUpAllocation(
+    props: TopUpAllocationProps,
+  ): Promise<PerformOptionsNoSpend> {
+    const { nodeOperatorId, ...rest } = props;
+    await this.assertTopUpAllocationSupported();
+
+    return {
+      ...rest,
+      call: () =>
+        this.moduleContract.encode.enableTopUpAllocation([nodeOperatorId]),
+    };
+  }
+
+  private async buildDisableTopUpAllocation(
+    props: TopUpAllocationProps,
+  ): Promise<PerformOptionsNoSpend> {
+    const { nodeOperatorId, ...rest } = props;
+    await this.assertTopUpAllocationSupported();
+
+    return {
+      ...rest,
+      call: () =>
+        this.moduleContract.encode.disableTopUpAllocation([nodeOperatorId]),
+    };
+  }
+
+  private async assertTopUpAllocationSupported() {
+    invariant(
+      await this.isTopUpAllocationSupported(),
+      'Top-up allocation toggle requires CuratedModule v2',
+      ERROR_CODE.NOT_SUPPORTED,
+    );
+  }
+
+  @Access({ level: AccessLevel.OWNER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async setOperatorInfo(props: SetOperatorDataProps) {
+    return this.bus.tx.perform(this.buildSetOperatorInfo(props));
+  }
+
+  @EstimateView()
+  public async estimateSetOperatorInfo(props: SetOperatorDataProps) {
+    return this.bus.tx.estimate(this.buildSetOperatorInfo(props));
+  }
+
   @Access({
     level: AccessLevel.PROTOCOL_ROLE,
     protocolRole: 'ENABLE_TOP_UP_ALLOCATION_ROLE',
@@ -211,36 +258,24 @@ export class MetaRegistrySDK extends CsmSDKModule<{
   @Logger('Call:')
   @ErrorHandler()
   public async enableTopUpAllocation(props: TopUpAllocationProps) {
-    const { nodeOperatorId, ...rest } = props;
-    invariant(
-      await this.isTopUpAllocationSupported(),
-      'Top-up allocation toggle requires CuratedModule v2',
-      ERROR_CODE.NOT_SUPPORTED,
-    );
+    return this.bus.tx.perform(await this.buildEnableTopUpAllocation(props));
+  }
 
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        this.moduleContract.encode.enableTopUpAllocation([nodeOperatorId]),
-    });
+  @EstimateView()
+  public async estimateEnableTopUpAllocation(props: TopUpAllocationProps) {
+    return this.bus.tx.estimate(await this.buildEnableTopUpAllocation(props));
   }
 
   @Access({ level: AccessLevel.OWNER })
   @Logger('Call:')
   @ErrorHandler()
   public async disableTopUpAllocation(props: TopUpAllocationProps) {
-    const { nodeOperatorId, ...rest } = props;
-    invariant(
-      await this.isTopUpAllocationSupported(),
-      'Top-up allocation toggle requires CuratedModule v2',
-      ERROR_CODE.NOT_SUPPORTED,
-    );
+    return this.bus.tx.perform(await this.buildDisableTopUpAllocation(props));
+  }
 
-    return this.bus.tx.perform({
-      ...rest,
-      call: () =>
-        this.moduleContract.encode.disableTopUpAllocation([nodeOperatorId]),
-    });
+  @EstimateView()
+  public async estimateDisableTopUpAllocation(props: TopUpAllocationProps) {
+    return this.bus.tx.estimate(await this.buildDisableTopUpAllocation(props));
   }
 
   @Logger('Utils:')

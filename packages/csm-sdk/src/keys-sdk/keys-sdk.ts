@@ -3,6 +3,7 @@ import { CsmSDKModule } from '../common/class-primitives/csm-sdk-module';
 import {
   Access,
   AccessLevel,
+  EstimateView,
   ErrorHandler,
   Logger,
 } from '../common/decorators/index';
@@ -21,6 +22,11 @@ import {
   withKeysRemovalCacheCallback,
 } from '../keys-cache-sdk/index';
 import { TxSDK } from '../tx-sdk/index';
+import {
+  PerformOptions,
+  PerformOptionsNoSpend,
+  PerformOptionsSpend,
+} from '../tx-sdk/types';
 import { parseAddKeysProps } from './parse-add-keys-props';
 import { AddKeysProps, EjectKeysByArrayProps, RemoveKeysProps } from './types';
 
@@ -40,21 +46,20 @@ export class KeysSDK extends CsmSDKModule<{
     return this.core.getContract(CONTRACT_NAMES.withdrawalVault);
   }
 
-  @Access({ level: AccessLevel.MANAGER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addKeysETH(props: AddKeysProps) {
+  private async buildAddKeysETH(
+    props: AddKeysProps,
+  ): Promise<PerformOptionsNoSpend> {
     const {
       nodeOperatorId,
       amount,
       keysCount,
       publicKeys,
       signatures,
-      permit,
+      permit: _permit,
       ...rest
     } = await parseAddKeysProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -66,13 +71,12 @@ export class KeysSDK extends CsmSDKModule<{
           [from, nodeOperatorId, keysCount, publicKeys, signatures],
           { value: amount },
         ),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.MANAGER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addKeysStETH(props: AddKeysProps) {
+  private async buildAddKeysStETH(
+    props: AddKeysProps,
+  ): Promise<PerformOptionsSpend> {
     const {
       nodeOperatorId,
       amount,
@@ -83,7 +87,7 @@ export class KeysSDK extends CsmSDKModule<{
       ...rest
     } = await parseAddKeysProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -100,13 +104,12 @@ export class KeysSDK extends CsmSDKModule<{
           signatures,
           permit,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.MANAGER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async addKeysWstETH(props: AddKeysProps) {
+  private async buildAddKeysWstETH(
+    props: AddKeysProps,
+  ): Promise<PerformOptionsSpend> {
     const {
       nodeOperatorId,
       amount,
@@ -117,7 +120,7 @@ export class KeysSDK extends CsmSDKModule<{
       ...rest
     } = await parseAddKeysProps(props);
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       callback: withKeysCacheCallback(
         this.bus.keysCache,
@@ -134,19 +137,19 @@ export class KeysSDK extends CsmSDKModule<{
           signatures,
           permit,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.MANAGER })
-  public async addKeys(props: WithToken<AddKeysProps>) {
-    const { token } = props;
-    switch (token) {
+  private async buildAddKeys(
+    props: WithToken<AddKeysProps>,
+  ): Promise<PerformOptions> {
+    switch (props.token) {
       case TOKENS.eth:
-        return this.addKeysETH(props);
+        return this.buildAddKeysETH(props);
       case TOKENS.steth:
-        return this.addKeysStETH(props);
+        return this.buildAddKeysStETH(props);
       case TOKENS.wsteth:
-        return this.addKeysWstETH(props);
+        return this.buildAddKeysWstETH(props);
       default:
         throw new SDKError({
           message: 'unsupported token',
@@ -155,13 +158,10 @@ export class KeysSDK extends CsmSDKModule<{
     }
   }
 
-  @Access({ level: AccessLevel.MANAGER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async removeKeys(props: RemoveKeysProps) {
+  private buildRemoveKeys(props: RemoveKeysProps): PerformOptionsNoSpend {
     const { nodeOperatorId, startIndex, keysCount, pubkeys, ...rest } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       callback: withKeysRemovalCacheCallback(
         this.bus.keysCache,
@@ -174,13 +174,10 @@ export class KeysSDK extends CsmSDKModule<{
           startIndex,
           keysCount,
         ]),
-    });
+    };
   }
 
-  @Access({ level: AccessLevel.OWNER })
-  @Logger('Call:')
-  @ErrorHandler()
-  public async ejectKeys(props: EjectKeysByArrayProps) {
+  private buildEjectKeys(props: EjectKeysByArrayProps): PerformOptionsNoSpend {
     const {
       nodeOperatorId,
       keyIndices,
@@ -189,14 +186,71 @@ export class KeysSDK extends CsmSDKModule<{
       ...rest
     } = props;
 
-    return this.bus.tx.perform({
+    return {
       ...rest,
       call: () =>
         this.ejectorContract.encode.voluntaryEject(
           [nodeOperatorId, keyIndices, refundRecipient],
           { value: amount },
         ),
-    });
+    };
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addKeysETH(props: AddKeysProps) {
+    return this.bus.tx.perform(await this.buildAddKeysETH(props));
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addKeysStETH(props: AddKeysProps) {
+    return this.bus.tx.perform(await this.buildAddKeysStETH(props));
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addKeysWstETH(props: AddKeysProps) {
+    return this.bus.tx.perform(await this.buildAddKeysWstETH(props));
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async addKeys(props: WithToken<AddKeysProps>) {
+    return this.bus.tx.perform(await this.buildAddKeys(props));
+  }
+
+  @EstimateView()
+  public async estimateAddKeys(props: WithToken<AddKeysProps>) {
+    return this.bus.tx.estimate(await this.buildAddKeys(props));
+  }
+
+  @Access({ level: AccessLevel.MANAGER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async removeKeys(props: RemoveKeysProps) {
+    return this.bus.tx.perform(this.buildRemoveKeys(props));
+  }
+
+  @EstimateView()
+  public async estimateRemoveKeys(props: RemoveKeysProps) {
+    return this.bus.tx.estimate(this.buildRemoveKeys(props));
+  }
+
+  @Access({ level: AccessLevel.OWNER })
+  @Logger('Call:')
+  @ErrorHandler()
+  public async ejectKeys(props: EjectKeysByArrayProps) {
+    return this.bus.tx.perform(this.buildEjectKeys(props));
+  }
+
+  @EstimateView()
+  public async estimateEjectKeys(props: EjectKeysByArrayProps) {
+    return this.bus.tx.estimate(this.buildEjectKeys(props));
   }
 
   @Logger('Views:')
