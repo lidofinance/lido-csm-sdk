@@ -6,6 +6,7 @@ import { BusRegistry } from '../../../src/common/class-primitives/bus-registry';
 import { CONTRACT_NAMES } from '../../../src/common/constants/contract-names';
 import { TxSDK } from '../../../src/tx-sdk/tx-sdk';
 import { WalletSDK } from '../../../src/wallet-sdk/wallet-sdk';
+import { zeroDataError } from '../wallet-sdk/contract-call-errors';
 
 // Callers must vi.mock viem.getContract and getEncodableContract (see perform-routing.test.ts).
 
@@ -15,6 +16,7 @@ export const STETH: Address = '0xcccccccccccccccccccccccccccccccccccccccc';
 const TARGET: Address = '0xdddddddddddddddddddddddddddddddddddddddd';
 export const TX_HASH = '0x' + '11'.repeat(32);
 export const APPROVE_HASH = '0x' + '22'.repeat(32);
+export const SAFE_TX_HASH = '0x' + '33'.repeat(32);
 export const CHAIN_ID = 560_048;
 export const APPROVE_CALL = { to: STETH, data: '0x095ea7b3' };
 export const MAIN_CALL = { to: TARGET, data: '0xabcdef' };
@@ -31,7 +33,12 @@ export const SIGNED_PERMIT = {
 } as const;
 export const GIVEN_PERMIT = { ...SIGNED_PERMIT, v: 28, value: 7n };
 
-export type Kind = 'eoa' | 'multisig' | 'atomicBatch';
+export type Kind = 'eoa' | 'multisig' | 'multisigBatch' | 'atomicBatch';
+
+const CAPS: Partial<Record<Kind, object>> = {
+  atomicBatch: { atomic: { status: 'supported' } },
+  multisigBatch: { atomicBatch: { supported: true } },
+};
 
 export const APPROVE_GAS = 46_000n;
 export const MAIN_GAS = 100_000n;
@@ -47,16 +54,16 @@ export const build = (
   const estimateGas = vi.fn(async (args: { to?: Address }) =>
     args.to === STETH ? APPROVE_GAS : MAIN_GAS,
   );
-  const sendCalls = vi.fn(async (_args: unknown) => ({ id: 'call-1' }));
+  const sendCalls = vi.fn(async (_args: unknown) => ({ id: SAFE_TX_HASH }));
   const waitForCallsStatus = vi.fn(async () => ({
     status: 'success',
     receipts: [{ status: 'success', transactionHash: TX_HASH }],
   }));
-  const getCapabilities = vi.fn(async () =>
-    kind === 'atomicBatch'
-      ? { [CHAIN_ID]: { atomic: { status: 'supported' } } }
-      : {},
-  );
+  const getCapabilities = vi.fn(async () => ({ [CHAIN_ID]: CAPS[kind] ?? {} }));
+  const readContract = vi.fn(async (_args: unknown) => {
+    if (kind !== 'multisigBatch') throw zeroDataError();
+    return 1n;
+  });
   const signPermit = vi.fn(async () => SIGNED_PERMIT);
   const waitForTransactionReceipt = vi.fn(async () => ({
     status: 'success',
@@ -77,7 +84,7 @@ export const build = (
   const lido = {
     chain: { id: CHAIN_ID },
     useAccount: async (a: unknown) =>
-      (a as object | undefined) ?? { address: ACCOUNT },
+      typeof a === 'string' ? { address: a } : (a ?? { address: ACCOUNT }),
     isContract,
     signPermit,
     getFeeData: async () => ({ maxFeePerGas: 2n, maxPriorityFeePerGas: 2n }),
@@ -85,6 +92,7 @@ export const build = (
     useWalletClient: () => walletClient,
     publicClient: {
       estimateGas,
+      readContract,
       waitForTransactionReceipt,
       getTransactionConfirmations: async () => 1n,
     },
@@ -136,6 +144,9 @@ export const build = (
     signPermit,
     estimateGas,
     readAllowance,
+    readContract,
+    getCapabilities,
+    waitForCallsStatus,
     requestAddresses,
     bus,
     waitForTransactionReceipt,

@@ -86,15 +86,24 @@ const { main, unlock, total, walletKind } = await csmSdk.bond.estimateAddBond({
   amount: parseEther('1'),
   account, // required unless the wallet client already has an account; never prompts
 });
-// unlock: { kind: 'permit', gas } for EOA, { kind: 'approve', gas } for multisig / atomic batch, absent if allowance suffices
+// unlock: { kind: 'permit', gas } for EOA, { kind: 'approve', gas } for multisig / Safe batch / atomic batch, absent if allowance suffices
 ```
 
 - Throws `SDKError` like the write would — a revert (`CONTRACT_REVERT` + `decodedRevert`) means the tx would fail, so it doubles as a pre-flight check.
 - `main` is the raw `eth_estimateGas` result (no padding); `permit` gas is a fixed approximation (`PERMIT_GAS_OVERHEAD`, same token bytecode on every supported chain, pinned within 15% by an integration test), not a live estimate.
 - When allowance is missing, the main call is estimated with an `eth_estimateGas` `stateOverride` of the token allowance. Each call verifies the override took effect: if the RPC ignored it or the token's allowance slot differs → `NOT_SUPPORTED`; if it applied but the call needs more than the spend amount, the original revert is rethrown; an RPC that rejects the param → RPC error.
-- `unlock` is present iff the user still has to sign a permit or send an approve; with a caller-supplied permit its cost is already inside `main`. For multisig, `total` sums two separate Safe txs (approve sent first; `perform` returns `{ hash }` and the caller re-invokes).
+- `unlock` is present iff the user still has to sign a permit or send an approve; with a caller-supplied permit its cost is already inside `main`. For multisig, `total` sums two separate Safe txs (approve sent first; `perform` returns `{ hash }` and the caller re-invokes); for `multisigBatch` it is one Safe tx (approve + call in a MultiSend).
 - `from` must hold the ETH/tokens being spent (no balance override). No fee fields are sent, so "not enough ETH for gas" isn't detected.
 - Multisig / atomic-batch numbers are approximations: no Safe/EntryPoint wrapper overhead, and gas may be sponsored.
+
+### Safe wallets
+
+A Safe whose provider advertises EIP-5792 (`walletKind: 'multisigBatch'`; Safe{Wallet} iframe and WalletConnect web) gets **one** Safe transaction: approve (if needed) + call are proposed together via `wallet_sendCalls`. `perform` returns `{ hash }` right after the proposal and fires `SIGN` → `MULTISIG_DONE`.
+
+- `hash` (return value and `MULTISIG_DONE.payload.hash`) is a **Safe transaction hash** on the batched (EIP-5792) path, not an Ethereum tx hash — don't pass it to `waitForTransactionReceipt`; track execution via the Safe tx service or `wallet_getCallsStatus`.
+- `MULTISIG_DONE.payload.approve` is set by `perform`/`signPermitOrApprove` when only the approve step was sent and the main call is pending (Safe without EIP-5792, or `signPermitOrApprove`, which stays 2-step by design): re-invoke after it executes. Absent ⇒ done.
+- Migration: drop "`isMultisig()` ⇒ sign twice" UX; use `getWalletKind()` / `estimate*().walletKind` or `MULTISIG_DONE.payload.approve`.
+- Limitation (unverified): a Safe-4337 account whose provider advertises `atomic` is treated as `multisigBatch` — no receipt, no `decodeResult` (e.g. `nodeOperatorId` from gate `createNodeOperator`, bond/roles results). The tx still executes.
 
 ## SDK Modules
 

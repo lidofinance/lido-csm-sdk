@@ -78,7 +78,14 @@ export type TransactionCallbackProps<TDecodedResult = undefined> =
         id?: string;
       };
     }
-  | { stage: TransactionCallbackStage.MULTISIG_DONE; payload?: undefined }
+  | {
+      stage: TransactionCallbackStage.MULTISIG_DONE;
+      /** `hash` is a Safe tx hash on `multisigBatch`; on `multisig` it may also be a real tx hash (auto-executing 1/1 Safe). `approve` is set by `perform`/`signPermitOrApprove` when only the approve was sent and the main call is pending: re-invoke after it executes. */
+      payload: {
+        hash: Hash;
+        approve?: { token: Erc20Tokens; amount: bigint };
+      };
+    }
   | {
       stage: TransactionCallbackStage.ERROR;
       payload: { error: SDKError };
@@ -154,7 +161,7 @@ export type GasEstimate = {
   main: bigint;
   /** Present iff the user still has to sign a permit or send an approve; with a caller-supplied permit its cost is already inside `main`. */
   unlock?: GasEstimateUnlock;
-  /** `main + (unlock?.gas ?? 0n)`. For multisig this sums two separate Safe txs (approve first; `perform` returns `{ hash }` and the caller re-invokes). */
+  /** `main + (unlock?.gas ?? 0n)`. multisig: two Safe txs (approve first; `perform` returns `{ hash }`, caller re-invokes). multisigBatch: one Safe tx. */
   total: bigint;
   walletKind: WalletKind;
 };

@@ -28,6 +28,7 @@ import {
   TransactionTypeNotSupportedError,
   UnauthorizedProviderError,
   UnknownBundleIdError,
+  UnknownRpcError,
   UnsupportedChainIdError,
   UnsupportedProviderMethodError,
   UserRejectedRequestError,
@@ -62,6 +63,10 @@ const AA_VALIDATION_PATTERN = /\bAA[1-2]\d\b/;
 // reverted post-op, etc.).
 const AA_PAYMASTER_PATTERN = /\bAA3\d\b/;
 
+// Safe Apps iframe rejects with a code-less Error (CommunicatorMessages.REJECT_TRANSACTION_MESSAGE),
+// which viem wraps as UnknownRpcError. Best-effort text match, like WALLET_TIMEOUT.
+const SAFE_REJECTION_PATTERN = /transaction was rejected/i;
+
 const aaReasonOf = (e: ExecutionRevertedError): string => e.shortMessage;
 
 // Ordered most-specific → most-generic: a UserRejectedRequestError wrapped
@@ -73,6 +78,12 @@ const aaReasonOf = (e: ExecutionRevertedError): string => e.shortMessage;
 // reason — each must win before its catch-all superclass match claims it.
 const CLASSIFIERS: Array<[(e: unknown) => boolean, ERROR_CODE]> = [
   [(e) => e instanceof UserRejectedRequestError, ERROR_CODE.USER_REJECTED],
+  [
+    (e) =>
+      e instanceof UnknownRpcError &&
+      SAFE_REJECTION_PATTERN.test(e.details ?? ''),
+    ERROR_CODE.USER_REJECTED,
+  ],
   [(e) => e instanceof UnknownBundleIdError, ERROR_CODE.BUNDLE_NOT_FOUND],
   [(e) => e instanceof DuplicateIdError, ERROR_CODE.DUPLICATE_BUNDLE_ID],
   [

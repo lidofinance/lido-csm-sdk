@@ -9,7 +9,8 @@ import type {
   PerformOptionsDecodePartial,
 } from '../tx-sdk/types';
 
-export type WalletKind = 'eoa' | 'multisig' | 'atomicBatch';
+/** `multisigBatch`: a Safe advertising EIP-5792 — one proposal via `proposeCalls`, never awaited. */
+export type WalletKind = 'eoa' | 'multisig' | 'multisigBatch' | 'atomicBatch';
 
 export type WalletSDKProps = { core: LidoSDKCore };
 

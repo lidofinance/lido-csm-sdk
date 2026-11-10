@@ -7,7 +7,13 @@ import {
   TransactionOptions,
   TransactionResult,
 } from '@lidofinance/lido-ethereum-sdk';
-import { Address, StateOverride, WalletCallReceipt } from 'viem';
+import {
+  Address,
+  getAddress,
+  Hash,
+  StateOverride,
+  WalletCallReceipt,
+} from 'viem';
 import type { ReplacementReturnType } from 'viem/actions';
 import {
   CACHE_SHORT,
@@ -17,6 +23,8 @@ import {
 } from '../common/index';
 import { Cache, Logger } from '../common/decorators/index';
 import { isCapabilitySupported } from '../common/utils/is-capability-supported';
+import { isContractCallFailure } from './is-contract-call-failure';
+import { SAFE_ABI } from './safe-abi';
 import {
   CallResult,
   PerformTransactionGasLimit,
@@ -32,6 +40,8 @@ import {
   WalletKind,
   WalletSDKProps,
 } from './types';
+
+type WalletCaps = Parameters<typeof isCapabilitySupported>[0];
 
 /** Chain-scoped wallet detection and transaction sending; shared by every module SDK. */
 export class WalletSDK {
@@ -53,36 +63,73 @@ export class WalletSDK {
     return this.core.publicClient;
   }
 
+  /** EIP-5792 `atomic` capability only; use `getWalletKind` for routing. Never throws. */
   @Logger('Views:')
-  @Cache(CACHE_SHORT)
   public async isAbstractAccount(account: Address): Promise<boolean> {
     try {
-      const capabilities = await this.walletClient.getCapabilities({
-        account,
-      });
-      return isCapabilitySupported(capabilities, this.chainId, 'atomic');
+      const caps = await this.getCapabilitiesOf(getAddress(account));
+      return isCapabilitySupported(caps, this.chainId, 'atomic');
     } catch {
       return false;
     }
   }
 
+  /** Account has contract code; use `getWalletKind` for routing. */
   @Logger('Views:')
   public async isMultisig(account?: AccountValue): Promise<boolean> {
-    const { address } = await this.core.useAccount(account);
-    return this.isContract(address);
+    return this.isContract(await this.resolveAddress(account));
   }
 
-  /** Resolved once per operation; AA capability wins over contract code. */
+  /** Resolved once per operation: a Safe advertising EIP-5792 first, then `atomic`, then contract code. */
   @Logger('Views:')
   public async getWalletKind(account?: AccountValue): Promise<WalletKind> {
-    const { address } = await this.core.useAccount(account);
-    if (await this.isAbstractAccount(address)) return 'atomicBatch';
-    return (await this.isContract(address)) ? 'multisig' : 'eoa';
+    const address = await this.resolveAddress(account);
+    const [hasCode, caps] = await Promise.all([
+      this.isContract(address),
+      this.getCapabilitiesOf(address),
+    ]);
+    const atomic = isCapabilitySupported(caps, this.chainId, 'atomic');
+    const batch =
+      atomic || isCapabilitySupported(caps, this.chainId, 'atomicBatch');
+    if (hasCode && batch && (await this.isSafe(address)))
+      return 'multisigBatch';
+    if (atomic) return 'atomicBatch';
+    return hasCode ? 'multisig' : 'eoa';
+  }
+
+  // Safe providers match the address case-sensitively and WalletConnect caches caps per exact string, so callers pass it checksummed
+  @Cache(CACHE_SHORT)
+  private async getCapabilitiesOf(address: Address): Promise<WalletCaps> {
+    try {
+      return await this.walletClient.getCapabilities({ account: address });
+    } catch {
+      return {};
+    }
+  }
+
+  @Cache(CACHE_SHORT)
+  private async isSafe(address: Address): Promise<boolean> {
+    try {
+      const threshold = await this.publicClient.readContract({
+        address,
+        abi: SAFE_ABI,
+        functionName: 'getThreshold',
+      });
+      return threshold > 0n;
+    } catch (error) {
+      if (isContractCallFailure(error)) return false;
+      throw SDKError.from(error, ERROR_CODE.NETWORK_ERROR);
+    }
   }
 
   @Cache(CACHE_SHORT)
   private isContract(address: Address): Promise<boolean> {
     return this.core.isContract(address);
+  }
+
+  private async resolveAddress(account?: AccountValue): Promise<Address> {
+    const { address } = await this.core.useAccount(account);
+    return getAddress(address);
   }
 
   /** Pure `eth_estimateGas` for a prepared call; never signs, sends, or sets fee fields. */
@@ -230,7 +277,10 @@ export class WalletSDK {
     );
 
     if (multisig) {
-      await callback({ stage: TransactionCallbackStage.MULTISIG_DONE });
+      await callback({
+        stage: TransactionCallbackStage.MULTISIG_DONE,
+        payload: { hash },
+      });
       return { hash };
     }
 
@@ -413,5 +463,37 @@ export class WalletSDK {
       result,
       confirmations,
     };
+  }
+
+  /** EIP-5792 proposal for a deferred-execution wallet (Safe): returns the wallet's call id as `hash` without waiting; `decodeResult` is ignored. */
+  public async proposeCalls<TDecodedResult = undefined>(
+    props: SendCallsProps<TDecodedResult>,
+  ): Promise<TransactionResult<TDecodedResult>> {
+    const { callback = NOOP, calls } = props;
+    const account = await this.resolveAddress(props.account);
+
+    await callback({
+      stage: TransactionCallbackStage.SIGN,
+      payload: { gas: undefined },
+    });
+
+    // fallback off: a code-less rejection would otherwise fan out into one eth_sendTransaction per call
+    const { id } = await withSDKError(
+      this.walletClient.sendCalls({
+        account,
+        chain: this.core.chain,
+        calls,
+        experimental_fallback: false,
+      }),
+      ERROR_CODE.TRANSACTION_ERROR,
+    );
+    // never validate the id shape: the proposal already exists, a throw invites a duplicate
+    const hash = id as Hash;
+
+    await callback({
+      stage: TransactionCallbackStage.MULTISIG_DONE,
+      payload: { hash },
+    });
+    return { hash };
   }
 }

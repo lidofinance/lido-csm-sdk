@@ -47,7 +47,7 @@ const expectNothingSent = (fakes: ReturnType<typeof build>) => {
 const estimateArgs = (fakes: ReturnType<typeof build>, index: number) =>
   fakes.estimateGas.mock.calls[index]?.[0] as Record<string, any>;
 
-const KINDS: Kind[] = ['eoa', 'multisig', 'atomicBatch'];
+const KINDS: Kind[] = ['eoa', 'multisig', 'multisigBatch', 'atomicBatch'];
 
 describe('TxSDK.estimate', () => {
   describe.each(KINDS)('%s', (kind) => {
@@ -84,7 +84,7 @@ describe('TxSDK.estimate', () => {
     });
   });
 
-  describe.each(['eoa', 'multisig'] as const)(
+  describe.each(['eoa', 'multisig', 'multisigBatch'] as const)(
     '%s with a caller permit',
     (kind) => {
       it('estimates with the real permit, exact, no override and no unlock', async () => {
@@ -130,7 +130,7 @@ describe('TxSDK.estimate', () => {
     });
   });
 
-  describe.each(['multisig', 'atomicBatch'] as const)(
+  describe.each(['multisig', 'multisigBatch', 'atomicBatch'] as const)(
     '%s needing approval',
     (kind) => {
       it('estimates the approve call as unlock', async () => {

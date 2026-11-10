@@ -59,7 +59,10 @@ const wrapApproveCallback = ({
         });
       }
       case TransactionCallbackStage.MULTISIG_DONE:
-        return callback(args);
+        return callback({
+          stage: TransactionCallbackStage.MULTISIG_DONE,
+          payload: { ...args.payload, approve: { token, amount } },
+        });
       default:
     }
   };
@@ -79,6 +82,9 @@ const approveThenStop = async (
   return { permit: EMPTY_PERMIT, hash };
 };
 
+const approveCall = (ctx: SpendContext, props: WithSpender<SpendProps>) =>
+  ctx.allowance.getApproveCall({ ...props.spend, spender: props.spender });
+
 const sendApprove = (
   ctx: SpendContext,
   props: WithSpender<SpendProps>,
@@ -86,28 +92,22 @@ const sendApprove = (
 ) =>
   ctx.wallet.sendTransaction({
     ...props,
-    ...ctx.wallet.callToTransaction(
-      ctx.allowance.getApproveCall({ ...props.spend, spender: props.spender }),
-    ),
+    ...ctx.wallet.callToTransaction(approveCall(ctx, props)),
     multisig,
   });
 
 const sendApproveBatch = (ctx: SpendContext, props: WithSpender<SpendProps>) =>
-  ctx.wallet.sendCalls({
-    ...props,
-    calls: [
-      ctx.allowance.getApproveCall({ ...props.spend, spender: props.spender }),
-    ],
-  });
+  ctx.wallet.sendCalls({ ...props, calls: [approveCall(ctx, props)] });
+
+const proposeApprove = (ctx: SpendContext, props: WithSpender<SpendProps>) =>
+  ctx.wallet.proposeCalls({ ...props, calls: [approveCall(ctx, props)] });
 
 export const getApproveCallIfNeeded = async (
   ctx: SpendContext,
   props: WithSpender<SpendProps>,
 ): Promise<CallResult | undefined> => {
   const { needsApprove } = await ctx.allowance.checkAllowance(props);
-  return needsApprove
-    ? ctx.allowance.getApproveCall({ ...props.spend, spender: props.spender })
-    : undefined;
+  return needsApprove ? approveCall(ctx, props) : undefined;
 };
 
 export const SPEND_STRATEGIES: Record<WalletKind, SpendStrategy> = {
@@ -123,6 +123,11 @@ export const SPEND_STRATEGIES: Record<WalletKind, SpendStrategy> = {
     approve: (ctx, props) => sendApprove(ctx, props, true),
     signPermitOrApprove: (ctx, props) =>
       approveThenStop(ctx, props, (p) => sendApprove(ctx, p, true)),
+  },
+  multisigBatch: {
+    approve: proposeApprove,
+    signPermitOrApprove: (ctx, props) =>
+      approveThenStop(ctx, props, (p) => proposeApprove(ctx, p)),
   },
   atomicBatch: {
     approve: sendApproveBatch,

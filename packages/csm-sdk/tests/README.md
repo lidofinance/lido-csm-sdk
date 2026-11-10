@@ -53,7 +53,7 @@ Available fixtures:
 
 ### Cached SDKs + chain mutations
 
-Mutable on-chain reads are not cached across calls (`@Dedupe` only shares concurrent calls), so re-reading after a mutation through the shared SDK returns fresh state. Only external-API reads (`keysWithStatus.getApiKeys`/`getClKeys`, `feesMonitoring.getKeysWithIssues`, `depositData.checkUploadedKeys`), `module.getUsedOtherModule` and wallet detection (`isAbstractAccount`, `isContract`) keep a 10 s TTL; immutable values and CID-keyed proof trees are cached for the instance lifetime.
+Mutable on-chain reads are not cached across calls (`@Dedupe` only shares concurrent calls), so re-reading after a mutation through the shared SDK returns fresh state. Only external-API reads (`keysWithStatus.getApiKeys`/`getClKeys`, `feesMonitoring.getKeysWithIssues`, `depositData.checkUploadedKeys`), `module.getUsedOtherModule` and wallet detection (`getCapabilitiesOf`, `isSafe`, `isContract`) keep a 10 s TTL; immutable values and CID-keyed proof trees are cached for the instance lifetime.
 
 If a test re-reads one of those TTL-cached values after a mutation, use `makeCsmSdk(publicClient, walletClient?)` (see `tests/helpers/make-csm-sdk.ts`) to get a fresh SDK per test, as `bond-aa.test.ts` and `bond-multisig.test.ts` do.
 
@@ -101,8 +101,9 @@ The SDK resolves a wallet kind (`WalletSDK.getWalletKind`) and routes through on
 | Branch | Detection | Unit tests | Integration test | Anvil trick |
 |---|---|---|---|---|
 | **EOA** | not AA, no contract code | `unit/wallet-sdk/detection.test.ts` (12 cases), `unit/tx-sdk/perform-routing.test.ts` (perform/approve per wallet kind), `unit/wallet-sdk/send-transaction.test.ts` | `bond-wallet.test.ts` | `setBalance` |
-| **Multisig** | contract code and not AA | same as EOA + multisig cases in `perform-routing.test.ts` | `bond-multisig.test.ts` | `setCode` + `setNonce(1)` + `setNextBlockBaseFeePerGas(1n)` + `mine(1)` |
-| **AA (EIP-5792)** | `getCapabilities.atomic === 'supported'` (checked first) | `unit/wallet-sdk/detection.test.ts` + routing tests | `bond-aa.test.ts` | walletClient `.extend({ getCapabilities })` + viem's `experimental_fallback: true` |
+| **Multisig** | contract code, not a batch-capable Safe, no `atomic` | same as EOA + multisig cases in `perform-routing.test.ts` | `bond-multisig.test.ts` | `setCode` + `setNonce(1)` + `setNextBlockBaseFeePerGas(1n)` + `mine(1)` |
+| **Safe batch (multisigBatch)** | contract code + `atomic`/legacy `atomicBatch` caps + `getThreshold() > 0` | `unit/wallet-sdk/detection.test.ts`, `propose-calls.test.ts`, multisigBatch cases in routing/spend tests | `bond-safe-batch.test.ts` | `setCode(0x600160005260206000f3)` + walletClient `.extend({ getCapabilities, sendCalls })` |
+| **AA (EIP-5792)** | `getCapabilities.atomic === 'supported'`, not a Safe | `unit/wallet-sdk/detection.test.ts` + routing tests | `bond-aa.test.ts` | walletClient `.extend({ getCapabilities })` + viem's `experimental_fallback: true` |
 
 ### Multisig integration nuances
 
@@ -112,7 +113,7 @@ The SDK hard-codes `nonce: 1` + `gas: 21_000n` + `maxFeePerGas: 1n` in the multi
 - `setNextBlockBaseFeePerGas({ baseFeePerGas: 1n })` + `mine({ blocks: 1 })` — the `setNext*` family applies to the NEXT block, so an empty mine is required to commit it BEFORE the tx is broadcast. Without the mine, the tx sits in the mempool because `maxFeePerGas: 1` < the current block's base fee.
 - An alt account + per-test `snapshot`/`revert` keeps the contract-account state from leaking into other tests.
 
-The branch returns `{ hash }` only (no `receipt`) — semantically: "submitted to the multisig, awaiting external signers."
+The branch returns `{ hash }` only (no `receipt`) — semantically: "submitted to the multisig, awaiting external signers." `MIN_BYTECODE` returns no data, so `getThreshold()` reads as not-Safe; anvil's caps call throws → `{}` — both keep these tests on the multisig branch.
 
 ### AA integration nuances
 

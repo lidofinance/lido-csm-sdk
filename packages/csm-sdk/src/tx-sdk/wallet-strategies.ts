@@ -10,7 +10,7 @@ import {
   PermitSignatureShort,
   SDKError,
 } from '../common/index';
-import type { WalletKind } from '../wallet-sdk/types';
+import type { SendCallsProps, WalletKind } from '../wallet-sdk/types';
 import type { WalletSDK } from '../wallet-sdk/wallet-sdk';
 import { PERMIT_GAS_OVERHEAD } from './consts';
 import {
@@ -27,7 +27,7 @@ export type StrategyContext = {
   wallet: WalletSDK;
   allowance: AllowanceSDK;
   spender: Address;
-  /** Builds and version-checks the call; `permit` is only meaningful for sendTransaction kinds. */
+  /** Builds and version-checks the call; `permit` is honoured by sendTransaction kinds and by `multisigBatch` via `proposeCalls`. */
   prepare: (
     props: PerformOptions<any>,
     permit?: PermitSignatureShort,
@@ -69,6 +69,34 @@ const performTransaction = async <T>(
     ...props,
     ...ctx.wallet.callToTransaction(call),
     multisig: kind === 'multisig',
+  });
+};
+
+const performBatch = async <T>(
+  ctx: StrategyContext,
+  props: PerformOptions<T>,
+  opts: {
+    honourPermit: boolean;
+    send: (p: SendCallsProps<T>) => Promise<TransactionResult<T>>;
+  },
+): Promise<TransactionResult<T>> => {
+  const permit = props.spend?.permit;
+  if (opts.honourPermit && permit) {
+    const call = await ctx.prepare(props, stripPermit(permit));
+    return opts.send({ ...props, calls: [call] });
+  }
+  const [approveCall, call] = await Promise.all([
+    props.spend
+      ? ctx.allowance.getApproveCallIfNeeded({
+          ...(props as PerformOptionsSpend<any>),
+          spender: ctx.spender,
+        })
+      : undefined,
+    ctx.prepare(props),
+  ]);
+  return opts.send({
+    ...props,
+    calls: approveCall ? [approveCall, call] : [call],
   });
 };
 
@@ -157,19 +185,20 @@ export const WALLET_STRATEGIES: Record<WalletKind, WalletStrategy> = {
     perform: (ctx, props) => performTransaction(ctx, 'multisig', props),
     estimate: (ctx, props) => estimateTransaction(ctx, 'multisig', props),
   },
+  multisigBatch: {
+    perform: (ctx, props) =>
+      performBatch(ctx, props, {
+        honourPermit: true,
+        send: (p) => ctx.wallet.proposeCalls(p),
+      }),
+    estimate: (ctx, props) => estimateTransaction(ctx, 'multisigBatch', props),
+  },
   atomicBatch: {
+    perform: (ctx, props) =>
+      performBatch(ctx, props, {
+        honourPermit: false,
+        send: (p) => ctx.wallet.sendCalls(p),
+      }),
     estimate: (ctx, props) => estimateTransaction(ctx, 'atomicBatch', props),
-    async perform(ctx, props) {
-      const calls: CallResult[] = [];
-      if (props.spend) {
-        const approveCall = await ctx.allowance.getApproveCallIfNeeded({
-          ...(props as PerformOptionsSpend<any>),
-          spender: ctx.spender,
-        });
-        if (approveCall) calls.push(approveCall);
-      }
-      calls.push(await ctx.prepare(props));
-      return ctx.wallet.sendCalls({ ...props, calls });
-    },
   },
 };

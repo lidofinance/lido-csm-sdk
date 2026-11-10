@@ -384,7 +384,7 @@ describe('KeysCacheSDK.makeCallback', () => {
     await cb({ stage: TransactionCallbackStage.SIGN, payload: {} });
     await cb({
       stage: TransactionCallbackStage.MULTISIG_DONE,
-      payload: undefined,
+      payload: { hash: '0x0' },
     });
     expect(sdk.getCacheStatus(PK_A)).toBe(KeyCacheStatus.PENDING);
   });

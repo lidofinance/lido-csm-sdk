@@ -7,6 +7,7 @@ import {
   build,
   GIVEN_PERMIT,
   MAIN_CALL,
+  SAFE_TX_HASH,
   SIGNED_PERMIT,
   SPENDER,
   TX_HASH,
@@ -106,10 +107,14 @@ describe('TxSDK.perform routing by wallet kind', () => {
   describe('multisig', () => {
     it('sends with stub overrides, fires MULTISIG_DONE and returns the hash only', async () => {
       const fakes = build('multisig');
-      const { promise, stages } = run(fakes);
+      const { promise, stages, callback } = run(fakes);
       const result = await promise;
       expect(result).toEqual({ hash: APPROVE_HASH });
       expect(stages).toEqual([S.SIGN, S.MULTISIG_DONE]);
+      expect(callback).toHaveBeenLastCalledWith({
+        stage: S.MULTISIG_DONE,
+        payload: { hash: APPROVE_HASH },
+      });
       expect(fakes.estimateGas).not.toHaveBeenCalled();
       expect(fakes.sendTransaction).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -123,13 +128,21 @@ describe('TxSDK.perform routing by wallet kind', () => {
 
     it('approves and stops when allowance is short, deferring the main call', async () => {
       const fakes = build('multisig', 0n);
-      const { promise, stages, call } = run(fakes, { spend });
+      const { promise, stages, call, callback } = run(fakes, { spend });
       const result = await promise;
       expect(result).toEqual({ hash: APPROVE_HASH });
       expect(fakes.signPermit).not.toHaveBeenCalled();
       expect(fakes.sendTransaction).toHaveBeenCalledTimes(1);
       expect(call).not.toHaveBeenCalled();
       expect(stages).toEqual([S.APPROVE_SIGN, S.MULTISIG_DONE]);
+      // stETH approve amount carries the 10 wei rounding threshold
+      expect(callback).toHaveBeenLastCalledWith({
+        stage: S.MULTISIG_DONE,
+        payload: {
+          hash: APPROVE_HASH,
+          approve: { token: TOKENS.steth, amount: 15n },
+        },
+      });
     });
 
     it('sends the main call when allowance already covers the spend', async () => {
@@ -146,6 +159,73 @@ describe('TxSDK.perform routing by wallet kind', () => {
       const { promise, stages } = run(fakes, { spend });
       await expect(promise).rejects.toThrow();
       expect(stages.filter((s) => s === S.ERROR)).toHaveLength(1);
+    });
+  });
+
+  describe('multisigBatch', () => {
+    it('proposes approve + call as one Safe tx and returns the safeTxHash', async () => {
+      const fakes = build('multisigBatch', 0n);
+      const resolveSpendAs = vi.spyOn(fakes.allowanceSdk, 'resolveSpendAs');
+      const { promise, stages, callback } = run(fakes, { spend });
+      const result = await promise;
+      expect(result).toEqual({ hash: SAFE_TX_HASH });
+      expect(fakes.sendCalls).toHaveBeenCalledTimes(1);
+      expect(fakes.sendCalls).toHaveBeenCalledWith(
+        expect.objectContaining({
+          calls: [APPROVE_CALL, MAIN_CALL],
+          experimental_fallback: false,
+        }),
+      );
+      expect(resolveSpendAs).not.toHaveBeenCalled();
+      expect(fakes.sendTransaction).not.toHaveBeenCalled();
+      expect(fakes.waitForCallsStatus).not.toHaveBeenCalled();
+      expect(stages).toEqual([S.SIGN, S.MULTISIG_DONE]);
+      expect(callback).toHaveBeenLastCalledWith({
+        stage: S.MULTISIG_DONE,
+        payload: { hash: SAFE_TX_HASH },
+      });
+    });
+
+    it('omits the approve when allowance covers the spend', async () => {
+      const fakes = build('multisigBatch', 100n);
+      await run(fakes, { spend }).promise;
+      expect(fakes.sendCalls).toHaveBeenCalledWith(
+        expect.objectContaining({ calls: [MAIN_CALL] }),
+      );
+    });
+
+    it('uses a caller-supplied permit inside a single-call proposal', async () => {
+      const fakes = build('multisigBatch', 0n);
+      const { promise, call } = run(fakes, {
+        spend: { ...spend, permit: GIVEN_PERMIT },
+      });
+      await promise;
+      expect(fakes.readAllowance).not.toHaveBeenCalled();
+      expect(fakes.sendCalls).toHaveBeenCalledWith(
+        expect.objectContaining({ calls: [MAIN_CALL] }),
+      );
+      expect(call).toHaveBeenCalledWith(
+        expect.objectContaining({
+          permit: expect.objectContaining({ v: 28, value: 7n }),
+        }),
+      );
+    });
+
+    it('proposes a single call when nothing is spent', async () => {
+      const fakes = build('multisigBatch');
+      await run(fakes).promise;
+      expect(fakes.sendCalls).toHaveBeenCalledWith(
+        expect.objectContaining({ calls: [MAIN_CALL] }),
+      );
+    });
+
+    it('notifies ERROR once and never MULTISIG_DONE when the proposal fails', async () => {
+      const fakes = build('multisigBatch', 0n);
+      fakes.sendCalls.mockRejectedValueOnce(new Error('rejected'));
+      const { promise, stages } = run(fakes, { spend });
+      await expect(promise).rejects.toThrow();
+      expect(stages.filter((s) => s === S.ERROR)).toHaveLength(1);
+      expect(stages).not.toContain(S.MULTISIG_DONE);
     });
   });
 
@@ -196,7 +276,12 @@ describe('TxSDK.perform routing by wallet kind', () => {
 
 describe('TxSDK delegation', () => {
   it('resolves wallet kind exactly once per perform', async () => {
-    for (const kind of ['eoa', 'multisig', 'atomicBatch'] as const) {
+    for (const kind of [
+      'eoa',
+      'multisig',
+      'multisigBatch',
+      'atomicBatch',
+    ] as const) {
       const fakes = build(kind, 0n);
       await run(fakes, { spend }).promise;
       expect(fakes.getWalletKind).toHaveBeenCalledTimes(1);

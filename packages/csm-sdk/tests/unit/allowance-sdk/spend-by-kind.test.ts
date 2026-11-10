@@ -6,6 +6,7 @@ import {
   APPROVE_CALL,
   APPROVE_HASH,
   build,
+  SAFE_TX_HASH,
   SIGNED_PERMIT,
   TX_HASH,
 } from '../tx-sdk/wallet-fakes';
@@ -137,6 +138,20 @@ describe('AllowanceSDK.approve / signPermitOrApprove by wallet kind', () => {
     );
   });
 
+  it('approve on a multisig wallet reports MULTISIG_DONE with the hash and no approve marker', async () => {
+    const fakes = build('multisig');
+    const callback = vi.fn();
+    await fakes.allowanceSdk.approve({
+      spend,
+      spender: OTHER_SPENDER,
+      callback,
+    });
+    expect(callback).toHaveBeenLastCalledWith({
+      stage: S.MULTISIG_DONE,
+      payload: { hash: APPROVE_HASH },
+    });
+  });
+
   it('signPermitOrApprove on multisig forwards MULTISIG_DONE and no APPROVE_RECEIPT', async () => {
     const fakes = build('multisig', 0n);
     const callback = vi.fn();
@@ -148,6 +163,13 @@ describe('AllowanceSDK.approve / signPermitOrApprove by wallet kind', () => {
     const stages = callback.mock.calls.map(([a]) => a.stage);
     expect(stages).toContain(S.MULTISIG_DONE);
     expect(stages).not.toContain(S.APPROVE_RECEIPT);
+    expect(callback).toHaveBeenLastCalledWith({
+      stage: S.MULTISIG_DONE,
+      payload: {
+        hash: APPROVE_HASH,
+        approve: { token: TOKENS.steth, amount: 15n },
+      },
+    });
   });
 
   it('signs the permit for the explicit spender, not the module one', async () => {
@@ -179,6 +201,56 @@ describe('AllowanceSDK.approve / signPermitOrApprove by wallet kind', () => {
     ).rejects.toThrow();
     const errors = callback.mock.calls.filter(([a]) => a.stage === S.ERROR);
     expect(errors).toHaveLength(1);
+  });
+
+  it('approve on a multisigBatch wallet proposes a single-call batch without waiting', async () => {
+    const fakes = build('multisigBatch');
+    const result = await fakes.allowanceSdk.approve({
+      spend,
+      spender: OTHER_SPENDER,
+    });
+    expect(fakes.sendTransaction).not.toHaveBeenCalled();
+    expect(fakes.sendCalls).toHaveBeenCalledWith(
+      expect.objectContaining({
+        calls: [APPROVE_CALL],
+        experimental_fallback: false,
+      }),
+    );
+    expect(fakes.waitForCallsStatus).not.toHaveBeenCalled();
+    expect(result).toEqual({ hash: SAFE_TX_HASH });
+  });
+
+  it('signPermitOrApprove on multisigBatch proposes the approve and marks MULTISIG_DONE', async () => {
+    const fakes = build('multisigBatch', 0n);
+    const callback = vi.fn();
+    const result = await fakes.allowanceSdk.signPermitOrApprove({
+      spend,
+      spender: OTHER_SPENDER,
+      callback,
+    });
+    expect(result.hash).toBe(SAFE_TX_HASH);
+    expect(result.permit).toEqual(expect.objectContaining({ value: 0n }));
+    expect(callback.mock.calls.map(([a]) => a.stage)).toEqual([
+      S.APPROVE_SIGN,
+      S.MULTISIG_DONE,
+    ]);
+    expect(callback).toHaveBeenLastCalledWith({
+      stage: S.MULTISIG_DONE,
+      payload: {
+        hash: SAFE_TX_HASH,
+        approve: { token: TOKENS.steth, amount: 15n },
+      },
+    });
+  });
+
+  it('signPermitOrApprove on multisigBatch sends nothing when allowance covers the spend', async () => {
+    const fakes = build('multisigBatch', 100n);
+    const result = await fakes.allowanceSdk.signPermitOrApprove({
+      spend,
+      spender: OTHER_SPENDER,
+    });
+    expect(result.hash).toBeUndefined();
+    expect(fakes.sendCalls).not.toHaveBeenCalled();
   });
 
   it('getApproveCallIfNeeded returns the call only when allowance is short', async () => {

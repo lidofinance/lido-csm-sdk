@@ -32,6 +32,7 @@ import {
   TransactionTypeNotSupportedError,
   UnauthorizedProviderError,
   UnknownBundleIdError,
+  UnknownRpcError,
   UnsupportedChainIdError,
   UnsupportedProviderMethodError,
   UserRejectedRequestError,
@@ -81,6 +82,24 @@ describe('classifyError', () => {
   it('USER_REJECTED from UserRejectedRequestError', () => {
     const err = wrap(new UserRejectedRequestError(new Error('cancelled')));
     expect(classifyError(err, undefined)).toBe(ERROR_CODE.USER_REJECTED);
+  });
+
+  it('USER_REJECTED from a Safe iframe rejection (UnknownRpcError)', () => {
+    const err = new UnknownRpcError(new Error('Transaction was rejected'));
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.USER_REJECTED);
+  });
+
+  it('USER_REJECTED from a Safe iframe rejection wrapped in TransactionExecutionError', () => {
+    const err = new TransactionExecutionError(
+      new UnknownRpcError(new Error('Transaction was rejected')),
+      { account: null },
+    );
+    expect(classifyError(err, undefined)).toBe(ERROR_CODE.USER_REJECTED);
+  });
+
+  it('leaves any other UnknownRpcError unclassified', () => {
+    const err = new UnknownRpcError(new Error('Invalid from address'));
+    expect(classifyError(err, undefined)).toBeUndefined();
   });
 
   it('BUNDLE_NOT_FOUND from UnknownBundleIdError', () => {
