@@ -170,7 +170,9 @@ export const MODULE_PROFILE: PerModule<ModuleProfileConfig> = {
     allocatedBalance: true,
     contractVersions: CSM_VERSIONS,
     merkleTreeFallbacks: {
-      [CHAINS.Mainnet]: {},
+      [CHAINS.Mainnet]: {
+        [CONTRACT_NAMES.feeDistributor]: `${SM_REWARDS}/mainnet-0x02/tree.json`,
+      },
       [CHAINS.Hoodi]: {
         [CONTRACT_NAMES.feeDistributor]: `${SM_REWARDS}/hoodi-0x02/tree.json`,
       },
